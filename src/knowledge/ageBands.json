@@ -1,0 +1,11 @@
+{
+  "bands": [
+    { "id": "RN",       "label": "RN (0–28 dias)",      "minDays": 0,    "maxDays": 28 },
+    { "id": "30_60",    "label": "30 a 60 dias",        "minDays": 29,   "maxDays": 60 },
+    { "id": "60_90",    "label": "60 a 90 dias",        "minDays": 61,   "maxDays": 90 },
+    { "id": "90_120",   "label": "90 a 120 dias",       "minDays": 91,   "maxDays": 120 },
+    { "id": "4_6m",     "label": "4 a 6 meses",         "minDays": 121,  "maxDays": 180 },
+    { "id": "7_12m",    "label": "7 a 12 meses",        "minDays": 181,  "maxDays": 365 },
+    { "id": "13_36m",   "label": "13 a 36 meses",       "minDays": 366,  "maxDays": 1095 }
+  ]
+}

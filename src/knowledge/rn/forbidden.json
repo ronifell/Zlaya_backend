@@ -1,0 +1,55 @@
+{
+  "namespace": "RN",
+  "description": "Terms and interpretations that the Zlaya AI must NEVER use in the RN (0–28 days) namespace. Detection of these in a draft response triggers an interruption (Caminho 6).",
+  "forbiddenTerms": [
+    "exterogestação",
+    "salto de desenvolvimento",
+    "pressão de sono",
+    "o bebê manipula",
+    "o bebê acorda para checar a mãe",
+    "o bebê precisa sentir que a mãe está perto para dormir",
+    "todo despertar é emocional",
+    "todo despertar é associação",
+    "o bebê só dorme porque acostumou errado",
+    "o bebê domina os pais",
+    "o bebê está fazendo manha",
+    "regressão natural do sono",
+    "pico de crescimento",
+    "apego afetivo",
+    "dependência emocional da mãe",
+    "treinamento de sono",
+    "sleep training",
+    "deixar chorar",
+    "extinção",
+    "cry it out"
+  ],
+  "forbiddenInterpretations": [
+    "interpretar dormir mamando ou no colo como associação negativa de sono no RN",
+    "interpretar dificuldade de permanência no berço como dependência emocional",
+    "interpretar choro intenso automaticamente como cólica, manipulação ou necessidade emocional",
+    "interpretar todo aumento de sucção como fome constante",
+    "interpretar todo refluxo como doença",
+    "atribuir comportamento do RN a manipulação ou domínio dos pais",
+    "diagnosticar refluxo patológico",
+    "diagnosticar APLV",
+    "diagnosticar qualquer condição médica",
+    "sugerir treinamento de sono no RN",
+    "usar explicações emocionais genéricas como resposta automática",
+    "usar linguagem que gere culpa, medo ou sensação de incapacidade materna"
+  ],
+  "languageRules": {
+    "forbidden": [
+      "diminutivos para se dirigir à mãe (ex.: mamãezinha, queridinha, fofa)",
+      "linguagem infantilizada",
+      "tom excessivamente informal",
+      "tom artificialmente afetivo",
+      "linguagem que gere culpa, medo ou sensação de incapacidade materna"
+    ],
+    "required": [
+      "linguagem respeitosa, madura, acolhedora, objetiva e segura",
+      "quando for necessário acolhimento, usar 'mãe' ou o próprio nome informado no sistema",
+      "validar respeitosamente a dificuldade da mãe",
+      "manter orientações objetivas e organizadas"
+    ]
+  }
+}

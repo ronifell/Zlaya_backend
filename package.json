@@ -1,0 +1,28 @@
+{
+  "name": "zlaya-backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Zlaya RN MVP – Controlled conversational AI backend for the Método Eliana Dias (newborn 0–28 days).",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "ingest": "node src/scripts/ingest.js",
+    "db:setup": "node src/scripts/setupDb.js",
+    "test:scenarios": "node src/scripts/runCriticalScenarios.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "morgan": "^1.10.0",
+    "openai": "^4.55.7",
+    "pg": "^8.12.0",
+    "uuid": "^10.0.0",
+    "zod": "^3.23.8"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

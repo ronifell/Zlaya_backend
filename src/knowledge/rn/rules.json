@@ -1,0 +1,231 @@
+{
+  "namespace": "RN",
+  "ageRange": { "minDays": 0, "maxDays": 28 },
+  "description": "Regras metodológicas operacionais para RN (0–28 dias) — Método Eliana Dias.",
+  "fixedRules": [
+    {
+      "id": "rn-no-negative-association",
+      "rule": "RN não cria associação negativa de sono. Quando o RN dorme mamando ou no colo, isso NÃO deve ser interpretado como associação negativa de sono.",
+      "rationale": "O RN pode adormecer durante a mamada por cansaço fisiológico, relaxamento e imaturidade neurológica."
+    },
+    {
+      "id": "rn-no-behavioral-advanced",
+      "rule": "A IA não deve aplicar interpretações comportamentais avançadas ao RN."
+    },
+    {
+      "id": "rn-breastfeeding-interval",
+      "rule": "Bebês em aleitamento materno devem mamar aproximadamente a cada 2h a 2h30. Se necessário, podem permanecer em livre demanda."
+    },
+    {
+      "id": "rn-formula-interval",
+      "rule": "Bebês em fórmula/mamadeira devem ser conduzidos prioritariamente para intervalos aproximados de 3 horas durante o dia."
+    },
+    {
+      "id": "rn-crying-not-always-hunger",
+      "rule": "A IA não deve interpretar automaticamente todo choro como fome. Antes de concluir fome, deve investigar: tempo desde a última mamada, eficiência da mamada, duração da mamada, sinais de cansaço, tempo acordado, padrão de sono e horário do dia."
+    },
+    {
+      "id": "rn-moro-physiological",
+      "rule": "O reflexo de Moro é fisiológico e esperado no recém-nascido. Pode impactar manutenção do sono, permanência no berço, despertares frequentes, dificuldade de relaxamento e sonecas curtas."
+    },
+    {
+      "id": "rn-physiological-reflux-common",
+      "rule": "Refluxo fisiológico é comum no RN devido à imaturidade do sistema digestivo. A IA não deve interpretar automaticamente todo refluxo como doença."
+    },
+    {
+      "id": "rn-no-medical-diagnosis",
+      "rule": "A IA NUNCA emite diagnóstico. Não diagnostica refluxo patológico, APLV, ou qualquer outra condição médica. Quando houver sinais persistentes/relevantes, encaminha para suporte humano, aulas bônus com o pediatra Roberto Franklin e/ou avaliação com o pediatra da família."
+    },
+    {
+      "id": "rn-pacifier-respect",
+      "rule": "Em casos de reflexo de sucção aumentado, a IA pode sugerir uso de chupeta como ferramenta auxiliar de organização e relaxamento, se isso estiver de acordo com a aceitação e escolha da família. A IA não impõe uso de chupeta como obrigação metodológica. A sugestão de chupeta não substitui investigação alimentar quando houver suspeita de fome real."
+    }
+  ],
+
+  "investigationHierarchies": {
+    "busca_excessiva_peito": {
+      "label": "Busca excessiva pelo peito",
+      "priorityOrder": [
+        "cansaço e desorganização do sono",
+        "baixa ingestão ou baixa produção de leite",
+        "mamadas ineficientes",
+        "dificuldade de manutenção do estado de relaxamento",
+        "desconforto gástrico",
+        "reflexo de sucção aumentado"
+      ],
+      "askAbout": [
+        "intervalo entre mamadas",
+        "duração das mamadas",
+        "eficiência alimentar",
+        "sinais de saciedade",
+        "tempo acordado",
+        "padrão de sono",
+        "irritabilidade",
+        "horário do dia"
+      ],
+      "doNot": "interpretar automaticamente todo aumento de sucção como fome constante"
+    },
+    "choro_intenso": {
+      "label": "Choro intenso no RN",
+      "priorityOrder": [
+        "fome ou baixa ingestão alimentar",
+        "cansaço e dificuldade de organização do sono",
+        "desconfortos relacionados à alimentação",
+        "refluxo fisiológico ou patológico",
+        "dificuldade de relaxamento e manutenção do sono",
+        "excesso de estímulos e dificuldade de autorregulação fisiológica"
+      ],
+      "askAbout": [
+        "horário do choro",
+        "relação com alimentação",
+        "padrão de sono",
+        "tempo acordado",
+        "facilidade de acalmar",
+        "intensidade e duração do choro",
+        "comportamento após mamar",
+        "sinais físicos associados"
+      ],
+      "doNot": "usar 'cólica' como explicação automática para todo choro intenso no RN"
+    },
+    "acorda_ao_deitar": {
+      "label": "Acorda ao ser deitado no berço",
+      "priorityOrder": [
+        "tempo insuficiente em posição vertical após mamada",
+        "necessidade de arroto",
+        "reflexo de Moro",
+        "dificuldade de adaptação à superfície",
+        "refluxo fisiológico ou patológico"
+      ],
+      "askAbout": [
+        "quanto tempo o bebê permaneceu em posição vertical após a mamada",
+        "se houve arroto",
+        "em quanto tempo o bebê desperta após ser deitado",
+        "padrão corporal do despertar",
+        "presença de irritabilidade ou desconforto",
+        "facilidade de retorno ao sono",
+        "horário do episódio",
+        "padrão alimentar associado"
+      ],
+      "doNot": "inverter essa ordem investigativa sem justificativa contextual relevante",
+      "neverInterpretAs": "associação negativa de sono no RN"
+    },
+    "dificuldade_berco": {
+      "label": "Dificuldade de permanência no berço",
+      "priorityOrder": [
+        "pouco tempo em posição vertical após mamada",
+        "necessidade de arroto",
+        "reflexo de Moro",
+        "dificuldade de adaptação à superfície",
+        "comportamento de vigília por fome",
+        "refluxo fisiológico ou patológico"
+      ],
+      "askAbout": [
+        "tempo em posição vertical após alimentação",
+        "padrão do despertar após ser deitado",
+        "presença de regurgitação",
+        "irritabilidade ao deitar",
+        "facilidade de retorno ao sono",
+        "necessidade constante de contato físico para manutenção do relaxamento",
+        "padrão alimentar associado"
+      ]
+    },
+    "refluxo_fisiologico": {
+      "label": "Suspeita de refluxo fisiológico",
+      "priorityOrder": [
+        "tempo insuficiente em posição vertical após alimentação",
+        "excesso de manipulação após mamada",
+        "berço totalmente reto sem elevação",
+        "mamadas muito volumosas",
+        "desconforto associado ao deitar"
+      ],
+      "askAbout": [
+        "frequência de regurgitações",
+        "comportamento após mamar",
+        "irritabilidade ao deitar",
+        "arqueamento corporal",
+        "padrão de sono associado",
+        "desconforto após alimentação",
+        "facilidade de retorno ao sono",
+        "relação entre alimentação e despertares"
+      ],
+      "doNot": "diagnosticar refluxo patológico"
+    },
+    "mamadas_ineficientes": {
+      "label": "Mamadas ineficientes",
+      "priorityOrder": [
+        "possível baixa produção de leite",
+        "sinais de transferência insuficiente de leite",
+        "tempo efetivo de sucção",
+        "sonolência excessiva durante a mamada",
+        "dificuldade de pega",
+        "intervalos muito curtos entre mamadas",
+        "irritabilidade persistente após mamar",
+        "dificuldade de manutenção da saciedade"
+      ],
+      "askAbout": [
+        "duração das mamadas",
+        "comportamento durante a alimentação",
+        "presença de sucção ativa ou apenas conforto",
+        "necessidade de múltiplas mamadas muito próximas",
+        "ganho de peso",
+        "padrão de sono associado",
+        "irritabilidade após mamar",
+        "percepção materna sobre produção de leite"
+      ]
+    },
+    "moro_reflexo": {
+      "label": "Reflexo de Moro",
+      "priorityOrder": [
+        "padrão corporal do despertar",
+        "movimentos bruscos dos braços durante o sono",
+        "despertar imediato após transferência para o berço",
+        "dificuldade de manutenção do relaxamento",
+        "adaptação à superfície do berço"
+      ],
+      "askAbout": [
+        "em quanto tempo o bebê desperta após ser deitado",
+        "presença de sobressaltos",
+        "padrão de movimentação corporal",
+        "necessidade constante de contenção",
+        "facilidade de retorno ao sono",
+        "relação entre relaxamento e contato físico"
+      ]
+    },
+    "baixa_producao_leite": {
+      "label": "Suspeita de baixa produção de leite",
+      "priorityOrder": [
+        "intervalos muito curtos entre mamadas",
+        "comportamento persistente de fome após mamar",
+        "irritabilidade durante e após as mamadas",
+        "dificuldade de manutenção da saciedade",
+        "despertares frequentes associados à alimentação",
+        "percepção materna de baixa produção",
+        "mamadas muito longas sem sinais claros de satisfação"
+      ],
+      "askAbout": [
+        "duração das mamadas",
+        "padrão de sucção",
+        "sinais de saciedade",
+        "frequência das mamadas",
+        "ganho de peso",
+        "padrão de sono associado",
+        "irritabilidade recorrente",
+        "comportamento do bebê após alimentação"
+      ],
+      "auxiliary": "Pode sugerir ordenha no final da tarde como ferramenta auxiliar para avaliação da produção de leite."
+    }
+  },
+
+  "clinicalRedFlags": [
+    "perda de peso ou baixa evolução ponderal",
+    "vômitos em jato persistentes",
+    "sangue nas fezes",
+    "febre",
+    "letargia importante / dificuldade de despertar para alimentar",
+    "recusa alimentar persistente",
+    "sinais de desidratação (fralda seca por mais de 6h, fontanela afundada)",
+    "arqueamento corporal persistente com choro inconsolável",
+    "dificuldade respiratória",
+    "coloração arroxeada"
+  ]
+}

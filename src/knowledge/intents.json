@@ -1,0 +1,23 @@
+{
+  "description": "Catálogo de intenções reconhecidas pelo roteador. O classificador deve retornar SEMPRE um destes valores (ou 'fora_da_base').",
+  "intents": [
+    { "id": "dificuldade_para_dormir",     "label": "Dificuldade para dormir / iniciar o sono" },
+    { "id": "despertares_noturnos",        "label": "Despertares noturnos" },
+    { "id": "dificuldade_manutencao_sono", "label": "Dificuldade de manutenção do sono" },
+    { "id": "choro_excessivo",             "label": "Choro excessivo" },
+    { "id": "mamadas",                     "label": "Mamadas / amamentação" },
+    { "id": "refluxo",                     "label": "Refluxo / regurgitação" },
+    { "id": "sonecas_curtas",              "label": "Sonecas curtas" },
+    { "id": "rotina",                      "label": "Rotina / organização do dia" },
+    { "id": "associacao_comportamental",   "label": "Associação comportamental" },
+    { "id": "adaptacao_ao_berco",          "label": "Adaptação ao berço" },
+    { "id": "comportamento_esperado",      "label": "Comportamento esperado da idade" },
+    { "id": "desconforto_fisiologico",     "label": "Possível desconforto fisiológico" },
+    { "id": "ganho_peso",                  "label": "Ganho de peso" },
+    { "id": "seguranca_sono",              "label": "Segurança do sono (posição, ambiente)" },
+    { "id": "ambiente",                    "label": "Ambiente (luminosidade, ruído, ninho, cama compartilhada)" },
+    { "id": "risco_clinico",               "label": "Possível risco clínico / sinal de alerta" },
+    { "id": "fora_da_base",                "label": "Pergunta fora do escopo do método" },
+    { "id": "ambiguo",                     "label": "Pergunta ambígua / múltiplas interpretações" }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "namespace": "RN",
+  "description": "Mapeamento operacional RN — situações → aulas internas do app Zleep Baby.",
+  "lessons": [
+    { "id": "lesson-alimentacao-livre-demanda", "title": "ALIMENTAÇÃO E SONO: LIVRE DEMANDA E INTERVALOS DE MAMADA", "track": "amamentacao", "appPath": "/aulas/rn/alimentacao-livre-demanda" },
+    { "id": "lesson-mamadas-efetivas", "title": "O QUE SÃO MAMADAS EFETIVAS", "track": "amamentacao", "appPath": "/aulas/rn/mamadas-efetivas" },
+    { "id": "lesson-reflexo-succao", "title": "REFLEXO DE SUCÇÃO", "track": "fisiologia", "appPath": "/aulas/rn/reflexo-succao" },
+    { "id": "lesson-estimule-arroto", "title": "ESTIMULE O ARROTO", "track": "cuidados", "appPath": "/aulas/rn/estimule-arroto" },
+    { "id": "lesson-refluxo", "title": "O QUE É O REFLUXO?", "track": "fisiologia", "appPath": "/aulas/rn/refluxo" },
+    { "id": "lesson-travesseiro", "title": "UTILIZE A ESTRATÉGIA DO TRAVESSEIRO", "track": "berco", "appPath": "/aulas/rn/estrategia-travesseiro" },
+    { "id": "lesson-berco-do-bebe", "title": "O BERÇO DO BEBÊ", "track": "berco", "appPath": "/aulas/rn/berco-do-bebe" },
+    { "id": "lesson-charutinho-moro", "title": "CHARUTINHO E OS REFLEXOS DE MORO", "track": "fisiologia", "appPath": "/aulas/rn/charutinho-moro" },
+    { "id": "lesson-hora-da-bruxa", "title": "HORA DA BRUXA", "track": "comportamento", "appPath": "/aulas/rn/hora-da-bruxa" },
+    { "id": "lesson-colicas", "title": "COMO SABER SE SÃO CÓLICAS?", "track": "fisiologia", "appPath": "/aulas/rn/colicas" },
+    { "id": "lesson-aplv", "title": "O QUE É APLV E COMO IDENTIFICAR?", "track": "medico", "appPath": "/aulas/rn/aplv" },
+    { "id": "lesson-sono-luminosidade", "title": "SONO E LUMINOSIDADE", "track": "ambiente", "appPath": "/aulas/rn/sono-luminosidade" },
+    { "id": "lesson-passo-1-ambiente", "title": "PASSO 1: PREPARE O AMBIENTE E OBSERVE O COMPORTAMENTO DO RN", "track": "passos", "appPath": "/aulas/rn/passo-1" },
+    { "id": "lesson-passo-2-sinais", "title": "PASSO 2: FIQUE ATENTA AOS SINAIS DE SONO", "track": "passos", "appPath": "/aulas/rn/passo-2" },
+    { "id": "lesson-passo-3-janela", "title": "PASSO 3: CALCULE A JANELA DE SONO E O TEMPO DAS SONECAS", "track": "passos", "appPath": "/aulas/rn/passo-3" },
+    { "id": "lesson-passo-4-alimentacao-sono", "title": "PASSO 4: ATENÇÃO À ALIMENTAÇÃO ASSOCIADA AO SONO", "track": "passos", "appPath": "/aulas/rn/passo-4" },
+    { "id": "lesson-passo-5-rotina", "title": "PASSO 5: ESTABELEÇA UMA ROTINA DESDE O PRIMEIRO DIA (E VÁ AJUSTANDO)", "track": "passos", "appPath": "/aulas/rn/passo-5" },
+    { "id": "lesson-inicio-sono-noturno", "title": "ESTABELEÇA O HORÁRIO DO INÍCIO DO SONO NOTURNO", "track": "rotina", "appPath": "/aulas/rn/inicio-sono-noturno" },
+    { "id": "lesson-evitar-troca-dia-noite", "title": "EVITE QUE O BEBÊ TROQUE O DIA PELA NOITE", "track": "rotina", "appPath": "/aulas/rn/troca-dia-noite" },
+    { "id": "lesson-posicao-dormir", "title": "POSIÇÃO PARA DORMIR", "track": "seguranca", "appPath": "/aulas/rn/posicao-dormir" },
+    { "id": "lesson-ruido-branco", "title": "RUÍDO BRANCO", "track": "ambiente", "appPath": "/aulas/rn/ruido-branco" },
+    { "id": "lesson-cama-compartilhada", "title": "QUARTO COMPARTILHADO, CAMA COMPARTILHADA E CO-SLEEP", "track": "ambiente", "appPath": "/aulas/rn/cama-compartilhada" },
+    { "id": "lesson-ninho", "title": "ATÉ QUANDO USAR O NINHO?", "track": "ambiente", "appPath": "/aulas/rn/ninho" },
+    { "id": "lesson-paninho-olhos", "title": "PANINHO SOBRE OS OLHOS", "track": "ambiente", "appPath": "/aulas/rn/paninho-olhos" }
+  ],
+  "situationToLessons": [
+    { "situation": "Busca excessiva pelo peito",                   "lessons": ["lesson-alimentacao-livre-demanda", "lesson-mamadas-efetivas"] },
+    { "situation": "Reflexo de sucção aumentado",                   "lessons": ["lesson-reflexo-succao"] },
+    { "situation": "Despertar ao deitar",                           "lessons": ["lesson-estimule-arroto", "lesson-refluxo"] },
+    { "situation": "Dificuldade no berço",                          "lessons": ["lesson-travesseiro"] },
+    { "situation": "Dificuldade de adaptação ao berço",             "lessons": ["lesson-berco-do-bebe"] },
+    { "situation": "Reflexo de Moro",                               "lessons": ["lesson-charutinho-moro"] },
+    { "situation": "Bebê desperta com movimentos bruscos",          "lessons": ["lesson-charutinho-moro"] },
+    { "situation": "Irritabilidade final da tarde",                 "lessons": ["lesson-hora-da-bruxa"] },
+    { "situation": "Choro persistente",                             "lessons": ["lesson-colicas"] },
+    { "situation": "Suspeita de refluxo",                           "lessons": ["lesson-refluxo"] },
+    { "situation": "Suspeita de APLV",                              "lessons": ["lesson-aplv"] },
+    { "situation": "Dificuldade para arrotar",                      "lessons": ["lesson-estimule-arroto"] },
+    { "situation": "Ambiente muito estimulante",                    "lessons": ["lesson-sono-luminosidade"] },
+    { "situation": "Ambiente inadequado para o sono",               "lessons": ["lesson-passo-1-ambiente"] },
+    { "situation": "Dificuldade para identificar sinais de sono",   "lessons": ["lesson-passo-2-sinais"] },
+    { "situation": "Dificuldade com janelas de sono",               "lessons": ["lesson-passo-3-janela"] },
+    { "situation": "Associação alimentação/sono",                   "lessons": ["lesson-passo-4-alimentacao-sono"] },
+    { "situation": "Falta de rotina",                               "lessons": ["lesson-passo-5-rotina"] },
+    { "situation": "Dificuldade no início do sono noturno",         "lessons": ["lesson-inicio-sono-noturno"] },
+    { "situation": "Troca a noite pelo dia",                        "lessons": ["lesson-evitar-troca-dia-noite"] },
+    { "situation": "Dúvidas sobre posição para dormir",             "lessons": ["lesson-posicao-dormir"] },
+    { "situation": "Dúvidas sobre ruído branco",                    "lessons": ["lesson-ruido-branco"] },
+    { "situation": "Dúvidas sobre cama compartilhada",              "lessons": ["lesson-cama-compartilhada"] },
+    { "situation": "Dúvidas sobre uso do ninho",                    "lessons": ["lesson-ninho"] },
+    { "situation": "Dificuldade de relaxamento visual",             "lessons": ["lesson-paninho-olhos"] },
+    { "situation": "Dificuldade para estruturar rotina",            "lessons": ["lesson-passo-5-rotina"] },
+    { "situation": "Dificuldade para iniciar o sono",               "lessons": ["lesson-passo-2-sinais"] }
+  ],
+  "supportChannels": {
+    "humanSupport": {
+      "label": "Suporte humano da equipe Eliana Dias",
+      "description": "Atendimento humano para casos sem regra metodológica validada, conflitos relevantes de interpretação ou necessidade de análise individual.",
+      "appPath": "/suporte/humano"
+    },
+    "pediatricianBonus": {
+      "label": "Aulas bônus com o pediatra Roberto Franklin",
+      "description": "Conteúdos médicos complementares (refluxo, APLV, sinais de alerta clínico).",
+      "appPath": "/aulas/bonus/pediatra-roberto-franklin"
+    },
+    "familyPediatrician": {
+      "label": "Pediatra da família",
+      "description": "A Zlaya recomenda avaliação com o pediatra da família diante de sinais clínicos persistentes."
+    }
+  }
+}
