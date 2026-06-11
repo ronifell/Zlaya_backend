@@ -2,6 +2,7 @@ import { v4 as uuid } from 'uuid';
 import { config } from '../config/index.js';
 import { resolveAge, isNamespaceActive } from './ageService.js';
 import { classifyIntent } from './intentClassifier.js';
+import { extractSignals } from './signalExtractor.js';
 import { retrieve } from './retrieval.js';
 import { checkForbiddenContent, detectClinicalRedFlags } from './safetyValidator.js';
 import {
@@ -75,18 +76,25 @@ export async function processTurn({ message, babyProfile, conversation, conversa
   // 2b) Clinical red flags --------------------------------------------
   const clinical = detectClinicalRedFlags({ text: message, namespace });
 
-  // 3) Context evaluation (very lightweight in the MVP) ----------------
+  // 2c) Contextual signals (vespertine pattern, breast-soothing, crib
+  //     transition, already-provided info, already-used techniques) -----
+  const signals = extractSignals({ message, conversation });
+
+  // 3) Context evaluation ---------------------------------------------
   const babyContext = {
     hasMinimumContext: Boolean(babyProfile?.ageDays || babyProfile?.birthDate),
     missingFields: [],
     questionLooksVague: questionLooksVague(message),
+    hasRichContext: signals.hasRichContext,
+    provided: signals.provided,
   };
 
-  // 4) Controlled retrieval --------------------------------------------
+  // 4) Controlled retrieval (signal themes boost matching chunks) ------
   const retrieval = await retrieve({
     query: message,
     namespace,
     intent: intent.intent,
+    boostThemes: signals.boostThemes,
   });
 
   // 5) Operational decision -------------------------------------------
@@ -112,6 +120,7 @@ export async function processTurn({ message, babyProfile, conversation, conversa
       chunks: retrieval.chunks,
       babyProfile,
       conversation,
+      signals,
     });
     safety = checkForbiddenContent({ text: draft.text, namespace });
 

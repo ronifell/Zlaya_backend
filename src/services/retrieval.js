@@ -8,9 +8,11 @@ import { search as vectorSearch } from './vectorStore.js';
  *   1) embed query
  *   2) vector search restricted to namespace
  *   3) intent-aware reranking (boost chunks whose `intent` matches the classified intent)
+ *   3b) signal-aware reranking (boost chunks whose `theme` matches a detected
+ *       contextual signal — e.g. "after 6pm" boosts the vespertine/feeding themes)
  *   4) confidence aggregation
  */
-export async function retrieve({ query, namespace, intent }) {
+export async function retrieve({ query, namespace, intent, boostThemes = [] }) {
   if (!namespace) {
     return emptyResult('namespace_required');
   }
@@ -26,15 +28,22 @@ export async function retrieve({ query, namespace, intent }) {
     return emptyResult('no_candidates');
   }
 
-  // Reranking: keep similarity as the base, add a small intent-match boost.
+  const themeSet = new Set(boostThemes || []);
+  const THEME_BOOST_PER_MATCH = 0.08;
+  const THEME_BOOST_CAP = 0.16;
+
+  // Reranking: similarity base + intent-match boost + signal/theme boost.
   const reranked = candidates.map((c) => {
     const intents = Array.isArray(c.chunk.intent) ? c.chunk.intent : [c.chunk.intent].filter(Boolean);
     const intentBoost = intent && intents.includes(intent) ? 0.1 : 0;
+    const themeMatch = themeSet.has(c.chunk.theme);
+    const themeBoost = themeMatch ? Math.min(THEME_BOOST_PER_MATCH, THEME_BOOST_CAP) : 0;
     const safetyPenalty = c.chunk.safetyLevel === 'vermelho' ? 0 : 0;
     return {
       ...c,
-      rerankScore: c.similarity + intentBoost - safetyPenalty,
+      rerankScore: c.similarity + intentBoost + themeBoost - safetyPenalty,
       intentMatch: intent ? intents.includes(intent) : false,
+      themeMatch,
     };
   });
 
@@ -49,7 +58,8 @@ export async function retrieve({ query, namespace, intent }) {
   const topSim = aboveFloor[0]?.similarity ?? top[0]?.similarity ?? 0;
   const coverage = aboveFloor.length / Math.max(1, config.retrieval.rerankK);
   const intentBoostFactor = aboveFloor[0]?.intentMatch ? 0.1 : 0;
-  const confidence = clamp01(topSim * 0.7 + coverage * 0.2 + intentBoostFactor);
+  const themeBoostFactor = aboveFloor[0]?.themeMatch ? 0.05 : 0;
+  const confidence = clamp01(topSim * 0.7 + coverage * 0.2 + intentBoostFactor + themeBoostFactor);
 
   return {
     status: aboveFloor.length === 0 ? 'low_confidence' : 'ok',

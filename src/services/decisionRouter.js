@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { config } from '../config/index.js';
+import { filterAnswered } from './signalExtractor.js';
 
 /**
  * Implements the operational decision flow described in the project spec.
@@ -90,26 +91,41 @@ export function decideRoute({
     });
   }
 
+  // When the mother already brought enough context, we should give practical
+  // orientation, not just keep asking questions (test feedback). This flag
+  // unlocks ANSWER_DIRECTLY a bit more aggressively and suppresses ASK paths.
+  const richContext = Boolean(babyContext?.hasRichContext);
+  const provided = babyContext?.provided || [];
+
   // Inspect the leading chunk to decide between FORWARD_TO_LESSON vs ASK_MORE_CONTEXT vs ANSWER_DIRECTLY
   const leading = retrieval.chunks?.[0]?.chunk;
   if (leading) {
     // If the chunk demands more context AND we have not gathered any, ask first.
     if (Array.isArray(leading.askIfMissing) && leading.askIfMissing.length >= 3) {
-      // We have not modeled per-question context capture yet in this MVP, so
-      // for the first turn of a thread on this theme we ask before answering
-      // when the question is short / vague (<= 60 chars).
-      if (babyContext?.questionLooksVague) {
+      // Drop anything the mother already answered so we never ask twice.
+      const stillMissing = filterAnswered(leading.askIfMissing, provided);
+      // Only ask first when the question is short/vague, context is NOT rich,
+      // and there is genuinely something left to ask.
+      if (babyContext?.questionLooksVague && !richContext && stillMissing.length >= 2) {
         return route(PATHS.ASK_MORE_CONTEXT, {
           reason: 'methodology_requires_more_context',
-          missing: leading.askIfMissing,
+          missing: stillMissing,
           relatedLessons: leading.relatedLessons || [],
         });
       }
     }
 
     // If retrieval confidence is moderate and the chunk explicitly points to
-    // a lesson as the primary handling, route to that lesson.
+    // a lesson as the primary handling, route to that lesson — UNLESS the
+    // mother already gave rich context, in which case prefer a practical,
+    // grounded answer (lessons are still attached as suggestions).
     if (retrieval.confidence < config.retrieval.answerMinConfidence) {
+      if (richContext && retrieval.confidence >= config.retrieval.answerMinConfidence * 0.75) {
+        return route(PATHS.ANSWER_DIRECTLY, {
+          reason: 'rich_context_practical_orientation',
+          confidence: retrieval.confidence,
+        });
+      }
       const lessons = lessonsForChunks(retrieval.chunks, namespace);
       if (lessons.length > 0) {
         return route(PATHS.FORWARD_TO_LESSON, {

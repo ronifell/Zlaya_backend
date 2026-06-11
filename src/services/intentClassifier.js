@@ -17,6 +17,10 @@ const KEYWORD_RULES = [
   { intent: 'refluxo',                  weight: 3, keywords: ['refluxo', 'regurgit', 'golfa', 'vomito', 'vômito', 'arqueia', 'arqueamento'] },
   { intent: 'choro_excessivo',          weight: 2, keywords: ['chora', 'choro', 'chorando', 'inconsolavel', 'colica', 'cólica'] },
   { intent: 'mamadas',                  weight: 2, keywords: ['mama', 'mamada', 'mamando', 'peito', 'amamenta', 'leite', 'formula', 'fórmula', 'mamadeira', 'producao de leite', 'ordenha'] },
+  // High-weight vespertine / breast-soothing signals (test feedback): the
+  // end-of-day worsening + constant return to the breast points to a feeding
+  // hypothesis, so we weight it strongly toward `mamadas`.
+  { intent: 'mamadas',                  weight: 3, keywords: ['so se acalma no peito', 'só se acalma no peito', 'so dorme no peito', 'só dorme no peito', 'so dorme mamando', 'só dorme mamando', 'volta pro peito', 'retornar ao peito', 'voltar ao peito', 'depois das 18', 'após 18', 'apos as 18', 'final do dia', 'fim da tarde', 'final da tarde', 'hora da bruxa'] },
   { intent: 'despertares_noturnos',     weight: 2, keywords: ['acorda', 'acordou', 'despertar', 'despertares', 'noite', 'madrugada'] },
   { intent: 'dificuldade_manutencao_sono', weight: 2, keywords: ['nao mantem o sono', 'sono curto', 'acorda logo', 'nao continua dormindo'] },
   { intent: 'adaptacao_ao_berco',       weight: 2, keywords: ['berco', 'berço', 'deitar', 'deita no berco', 'coloco no berco', 'transferir para o berco'] },

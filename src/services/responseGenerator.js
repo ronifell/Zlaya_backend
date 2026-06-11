@@ -1,6 +1,7 @@
 import { config, useOpenAI } from '../config/index.js';
 import { getOpenAI } from './openaiClient.js';
 import { buildSystemPrompt, buildUserPrompt } from '../prompts/systemPrompt.js';
+import { filterAnswered } from './signalExtractor.js';
 
 /**
  * Generates a supervised response strictly grounded on the retrieved chunks
@@ -18,14 +19,15 @@ export async function generateAnswer({
   chunks,
   babyProfile,
   conversation,
+  signals,
 }) {
   if (!useOpenAI) {
-    return composeLocalAnswer({ question, chunks, namespace, intent });
+    return composeLocalAnswer({ question, chunks, namespace, intent, signals });
   }
 
   const client = getOpenAI();
   const system = buildSystemPrompt({ namespace, band });
-  const user = buildUserPrompt({ question, intent, chunks, babyProfile, conversation });
+  const user = buildUserPrompt({ question, intent, chunks, babyProfile, conversation, signals });
 
   const resp = await client.chat.completions.create({
     model: config.openai.chatModel,
@@ -44,7 +46,7 @@ export async function generateAnswer({
   };
 }
 
-function composeLocalAnswer({ question, chunks, namespace, intent }) {
+function composeLocalAnswer({ question, chunks, namespace, intent, signals }) {
   if (!chunks || chunks.length === 0) {
     return {
       text:
@@ -57,9 +59,19 @@ function composeLocalAnswer({ question, chunks, namespace, intent }) {
   const supporting = chunks.slice(1, 3).map((c) => c.chunk);
 
   const lines = [];
-  lines.push(`Sobre a sua dúvida no contexto do RN (${namespace}):`);
+  lines.push(`Mãe, sobre a sua dúvida no contexto do RN (${namespace}):`);
   lines.push('');
   lines.push(leading.text);
+
+  // Lead with the prioritized hypothesis when a high-weight signal fired.
+  if (signals?.priorities?.length) {
+    lines.push('');
+    lines.push('Hipótese prioritária para o seu caso:');
+    for (const p of signals.priorities.slice(0, 2)) {
+      lines.push(`• ${p}`);
+    }
+  }
+
   if (supporting.length > 0) {
     lines.push('');
     lines.push('Outros pontos relevantes do método:');
@@ -67,10 +79,13 @@ function composeLocalAnswer({ question, chunks, namespace, intent }) {
       lines.push(`• ${oneLine(s.text)}`);
     }
   }
-  if (leading.askIfMissing?.length) {
+
+  // Only ask for what the mother has NOT already provided.
+  const stillMissing = filterAnswered(leading.askIfMissing || [], signals?.provided);
+  if (stillMissing.length) {
     lines.push('');
-    lines.push('Para te orientar com mais precisão, posso considerar:');
-    for (const q of leading.askIfMissing.slice(0, 4)) {
+    lines.push('Para refinar a orientação, ainda ajuda saber:');
+    for (const q of stillMissing.slice(0, 4)) {
       lines.push(`• ${q}`);
     }
   }

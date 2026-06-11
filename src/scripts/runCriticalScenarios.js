@@ -80,6 +80,15 @@ const SCENARIOS = [
     expectAny: ['answer', 'forward_to_lesson', 'ask_more_context'],
     expectNoTermsHard: HARD_FORBIDDEN_TERMS,
   },
+  {
+    label: '9) RN — padrão vespertino + busca pelo peito (deve responder, não só perguntar)',
+    message:
+      'Meu bebê de 20 dias fica bem durante o dia, mas depois das 18h piora muito, só se acalma no peito e preciso voltar a dar o peito o tempo todo. Ele mama nos dois seios, eu faço arrotar e mantenho acordado, mas só consigo colocar no berço depois da 1h da manhã.',
+    babyProfile: { motherName: 'Helena', babyName: 'Davi', ageDays: 20 },
+    expectAny: ['answer', 'forward_to_lesson'],
+    expectNoTerms: ['associação negativa', 'fazendo manha', 'apego afetivo'],
+    expectNoTermsHard: HARD_FORBIDDEN_TERMS,
+  },
 ];
 
 // Negation cues that, when present in the ~60 chars BEFORE a forbidden term,

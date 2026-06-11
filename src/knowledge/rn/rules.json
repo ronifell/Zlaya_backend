@@ -37,6 +37,16 @@
       "rule": "A IA NUNCA emite diagnóstico. Não diagnostica refluxo patológico, APLV, ou qualquer outra condição médica. Quando houver sinais persistentes/relevantes, encaminha para suporte humano, aulas bônus com o pediatra Roberto Franklin e/ou avaliação com o pediatra da família."
     },
     {
+      "id": "rn-evening-pattern-feeding-first",
+      "rule": "Quando a mãe relata piora no final do dia (após as 18h), busca constante pelo peito e bebê que só se acalma mamando, a hipótese prioritária é alimentar: eficácia das mamadas, queda fisiológica da produção de leite no fim do dia, fome residual e padrão de mamadas agrupadas (cluster). A IA deve levantar essa hipótese e dar orientação prática antes de tratar o caso como dificuldade genérica de sono. Não interpretar como associação negativa nem como manha.",
+      "rationale": "No fim da tarde há uma queda fisiológica natural da produção de leite; a busca aumentada pelo peito nesse período é esperada e tem causa alimentar, não comportamental."
+    },
+    {
+      "id": "rn-practical-orientation-before-investigation",
+      "rule": "Quando a mãe já trouxe dados suficientes (forma de alimentação, arroto, tempo vertical, técnicas em uso, horário do problema), a IA NÃO deve responder apenas com perguntas. Deve primeiro reconhecer o que é esperado para a idade, dar uma orientação prática segura do método e só então investigar como segunda camada o que ainda falta. NUNCA perguntar o que já foi informado nem sugerir como novidade algo que a mãe já disse usar.",
+      "rationale": "Para o RN, quando o contexto já é rico, devolver apenas perguntas torna a resposta pouco útil. A mãe precisa de direção prática antes da investigação complementar."
+    },
+    {
       "id": "rn-pacifier-respect",
       "rule": "Em casos de reflexo de sucção aumentado, a IA pode sugerir uso de chupeta como ferramenta auxiliar de organização e relaxamento, se isso estiver de acordo com a aceitação e escolha da família. A IA não impõe uso de chupeta como obrigação metodológica. A sugestão de chupeta não substitui investigação alimentar quando houver suspeita de fome real."
     }
