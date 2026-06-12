@@ -89,6 +89,31 @@ const SCENARIOS = [
     expectNoTerms: ['associação negativa', 'fazendo manha', 'apego afetivo'],
     expectNoTermsHard: HARD_FORBIDDEN_TERMS,
   },
+  {
+    label: '10) RN 16d — fim de tarde/madrugada + complemento/icterícia/linguinha → hipótese alimentar (não sono)',
+    message:
+      'Minha bebê tem 16 dias, teve icterícia e fez o procedimento da linguinha, usa sonda e recebe complemento. No finalzinho da tarde ela começa a procurar o peito a cada 1 hora e piora muito na madrugada, mas de manhã fica mais tranquila. O que pode ser?',
+    babyProfile: { motherName: 'Sofia', babyName: 'Liz', ageDays: 16 },
+    expectRoute: 'answer_directly',
+    expectAny: ['answer'],
+    expectNoTerms: ['associação negativa', 'fazendo manha'],
+    expectNoTermsHard: HARD_FORBIDDEN_TERMS,
+  },
+  {
+    label: '11) RN 16d — soneca diurna de 4h → orientar acordar para mamar (alimentação, não sono noturno)',
+    message: 'Meu bebê de 16 dias dormiu 4 horas de soneca à tarde, preciso acordar para mamar?',
+    babyProfile: { motherName: 'Lúcia', babyName: 'Bento', ageDays: 16 },
+    expectAny: ['answer', 'forward_to_lesson'],
+    expectNoTermsHard: HARD_FORBIDDEN_TERMS,
+  },
+  {
+    label: '12) RN 25d — acordado 2-3h após mamada das 21h → investigar mamada efetiva, não normalizar',
+    message:
+      'Meu bebê de 25 dias fica acordado por 2 a 3 horas depois da mamada das 21h. Isso é normal?',
+    babyProfile: { motherName: 'Renata', babyName: 'Ravi', ageDays: 25 },
+    expectAny: ['answer', 'forward_to_lesson'],
+    expectNoTermsHard: HARD_FORBIDDEN_TERMS,
+  },
 ];
 
 // Negation cues that, when present in the ~60 chars BEFORE a forbidden term,

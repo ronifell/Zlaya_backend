@@ -47,6 +47,26 @@
       "rationale": "Para o RN, quando o contexto já é rico, devolver apenas perguntas torna a resposta pouco útil. A mãe precisa de direção prática antes da investigação complementar."
     },
     {
+      "id": "rn-interpret-not-list",
+      "rule": "A IA deve fazer LEITURA clínico-metodológica do caso e se comprometer com a HIPÓTESE PRINCIPAL, explicando o porquê pelos dados da mãe (idade, horário, intervalo, contexto). NÃO deve apenas listar fatores/possibilidades genéricas. Listar sem interpretar é considerado resposta incompleta.",
+      "rationale": "O diferencial do método é a hierarquia de investigação e a leitura do caso, não a enumeração de causas."
+    },
+    {
+      "id": "rn-feeding-first-not-sleep",
+      "rule": "Quando o quadro apontar para alimentação/saciedade (busca pelo peito, intervalo curto, piora no fim do dia/madrugada, manhã melhor, contexto de icterícia/linguinha/sonda/complemento), a IA NÃO deve abrir a resposta por 'cansaço e desorganização do sono' nem deslocar o foco para organização dia/noite. A hierarquia é: (1) alimentação/saciedade; (2) transferência de leite; (3) produção materna no fim do dia/noite; (4) contexto clínico de amamentação (icterícia, linguinha, sonda, complemento); só depois outros fatores.",
+      "rationale": "Para o RN, a leitura central de muitos casos noturnos/vespertinos é alimentar, não de sono."
+    },
+    {
+      "id": "rn-do-not-normalize",
+      "rule": "A IA NÃO deve normalizar automaticamente como 'esperado/normal' um RN com período acordado prolongado após a mamada, soneca diurna longa (3-4h) ou procura frequente pelo peito. Esses dados devem ACENDER investigação alimentar (mamada efetiva, saciedade, produção/transferência) antes de tranquilizar. Durante o dia, orientar acordar para mamar (peito ~2h-2h30; fórmula ~3h). À noite depende de idade, peso, ganho e orientação do pediatra. Só tranquilizar depois de investigar e quando não houver sinais de necessidade/desconforto.",
+      "rationale": "Normalizar cedo demais pode levar a longos intervalos sem mamar em fase de estabelecimento da amamentação."
+    },
+    {
+      "id": "rn-no-off-target-investigation",
+      "rule": "A IA não deve investigar berço, arroto ou posição vertical quando a dúvida não trouxer desconforto, refluxo, regurgitação ou dificuldade de deitar. A investigação deve responder à dúvida principal, não desviar dela.",
+      "rationale": "Perguntas fora do alvo tornam a resposta menos útil e confundem a mãe."
+    },
+    {
       "id": "rn-pacifier-respect",
       "rule": "Em casos de reflexo de sucção aumentado, a IA pode sugerir uso de chupeta como ferramenta auxiliar de organização e relaxamento, se isso estiver de acordo com a aceitação e escolha da família. A IA não impõe uso de chupeta como obrigação metodológica. A sugestão de chupeta não substitui investigação alimentar quando houver suspeita de fome real."
     }

@@ -32,6 +32,7 @@ const SIGNAL_DEFS = [
   {
     id: 'evening_pattern',
     label: 'Piora no final do dia / após as 18h',
+    directive: true,
     phrases: [
       'depois das 18', 'apos as 18', 'apos 18', 'após 18', 'a partir das 18',
       '18h', '18 horas', 'das 18', 'final do dia', 'fim do dia',
@@ -49,6 +50,88 @@ const SIGNAL_DEFS = [
     ],
     priority:
       'A piora no final do dia (após as 18h) é um padrão vespertino típico no RN. Priorize a investigação ALIMENTAR: eficácia das mamadas, possível queda fisiológica da produção de leite no fim do dia, fome residual acumulada e mamadas agrupadas (cluster). Considere também a "hora da bruxa".',
+  },
+  {
+    id: 'night_production_drop',
+    label: 'Piora à noite/madrugada e manhã melhor (queda de produção no fim do dia/noite)',
+    directive: true,
+    phrases: [
+      'piora na madrugada', 'piora de madrugada', 'madrugada dificil', 'madrugada difícil',
+      'na madrugada', 'de madrugada', 'a noite procura mais', 'a noite quer mais',
+      'de manha melhora', 'de manhã melhora', 'manha mais tranquila', 'manhã mais tranquila',
+      'manha e mais tranquila', 'manhã é mais tranquila', 'de manha e tranquila', 'pela manha melhora',
+      'comeca no fim da tarde e piora a noite', 'a tarde e a noite procura mais',
+    ],
+    boostThemes: [
+      'baixa_producao_leite',
+      'baixa_producao_fim_dia',
+      'mamadas_ineficientes',
+      'busca_excessiva_peito',
+      'padrao_vespertino',
+    ],
+    priority:
+      'O quadro que começa no fim da tarde, piora na madrugada e melhora pela manhã aponta como HIPÓTESE PRINCIPAL a baixa produção/baixa transferência de leite no período final do dia e da noite — mesmo com complemento. Não leia isso como desorganização do sono. Investigue transferência efetiva (sucção ativa e deglutição) e produção materna nesse período.',
+  },
+  {
+    id: 'short_feeding_interval',
+    label: 'Procura o peito em intervalo curto (< 2h)',
+    directive: true,
+    phrases: [
+      'antes de 2 horas', 'antes de duas horas', 'menos de 2 horas', 'menos de duas horas',
+      'a cada 1 hora', 'a cada uma hora', 'a cada hora', 'de hora em hora',
+      'quer mamar toda hora', 'quer mamar o tempo todo', 'mama de hora em hora',
+      'procura o peito antes de', 'logo apos mamar quer de novo', 'logo após mamar quer de novo',
+      'quer mamar de novo logo', 'volta a querer mamar logo',
+    ],
+    boostThemes: ['baixa_producao_leite', 'baixa_producao_fim_dia', 'mamadas_ineficientes', 'busca_excessiva_peito'],
+    priority:
+      'Procurar o peito em intervalo menor que 2h, especialmente à tarde/noite, sugere INGESTÃO/SACIEDADE insuficiente: investigue PRIMEIRO a transferência de leite (mamada efetiva) e a produção materna, antes de qualquer leitura comportamental. Não force intervalo de 2h se o bebê estiver com sinais de necessidade.',
+  },
+  {
+    id: 'feeding_clinical_context',
+    label: 'Contexto que afeta a transferência de leite (icterícia, linguinha, sonda, complemento)',
+    directive: true,
+    phrases: [
+      'ictericia', 'icterícia', 'amarelao', 'amarelão', 'amarelinho', 'fototerapia',
+      'linguinha', 'lingua presa', 'língua presa', 'frenulo', 'frênulo', 'freio lingual', 'frenotomia',
+      'sonda', 'translactacao', 'translactação', 'relactacao', 'relactação',
+      'complemento', 'complementa', 'formula complementar', 'fórmula complementar', 'complementacao', 'complementação',
+      'prematuro', 'baixo peso', 'nao ganha peso', 'não ganha peso', 'pouco ganho de peso',
+    ],
+    boostThemes: ['mamadas_ineficientes', 'baixa_producao_leite', 'baixa_producao_fim_dia'],
+    priority:
+      'Há contexto que afeta a transferência de leite (icterícia, linguinha/frênulo, sonda, complemento, baixo peso). Faça uma leitura cuidadosa da AMAMENTAÇÃO: verifique se o bebê mama de forma efetiva (sucção ativa e deglutição) e não apenas por cansaço/conforto; reavalie o plano de complemento com quem acompanha a amamentação e com o pediatra. Não oriente alteração de complemento por conta própria.',
+  },
+  {
+    id: 'prolonged_awake_after_feed',
+    label: 'Período acordado prolongado após a mamada (ex.: após a mamada da noite/21h)',
+    directive: true,
+    phrases: [
+      'fica acordado', 'acordado por 2', 'acordado 2 a 3', 'acordado por 3', 'acordado depois da mamada',
+      'acordado apos a mamada', 'acordado após a mamada', 'acordado depois de mamar', 'nao dorme depois de mamar',
+      'não dorme depois de mamar', 'depois de mamar fica acordado', 'continua acordado depois de mamar',
+      'mamada das 21', 'mamada das 22', 'mamada das 20', 'mamada da noite', 'mamada do fim da noite',
+      'horas acordado', 'fica desperto depois', 'nao relaxa depois de mamar', 'não relaxa depois de mamar',
+    ],
+    boostThemes: ['baixa_producao_fim_dia', 'mamadas_ineficientes', 'busca_excessiva_peito', 'baixa_producao_leite'],
+    priority:
+      'Período acordado prolongado após a mamada da noite (ex.: 21h) no RN NÃO deve ser normalizado como "esperado". Investigue PRIMEIRO a eficácia da mamada e a saciedade — o bebê pode seguir acordado por não ter ficado saciado (RN nem sempre demonstra fome com choro) e pela queda de produção/transferência no período noturno. Oriente observar se ele relaxa e solta o peito após mamar ou continua procurando. Só tranquilize depois de investigar e na ausência de sinais de necessidade/desconforto.',
+  },
+  {
+    id: 'long_daytime_nap',
+    label: 'Soneca diurna longa / dúvida sobre acordar para mamar',
+    directive: true,
+    phrases: [
+      'soneca de 4', 'soneca de 3', 'dormiu 4 horas', 'dormiu 3 horas', 'dorme 4 horas',
+      'dorme 3 horas', 'dormindo ha 4', 'dormindo há 4', 'dorme muito de dia', 'dorme demais de dia',
+      'soneca longa', 'soneca muito longa', '4 horas de soneca', '3 horas de soneca',
+      'devo acordar', 'preciso acordar', 'posso acordar', 'tenho que acordar', 'acordar para mamar',
+      'deixar dormir', 'quanto tempo pode ficar sem mamar', 'pode ficar sem mamar',
+      '4 horas sem mamar', '3 horas sem mamar', 'intervalo de mamada durante o dia',
+    ],
+    boostThemes: ['acordar_para_mamar_dia', 'intervalos_alimentacao'],
+    priority:
+      'Para dúvida de soneca diurna longa / acordar para mamar no RN: NÃO normalize uma soneca de 3-4h à tarde como rotina. Durante o DIA, oriente acordar para oferecer a mamada (peito ~2h a 2h30; fórmula ~3h). À noite a regra é outra e depende de idade, peso, ganho e orientação do pediatra. NÃO use "afetar o sono noturno" como critério principal e NÃO investigue berço, arroto ou posição vertical se a mãe não relatou desconforto/refluxo.',
   },
   {
     id: 'breast_soothing',
@@ -179,6 +262,7 @@ export function extractSignals({ message, conversation } = {}) {
   const signals = [];
   const boostThemes = new Set();
   const priorities = [];
+  let hasDirectiveSignal = false;
 
   for (const def of SIGNAL_DEFS) {
     const matched = def.phrases.filter((p) => norm.includes(normalize(p)));
@@ -186,6 +270,7 @@ export function extractSignals({ message, conversation } = {}) {
       signals.push({ id: def.id, label: def.label, matched });
       def.boostThemes.forEach((t) => boostThemes.add(t));
       priorities.push(def.priority);
+      if (def.directive) hasDirectiveSignal = true;
     }
   }
 
@@ -198,10 +283,12 @@ export function extractSignals({ message, conversation } = {}) {
   ).map((t) => t.label);
 
   // Rich context = the mother already brought enough for the assistant to give
-  // practical orientation instead of only asking questions.
+  // practical orientation instead of only asking questions. A directive signal
+  // (e.g. "should I wake to feed?", "worse at dawn") is itself enough to commit
+  // to a practical answer even from a short message.
   const detailScore =
     provided.length + signals.length + (currentNorm.length >= 140 ? 1 : 0);
-  const hasRichContext = detailScore >= 2 || currentNorm.length >= 180;
+  const hasRichContext = hasDirectiveSignal || detailScore >= 2 || currentNorm.length >= 180;
 
   return {
     signals,
@@ -210,6 +297,7 @@ export function extractSignals({ message, conversation } = {}) {
     provided,
     alreadyUsing,
     hasRichContext,
+    hasDirectiveSignal,
   };
 }
 

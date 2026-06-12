@@ -6,6 +6,7 @@
     { "id": "dificuldade_manutencao_sono", "label": "Dificuldade de manutenção do sono" },
     { "id": "choro_excessivo",             "label": "Choro excessivo" },
     { "id": "mamadas",                     "label": "Mamadas / amamentação" },
+    { "id": "intervalo_mamada_diurna",     "label": "Intervalo de mamada diurna / acordar para mamar durante o dia (RN)" },
     { "id": "refluxo",                     "label": "Refluxo / regurgitação" },
     { "id": "sonecas_curtas",              "label": "Sonecas curtas" },
     { "id": "rotina",                      "label": "Rotina / organização do dia" },
