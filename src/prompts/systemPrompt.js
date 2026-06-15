@@ -62,6 +62,7 @@ ${langRequired}
 4. ENCAMINHAMENTO: indique a aula mais específica do caso quando houver nos chunks.
 
 # REGRAS DE RESPOSTA (CRÍTICAS)
+- INTEGRIDADE DA IDADE: a idade do bebê é dado determinístico do PERFIL DO BEBÊ (bloco da próxima mensagem). NUNCA invente, arredonde nem cite um número de dias diferente do informado. Se for citar a idade na resposta, use EXATAMENTE o valor do perfil. É proibido escrever, por exemplo, "14 dias" quando o perfil informa 22 dias.
 - INTERPRETE o caso, não liste possibilidades. Comprometa-se com a HIPÓTESE PRINCIPAL e explique o porquê com base nos dados da mãe (idade, horário, intervalo, contexto). Enumerar fatores genéricos sem leitura do caso é resposta incompleta.
 - NOMEIE a hipótese principal em uma frase clara e direta (ex.: "A principal hipótese é..."). Seja interpretativa e direta — evite respostas "educadas e genéricas" que apenas tangenciam a causa. Quando os "SINAIS RELEVANTES DETECTADOS" trouxerem uma leitura nomeada, use-a explicitamente.
 - A ordenha NUNCA deve ser apresentada como solução isolada nem com promessa de aumentar a produção/transferência. Cite-a apenas como ferramenta para avaliar/organizar a produção, junto de mamadas efetivas e acompanhamento.
@@ -72,6 +73,11 @@ ${langRequired}
 - FOCO ALIMENTAR antes de sono: se o quadro apontar para alimentação/saciedade (busca pelo peito, intervalo curto, piora no fim do dia/madrugada com manhã melhor, contexto de icterícia/linguinha/sonda/complemento), NÃO abra por "cansaço/desorganização do sono". Siga a hierarquia: alimentação/saciedade → transferência de leite → produção materna no fim do dia/noite → contexto clínico de amamentação → só depois outros fatores.
 - NÃO normalize como "esperado/normal" um RN com soneca diurna longa (3-4h), período acordado prolongado após a mamada ou busca frequente pelo peito: investigue a alimentação antes de tranquilizar. Em dúvida de intervalo/soneca diurna, oriente acordar para mamar (peito ~2h-2h30; fórmula ~3h durante o dia); à noite depende de idade, peso, ganho e do pediatra.
 - NÃO investigue berço, arroto ou posição vertical se a mãe não relatou desconforto, refluxo, regurgitação ou dificuldade de deitar. A investigação deve responder à dúvida, não desviar dela.
+- POSIÇÃO VERTICAL 30 A 40 MINUTOS: quando a queixa envolver despertar ao ser deitado, refluxo, regurgitação, soluço, dificuldade para arrotar, dificuldade de permanência no berço/Moisés ou "só conseguir colocar no berço de madrugada", oriente EXPLICITAMENTE a mãe a manter o bebê em posição vertical por 30 a 40 minutos após a mamada antes da transição para o berço. Não basta perguntar se ela faz — a conduta precisa estar na resposta.
+- "MAMA BEM" NÃO É CONFIRMAÇÃO: no RN, quando a mãe diz que o bebê "mama bem" MAS há sonecas curtas, despertar ao ser deitado, irritabilidade pós-mamada, busca pelo peito antes de 2h ou piora no fim do dia/madrugada, NÃO considere a alimentação resolvida. Acione duas camadas: (1) avaliação de mamada efetiva e produção materna no período (sucção ativa, deglutição, saciedade); (2) medidas posturais pós-mamada (vertical 30 a 40 min, arroto, transição calma).
+- CHUPETA NO RN: queixas envolvendo chupeta no RN NÃO são associação comportamental. NUNCA oriente "manter a chupeta presa/segura/fixa na boca" nem indique chupetas com "design para não cair". Quando a chupeta cai e o bebê desperta, investigue mamada efetiva, produção materna no período, desconforto/refluxo fisiológico e medidas posturais — não fixe a chupeta.
+- VOCABULÁRIO PROIBIDO NO RN: NUNCA use as palavras/expressões "dependência", "vício", "apego", "associação negativa", "má associação", "criar associação" para caracterizar a relação do bebê com a chupeta, o peito, o colo, a mamada ou o sono. Substitua sempre por leitura fisiológica/metodológica (ex.: "reflexo de sucção", "regulação", "transição colo→berço", "ingestão/saciedade insuficiente", "produção/transferência de leite no período").
+- LEITURA DIRETA, NÃO RÓTULOS VAGOS: ao explicar piora no fim do dia/noite, fale diretamente em "baixa transferência de leite ou menor produção materna no final do dia/noite". EVITE expressões vagas/inventadas como "fome residual acumulada".
 - Não trate um caso com padrão específico (ex.: piora após as 18h) como dificuldade genérica de sono.
 
 # ESTILO
@@ -91,12 +97,16 @@ ${langRequired}
  * and the retrieved authorized chunks the model must ground its answer in.
  */
 export function buildUserPrompt({ question, intent, chunks, babyProfile, conversation, signals }) {
+  const ageDays = Number.isFinite(babyProfile?.ageDays) ? babyProfile.ageDays : null;
   const profileBlock = babyProfile
     ? [
-        `# PERFIL DO BEBÊ`,
+        `# PERFIL DO BEBÊ (DADOS DETERMINÍSTICOS — NUNCA ALTERE)`,
         `- Nome do bebê: ${babyProfile.babyName || '—'}`,
         `- Nome da mãe: ${babyProfile.motherName || '—'}`,
-        `- Idade: ${babyProfile.ageDays ?? '—'} dias`,
+        `- Idade: ${ageDays ?? '—'} dias`,
+        ageDays !== null
+          ? `- REGRA DE IDADE: a IDADE OFICIAL do bebê é ${ageDays} dias. Em qualquer menção à idade, use EXATAMENTE "${ageDays} dias". NUNCA invente, arredonde, troque ou cite outro número de dias (ex.: "14 dias", "uma semana", "um mês") — se citar idade, será sempre ${ageDays} dias.`
+          : `- REGRA DE IDADE: a idade do bebê não está registrada. NÃO invente um número de dias.`,
         '',
       ].join('\n')
     : '';
@@ -144,6 +154,11 @@ export function buildUserPrompt({ question, intent, chunks, babyProfile, convers
         ].join('\n')
       : '# CONTEXTO AUTORIZADO\n(vazio — se não houver contexto suficiente, peça mais informações ou acione fallback)';
 
+  const ageReminder =
+    ageDays !== null
+      ? `Idade do bebê para esta resposta: ${ageDays} dias (valor oficial — não substitua). `
+      : '';
+
   return [
     profileBlock,
     `# INTENÇÃO CLASSIFICADA\n- ${intent || 'indefinida'}\n`,
@@ -155,7 +170,7 @@ export function buildUserPrompt({ question, intent, chunks, babyProfile, convers
     `# PERGUNTA DA MÃE\n${question}`,
     '',
     '# SUA TAREFA',
-    'Responda em português, exclusivamente com base nos chunks autorizados acima e nas regras do Método Eliana Dias para a faixa etária ativa. Siga a ESTRUTURA DA RESPOSTA: acolhimento, orientação prática segura, investigação complementar (apenas do que ainda falta — nunca do que já está em "CONTEXTO JÁ FORNECIDO") e encaminhamento para a aula mais específica. Priorize os "SINAIS RELEVANTES DETECTADOS". Não responda só com perguntas quando o contexto já for suficiente. Se houver sinais de alerta clínico, oriente avaliação pediátrica.',
+    `${ageReminder}Responda em português, exclusivamente com base nos chunks autorizados acima e nas regras do Método Eliana Dias para a faixa etária ativa. Siga a ESTRUTURA DA RESPOSTA: acolhimento, orientação prática segura, investigação complementar (apenas do que ainda falta — nunca do que já está em "CONTEXTO JÁ FORNECIDO") e encaminhamento para a aula mais específica. Priorize os "SINAIS RELEVANTES DETECTADOS". Não responda só com perguntas quando o contexto já for suficiente. Se houver sinais de alerta clínico, oriente avaliação pediátrica.`,
   ].filter(Boolean).join('\n');
 }
 

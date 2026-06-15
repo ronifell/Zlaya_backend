@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
 import { config } from '../config/index.js';
 import { resolveAge, isNamespaceActive } from './ageService.js';
-import { classifyIntent } from './intentClassifier.js';
+import { classifyIntent, applyRnIntentOverrides } from './intentClassifier.js';
 import { extractSignals } from './signalExtractor.js';
 import { retrieve } from './retrieval.js';
 import { checkForbiddenContent, detectClinicalRedFlags } from './safetyValidator.js';
@@ -71,7 +71,17 @@ export async function processTurn({ message, babyProfile, conversation, conversa
   const namespace = age.band.id;
 
   // 2) Intent classification ------------------------------------------
-  const intent = await classifyIntent(message);
+  let intent = await classifyIntent(message);
+  // 2a) RN-specific intent overrides (e.g. block ASSOCIACAO_COMPORTAMENTAL
+  //     for RN + chupeta/colo/peito — test feedback explicitly prohibits it
+  //     in this age band and asks for reclassification to berço/manutenção
+  //     de sono/mamadas instead).
+  const intentOverride = applyRnIntentOverrides({
+    intent,
+    message,
+    ageDays: age?.days ?? null,
+  });
+  intent = intentOverride.intent;
 
   // 2b) Clinical red flags --------------------------------------------
   const clinical = detectClinicalRedFlags({ text: message, namespace });
@@ -122,7 +132,11 @@ export async function processTurn({ message, babyProfile, conversation, conversa
       conversation,
       signals,
     });
-    safety = checkForbiddenContent({ text: draft.text, namespace });
+    safety = checkForbiddenContent({
+      text: draft.text,
+      namespace,
+      ageDays: age?.days ?? null,
+    });
 
     // 7a) Post-generation safety guard (Caminho 6)
     const guardOverride = postGenerationGuard({ draft, safetyCheck: safety });

@@ -32,7 +32,7 @@
       "relatedLessons": ["lesson-estimule-arroto", "lesson-refluxo", "lesson-travesseiro", "lesson-charutinho-moro"],
       "contraindications": ["inverter a ordem investigativa sem justificativa contextual relevante"],
       "askIfMissing": ["quanto tempo o bebê permaneceu em posição vertical após a mamada", "se houve arroto", "em quanto tempo desperta após ser deitado", "padrão corporal do despertar (sobressaltos?)", "horário do episódio", "padrão alimentar associado"],
-      "text": "Quando o RN acorda ao ser colocado no berço, a investigação metodológica segue uma ordem prioritária: (1) tempo insuficiente em posição vertical após a mamada; (2) necessidade de arroto; (3) reflexo de Moro; (4) dificuldade de adaptação à superfície do berço; (5) refluxo fisiológico ou patológico. Essa ordem não deve ser invertida sem justificativa contextual relevante. Sem essas informações, a IA não conclui — ela aprofunda a investigação."
+      "text": "Quando o RN acorda ao ser colocado no berço, a investigação metodológica segue uma ordem prioritária: (1) tempo insuficiente em posição vertical após a mamada; (2) necessidade de arroto; (3) reflexo de Moro; (4) dificuldade de adaptação à superfície do berço; (5) refluxo fisiológico ou patológico. Essa ordem não deve ser invertida sem justificativa contextual relevante. ORIENTAÇÃO PRÁTICA OFICIAL: manter o bebê em POSIÇÃO VERTICAL POR 30 A 40 MINUTOS após a mamada, com arroto estimulado, antes de tentar colocá-lo no berço — essa conduta precisa ser explicitada na resposta à mãe, não apenas perguntada. Sem essas informações, a IA não conclui — ela aprofunda a investigação, mas já entrega a conduta prática."
     },
     {
       "id": "rn-chunk-reflexo-moro",
@@ -142,7 +142,7 @@
       "relatedLessons": ["lesson-refluxo", "lesson-estimule-arroto"],
       "escalateTo": ["pediatricianBonus", "humanSupport", "familyPediatrician"],
       "askIfMissing": ["frequência de regurgitações", "comportamento após mamar", "irritabilidade ao deitar", "arqueamento corporal", "padrão de sono associado", "facilidade de retorno ao sono"],
-      "text": "O refluxo fisiológico é comum no RN devido à imaturidade do sistema digestivo. A investigação inclui: tempo em posição vertical após alimentação, manipulação após a mamada, elevação do berço, volume das mamadas. A Zlaya não emite diagnóstico de refluxo patológico — diante de sinais persistentes ou desconforto importante, encaminha para as aulas bônus com o pediatra Roberto Franklin, suporte humano e/ou avaliação com o pediatra da família."
+      "text": "O refluxo fisiológico é comum no RN devido à imaturidade do sistema digestivo. A investigação inclui: tempo em posição vertical após alimentação, manipulação após a mamada, elevação do berço, volume das mamadas. ORIENTAÇÃO PRÁTICA OFICIAL: quando há regurgitação, soluço, dificuldade para arrotar ou despertar ao deitar, manter o bebê em POSIÇÃO VERTICAL POR 30 A 40 MINUTOS após a mamada antes de tentar colocá-lo no berço/Moisés. Essa conduta precisa estar na resposta à mãe, não apenas em forma de pergunta. A Zlaya não emite diagnóstico de refluxo patológico — diante de sinais persistentes ou desconforto importante, encaminha para as aulas bônus com o pediatra Roberto Franklin, suporte humano e/ou avaliação com o pediatra da família."
     },
     {
       "id": "rn-chunk-mamadas-ineficientes",
@@ -189,7 +189,7 @@
       "blockedAction": "concluir dependência emocional ou associação negativa de sono",
       "relatedLessons": ["lesson-travesseiro", "lesson-berco-do-bebe", "lesson-charutinho-moro"],
       "askIfMissing": ["tempo em posição vertical após alimentação", "padrão do despertar após ser deitado", "presença de regurgitação", "irritabilidade ao deitar", "padrão alimentar associado"],
-      "text": "Diante de dificuldade recorrente de permanência no berço no RN, a investigação prioritária é: (1) pouco tempo em posição vertical após mamada; (2) necessidade de arroto; (3) reflexo de Moro; (4) dificuldade de adaptação à superfície; (5) comportamento de vigília por fome; (6) refluxo fisiológico ou patológico. A Estratégia do Travesseiro é o conteúdo prioritário para adaptação à superfície."
+      "text": "Diante de dificuldade recorrente de permanência no berço no RN, a investigação prioritária é: (1) pouco tempo em posição vertical após mamada; (2) necessidade de arroto; (3) reflexo de Moro; (4) dificuldade de adaptação à superfície; (5) comportamento de vigília por fome; (6) refluxo fisiológico ou patológico. ORIENTAÇÃO PRÁTICA OFICIAL: manter o bebê em POSIÇÃO VERTICAL POR 30 A 40 MINUTOS após a mamada antes da transição para o berço, com arroto estimulado — essa conduta precisa ser dada à mãe, não apenas perguntada. A Estratégia do Travesseiro é o conteúdo prioritário para adaptação à superfície. NÃO oriente 'manter a chupeta presa/segura' nem indique chupetas com 'design para não cair' — se a chupeta cai e o bebê acorda, isso é sinal para investigar mamada efetiva, produção materna no período e medidas posturais, não para fixar a chupeta."
     },
     {
       "id": "rn-chunk-hora-da-bruxa",
@@ -219,7 +219,33 @@
       "relatedLessons": ["lesson-mamadas-efetivas", "lesson-alimentacao-livre-demanda", "lesson-hora-da-bruxa"],
       "contraindications": ["tratar a piora do fim do dia apenas como dificuldade genérica de sono", "ignorar a hipótese alimentar quando a mãe relata busca constante pelo peito após as 18h"],
       "askIfMissing": ["duração das mamadas", "sinais de saciedade após mamar", "percepção sobre a produção de leite no fim do dia", "horário em que o quadro piora", "comportamento logo após mamar"],
-      "text": "No RN é comum uma piora do comportamento no final do dia, em geral após as 18h: mais agitação, choro e busca frequente pelo peito, com o bebê se acalmando ao mamar e voltando a se incomodar pouco depois. Esse é um padrão vespertino esperado e tem relação direta com a alimentação. No fim da tarde costuma ocorrer uma queda fisiológica natural da produção de leite, o que aumenta a busca pelo peito e as mamadas agrupadas (cluster feeding), somada a uma possível fome residual acumulada ao longo do dia. Diante desse quadro, a hipótese prioritária é alimentar: eficácia das mamadas (mamada efetiva e sinais de saciedade), produção de leite no fim do dia e padrão de mamadas nesse período. Esse comportamento NÃO é associação negativa de sono e NÃO deve ser lido como manha. Pode coexistir com a 'hora da bruxa' (irritabilidade do fim da tarde). Orientação prática segura: oferecer o peito em livre demanda nesse período (não forçar intervalo de 2h quando houver sinais de necessidade) e garantir mamadas efetivas. A ordenha no fim da tarde pode entrar apenas como ferramenta auxiliar para AVALIAR ou organizar a produção, sempre junto de mamadas efetivas e acompanhamento — nunca como solução isolada nem como promessa de aumentar a produção/transferência. Encaminhar para as aulas de mamadas efetivas e amamentação."
+      "text": "No RN é comum uma piora do comportamento no final do dia, em geral após as 18h: mais agitação, choro e busca frequente pelo peito, com o bebê se acalmando ao mamar e voltando a se incomodar pouco depois. Esse é um padrão vespertino esperado e tem relação direta com a alimentação. NOMEIE a hipótese principal de forma direta: 'A principal hipótese é baixa transferência de leite ou menor produção materna no final do dia/noite'. No fim da tarde costuma ocorrer uma queda fisiológica natural da produção de leite, o que aumenta a busca pelo peito e as mamadas agrupadas (cluster feeding); some-se a isso a possibilidade de a mamada estar transferindo menos leite nesse período (mamada menos efetiva). EVITE usar expressões vagas/inventadas como 'fome residual acumulada' — vá direto à hipótese de baixa produção ou transferência insuficiente. Diante desse quadro, a hipótese prioritária é alimentar: eficácia das mamadas (sucção ativa, deglutição e sinais de saciedade), produção de leite no fim do dia e padrão de mamadas nesse período. Esse comportamento NÃO é associação negativa de sono e NÃO deve ser lido como manha. Pode coexistir com a 'hora da bruxa' (irritabilidade do fim da tarde). Orientação prática segura: oferecer o peito em livre demanda nesse período (não forçar intervalo de 2h quando houver sinais de necessidade) e garantir mamadas efetivas. A ordenha no fim da tarde pode entrar apenas como ferramenta auxiliar para AVALIAR ou organizar a produção, sempre junto de mamadas efetivas e acompanhamento — nunca como solução isolada nem como promessa de aumentar a produção/transferência. Encaminhar para as aulas de mamadas efetivas e amamentação."
+    },
+    {
+      "id": "rn-chunk-chupeta-rn-nao-associacao",
+      "namespace": "RN",
+      "theme": "chupeta_rn",
+      "intent": ["dificuldade_manutencao_sono", "adaptacao_ao_berco", "mamadas", "despertares_noturnos"],
+      "ageBand": "RN",
+      "ageRangeDays": [0, 28],
+      "safetyLevel": "amarelo",
+      "contentType": "hierarquia_investigacao",
+      "allowedAction": "ler a queixa de chupeta no RN como reflexo de sucção / regulação / transição para o berço / alimentação; orientar 30–40 min em posição vertical pós-mamada; investigar mamada efetiva e produção materna",
+      "blockedAction": "classificar como associação comportamental; orientar 'manter a chupeta presa/segura/fixa na boca'; indicar chupeta com 'design para não cair'; usar a chupeta como solução isolada",
+      "relatedLessons": ["lesson-reflexo-succao", "lesson-mamadas-efetivas", "lesson-alimentacao-livre-demanda", "lesson-estimule-arroto", "lesson-travesseiro", "lesson-charutinho-moro", "lesson-berco-do-bebe"],
+      "contraindications": [
+        "tratar a chupeta como objeto a ser fixado na boca do bebê",
+        "interpretar 'a chupeta cai e ele acorda' como dependência ou associação negativa"
+      ],
+      "askIfMissing": [
+        "forma de alimentação (peito, fórmula ou misto) e se há complemento",
+        "se a mãe percebe sucção ativa e deglutição na mamada",
+        "se o bebê relaxa e solta o peito após mamar ou continua procurando",
+        "quanto tempo o bebê permanece em posição vertical após a mamada",
+        "se houve arroto",
+        "horário em que o quadro piora (especialmente final da tarde/madrugada)"
+      ],
+      "text": "No RN (0–28 dias), qualquer queixa envolvendo chupeta — chupeta cai e o bebê acorda, só dorme com chupeta, mãe passa a noite recolocando a chupeta — NÃO é associação comportamental, NÃO é aprendizado negativo e NÃO deve ser descrita com as palavras 'dependência', 'vício', 'apego' ou 'má associação'. Use SEMPRE leitura fisiológica/metodológica: reflexo de sucção, necessidade de regulação, transição colo→berço, ingestão/saciedade insuficiente, produção/transferência de leite no período. Nessa faixa etária a leitura correta é: (1) reflexo de sucção e necessidade de regulação; (2) ALIMENTAÇÃO — investigar mamada efetiva (sucção ativa, deglutição, sinais de saciedade) e produção materna no período do dia em que o quadro piora; (3) transição colo→berço e MEDIDAS POSTURAIS pós-mamada; (4) ritmo dia/noite. ORIENTAÇÃO PRÁTICA OFICIAL: manter o bebê em POSIÇÃO VERTICAL POR 30 A 40 MINUTOS após a mamada antes de tentar colocá-lo no berço/Moisés, com arroto estimulado e transição calma. É PROIBIDO orientar a mãe a 'manter a chupeta presa/segura/fixa na boca' ou usar chupetas com 'design para não cair' — se a chupeta cai e o bebê desperta, isso é sinal para investigar mamada/produção/desconforto, não para fixar a chupeta. Se 'só conseguir colocar no berço depois de 1h da manhã', isso NÃO é simplesmente normal da idade — exige investigação alimentar do fim do dia/noite e medidas posturais. A chupeta entra apenas como apoio à regulação, nunca como solução isolada nem como substituto da investigação."
     },
     {
       "id": "rn-chunk-ambiente-sono",

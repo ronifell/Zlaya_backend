@@ -38,8 +38,8 @@
     },
     {
       "id": "rn-evening-pattern-feeding-first",
-      "rule": "Quando a mãe relata piora no final do dia (após as 18h), busca constante pelo peito e bebê que só se acalma mamando, a hipótese prioritária é alimentar: eficácia das mamadas, queda fisiológica da produção de leite no fim do dia, fome residual e padrão de mamadas agrupadas (cluster). A IA deve levantar essa hipótese e dar orientação prática antes de tratar o caso como dificuldade genérica de sono. Não interpretar como associação negativa nem como manha.",
-      "rationale": "No fim da tarde há uma queda fisiológica natural da produção de leite; a busca aumentada pelo peito nesse período é esperada e tem causa alimentar, não comportamental."
+      "rule": "Quando a mãe relata piora no final do dia (após as 18h), busca constante pelo peito e bebê que só se acalma mamando, a hipótese prioritária é alimentar e deve ser nomeada de forma direta: 'A principal hipótese é baixa transferência de leite ou menor produção materna no final do dia/noite.' A IA deve levantar essa hipótese e dar orientação prática antes de tratar o caso como dificuldade genérica de sono. Não interpretar como associação negativa nem como manha. EVITE termos vagos/inventados como 'fome residual acumulada' — fale diretamente em baixa produção e/ou transferência insuficiente, e em mamadas agrupadas (cluster) quando aplicável.",
+      "rationale": "No fim da tarde há uma queda fisiológica natural da produção de leite; a busca aumentada pelo peito nesse período é esperada e tem causa alimentar, não comportamental. O método pede leitura direta da hipótese, não rótulos vagos."
     },
     {
       "id": "rn-practical-orientation-before-investigation",
@@ -83,7 +83,42 @@
     },
     {
       "id": "rn-pacifier-respect",
-      "rule": "Em casos de reflexo de sucção aumentado, a IA pode sugerir uso de chupeta como ferramenta auxiliar de organização e relaxamento, se isso estiver de acordo com a aceitação e escolha da família. A IA não impõe uso de chupeta como obrigação metodológica. A sugestão de chupeta não substitui investigação alimentar quando houver suspeita de fome real."
+      "rule": "Em casos de reflexo de sucção aumentado, a IA pode sugerir uso de chupeta como ferramenta auxiliar de organização e relaxamento, se isso estiver de acordo com a aceitação e escolha da família. A IA não impõe uso de chupeta como obrigação metodológica. A sugestão de chupeta NÃO substitui investigação alimentar quando houver suspeita de fome real, nem substitui medidas posturais pós-mamada (posição vertical 30 a 40 min) quando houver despertar ao deitar ou desconforto."
+    },
+    {
+      "id": "rn-pacifier-no-securing",
+      "rule": "É PROIBIDO orientar a mãe a 'manter a chupeta presa/segura/fixa na boca' do bebê ou a usar chupetas com 'design para não cair / continuar na boca'. Quando a chupeta cai e o bebê desperta, isso NÃO é problema de fixação da chupeta — é sinal para investigar mamada efetiva, produção materna no período, desconforto/refluxo fisiológico e medidas posturais pós-mamada (posição vertical 30 a 40 minutos).",
+      "rationale": "Test feedback explícito: orientar a mãe a manter a chupeta presa é inseguro e desvia da investigação metodológica."
+    },
+    {
+      "id": "rn-no-behavioral-association-pacifier",
+      "rule": "Para o RN (0–28 dias), qualquer queixa envolvendo chupeta, dormir mamando, dormir no colo ou só se acalmar no peito NÃO deve ser classificada nem lida como 'associação comportamental'. Nessa faixa esses comportamentos são de regulação, reflexo de sucção, transição para o berço ou alimentação. A leitura deve seguir essa hierarquia: (1) reflexo de sucção/regulação; (2) alimentação (mamada efetiva e produção materna no período); (3) transição colo→berço e medidas posturais pós-mamada; (4) ritmo noturno/dia–noite.",
+      "rationale": "Test feedback do caso 22d explicitamente proibiu o uso de ASSOCIACAO_COMPORTAMENTAL para chupeta no RN."
+    },
+    {
+      "id": "rn-vertical-30-40",
+      "rule": "Em RN com despertar ao ser deitado, dificuldade de permanecer no berço/Moisés, refluxo fisiológico, regurgitação, soluço, dificuldade para arrotar ou desconforto pós-mamada, a IA DEVE orientar EXPLICITAMENTE manter o bebê em posição vertical por 30 a 40 minutos após a mamada antes da transição para o berço. Não basta perguntar se a mãe faz — a orientação prática precisa estar na resposta.",
+      "rationale": "Test feedback (10d e 22d): a IA perguntava sobre posição vertical, mas não dava o tempo oficial de 30 a 40 minutos como conduta prática do método."
+    },
+    {
+      "id": "rn-late-crib-investigate-feeding",
+      "rule": "Quando a mãe relata só conseguir colocar o bebê no berço/Moisés depois da 1h da manhã (ou na madrugada), a IA NÃO deve aceitar isso como simplesmente 'normal da idade'. Deve OBRIGATORIAMENTE investigar: (a) eficácia/transferência da mamada no fim do dia/noite; (b) produção materna nesse período; (c) tempo em posição vertical pós-mamada (30 a 40 min); (d) arrotos e desconforto/refluxo fisiológico; (e) transição colo→berço. Tentar resolver apenas recolocando chupeta ou ajustando berço é insuficiente.",
+      "rationale": "Test feedback caso 22d: 'colocar no berço depois de 1h da manhã' foi tratado como esperado, sem investigação alimentar nem postural."
+    },
+    {
+      "id": "rn-mama-bem-not-sufficient",
+      "rule": "No RN, 'mama bem' relatado pela mãe NÃO é confirmação de mamada efetiva quando há sinais concorrentes: sonecas curtas, despertar ao ser deitado, irritabilidade pós-mamada, busca pelo peito antes de 2h, piora no fim do dia/madrugada. Nessas situações, mesmo com 'mama bem', a IA deve acionar DUAS CAMADAS obrigatórias: (1) avaliação de produção materna e mamada efetiva (sucção ativa, deglutição, sinais de saciedade, comportamento após soltar o peito); (2) medidas posturais pós-mamada (posição vertical 30 a 40 min, arroto, transição calma para o berço). Não considere a alimentação resolvida com base apenas em 'mama bem'.",
+      "rationale": "Test feedback caso 23d: a IA aceitou 'mama bem' como suficiente e não investigou produção/transferência nem orientou as medidas posturais."
+    },
+    {
+      "id": "rn-no-vague-terms",
+      "rule": "A IA NÃO deve usar expressões vagas/inventadas como 'fome residual acumulada' para explicar piora no fim do dia/noite. A leitura deve ser direta e nomeada: 'A principal hipótese é baixa transferência de leite ou menor produção materna no final do dia/noite' — combinada, quando couber, com mamadas agrupadas (cluster) e com a 'hora da bruxa'.",
+      "rationale": "Test feedback 16d: 'fome residual acumulada' soou inventado e desviou do vocabulário direto do método."
+    },
+    {
+      "id": "rn-age-integrity",
+      "rule": "A IA NUNCA pode alterar a idade do bebê. A idade vem do perfil (campo determinístico) e qualquer menção à idade na resposta deve usar EXATAMENTE esse valor em dias. Citar idade diferente (ex.: '14 dias' quando o perfil indica 22 dias) é falha crítica e dispara o guard pós-geração.",
+      "rationale": "Test feedback 10d e 22d: a IA respondeu com idade errada (14 dias), comprometendo toda a leitura clínica."
     }
   ],
 

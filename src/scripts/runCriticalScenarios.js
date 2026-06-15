@@ -114,6 +114,45 @@ const SCENARIOS = [
     expectAny: ['answer', 'forward_to_lesson'],
     expectNoTermsHard: HARD_FORBIDDEN_TERMS,
   },
+  {
+    label: '13) RN 22d — chupeta cai + só vai pro berço depois da 1h → NÃO classificar como associação, NÃO mandar prender chupeta',
+    message:
+      'Meu bebê de 22 dias só dorme com a chupeta e acorda toda hora que ela cai. Às vezes só consigo colocá-lo no berço depois da 1h da manhã. Isso é normal pra idade? Como posso melhorar?',
+    babyProfile: { motherName: 'Iara', babyName: 'Caio', ageDays: 22 },
+    expectAny: ['answer', 'forward_to_lesson'],
+    expectIntentNot: ['associacao_comportamental'],
+    expectNoTerms: ['associação negativa', 'dependência', 'manter a chupeta presa', 'chupeta com design'],
+    expectNoTermsHard: HARD_FORBIDDEN_TERMS,
+    expectAgeOnly: 22,
+  },
+  {
+    label: '14) RN 23d — "mama bem" + sonecas curtas + acorda ao deitar → não considerar mamada resolvida (duas camadas)',
+    message:
+      'Meu bebê de 23 dias mama bem nos dois seios, mas as sonecas diurnas são muito difíceis. Ele só dorme no colo e acorda assim que coloco no berço. Faço arrotar.',
+    babyProfile: { motherName: 'Joana', babyName: 'Vitor', ageDays: 23 },
+    expectAny: ['answer', 'forward_to_lesson'],
+    expectNoTermsHard: HARD_FORBIDDEN_TERMS,
+    expectAgeOnly: 23,
+  },
+  {
+    label: '15) RN 10d — soneca de 3h + nervoso entre 23h-02h → priorizar alimentação e respeitar idade (10 dias, não 14)',
+    message:
+      'Meu bebê de 10 dias faz sonecas de até 3 horas durante o dia, mas entre 23h e 02h fica muito nervoso, suga as mãozinhas e choraminga. Devo diminuir as sonecas de 3 horas?',
+    babyProfile: { motherName: 'Marina', babyName: 'Bento', ageDays: 10 },
+    expectAny: ['answer', 'forward_to_lesson'],
+    expectNoTermsHard: HARD_FORBIDDEN_TERMS,
+    expectAgeOnly: 10,
+  },
+  {
+    label: '16) RN 16d — padrão vespertino → NÃO usar "fome residual acumulada" como rótulo',
+    message:
+      'Minha bebê tem 16 dias e a partir das 18h ela só se acalma no peito, quer voltar pro peito a cada 1h, mas de manhã fica tranquila. O que está acontecendo?',
+    babyProfile: { motherName: 'Paula', babyName: 'Liz', ageDays: 16 },
+    expectAny: ['answer', 'forward_to_lesson'],
+    expectNoTerms: ['fome residual acumulada'],
+    expectNoTermsHard: HARD_FORBIDDEN_TERMS,
+    expectAgeOnly: 16,
+  },
 ];
 
 // Negation cues that, when present in the ~60 chars BEFORE a forbidden term,
@@ -184,6 +223,27 @@ function check(result, scenario) {
     for (const t of scenario.expectNoTermsHard) {
       if (text.includes(stripDiacritics(t))) {
         issues.push(`hard-forbidden term leaked: "${t}"`);
+      }
+    }
+  }
+  if (scenario.expectIntentNot) {
+    const got = result.intent?.intent;
+    if (got && scenario.expectIntentNot.includes(got)) {
+      issues.push(`intent '${got}' is forbidden for this scenario (got it after RN override)`);
+    }
+  }
+  if (Number.isFinite(scenario.expectAgeOnly)) {
+    const text = stripDiacritics(String(result.response?.text || ''));
+    const re = /(\d{1,3})(?:\s*(?:a|ate|–|-|—)\s*(\d{1,3}))?\s*dias?\b/gi;
+    let m;
+    while ((m = re.exec(text)) !== null) {
+      const a = Number(m[1]);
+      const b = m[2] ? Number(m[2]) : a;
+      const lo = Math.min(a, b);
+      const hi = Math.max(a, b);
+      if (lo > 60) continue;
+      if (scenario.expectAgeOnly < lo || scenario.expectAgeOnly > hi) {
+        issues.push(`age hallucinated: response said "${m[0].trim()}" but profile is ${scenario.expectAgeOnly} dias`);
       }
     }
   }

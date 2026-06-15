@@ -110,6 +110,7 @@ Regras:
 - Se a mãe perguntar sobre soneca diurna longa (3-4h), se deve acordar para mamar, ou intervalo de mamada durante o dia, use "intervalo_mamada_diurna" (NÃO use "sonecas_curtas" nem "comportamento_esperado").
 - Quando o foco for busca pelo peito, eficácia/produção/transferência de leite, piora no fim do dia/madrugada, contexto de icterícia/linguinha/sonda/complemento, use "mamadas".
 - NÃO classifique como "comportamento_esperado" um RN com período acordado prolongado após a mamada ou soneca diurna longa: nesses casos o foco é alimentação ("mamadas" ou "intervalo_mamada_diurna").
+- Para o RN (0–28 dias), NUNCA use "associacao_comportamental" quando a queixa envolver chupeta, dormir mamando, dormir no colo ou só se acalmar no peito — nessa faixa esses comportamentos são de regulação/sucção/transição. Reclassifique como "adaptacao_ao_berco" quando o foco for dificuldade de colocar/permanecer no berço, "dificuldade_manutencao_sono" quando o foco for despertar (chupeta cai etc.) ou "mamadas" quando o foco for alimentação.
 - Se a pergunta não tiver relação alguma com sono, rotina, alimentação, comportamento ou cuidados do bebê, use "fora_da_base".
 - Se a pergunta for ambígua ou insuficiente, use "ambiguo".
 - NUNCA invente uma intenção fora da lista.`;
@@ -149,6 +150,48 @@ function clamp01(n) {
   const x = Number(n);
   if (!Number.isFinite(x)) return 0.5;
   return Math.max(0, Math.min(1, x));
+}
+
+/**
+ * Deterministic post-classification override for the RN namespace.
+ *
+ * Test feedback (22-day baby + pacifier case): the LLM was classifying the
+ * complaint as `associacao_comportamental` and the assistant then advised
+ * the mother to "keep the pacifier more secure in the mouth". In the RN
+ * methodology this is wrong: at 0–28 days a pacifier complaint must be
+ * read as sucção/regulação/transição-berço/alimentação, never as a learned
+ * negative association. This function reroutes the intent to the most
+ * appropriate alternative based on what the mother actually mentioned.
+ */
+export function applyRnIntentOverrides({ intent, message, ageDays }) {
+  const isRn = Number.isFinite(ageDays) ? ageDays <= 28 : true;
+  if (!isRn) return { intent, override: null };
+
+  const norm = normalize(message);
+  const mentionsPacifier = /chupeta|chupetinha/.test(norm);
+  const mentionsCrib = /berco|berço|moises|moisés|deitar|colocar no berco|coloco no berco/.test(norm);
+  const mentionsFeeding = /mama|mamada|peito|leite|amament|formula|fórmula|mamadeira/.test(norm);
+
+  if (intent?.intent === 'associacao_comportamental' && (mentionsPacifier || mentionsFeeding)) {
+    const target = mentionsCrib
+      ? 'adaptacao_ao_berco'
+      : mentionsPacifier
+        ? 'dificuldade_manutencao_sono'
+        : 'mamadas';
+    return {
+      intent: {
+        ...intent,
+        intent: target,
+        rationale:
+          (intent.rationale ? intent.rationale + ' | ' : '') +
+          `override_rn: 'associacao_comportamental' não se aplica ao RN 0–28 dias (chupeta/colo/peito) → ${target}`,
+        source: (intent.source || 'unknown') + '+rn_override',
+        originalIntent: intent.intent,
+      },
+      override: { from: 'associacao_comportamental', to: target, reason: 'rn_pacifier_or_feeding' },
+    };
+  }
+  return { intent, override: null };
 }
 
 export function listIntents() {

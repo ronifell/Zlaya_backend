@@ -21,12 +21,45 @@ function normalize(text) {
 }
 
 /**
+ * Patterns that catch unsafe pacifier guidance flagged in RN test feedback.
+ * The methodology forbids teaching the mother to "hold" or "secure" the
+ * pacifier in the baby's mouth or to choose specific pacifier designs to
+ * keep it from falling — that diverts from the real investigation
+ * (feeding effectiveness, milk production, postural measures).
+ */
+const UNSAFE_PACIFIER_PATTERNS = [
+  { re: /manter\s+(a\s+)?chupeta\s+(presa|segura|fixa|no\s+lugar)/, label: 'manter a chupeta presa/segura/no lugar' },
+  { re: /chupeta\s+(mais\s+)?(segura|presa|fixa)\s+(na\s+)?boca/, label: 'chupeta segura/presa/fixa na boca' },
+  { re: /prender\s+(a\s+)?chupeta/, label: 'prender a chupeta' },
+  { re: /chupeta\s+com\s+design\s+(para|que)\s+(mant|nao\s+cair|fixa)/, label: 'chupeta com design para manter no lugar' },
+  { re: /design\s+(especial\s+)?(da\s+)?chupeta\s+para\s+(manter|fixar|nao\s+cair)/, label: 'design especial da chupeta para manter no lugar' },
+  { re: /posicion(e|ar)\s+(a\s+)?chupeta\s+(de\s+forma\s+que\s+)?(fique|continue|permane[çc]a)\s+(mais\s+)?(segura|presa|fixa)/, label: 'posicionar a chupeta para ficar segura' },
+];
+
+/**
+ * Behavioral-association vocabulary that the RN methodology forbids when
+ * applied to pacifier / breast / lap / feeding. We do not block these words
+ * globally (they have legitimate uses), but in the RN namespace they must
+ * never be used to characterize the baby's relationship with chupeta, peito,
+ * colo or mamada. Catches "dependência da chupeta", "vício no peito",
+ * "apego ao colo", etc.
+ */
+const RN_FORBIDDEN_BEHAVIORAL_FRAMINGS = [
+  // (label, regex that allows up to ~30 chars between framing word and object)
+  { re: /depend[êe]nc[iy]a\s+(emocional\s+|excessiva\s+)?(d[aoe]|com\s+a|para\s+com\s+a)\s*(chupeta|peito|mamada|amamenta|colo)/, label: 'dependência da chupeta/peito/mamada/colo' },
+  { re: /v[íi]cio\s+(d[aoe]|na|no|com\s+a)\s*(chupeta|peito|mamada|amamenta|colo)/, label: 'vício na chupeta/peito/mamada/colo' },
+  { re: /apego\s+(emocional\s+|excessivo\s+)?(d[aoe]|a[oô]\s+|à\s+|para\s+com\s+a)\s*(chupeta|peito|mamada|amamenta|colo)/, label: 'apego à chupeta/peito/mamada/colo' },
+  { re: /(criar|cria|criou|criando)\s+(uma\s+)?associa[çc][ãa]o\s+(negativa\s+)?(d[aoe]|com\s+a|para\s+com\s+a)\s*(chupeta|peito|mamada|amamenta|colo|sono)/, label: 'criar associação (negativa) à chupeta/peito/mamada/colo/sono' },
+  { re: /m[aá]\s+associa[çc][ãa]o\s+(d[aoe]|com\s+a)\s*(chupeta|peito|mamada|amamenta|colo|sono)/, label: 'má associação à chupeta/peito/mamada/colo/sono' },
+];
+
+/**
  * Checks a piece of text (typically a drafted answer) against the forbidden
  * vocabulary configured for the namespace.
  *
  * Returns { safe, violations: [{ term, kind }] }
  */
-export function checkForbiddenContent({ text, namespace }) {
+export function checkForbiddenContent({ text, namespace, ageDays } = {}) {
   const forbidden = getForbidden(namespace);
   const norm = normalize(text);
   const violations = [];
@@ -42,7 +75,68 @@ export function checkForbiddenContent({ text, namespace }) {
     if (re.test(norm)) violations.push({ term: re.source, kind: 'language_diminutive' });
   }
 
+  for (const { re, label } of UNSAFE_PACIFIER_PATTERNS) {
+    if (re.test(norm)) {
+      violations.push({ term: label, kind: 'unsafe_pacifier_guidance' });
+    }
+  }
+
+  // RN-only: forbidden behavioral framings ("dependência da chupeta",
+  // "vício no peito", "apego ao colo"). Test feedback (caso 22d) flagged
+  // the model writing "a dependência da chupeta" for a 22-day baby — the
+  // methodology rejects this framing for RN regardless of context.
+  if (String(namespace || '').toUpperCase() === 'RN') {
+    for (const { re, label } of RN_FORBIDDEN_BEHAVIORAL_FRAMINGS) {
+      if (re.test(norm)) {
+        violations.push({ term: label, kind: 'rn_behavioral_framing' });
+      }
+    }
+  }
+
+  // Age consistency: never let the model claim a different age than the
+  // profile's. Test feedback flagged repeated cases where the AI answered
+  // "14 dias" while the baby was 10 or 22 days. We accept ranges if the
+  // profile age falls inside them and only flag standalone numeric ages.
+  const ageViolations = checkAgeConsistency({ text, ageDays });
+  for (const v of ageViolations) violations.push(v);
+
   return { safe: violations.length === 0, violations };
+}
+
+/**
+ * Detects numeric age mentions in the draft that contradict the profile's
+ * ageDays. Returns an array of violations (empty if all mentions are
+ * compatible — including ranges that contain the real age).
+ *
+ * We intentionally only look at "<num> dias" / "<num> dia" patterns; mentions
+ * in weeks or months are out of scope for RN (0–28 dias) and would have
+ * different syntactic shapes anyway.
+ */
+export function checkAgeConsistency({ text, ageDays }) {
+  if (!Number.isFinite(ageDays)) return [];
+  const norm = normalize(text);
+  const violations = [];
+  const re = /(\d{1,3})(?:\s*(?:a|ate|até|–|-|—)\s*(\d{1,3}))?\s*dias?\b/gi;
+  let m;
+  while ((m = re.exec(norm)) !== null) {
+    const a = Number(m[1]);
+    const b = m[2] ? Number(m[2]) : a;
+    if (!Number.isFinite(a) || !Number.isFinite(b)) continue;
+    const lo = Math.min(a, b);
+    const hi = Math.max(a, b);
+    // Skip clearly non-RN ranges (e.g. "365 dias", "100 dias de vida"); we
+    // only care about hallucinations within the RN window.
+    if (lo > 60) continue;
+    if (ageDays < lo || ageDays > hi) {
+      violations.push({
+        term: `idade citada "${m[0].trim()}" diverge do perfil (${ageDays} dias)`,
+        kind: 'age_mismatch',
+        detected: m[0].trim(),
+        profileAgeDays: ageDays,
+      });
+    }
+  }
+  return violations;
 }
 
 /**

@@ -49,7 +49,7 @@ const SIGNAL_DEFS = [
       'irritabilidade_final_tarde',
     ],
     priority:
-      'A piora no final do dia (após as 18h) é um padrão vespertino típico no RN. Priorize a investigação ALIMENTAR: eficácia das mamadas, possível queda fisiológica da produção de leite no fim do dia, fome residual acumulada e mamadas agrupadas (cluster). Considere também a "hora da bruxa".',
+      'A piora no final do dia (após as 18h) é um padrão vespertino típico no RN. NOMEIE a hipótese principal de forma direta: "A principal hipótese é baixa transferência de leite ou menor produção materna no final do dia/noite." Priorize a investigação ALIMENTAR: eficácia/transferência das mamadas, queda fisiológica da produção de leite no fim do dia e mamadas agrupadas (cluster). EVITE expressões vagas/inventadas como "fome residual acumulada" — fale diretamente em baixa produção ou transferência insuficiente de leite. Considere também a "hora da bruxa".',
   },
   {
     id: 'night_production_drop',
@@ -152,20 +152,30 @@ const SIGNAL_DEFS = [
   {
     id: 'late_crib_placement',
     label: 'Só consegue colocar no berço de madrugada',
+    directive: true,
     phrases: [
       'depois da 1h', 'depois da uma', 'depois da meia noite', 'depois da meia-noite',
       'so consigo colocar no berco depois', 'so coloco no berco depois',
       'so vai pro berco depois', 'apos a 1h da manha', 'depois da 1 da manha',
       '1h da manha', 'uma da manha', 'so dorme no berco de madrugada',
-      'so vai pro berco de madrugada',
+      'so vai pro berco de madrugada', 'so coloco no moises depois', 'so vai pro moises depois',
+      'so consigo colocar no moises depois',
     ],
-    boostThemes: ['dificuldade_berco', 'acorda_ao_deitar', 'reflexo_moro'],
+    boostThemes: [
+      'dificuldade_berco',
+      'acorda_ao_deitar',
+      'reflexo_moro',
+      'baixa_producao_fim_dia',
+      'mamadas_ineficientes',
+      'baixa_producao_leite',
+    ],
     priority:
-      'Conseguir colocar o bebê no berço apenas na madrugada indica trabalhar a transição colo→berço e a hierarquia de permanência no berço (tempo vertical após a mamada, arroto, reflexo de Moro, adaptação à superfície).',
+      'Conseguir colocar o bebê no berço/Moisés apenas na madrugada NÃO é "normal da idade" — é sinal para investigação obrigatória, em duas camadas: (a) ALIMENTAÇÃO no fim do dia/noite — eficácia/transferência da mamada e produção materna nesse período; (b) MEDIDAS POSTURAIS pós-mamada — oriente EXPLICITAMENTE manter o bebê em POSIÇÃO VERTICAL POR 30 A 40 MINUTOS após a mamada antes de tentar colocá-lo no berço, com arroto estimulado, transição calma e contida. NÃO resolva apenas recolocando chupeta nem ajustando berço. NÃO oriente "manter a chupeta presa".',
   },
   {
     id: 'wakes_on_transfer',
     label: 'Desperta ao ser colocado no berço',
+    directive: true,
     phrases: [
       'desperta ao ser colocado', 'acorda quando coloco', 'acorda ao ser colocado',
       'acorda ao deitar', 'acorda quando deito', 'desperta ao deitar',
@@ -175,7 +185,41 @@ const SIGNAL_DEFS = [
     ],
     boostThemes: ['acorda_ao_deitar', 'dificuldade_berco', 'reflexo_moro'],
     priority:
-      'O despertar na transferência para o berço segue a hierarquia: (1) tempo vertical após a mamada, (2) arroto, (3) reflexo de Moro, (4) adaptação à superfície, (5) refluxo. Oriente a transição gradual colo→superfície com o corpo bem contido.',
+      'O despertar na transferência para o berço segue a hierarquia: (1) tempo vertical após a mamada, (2) arroto, (3) reflexo de Moro, (4) adaptação à superfície, (5) refluxo. Oriente EXPLICITAMENTE manter o bebê em POSIÇÃO VERTICAL POR 30 A 40 MINUTOS após a mamada antes da transição para o berço — não basta perguntar se a mãe faz, a conduta prática precisa estar na resposta. Depois disso, transição gradual colo→superfície com o corpo bem contido.',
+  },
+  {
+    id: 'mama_bem_with_concurrent_symptoms',
+    label: '"Mama bem" relatado + sinais concorrentes (não considerar mamada resolvida)',
+    directive: true,
+    // Matched in a second pass (see post-processing below); this entry is
+    // here only for prompt/metadata symmetry.
+    phrases: [],
+    boostThemes: ['mamadas_ineficientes', 'baixa_producao_leite', 'baixa_producao_fim_dia'],
+    priority:
+      '"Mama bem" foi relatado pela mãe MAS existem sinais concorrentes no caso (sonecas curtas, despertar ao deitar, irritabilidade pós-mamada, busca pelo peito antes de 2h, piora no fim do dia/madrugada). NÃO considere a alimentação resolvida. Acione DUAS CAMADAS obrigatórias na resposta: (1) avaliação de mamada efetiva e produção materna no período (sucção ativa, deglutição, sinais de saciedade, comportamento após soltar o peito); (2) medidas posturais pós-mamada (POSIÇÃO VERTICAL 30 A 40 MIN, arroto, transição calma para o berço).',
+  },
+  {
+    id: 'pacifier_in_rn',
+    label: 'Queixa envolvendo chupeta no RN',
+    directive: true,
+    phrases: [
+      'chupeta cai', 'a chupeta cai', 'chupeta sai', 'chupeta solta', 'cuspir a chupeta',
+      'cospe a chupeta', 'perde a chupeta', 'acorda quando a chupeta cai',
+      'recoloco a chupeta', 'reponho a chupeta', 'fico recolocando a chupeta',
+      'precisa da chupeta para dormir', 'so dorme com a chupeta', 'so dorme com chupeta',
+      'usa chupeta', 'damos chupeta', 'dou chupeta', 'oferecemos chupeta',
+    ],
+    boostThemes: [
+      'busca_excessiva_peito',
+      'mamadas_ineficientes',
+      'baixa_producao_leite',
+      'baixa_producao_fim_dia',
+      'acorda_ao_deitar',
+      'dificuldade_berco',
+      'reflexo_moro',
+    ],
+    priority:
+      'Queixa envolvendo chupeta no RN (0–28 dias) NÃO é associação comportamental. A leitura correta segue a hierarquia: (1) reflexo de sucção / regulação; (2) ALIMENTAÇÃO — mamada efetiva e produção materna no período; (3) transição colo→berço e MEDIDAS POSTURAIS pós-mamada (POSIÇÃO VERTICAL 30 A 40 MIN após mamada); (4) ritmo dia/noite. É PROIBIDO orientar "manter a chupeta presa/segura/fixa na boca" ou indicar chupetas com "design para não cair". Se a chupeta cai e o bebê acorda, isso é sinal para investigar mamada/saciedade/desconforto, não para fixar a chupeta. NUNCA descreva o quadro com as palavras "dependência", "vício", "apego" ou "má associação" (em relação a chupeta, peito, colo, mamada ou sono) — use leitura fisiológica/metodológica.',
   },
 ];
 
@@ -209,12 +253,13 @@ const PROVIDED_FACTS = [
     phrases: ['a cada 2', 'a cada 3', 'de 2 em 2', 'de 3 em 3', 'intervalo de', 'mama de', 'a cada duas', 'a cada tres'],
     askKeywords: ['intervalo'],
   },
-  {
-    id: 'milk_supply',
-    label: 'percepção sobre a produção de leite',
-    phrases: ['mama bem', 'tenho bastante leite', 'pouco leite', 'producao de leite', 'produção de leite', 'acho que tenho leite', 'leite suficiente'],
-    askKeywords: ['producao', 'produção', 'percepcao materna'],
-  },
+  // Deliberately NOT mapping "mama bem" / "acho que tenho leite" as a
+  // provided fact: test feedback (caso 23d) flagged that these subjective
+  // perceptions cannot be accepted as confirmation of effective feeding,
+  // especially when there are concurrent symptoms (short naps, wake-on-
+  // transfer, post-feed irritability). We keep ONLY explicit, concrete
+  // facts here. The assistant must still investigate production/transfer
+  // even when the mother says "mama bem".
   {
     id: 'wake_latency',
     label: 'em quanto tempo desperta após ser deitado',
@@ -265,6 +310,10 @@ export function extractSignals({ message, conversation } = {}) {
   let hasDirectiveSignal = false;
 
   for (const def of SIGNAL_DEFS) {
+    // Skip the synthetic 'mama bem + concurrent symptoms' signal here; it
+    // is computed after the main pass when we know which other signals
+    // fired.
+    if (def.id === 'mama_bem_with_concurrent_symptoms') continue;
     const matched = def.phrases.filter((p) => norm.includes(normalize(p)));
     if (matched.length) {
       signals.push({ id: def.id, label: def.label, matched });
@@ -272,6 +321,29 @@ export function extractSignals({ message, conversation } = {}) {
       priorities.push(def.priority);
       if (def.directive) hasDirectiveSignal = true;
     }
+  }
+
+  // Secondary pass: "mama bem" coexisting with any concurrent symptom.
+  // Test feedback (caso 23d): the assistant accepted "mama bem" as
+  // sufficient confirmation. We flag this combination explicitly so the
+  // prompt block forces the two-layer investigation (feeding + posture).
+  const mamaBemPhrases = [
+    'mama bem', 'mama muito bem', 'esta mamando bem', 'está mamando bem',
+    'mamou bem', 'tenho bastante leite', 'leite suficiente', 'acho que tenho leite',
+  ];
+  const concurrentSignalIds = new Set([
+    'evening_pattern', 'night_production_drop', 'short_feeding_interval',
+    'feeding_clinical_context', 'prolonged_awake_after_feed', 'long_daytime_nap',
+    'breast_soothing', 'late_crib_placement', 'wakes_on_transfer', 'pacifier_in_rn',
+  ]);
+  const mamaBemMatch = mamaBemPhrases.filter((p) => norm.includes(normalize(p)));
+  const hasConcurrent = signals.some((s) => concurrentSignalIds.has(s.id));
+  if (mamaBemMatch.length && hasConcurrent) {
+    const def = SIGNAL_DEFS.find((d) => d.id === 'mama_bem_with_concurrent_symptoms');
+    signals.push({ id: def.id, label: def.label, matched: mamaBemMatch });
+    def.boostThemes.forEach((t) => boostThemes.add(t));
+    priorities.push(def.priority);
+    hasDirectiveSignal = true;
   }
 
   const provided = PROVIDED_FACTS.filter((f) =>
