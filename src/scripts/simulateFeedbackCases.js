@@ -75,6 +75,29 @@ const CASES = [
     },
   },
   {
+    id: 'caso-12d-noturno',
+    label: 'Caso 12 dias — dormiu de 19h e acordou às 23h (intervalo noturno não é rígido, mas investigar fome)',
+    profile: { motherName: 'Luiza', babyName: 'Aurora', ageDays: 12 },
+    message:
+      'Minha bebê tem 12 dias e pegou no sono por volta de 19h. Acordou agora, perto das 23h. O que devo fazer?',
+    checks: {
+      // She must NOT be told to wake-every-3h-rigidly at night, NOR to "hold"/wait;
+      // she MUST be told the sequence (offer feeding → observe hunger → feed → vertical → transfer)
+      // and the AI must ask if she offered the feeding and if the baby showed hunger signs.
+      mustContainAny: ['oferec', 'sinais de fome', 'sucção ativa', 'sucçao ativa'],
+      mustNotContain: [
+        'segurar a mamada',
+        'aguardar a próxima janela',
+        'aguardar o próximo horário',
+        'não ofereça',
+        'a cada 2h-2h30',
+        'a cada 2h a 2h30',
+        'a cada 3 horas',
+      ],
+      ageMustStayAt: 12,
+    },
+  },
+  {
     id: 'caso-hayato-style',
     label: 'Caso 20d — vespertine + busca constante + late crib (estilo Hayato)',
     profile: { motherName: 'Helena', babyName: 'Davi', ageDays: 20 },
@@ -90,6 +113,35 @@ const CASES = [
 
 function stripDiacritics(s) {
   return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+// Negation cues that, when present in the ~60 chars BEFORE a forbidden term,
+// turn that occurrence into a methodologically-correct teaching ("isso NÃO é
+// associação negativa") rather than a leak. Mirrors the logic used in
+// runCriticalScenarios.js so the simulator doesn't false-positive on
+// chunk-aligned negation phrasing.
+const NEGATION_CUES = [
+  'nao ', 'não ', 'sem ', 'evitar', 'evite', 'longe de', 'jamais', 'nunca',
+  'em vez de', 'ao invés de', 'ao inves de', 'diferente de', 'oposto de',
+  'nao deve', 'não deve', 'nao pode', 'não pode',
+  'nao significa', 'não significa', 'nao e ', 'não é ',
+  'nao se trata', 'não se trata',
+];
+
+function termLeakedAffirmatively(text, term) {
+  const haystack = stripDiacritics(text);
+  const needle = stripDiacritics(term);
+  if (!needle) return false;
+  let pos = 0;
+  while (true) {
+    const idx = haystack.indexOf(needle, pos);
+    if (idx === -1) return false;
+    const windowStart = Math.max(0, idx - 60);
+    const before = haystack.slice(windowStart, idx);
+    const negated = NEGATION_CUES.some((cue) => before.includes(stripDiacritics(cue)));
+    if (!negated) return true;
+    pos = idx + needle.length;
+  }
 }
 
 function checkCase(c, result) {
@@ -113,8 +165,8 @@ function checkCase(c, result) {
   }
   if (c.checks.mustNotContain?.length) {
     for (const s of c.checks.mustNotContain) {
-      if (norm.includes(stripDiacritics(s))) {
-        issues.push(`forbidden substring leaked: "${s}"`);
+      if (termLeakedAffirmatively(text, s)) {
+        issues.push(`forbidden substring used affirmatively: "${s}"`);
       }
     }
   }

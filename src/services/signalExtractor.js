@@ -118,6 +118,42 @@ const SIGNAL_DEFS = [
       'Período acordado prolongado após a mamada da noite (ex.: 21h) no RN NÃO deve ser normalizado como "esperado". Investigue PRIMEIRO a eficácia da mamada e a saciedade — o bebê pode seguir acordado por não ter ficado saciado (RN nem sempre demonstra fome com choro) e pela queda de produção/transferência no período noturno. Oriente observar se ele relaxa e solta o peito após mamar ou continua procurando. Só tranquilize depois de investigar e na ausência de sinais de necessidade/desconforto.',
   },
   {
+    id: 'rn_night_waking',
+    label: 'RN acorda à noite / pergunta sobre intervalo noturno',
+    directive: true,
+    phrases: [
+      // explicit night-waking phrases
+      'acorda a noite', 'acorda à noite', 'acorda de noite', 'acorda de madrugada',
+      'desperta a noite', 'desperta à noite', 'desperta de noite', 'desperta de madrugada',
+      'acordou a noite', 'acordou à noite', 'acordou de madrugada', 'acordou de noite',
+      'fica acordado de noite', 'fica acordada de noite',
+      // specific clock times that anchor a night-waking scenario
+      'acorda as 23', 'acordou as 23', 'acorda as 22', 'acordou as 22',
+      'acorda as 00', 'acordou as 00', 'acorda as 01', 'acordou as 01',
+      'acorda as 02', 'acordou as 02', 'acorda as 03', 'acordou as 03',
+      'acorda 23h', 'acordou 23h', 'acorda 22h', 'acordou 22h',
+      // canonical pattern: "dormiu de Xh e acordou às Yh" (the 12d case)
+      'dormiu de 19', 'dormiu de 20', 'dormiu desde as 19', 'dormiu desde as 20',
+      'dormiu por volta de 19', 'dormiu por volta de 20',
+      'pegou no sono as 19', 'pegou no sono as 20',
+      'comecou a dormir as 19', 'comecou a dormir as 20',
+      // night intervals doubt
+      'intervalo noturno', 'intervalo da noite', 'acordar para mamar a noite',
+      'acordar de madrugada para mamar', 'pode dormir mais de 3 horas a noite',
+      'pode ficar 3 horas sem mamar a noite', 'fica 4 horas sem mamar a noite',
+      'a noite ele dorme mais', 'a noite ela dorme mais', 'a noite dorme mais',
+    ],
+    boostThemes: [
+      'despertar_noturno_investigar_fome',
+      'intervalos_alimentacao',
+      'acordar_para_mamar_dia',
+      'mamadas_ineficientes',
+      'baixa_producao_leite',
+    ],
+    priority:
+      'À NOITE, o intervalo NÃO é rígido: se o RN está dormindo bem, intervalos maiores são aceitáveis. MAS quando o RN ACORDA à noite, é INDISPENSÁVEL investigar fome. Entregue a SEQUÊNCIA PRÁTICA OFICIAL: (1) oferecer a mamada quando ele acorda; (2) observar se mama com sinais de fome — sucção ativa, deglutição, busca avida pelo peito; (3) se houver fome, alimentar (livre demanda); (4) manter em POSIÇÃO VERTICAL POR 30 A 40 MINUTOS após a mamada para evitar volta do leite/refluxo; (5) só então transferir para o berço. PERGUNTAS OBRIGATÓRIAS quando ainda não respondidas: "Quando ele/ela acorda à noite, você oferece a mamada?" e "Ele/ela mama como se estivesse com fome (sucção ativa, deglutição)?". NÃO oriente a mãe a "segurar" ou "aguardar" o próximo horário se o bebê acordou. NÃO repita a regra rígida diurna ("a cada 2h-2h30") como se valesse para a noite.',
+  },
+  {
     id: 'long_daytime_nap',
     label: 'Soneca diurna longa / dúvida sobre acordar para mamar',
     directive: true,
@@ -219,7 +255,7 @@ const SIGNAL_DEFS = [
       'reflexo_moro',
     ],
     priority:
-      'Queixa envolvendo chupeta no RN (0–28 dias) NÃO é associação comportamental. A leitura correta segue a hierarquia: (1) reflexo de sucção / regulação; (2) ALIMENTAÇÃO — mamada efetiva e produção materna no período; (3) transição colo→berço e MEDIDAS POSTURAIS pós-mamada (POSIÇÃO VERTICAL 30 A 40 MIN após mamada); (4) ritmo dia/noite. É PROIBIDO orientar "manter a chupeta presa/segura/fixa na boca" ou indicar chupetas com "design para não cair". Se a chupeta cai e o bebê acorda, isso é sinal para investigar mamada/saciedade/desconforto, não para fixar a chupeta. NUNCA descreva o quadro com as palavras "dependência", "vício", "apego" ou "má associação" (em relação a chupeta, peito, colo, mamada ou sono) — use leitura fisiológica/metodológica.',
+      'Queixa envolvendo chupeta no RN (0–28 dias) é lida como REFLEXO DE SUCÇÃO e NECESSIDADE DE REGULAÇÃO, combinada com investigação alimentar e medidas posturais. Hierarquia: (1) reflexo de sucção / regulação; (2) ALIMENTAÇÃO — mamada efetiva e produção materna no período; (3) transição colo→berço e MEDIDAS POSTURAIS pós-mamada (POSIÇÃO VERTICAL 30 A 40 MIN após mamada); (4) ritmo dia/noite. Para DESCREVER a relação do bebê com a chupeta/peito/colo, use SEMPRE vocabulário fisiológico/metodológico (reflexo de sucção, regulação, transição, ingestão/saciedade, produção/transferência) — rótulos comportamentais são proibidos. NUNCA oriente "manter a chupeta presa/segura/fixa na boca" nem indique chupetas com "design para não cair". Se a chupeta cai e o bebê acorda, isso é sinal para investigar mamada/saciedade/desconforto, não para fixar a chupeta.',
   },
 ];
 

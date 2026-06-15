@@ -71,6 +71,39 @@ export function renderRoute({ route, namespace, retrieval, motherName }) {
     }
 
     case PATHS.INTERRUPT_UNSAFE: {
+      // Render a templated answer from the authorized chunks when the
+      // violation is a wording problem (forbidden term / RN behavioral
+      // framing / pacifier guidance). The mother still gets practical,
+      // methodologically-grounded content instead of a generic "preciso
+      // reformular" message — and by construction this text comes from the
+      // chunks, so it can't carry the prohibited wording.
+      const violations = route.details.violations || [];
+      const onlyWordingViolations = violations.length > 0 && violations.every((v) =>
+        ['forbidden_term', 'rn_behavioral_framing', 'unsafe_pacifier_guidance', 'language_diminutive'].includes(v.kind),
+      );
+      if (onlyWordingViolations && retrieval?.chunks?.length) {
+        const leading = retrieval.chunks[0].chunk;
+        const supporting = retrieval.chunks.slice(1, 3).map((c) => c.chunk);
+        const lines = [
+          `${greet}, deixa eu te orientar de forma direta, dentro do método:`,
+          '',
+          leading.text,
+        ];
+        if (supporting.length) {
+          lines.push('', 'Outros pontos relevantes:');
+          for (const s of supporting) {
+            lines.push(`• ${String(s.text || '').replace(/\s+/g, ' ').slice(0, 240)}`);
+          }
+        }
+        return {
+          text: lines.join('\n'),
+          meta: {
+            kind: 'interrupt_unsafe',
+            recoveredFromChunks: true,
+            violations,
+          },
+        };
+      }
       const lines = [
         `${greet}, preciso reformular essa orientação. A resposta que eu estava construindo não atendia totalmente os critérios do método para a faixa etária ativa.`,
         'Posso te conduzir por outro caminho seguro: você pode me contar um pouco mais de contexto ou prefere que eu te encaminhe para o conteúdo correspondente no app?',
@@ -79,7 +112,7 @@ export function renderRoute({ route, namespace, retrieval, motherName }) {
         text: lines.join('\n'),
         meta: {
           kind: 'interrupt_unsafe',
-          violations: route.details.violations || [],
+          violations,
         },
       };
     }

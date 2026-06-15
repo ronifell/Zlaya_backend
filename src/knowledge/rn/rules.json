@@ -14,11 +14,16 @@
     },
     {
       "id": "rn-breastfeeding-interval",
-      "rule": "Bebês em aleitamento materno devem mamar aproximadamente a cada 2h a 2h30. Se necessário, podem permanecer em livre demanda."
+      "rule": "DURANTE O DIA, bebês em aleitamento materno devem mamar aproximadamente a cada 2h a 2h30 (acordar para mamar se a soneca passar disso). À NOITE a regra NÃO é rígida: se o bebê estiver dormindo bem, pode fazer intervalos maiores. Se necessário, podem permanecer em livre demanda."
     },
     {
       "id": "rn-formula-interval",
-      "rule": "Bebês em fórmula/mamadeira devem ser conduzidos prioritariamente para intervalos aproximados de 3 horas durante o dia."
+      "rule": "DURANTE O DIA, bebês em fórmula/mamadeira devem ser conduzidos prioritariamente para intervalos aproximados de 3 horas. À NOITE a regra NÃO é rígida — depende de idade, peso, ganho e orientação do pediatra."
+    },
+    {
+      "id": "rn-night-waking-investigate-hunger",
+      "rule": "À NOITE, o intervalo de mamada NÃO é rígido. Se o RN está dormindo bem, pode fazer mais de 3h. Mas quando ele ACORDA, é INDISPENSÁVEL investigar fome e, se houver, alimentar. A IA NÃO deve orientar a mãe a 'segurar' ou 'esperar' a próxima janela quando o bebê já acordou. A conduta prática oficial quando o RN acorda à noite é uma sequência: (1) OFERECER a mamada; (2) OBSERVAR se mama com sinais de fome — sucção ativa, deglutição, busca avida pelo peito; (3) se houver fome, ALIMENTAR (livre demanda); (4) após a mamada, manter em POSIÇÃO VERTICAL por 30 a 40 minutos para evitar volta do leite/refluxo fisiológico; (5) só então fazer a transição para o berço. Quando a mãe relata 'dormiu de 19h/20h e acordou às 23h' (ou padrão semelhante), a IA precisa OBRIGATORIAMENTE perguntar: 'Quando ele/ela acorda à noite, você oferece a mamada? Ele/ela mama como se estivesse com fome (sucção ativa, deglutição)?'",
+      "rationale": "Test feedback (caso 12d): a IA respondeu com leitura rígida ('a cada 2h-2h30') e esqueceu de orientar a sequência prática de despertar noturno — perdendo o ponto central do método."
     },
     {
       "id": "rn-crying-not-always-hunger",
@@ -58,8 +63,8 @@
     },
     {
       "id": "rn-do-not-normalize",
-      "rule": "A IA NÃO deve normalizar automaticamente como 'esperado/normal' um RN com período acordado prolongado após a mamada, soneca diurna longa (3-4h) ou procura frequente pelo peito. Esses dados devem ACENDER investigação alimentar (mamada efetiva, saciedade, produção/transferência) antes de tranquilizar. Durante o dia, orientar acordar para mamar (peito ~2h-2h30; fórmula ~3h). À noite depende de idade, peso, ganho e orientação do pediatra. Só tranquilizar depois de investigar e quando não houver sinais de necessidade/desconforto.",
-      "rationale": "Normalizar cedo demais pode levar a longos intervalos sem mamar em fase de estabelecimento da amamentação."
+      "rule": "A IA NÃO deve normalizar automaticamente como 'esperado/normal' um RN com período acordado prolongado após a mamada, soneca diurna longa (3-4h) ou procura frequente pelo peito. Esses dados devem ACENDER investigação alimentar (mamada efetiva, saciedade, produção/transferência) antes de tranquilizar. Durante o DIA, orientar acordar para mamar (peito ~2h-2h30; fórmula ~3h). À NOITE, intervalos maiores são aceitáveis SE o bebê está dormindo bem — mas SEMPRE que o bebê acorda à noite, oferecer a mamada e observar sinais de fome; se houver fome, alimentar. Só tranquilizar depois de investigar e quando não houver sinais de necessidade/desconforto.",
+      "rationale": "Normalizar cedo demais pode levar a longos intervalos sem mamar em fase de estabelecimento da amamentação; mas rigidez excessiva à noite (acordar a cada 3h sem necessidade) também não é o método."
     },
     {
       "id": "rn-name-primary-hypothesis",
@@ -92,7 +97,7 @@
     },
     {
       "id": "rn-no-behavioral-association-pacifier",
-      "rule": "Para o RN (0–28 dias), qualquer queixa envolvendo chupeta, dormir mamando, dormir no colo ou só se acalmar no peito NÃO deve ser classificada nem lida como 'associação comportamental'. Nessa faixa esses comportamentos são de regulação, reflexo de sucção, transição para o berço ou alimentação. A leitura deve seguir essa hierarquia: (1) reflexo de sucção/regulação; (2) alimentação (mamada efetiva e produção materna no período); (3) transição colo→berço e medidas posturais pós-mamada; (4) ritmo noturno/dia–noite.",
+      "rule": "Para o RN (0–28 dias), uma queixa envolvendo chupeta, dormir mamando, dormir no colo ou só se acalmar no peito é lida como REFLEXO DE SUCÇÃO e NECESSIDADE DE REGULAÇÃO, combinada com investigação alimentar e medidas posturais — nunca como aprendizado/rótulo comportamental. A leitura segue esta hierarquia: (1) reflexo de sucção/regulação; (2) alimentação (mamada efetiva e produção materna no período); (3) transição colo→berço e medidas posturais pós-mamada; (4) ritmo noturno/dia–noite. Para DESCREVER a relação do bebê com a chupeta, peito ou colo, a IA usa SEMPRE vocabulário fisiológico/metodológico (reflexo de sucção, regulação, transição, ingestão/saciedade, produção/transferência) — rótulos comportamentais são proibidos.",
       "rationale": "Test feedback do caso 22d explicitamente proibiu o uso de ASSOCIACAO_COMPORTAMENTAL para chupeta no RN."
     },
     {
