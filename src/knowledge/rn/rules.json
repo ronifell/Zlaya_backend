@@ -62,6 +62,21 @@
       "rationale": "Normalizar cedo demais pode levar a longos intervalos sem mamar em fase de estabelecimento da amamentação."
     },
     {
+      "id": "rn-name-primary-hypothesis",
+      "rule": "Trava lógica: RN + busca pelo peito antes de 2h + início no fim da tarde + madrugada difícil + manhã mais tranquila => a IA DEVE NOMEAR explicitamente, em uma frase direta, a hipótese principal: baixa produção OU menor transferência de leite no período final do dia/noite (mesmo com complemento). A resposta deve ser interpretativa e direta, não educada e genérica. Não basta falar de transferência/saciedade de passagem — é preciso declarar a leitura central do caso.",
+      "rationale": "O padrão fim de tarde→madrugada→manhã melhor é um marcador metodológico forte de queda de produção/transferência no período final do dia/noite."
+    },
+    {
+      "id": "rn-ordenha-framing",
+      "rule": "A ordenha NÃO deve ser apresentada como solução simples e isolada, nem com promessa de que vai aumentar a produção ou melhorar a transferência. No método, a ordenha entra apenas como ferramenta auxiliar para AVALIAR a produção, estimular ou organizar o plano de alimentação, sempre junto de mamadas efetivas e acompanhamento.",
+      "rationale": "Apresentar ordenha como solução isolada gera expectativa errada e desvia do foco em mamadas efetivas e ingestão."
+    },
+    {
+      "id": "rn-ensure-intake-not-interval",
+      "rule": "Em RN de poucos dias, especialmente com histórico de icterícia, linguinha, sonda, complemento ou baixo ganho, a prioridade é GARANTIR A INGESTÃO. A IA não deve orientar forçar intervalo de 2h se o bebê está buscando o peito com sinais de fome/saciedade insuficiente — nessa fase trabalha-se livre demanda.",
+      "rationale": "Forçar intervalo em fase de estabelecimento e com risco de baixa transferência compromete a ingestão do bebê."
+    },
+    {
       "id": "rn-no-off-target-investigation",
       "rule": "A IA não deve investigar berço, arroto ou posição vertical quando a dúvida não trouxer desconforto, refluxo, regurgitação ou dificuldade de deitar. A investigação deve responder à dúvida principal, não desviar dela.",
       "rationale": "Perguntas fora do alvo tornam a resposta menos útil e confundem a mãe."

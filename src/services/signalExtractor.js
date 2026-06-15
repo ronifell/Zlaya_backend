@@ -70,7 +70,7 @@ const SIGNAL_DEFS = [
       'padrao_vespertino',
     ],
     priority:
-      'O quadro que começa no fim da tarde, piora na madrugada e melhora pela manhã aponta como HIPÓTESE PRINCIPAL a baixa produção/baixa transferência de leite no período final do dia e da noite — mesmo com complemento. Não leia isso como desorganização do sono. Investigue transferência efetiva (sucção ativa e deglutição) e produção materna nesse período.',
+      'NOMEIE a hipótese principal de forma direta, com esta leitura: "Pelo horário em que isso começa — final da tarde, madrugada difícil e manhã mais tranquila — a principal hipótese é baixa produção OU menor transferência de leite no período final do dia/noite, mesmo com complemento." Não leia como desorganização do sono. Investigue transferência efetiva (sucção ativa e deglutição) e produção materna nesse período. Nessa fase (poucos dias de vida), NÃO force intervalo de 2h se houver sinais de fome/saciedade insuficiente — a prioridade é garantir a ingestão (livre demanda). Seja interpretativa e direta, não genérica.',
   },
   {
     id: 'short_feeding_interval',
