@@ -23,6 +23,11 @@
     "extinção",
     "cry it out",
     "fome residual acumulada",
+    "mamadas agrupadas",
+    "mamada agrupada",
+    "cluster feeding",
+    "cluster",
+    "autorregulação",
     "manter a chupeta presa",
     "manter a chupeta segura",
     "manter a chupeta fixa",
@@ -68,7 +73,8 @@
     "posicionar a chupeta de forma a 'mantê-la' presa/fixa no bebê",
     "tratar a chupeta como solução para o sono em vez de investigar mamada efetiva, produção materna e medidas posturais pós-mamada",
     "aceitar 'mama bem' como confirmação de mamada efetiva quando há sinais concorrentes (sonecas curtas, despertar ao ser deitado, irritabilidade pós-mamada, busca curta pelo peito)",
-    "usar expressões vagas/inventadas como 'fome residual acumulada' em vez de nomear diretamente baixa transferência de leite ou menor produção materna"
+    "usar expressões vagas/inventadas como 'fome residual acumulada' em vez de nomear diretamente baixa transferência de leite ou menor produção materna",
+    "importar conceitos externos ao Método Eliana Dias para explicar fenômenos do RN — em particular 'mamadas agrupadas', 'cluster feeding', 'cluster', 'autorregulação' (sentido comportamental), 'janela emocional' e similares são proibidos mesmo quando clinicamente coerentes; use sempre o vocabulário do método (produção/transferência de leite, eficácia da mamada, necessidade de sucção, medidas posturais, transição colo→berço, hora da bruxa, reflexo de Moro)"
   ],
   "languageRules": {
     "forbidden": [

@@ -79,7 +79,7 @@ export function renderRoute({ route, namespace, retrieval, motherName }) {
       // chunks, so it can't carry the prohibited wording.
       const violations = route.details.violations || [];
       const onlyWordingViolations = violations.length > 0 && violations.every((v) =>
-        ['forbidden_term', 'rn_behavioral_framing', 'unsafe_pacifier_guidance', 'language_diminutive'].includes(v.kind),
+        ['forbidden_term', 'rn_behavioral_framing', 'unsafe_pacifier_guidance', 'language_diminutive', 'age_mismatch'].includes(v.kind),
       );
       if (onlyWordingViolations && retrieval?.chunks?.length) {
         const leading = retrieval.chunks[0].chunk;

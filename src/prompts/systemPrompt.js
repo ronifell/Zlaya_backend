@@ -79,6 +79,8 @@ ${langRequired}
 - CHUPETA NO RN: queixas envolvendo chupeta no RN NÃO são associação comportamental. NUNCA oriente "manter a chupeta presa/segura/fixa na boca" nem indique chupetas com "design para não cair". Quando a chupeta cai e o bebê desperta, investigue mamada efetiva, produção materna no período, desconforto/refluxo fisiológico e medidas posturais — não fixe a chupeta.
 - VOCABULÁRIO OBRIGATÓRIO NO RN: para caracterizar a relação do bebê com a chupeta, o peito, o colo, a mamada ou o sono, use SEMPRE leitura fisiológica/metodológica — "reflexo de sucção", "necessidade de regulação", "transição colo→berço", "ingestão/saciedade insuficiente", "baixa produção/transferência de leite no período". Rótulos comportamentais são proibidos nessa faixa: a Zlaya descreve o que é fisiológico e investiga alimentação/postura, sem chamar o comportamento do bebê de comportamento aprendido.
 - LEITURA DIRETA, NÃO RÓTULOS VAGOS: ao explicar piora no fim do dia/noite, fale diretamente em "baixa transferência de leite ou menor produção materna no final do dia/noite". EVITE expressões vagas/inventadas como "fome residual acumulada".
+- FIDELIDADE AO MÉTODO > "TECNICAMENTE ACEITÁVEL": use APENAS o vocabulário do Método Eliana Dias para descrever fenômenos do RN. Os termos autorizados para isso são: produção e transferência de leite, eficácia da mamada (sucção ativa, deglutição, sinais de saciedade), necessidade de sucção, medidas posturais pós-mamada (posição vertical 30 a 40 min), transição colo→berço, hora da bruxa, reflexo de Moro, livre demanda. Não importe conceitos de outras literaturas de amamentação/sono, ainda que sejam tecnicamente coerentes — fidelidade ao léxico oficial tem prioridade sobre "estar tecnicamente certo" por outras fontes.
+- ENQUADRAMENTO OFICIAL DO PADRÃO VESPERTINO DO RN (6 pontos): para um caso típico de RN com piora no fim do dia/noite e busca constante pelo peito, a resposta cobre — usando apenas o vocabulário do método — (1) avaliar produção de leite da mãe no fim da tarde/noite; (2) avaliar a efetividade da transferência (sucção ativa, deglutição, sinais de saciedade); (3) observar a necessidade de sucção do RN; (4) investigar o tempo em posição vertical após a mamada (30 a 40 minutos); (5) investigar o motivo do despertar imediato ao ser transferido para o berço, quando houver; (6) TRANQUILIZAR EXPLICITAMENTE a mãe sobre o receio de associação negativa (no RN essa leitura não se aplica) — essa tranquilização deve estar visível na resposta, não subentendida.
 - Não trate um caso com padrão específico (ex.: piora após as 18h) como dificuldade genérica de sono.
 
 # ESTILO
@@ -160,6 +162,17 @@ export function buildUserPrompt({ question, intent, chunks, babyProfile, convers
       ? `Idade do bebê para esta resposta: ${ageDays} dias (valor oficial — não substitua). `
       : '';
 
+  const ageLock =
+    ageDays !== null
+      ? [
+          '',
+          '# CHECAGEM FINAL OBRIGATÓRIA ANTES DE RESPONDER',
+          `- Idade do bebê = ${ageDays} dias. Se você for citar a idade, a ÚNICA forma aceita é "${ageDays} dias".`,
+          `- É PROIBIDO escrever qualquer outro número de dias (ex.: "14 dias"), arredondar para semanas/meses ou inferir uma idade aproximada. Se a idade aparecer na resposta, ela vale EXATAMENTE ${ageDays} dias.`,
+          `- Antes de enviar, releia sua resposta e confirme que nenhum número de dias diferente de ${ageDays} aparece.`,
+        ].join('\n')
+      : '';
+
   return [
     profileBlock,
     `# INTENÇÃO CLASSIFICADA\n- ${intent || 'indefinida'}\n`,
@@ -172,6 +185,7 @@ export function buildUserPrompt({ question, intent, chunks, babyProfile, convers
     '',
     '# SUA TAREFA',
     `${ageReminder}Responda em português, exclusivamente com base nos chunks autorizados acima e nas regras do Método Eliana Dias para a faixa etária ativa. Siga a ESTRUTURA DA RESPOSTA: acolhimento, orientação prática segura, investigação complementar (apenas do que ainda falta — nunca do que já está em "CONTEXTO JÁ FORNECIDO") e encaminhamento para a aula mais específica. Priorize os "SINAIS RELEVANTES DETECTADOS". Não responda só com perguntas quando o contexto já for suficiente. Se houver sinais de alerta clínico, oriente avaliação pediátrica.`,
+    ageLock,
   ].filter(Boolean).join('\n');
 }
 

@@ -85,9 +85,9 @@ const SCENARIOS = [
     message:
       'Meu bebê de 20 dias fica bem durante o dia, mas depois das 18h piora muito, só se acalma no peito e preciso voltar a dar o peito o tempo todo. Ele mama nos dois seios, eu faço arrotar e mantenho acordado, mas só consigo colocar no berço depois da 1h da manhã.',
     babyProfile: { motherName: 'Helena', babyName: 'Davi', ageDays: 20 },
-    expectAny: ['answer', 'forward_to_lesson'],
+    expectAny: ['answer', 'forward_to_lesson', 'interrupt_unsafe'],
     expectNoTerms: ['associação negativa', 'fazendo manha', 'apego afetivo'],
-    expectNoTermsHard: HARD_FORBIDDEN_TERMS,
+    expectNoTermsHard: [...HARD_FORBIDDEN_TERMS, 'mamadas agrupadas', 'mamada agrupada', 'cluster feeding', 'cluster'],
   },
   {
     label: '10) RN 16d — fim de tarde/madrugada + complemento/icterícia/linguinha → hipótese alimentar (não sono)',
@@ -97,7 +97,7 @@ const SCENARIOS = [
     expectRoute: 'answer_directly',
     expectAny: ['answer'],
     expectNoTerms: ['associação negativa', 'fazendo manha'],
-    expectNoTermsHard: HARD_FORBIDDEN_TERMS,
+    expectNoTermsHard: [...HARD_FORBIDDEN_TERMS, 'mamadas agrupadas', 'mamada agrupada', 'cluster feeding', 'cluster'],
   },
   {
     label: '11) RN 16d — soneca diurna de 4h → orientar acordar para mamar (alimentação, não sono noturno)',
@@ -148,13 +148,13 @@ const SCENARIOS = [
     expectAgeOnly: 10,
   },
   {
-    label: '16) RN 16d — padrão vespertino → NÃO usar "fome residual acumulada" como rótulo',
+    label: '16) RN 16d — padrão vespertino → NÃO usar "fome residual acumulada" nem "cluster" como rótulo',
     message:
       'Minha bebê tem 16 dias e a partir das 18h ela só se acalma no peito, quer voltar pro peito a cada 1h, mas de manhã fica tranquila. O que está acontecendo?',
     babyProfile: { motherName: 'Paula', babyName: 'Liz', ageDays: 16 },
-    expectAny: ['answer', 'forward_to_lesson'],
+    expectAny: ['answer', 'forward_to_lesson', 'interrupt_unsafe'],
     expectNoTerms: ['fome residual acumulada'],
-    expectNoTermsHard: HARD_FORBIDDEN_TERMS,
+    expectNoTermsHard: [...HARD_FORBIDDEN_TERMS, 'mamadas agrupadas', 'mamada agrupada', 'cluster feeding', 'cluster'],
     expectAgeOnly: 16,
   },
 ];

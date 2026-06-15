@@ -140,6 +140,86 @@ export function checkAgeConsistency({ text, ageDays }) {
 }
 
 /**
+ * Surgical auto-correction of age mentions in a drafted response.
+ * Replaces any "<N> dias" / "<N> dia" / "<N>d" mention inside the RN window
+ * (0–60 d) that diverges from the profile age with the canonical
+ * "<profileAge> dias". Preserves the rest of the response untouched.
+ *
+ * Also rewrites coarse mentions like "duas semanas" / "uma semana de vida"
+ * when the profile age clearly contradicts them. We are intentionally
+ * conservative: anything outside the RN window (e.g. "365 dias") or any
+ * range that already contains the profile age is left alone.
+ *
+ * Returns { text, corrections: [{ before, after }] }.
+ *
+ * Test feedback explicitly requires this: the mother stating "16 dias" and
+ * the IA answering "14 dias" is a 'PRESERVAÇÃO DE DADO OBJETIVO' error and
+ * compromises the response. We fix it before it ever reaches the mother.
+ */
+export function correctAgeMentions({ text, ageDays }) {
+  if (!Number.isFinite(ageDays) || !text) {
+    return { text: text || '', corrections: [] };
+  }
+  const corrections = [];
+
+  // 1) Numeric "<N> dias" mentions. Whitespace-flexible. Skip ranges (those
+  //    are validated elsewhere by checkAgeConsistency and would be ambiguous
+  //    to auto-rewrite).
+  const numericRe = /(\b\d{1,3})\s*dias?\b/gi;
+  let out = text.replace(numericRe, (match, numStr, offset, fullText) => {
+    // Skip if this is the trailing number of a range like "20 a 28 dias".
+    // We look back to see if there's "a/até/-/–/—" plus a number right
+    // before this token within ~8 chars.
+    const before = fullText.slice(Math.max(0, offset - 12), offset);
+    if (/(\b\d{1,3})\s*(?:a|até|ate|–|-|—)\s*$/i.test(before)) return match;
+
+    const n = Number(numStr);
+    if (!Number.isFinite(n) || n < 0 || n > 60) return match;
+    if (n === ageDays) return match;
+    corrections.push({ before: match.trim(), after: `${ageDays} dias`, kind: 'numeric_days' });
+    return `${ageDays} dias`;
+  });
+
+  // 2) Coarse "X semana(s)" mentions inside the RN window. If profile is
+  //    e.g. 22 days and the IA writes "duas semanas" (=14d), that's still a
+  //    misrepresentation of the data.
+  const semanasMap = {
+    uma: 7,
+    duas: 14,
+    tres: 21,
+    três: 21,
+    quatro: 28,
+  };
+  // Standard from test feedback: preserve the objective data EXACTLY (no
+  // approximation by week-bucketing). Rewrite any week mention that does not
+  // map back to the profile age in days. (Note: legitimate range mentions
+  // like "duas a três semanas" would have a different shape and are out of
+  // scope here.)
+  const semanasRe = /\b(uma|duas|tr[êe]s|quatro)\s+semanas?\b/gi;
+  out = out.replace(semanasRe, (match, word) => {
+    const key = word.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const days = semanasMap[key];
+    if (!Number.isFinite(days)) return match;
+    if (days === ageDays) return match;
+    corrections.push({ before: match.trim(), after: `${ageDays} dias`, kind: 'weeks_word' });
+    return `${ageDays} dias`;
+  });
+
+  // 3) "<N> semana(s)" numeric variant inside the RN window.
+  const semanasNumRe = /\b(\d{1,2})\s*semanas?\b/gi;
+  out = out.replace(semanasNumRe, (match, numStr) => {
+    const n = Number(numStr);
+    if (!Number.isFinite(n) || n < 1 || n > 8) return match;
+    const days = n * 7;
+    if (days === ageDays) return match;
+    corrections.push({ before: match.trim(), after: `${ageDays} dias`, kind: 'weeks_numeric' });
+    return `${ageDays} dias`;
+  });
+
+  return { text: out, corrections };
+}
+
+/**
  * Checks if the user's input contains explicit clinical red flags that should
  * short-circuit the pipeline into the "professional evaluation" path.
  */

@@ -49,7 +49,7 @@ const SIGNAL_DEFS = [
       'irritabilidade_final_tarde',
     ],
     priority:
-      'A piora no final do dia (após as 18h) é um padrão vespertino típico no RN. NOMEIE a hipótese principal de forma direta: "A principal hipótese é baixa transferência de leite ou menor produção materna no final do dia/noite." Priorize a investigação ALIMENTAR: eficácia/transferência das mamadas, queda fisiológica da produção de leite no fim do dia e mamadas agrupadas (cluster). EVITE expressões vagas/inventadas como "fome residual acumulada" — fale diretamente em baixa produção ou transferência insuficiente de leite. Considere também a "hora da bruxa".',
+      'A piora no final do dia (após as 18h) é um padrão vespertino típico no RN. NOMEIE a hipótese principal de forma direta: "A principal hipótese é baixa transferência de leite ou menor produção materna no final do dia/noite." Use o ENQUADRAMENTO METODOLÓGICO OFICIAL em SEIS pontos: (1) produção de leite da mãe no fim da tarde/noite; (2) efetividade da transferência (sucção ativa, deglutição, sinais de saciedade); (3) necessidade de sucção do RN; (4) tempo em posição vertical após a mamada (30 a 40 min); (5) motivo do despertar imediato ao ser transferido para o berço, se houver; (6) tranquilizar explicitamente a mãe sobre o receio de associação negativa (no RN essa leitura não se aplica). Use APENAS o vocabulário do Método Eliana Dias para descrever o fenômeno (produção e transferência de leite, eficácia da mamada, necessidade de sucção, medidas posturais pós-mamada, transição colo→berço, hora da bruxa, reflexo de Moro). Pode citar a "hora da bruxa", que é do método.',
   },
   {
     id: 'night_production_drop',

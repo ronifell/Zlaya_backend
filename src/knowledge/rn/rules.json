@@ -43,8 +43,8 @@
     },
     {
       "id": "rn-evening-pattern-feeding-first",
-      "rule": "Quando a mãe relata piora no final do dia (após as 18h), busca constante pelo peito e bebê que só se acalma mamando, a hipótese prioritária é alimentar e deve ser nomeada de forma direta: 'A principal hipótese é baixa transferência de leite ou menor produção materna no final do dia/noite.' A IA deve levantar essa hipótese e dar orientação prática antes de tratar o caso como dificuldade genérica de sono. Não interpretar como associação negativa nem como manha. EVITE termos vagos/inventados como 'fome residual acumulada' — fale diretamente em baixa produção e/ou transferência insuficiente, e em mamadas agrupadas (cluster) quando aplicável.",
-      "rationale": "No fim da tarde há uma queda fisiológica natural da produção de leite; a busca aumentada pelo peito nesse período é esperada e tem causa alimentar, não comportamental. O método pede leitura direta da hipótese, não rótulos vagos."
+      "rule": "Quando a mãe relata piora no final do dia (após as 18h), busca constante pelo peito e bebê que só se acalma mamando, o enquadramento metodológico oficial tem SEIS pontos, todos dentro do Método Eliana Dias: (1) avaliar produção de leite da mãe, principalmente no fim da tarde/noite; (2) avaliar a efetividade da transferência de leite (sucção ativa, deglutição, saciedade); (3) observar a necessidade de sucção do RN; (4) investigar o tempo em posição vertical após a mamada (30 a 40 minutos); (5) investigar o motivo do despertar imediato ao ser transferido para o berço, se houver; (6) tranquilizar a mãe sobre o receio de associação negativa. A hipótese deve ser nomeada de forma direta: 'A principal hipótese é baixa transferência de leite ou menor produção materna no final do dia/noite.' A IA NÃO importa conceitos externos ao método (em particular, NUNCA usa 'mamadas agrupadas', 'cluster feeding' ou 'cluster' — esses termos não pertencem ao Método Eliana Dias). EVITA também expressões vagas/inventadas como 'fome residual acumulada'. Não interpretar como associação negativa nem como manha.",
+      "rationale": "No fim da tarde há uma queda fisiológica natural da produção de leite; a busca aumentada pelo peito nesse período é esperada e tem causa alimentar, não comportamental. O método pede leitura direta da hipótese e o uso APENAS do vocabulário oficial — fidelidade ao método tem prioridade sobre conceitos externos amplamente usados em outras literaturas."
     },
     {
       "id": "rn-practical-orientation-before-investigation",
@@ -117,8 +117,23 @@
     },
     {
       "id": "rn-no-vague-terms",
-      "rule": "A IA NÃO deve usar expressões vagas/inventadas como 'fome residual acumulada' para explicar piora no fim do dia/noite. A leitura deve ser direta e nomeada: 'A principal hipótese é baixa transferência de leite ou menor produção materna no final do dia/noite' — combinada, quando couber, com mamadas agrupadas (cluster) e com a 'hora da bruxa'.",
-      "rationale": "Test feedback 16d: 'fome residual acumulada' soou inventado e desviou do vocabulário direto do método."
+      "rule": "A IA NÃO deve usar expressões vagas/inventadas como 'fome residual acumulada' para explicar piora no fim do dia/noite. A leitura deve ser direta e nomeada: 'A principal hipótese é baixa transferência de leite ou menor produção materna no final do dia/noite'. A 'hora da bruxa' pode ser citada quando couber (consta no método). A IA NÃO importa conceitos de fora do Método Eliana Dias — em particular, NUNCA usa 'mamadas agrupadas', 'cluster feeding' ou 'cluster', mesmo que sejam comuns em literatura geral de amamentação.",
+      "rationale": "Test feedback 16d e 20d: o método tem vocabulário próprio (produção, transferência, necessidade de sucção, medidas posturais, tranquilização sobre associação). Fidelidade ao método tem prioridade sobre conceitos externos."
+    },
+    {
+      "id": "rn-evening-six-point-framework",
+      "rule": "Para um caso típico de RN com piora no final do dia/noite e busca constante pelo peito, o protocolo metodológico oficial da Zlaya tem SEIS pontos a serem cobertos na resposta: (1) avaliar produção de leite da mãe, principalmente no fim da tarde/noite; (2) avaliar a efetividade da transferência de leite (sucção ativa, deglutição, sinais de saciedade); (3) observar a necessidade de sucção do RN; (4) investigar o tempo em posição vertical após a mamada (30 a 40 minutos); (5) investigar o motivo do despertar imediato ao ser transferido para o berço, quando houver; (6) tranquilizar a mãe sobre o receio de associação negativa (que no RN não se aplica). A resposta usa APENAS vocabulário do método para esses seis pontos.",
+      "rationale": "Test feedback explicitamente consolidado: este é o enquadramento fiel ao Método Eliana Dias para o padrão vespertino do RN; conceitos externos são proibidos mesmo quando clinicamente coerentes."
+    },
+    {
+      "id": "rn-no-external-concepts",
+      "rule": "A IA NÃO importa conceitos, termos ou rótulos que não pertençam ao Método Eliana Dias, mesmo que sejam amplamente usados em literatura geral de amamentação/sono/parentalidade. Em particular, NUNCA usa: 'mamadas agrupadas', 'cluster feeding', 'cluster', 'autorregulação' (no sentido comportamental), 'janela emocional', 'salto de desenvolvimento', 'pico de crescimento', 'exterogestação' nem outros termos fora da base autorizada. Quando precisar descrever um fenômeno, usa SEMPRE o vocabulário do método (produção/transferência de leite, eficácia da mamada, necessidade de sucção, medidas posturais pós-mamada, transição colo→berço, reflexo de Moro, hora da bruxa quando aplicável, etc.). Fidelidade ao método tem prioridade sobre 'estar tecnicamente certo' por outras fontes.",
+      "rationale": "Test feedback do caso vespertino: 'cluster feeding' foi tecnicamente coerente mas externo ao método; reduz a nota da resposta porque infidelidade ao léxico oficial é falha metodológica, ainda que segura."
+    },
+    {
+      "id": "rn-reassure-negative-association",
+      "rule": "Diante de queixas onde a mãe demonstra ou pode demonstrar receio de 'criar associação negativa' (bebê dorme mamando, dorme no colo, só se acalma no peito, usa chupeta), a IA DEVE tranquilizar explicitamente: no RN essas situações são fisiológicas e esperadas e NÃO configuram associação negativa de sono. Essa tranquilização é parte integrante do protocolo e precisa estar visível na resposta, não subentendida.",
+      "rationale": "Test feedback do padrão vespertino: tranquilizar a mãe sobre o receio de associação negativa é um dos seis pontos obrigatórios do protocolo oficial."
     },
     {
       "id": "rn-age-integrity",

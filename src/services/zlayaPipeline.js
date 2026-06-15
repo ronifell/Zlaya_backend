@@ -4,7 +4,11 @@ import { resolveAge, isNamespaceActive } from './ageService.js';
 import { classifyIntent, applyRnIntentOverrides } from './intentClassifier.js';
 import { extractSignals } from './signalExtractor.js';
 import { retrieve } from './retrieval.js';
-import { checkForbiddenContent, detectClinicalRedFlags } from './safetyValidator.js';
+import {
+  checkForbiddenContent,
+  correctAgeMentions,
+  detectClinicalRedFlags,
+} from './safetyValidator.js';
 import {
   decideRoute,
   postGenerationGuard,
@@ -132,6 +136,19 @@ export async function processTurn({ message, babyProfile, conversation, conversa
       conversation,
       signals,
     });
+
+    // Age auto-correction (PRESERVAÇÃO DE DADO OBJETIVO).
+    // Test feedback explicitly requires that "mãe diz 16 dias e Zlaya
+    // responde 14 dias" be treated as a serious error. We do not let it
+    // reach the mother: any divergent "<N> dias" / "X semanas" mention
+    // inside the RN window is surgically rewritten to the profile age
+    // before the safety check runs. The check below remains as a net.
+    const ageFix = correctAgeMentions({ text: draft.text, ageDays: age?.days ?? null });
+    if (ageFix.corrections.length > 0) {
+      draft.text = ageFix.text;
+      draft.ageCorrections = ageFix.corrections;
+    }
+
     safety = checkForbiddenContent({
       text: draft.text,
       namespace,

@@ -26,7 +26,16 @@ const CASES = [
       'Minha bebê tem 16 dias, teve icterícia e fez o procedimento da linguinha, usa sonda e recebe complemento. No finalzinho da tarde ela começa a procurar o peito a cada 1 hora e piora muito na madrugada, mas de manhã fica mais tranquila. O que pode ser?',
     checks: {
       mustContainAny: ['baixa transferência', 'menor produção', 'baixa produção'],
-      mustNotContain: ['fome residual acumulada', 'associação negativa', 'fazendo manha'],
+      mustNotContain: [
+        'fome residual acumulada',
+        'associação negativa',
+        'fazendo manha',
+        'mamadas agrupadas',
+        'mamada agrupada',
+        'cluster feeding',
+        'cluster',
+        'autorregulação',
+      ],
       ageMustStayAt: 16,
     },
   },
@@ -105,8 +114,39 @@ const CASES = [
       'Meu bebê de 20 dias fica bem durante o dia, mas depois das 18h piora muito, só se acalma no peito e preciso voltar a dar o peito o tempo todo. Ele mama nos dois seios, eu faço arrotar e mantenho acordado, mas só consigo colocar no berço depois da 1h da manhã.',
     checks: {
       mustContainAny: ['baixa transferência', 'menor produção', 'baixa produção'],
-      mustNotContain: ['fome residual acumulada', 'associação negativa', 'fazendo manha'],
+      mustNotContain: [
+        'fome residual acumulada',
+        'associação negativa',
+        'fazendo manha',
+        'mamadas agrupadas',
+        'mamada agrupada',
+        'cluster feeding',
+        'cluster',
+        'autorregulação',
+      ],
       ageMustStayAt: 20,
+    },
+  },
+  {
+    id: 'caso-vespertine-vocab-fidelity',
+    label: 'Caso 18d — padrão vespertino direto: vocabulário 100% do método (proíbe "cluster"/"mamadas agrupadas")',
+    profile: { motherName: 'Clara', babyName: 'Noah', ageDays: 18 },
+    message:
+      'Meu bebê de 18 dias começa a ficar muito agitado depois das 18h, busca o peito o tempo todo e só se acalma mamando. Tenho medo de estar criando associação negativa. O que faço?',
+    checks: {
+      // Must speak the method vocabulary and explicitly reassure about
+      // associação negativa; must NOT import the external "cluster" concept.
+      mustContainAny: ['baixa transferência', 'menor produção', 'baixa produção', 'necessidade de sucção', 'mamada efetiva'],
+      mustNotContain: [
+        'mamadas agrupadas',
+        'mamada agrupada',
+        'cluster feeding',
+        'cluster',
+        'autorregulação',
+        'fome residual acumulada',
+        'fazendo manha',
+      ],
+      ageMustStayAt: 18,
     },
   },
 ];
