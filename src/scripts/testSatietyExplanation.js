@@ -38,15 +38,23 @@ const cases = [
     mustContainAll: ['solta o peito'],
   },
   {
-    name: 'already explains signs (≥3) → must NOT duplicate',
+    name: 'TEST 001 — lists signs but NO operational block → must append operational tail',
     input:
       'Observe sinais de saciedade: o bebê solta o peito espontaneamente, relaxa o corpo, abre as mãozinhas e reduz o ritmo da sucção.',
-    mustExpand: false,
+    mustExpand: 'operational',
+    mustContainAll: ['ofereça o peito de novo', 'continua agitado'],
   },
   {
-    name: 'explains 4 signs in a different order → must NOT duplicate',
+    name: 'explains 4 signs in a different order, no operational → must append operational',
     input:
       'Sinais de saciedade incluem o bebê relaxar o corpo, soltar o peito, reduzir o ritmo da sucção e ficar tranquilo após a mamada.',
+    mustExpand: 'operational',
+    mustContainAll: ['ofereça o peito de novo'],
+  },
+  {
+    name: 'lists signs AND operational block already present → must NOT change anything',
+    input:
+      'Observe sinais de saciedade: o bebê solta o peito espontaneamente, relaxa o corpo, abre as mãozinhas, reduz o ritmo da sucção. Se ao contrário ele continua agitado e busca o peito de novo em pouco tempo, a mamada não foi suficiente — ofereça o peito de novo em livre demanda.',
     mustExpand: false,
   },
   {
@@ -75,13 +83,19 @@ for (const c of cases) {
   const r = ensureSatietySignsExplained({ text: c.input });
   let ok = true;
   const errs = [];
-  if (c.mustExpand && !r.expanded) {
+  // mustExpand can be `true` (any expansion), a literal string ('list' or
+  // 'operational'), or `false` (no expansion).
+  if (c.mustExpand === true && !r.expanded) {
     ok = false;
     errs.push(`expected expansion, none happened. output: ${r.text}`);
   }
-  if (!c.mustExpand && r.expanded) {
+  if (typeof c.mustExpand === 'string' && r.expanded !== c.mustExpand) {
     ok = false;
-    errs.push(`expected NO expansion, but it expanded. output: ${r.text}`);
+    errs.push(`expected expansion="${c.mustExpand}", got "${r.expanded}". output: ${r.text}`);
+  }
+  if (c.mustExpand === false && r.expanded) {
+    ok = false;
+    errs.push(`expected NO expansion, but it expanded (${r.expanded}). output: ${r.text}`);
   }
   for (const ph of c.mustContainAll || []) {
     if (!r.text.includes(ph)) {

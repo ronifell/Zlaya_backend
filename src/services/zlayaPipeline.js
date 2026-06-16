@@ -8,6 +8,8 @@ import {
   checkForbiddenContent,
   correctAgeMentions,
   ensureSatietySignsExplained,
+  ensureDirectNormalityAnswer,
+  ensureNegativeAssociationReassurance,
   detectClinicalRedFlags,
 } from './safetyValidator.js';
 import {
@@ -151,14 +153,49 @@ export async function processTurn({ message, babyProfile, conversation, conversa
     }
 
     // Saciedade auto-explanation (CLAREZA OBRIGATÓRIA).
-    // Test feedback (caso bebê 16 dias): pedir "observe sinais de
-    // saciedade" sem listar os sinais é orientação incompleta para mãe
-    // de RN. Sempre que a resposta mencionar saciedade sem enumerar a
-    // lista oficial (≥3 dos 6 sinais), anexamos a definição canônica.
-    const satietyFix = ensureSatietySignsExplained({ text: draft.text });
+    // Test feedback 16d: pedir "observe sinais de saciedade" sem listar
+    // é incompleto. Test feedback 001 (RN 9d): listar os 6 sinais sem
+    // ensinar o que fazer quando NÃO aparecem também é incompleto.
+    // Em padrão vespertino o framework de 6 pontos exige a lista, então
+    // forçamos o gatilho para garantir que o ponto 2 do framework esteja
+    // visível mesmo se a LLM não usou a expressão "sinais de saciedade".
+    const eveningTriggered = (signals?.signals || []).some(
+      (s) => s.id === 'evening_pattern' || s.id === 'night_production_drop',
+    );
+    const satietyFix = ensureSatietySignsExplained({
+      text: draft.text,
+      forceTrigger: eveningTriggered,
+    });
     if (satietyFix.expanded) {
       draft.text = satietyFix.text;
-      draft.satietyAutoExpanded = true;
+      draft.satietyAutoExpanded = satietyFix.expanded; // 'list' | 'operational'
+    }
+
+    // Direct normality answer (CLAREZA OBRIGATÓRIA — teste 001).
+    // Quando a mãe pergunta explicitamente "isso é normal pra idade?"
+    // a primeira frase precisa responder direto. Se a LLM abriu com
+    // "É compreensível…" (acolhimento antes da resposta), prependemos
+    // uma afirmação metodológica direta.
+    const normalityFix = ensureDirectNormalityAnswer({
+      text: draft.text,
+      userMessage: message,
+    });
+    if (normalityFix.prepended) {
+      draft.text = normalityFix.text;
+      draft.directNormalityPrepended = true;
+    }
+
+    // Tranquilização sobre associação negativa (ponto 6 do framework).
+    // Test feedback 001 (RN 9d): a mãe explicitou "tenho medo dessa
+    // associação negativa". Se a resposta não a tranquilizar, anexamos
+    // uma tranquilização metodológica.
+    const negAssocFix = ensureNegativeAssociationReassurance({
+      text: draft.text,
+      userMessage: message,
+    });
+    if (negAssocFix.appended) {
+      draft.text = negAssocFix.text;
+      draft.negativeAssociationReassuranceAppended = true;
     }
 
     safety = checkForbiddenContent({

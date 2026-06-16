@@ -128,6 +128,39 @@ const CASES = [
     },
   },
   {
+    id: 'teste-001-rn-9d',
+    label: 'TESTE 001 (16/06/2026) — RN 9 dias: vespertine + medo de associação negativa + "isso é normal?"',
+    profile: { motherName: 'Bia', babyName: 'Heitor', ageDays: 9 },
+    message:
+      'Bebê de 9 dias. Durante o dia faz sonecas geralmente de 2 a 2,5h sem dificuldades. Acorda chorando, mama um pouco, me esforço para mantê-lo acordado por uma meia hora, ele mama o outro peito, coloco para arrotar e vai para o berço (em todo o processo está muito sonolento). Depois das 18h mais ou menos, fica mais tempo acordado e já não deixa colocar para arrotar tão facilmente. Assim que coloco no berço desperta e começa a chorar. Em geral eu tento muitas coisas, mas, por fim, ele só se acalma se voltar para o peito. Tenho medo dessa associação negativa, mas muitas vezes nada mais funciona. Eu só queria que ele dormisse à noite como dorme de dia. Às vezes só consigo colocá-lo no berço depois de 1 da manhã. Isso é normal para a idade? Como posso melhorar?',
+    checks: {
+      // Methodological framework + direct answer to normality + concrete satiety
+      // (the three improvements identified in the official 9.3/10 dossier).
+      mustContainAny: ['baixa transferência', 'menor produção', 'baixa produção'],
+      // The response must address the normality question directly somewhere
+      // (not only with empathy). We accept several phrasings.
+      mustContainOneOf: [
+        ['sim, esse padrão', 'sim, esse comportamento', 'sim, é comum', 'sim, é esperado', 'em parte sim', 'pode ocorrer em rn', 'é comum no rn', 'é esperado no rn', 'é frequente no rn'],
+        // Satiety signs concretely listed
+        ['solta o peito', 'abre as mãozinhas'],
+        // The 30-40 min vertical position
+        ['30 a 40 minutos', '30 a 40 min', 'posição vertical'],
+        // Reassurance about negative association
+        ['associação negativa', 'não configura associação', 'fisiológic'],
+      ],
+      mustNotContain: [
+        'fome residual acumulada',
+        'mamadas agrupadas',
+        'mamada agrupada',
+        'cluster feeding',
+        'cluster',
+        'autorregulação',
+        'fazendo manha',
+      ],
+      ageMustStayAt: 9,
+    },
+  },
+  {
     id: 'caso-vespertine-vocab-fidelity',
     label: 'Caso 18d — padrão vespertino direto: vocabulário 100% do método (proíbe "cluster"/"mamadas agrupadas")',
     profile: { motherName: 'Clara', babyName: 'Noah', ageDays: 18 },
@@ -201,6 +234,21 @@ function checkCase(c, result) {
       issues.push(
         `none of the required substrings appeared: [${c.checks.mustContainAny.join(' | ')}]`,
       );
+    }
+  }
+  // mustContainOneOf: list of buckets — each bucket is an array of substrings;
+  // at least one substring per bucket must be present in the response. Lets
+  // us express "must address normality AND list satiety signs AND mention
+  // vertical position AND reassure about negative association".
+  if (Array.isArray(c.checks.mustContainOneOf)) {
+    for (const bucket of c.checks.mustContainOneOf) {
+      if (!Array.isArray(bucket) || bucket.length === 0) continue;
+      const hit = bucket.some((s) => norm.includes(stripDiacritics(s)));
+      if (!hit) {
+        issues.push(
+          `no member of required bucket appeared: [${bucket.join(' | ')}]`,
+        );
+      }
     }
   }
   if (c.checks.mustNotContain?.length) {

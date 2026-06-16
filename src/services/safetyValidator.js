@@ -149,7 +149,7 @@ export function checkAgeConsistency({ text, ageDays }) {
  * what those signs are. For a RN mother the instruction is unusable.
  */
 export const SATIETY_SIGNS_OFFICIAL_TEXT =
-  'Sinais de saciedade no RN: o bebê solta o peito espontaneamente, relaxa o corpo, abre as mãozinhas, reduz o ritmo da sucção, fica tranquilo após a mamada e permanece mais confortável depois de arrotar e de ficar em posição vertical.';
+  'Sinais de saciedade no RN: o bebê solta o peito espontaneamente, relaxa o corpo, abre as mãozinhas, reduz o ritmo da sucção, fica tranquilo após a mamada e permanece mais confortável depois de arrotar e de ficar em posição vertical. Se ao contrário ele continua agitado, mantém as mãozinhas cerradas e busca o peito novamente em pouco tempo, a mamada provavelmente não foi suficiente — ofereça o peito de novo em livre demanda e reavalie a produção/transferência no período.';
 
 /**
  * Words that, on their own or co-occurring with "saciedade", indicate the
@@ -180,29 +180,176 @@ const SATIETY_TRIGGER_PATTERNS = [
 ];
 
 /**
- * Returns { text, expanded: boolean } — if the draft mentions satiety
- * (any trigger pattern) without listing at least 3 of the official signs,
- * the canonical SATIETY_SIGNS_OFFICIAL_TEXT line is appended to the text.
+ * Phrases that indicate the response already contains the operational
+ * block B (what to do when the satiety signs do NOT appear). If any of
+ * these is present we consider the operational guidance covered.
  *
- * This is content-preserving: the rest of the draft is untouched. The
- * appended sentence carries the method's official enumeration so the
- * mother always receives a teachable, concrete list.
+ * Test feedback 001 (RN 9d): the LLM listed all 6 signs but stopped
+ * there — failed to teach the mother what to DO if the signs don't show
+ * up, which is the operational half of the method. We append block B
+ * automatically when missing.
  */
-export function ensureSatietySignsExplained({ text }) {
+const SATIETY_OPERATIONAL_TOKENS = [
+  /se\s+ao\s+contr[aá]rio/, // "se ao contrário ele continua agitado"
+  /se\s+(ele|ela)\s+continua(r)?\s+agitad/, // "se ele continua agitado"
+  /se\s+(esses\s+|os\s+)?sinais\s+n[aã]o\s+aparec/, // "se esses sinais não aparecem"
+  /se\s+n[aã]o\s+(v[ei]r|aparec|notar)\s+(esses\s+|os\s+)?sinais/, // "se não vir esses sinais"
+  /ofere[çc]a\s+(o\s+peito\s+)?(de\s+)?novo/, // "ofereça o peito de novo"
+  /ofere[çc]a\s+novamente\s+o\s+peito/, // "ofereça novamente o peito"
+  /repita\s+a\s+mamada/, // "repita a mamada"
+  /n[aã]o\s+foi\s+suficient/, // "a mamada não foi suficiente"
+  /mantem\s+(as\s+)?(maozinhas|m[ãa]ozinhas)\s+cerrad/, // "mantém as mãozinhas cerradas"
+];
+
+/**
+ * Returns { text, expanded: 'list'|'operational'|false }:
+ * - 'list'        → the canonical enumeration was missing and got appended
+ * - 'operational' → the enumeration was present but the operational block
+ *                   B ("what to do when the signs do NOT appear") was
+ *                   missing and got appended
+ * - false         → nothing was changed
+ *
+ * Content-preserving: the rest of the draft is untouched.
+ */
+export function ensureSatietySignsExplained({ text, forceTrigger = false }) {
   if (!text) return { text: text || '', expanded: false };
   const norm = normalize(text);
-  const triggered = SATIETY_TRIGGER_PATTERNS.some((re) => re.test(norm));
+  const triggered = forceTrigger || SATIETY_TRIGGER_PATTERNS.some((re) => re.test(norm));
   if (!triggered) return { text, expanded: false };
 
   const signsHit = SATIETY_SIGN_TOKENS.reduce((n, re) => (re.test(norm) ? n + 1 : n), 0);
-  if (signsHit >= 3) return { text, expanded: false };
+  const operationalHit = SATIETY_OPERATIONAL_TOKENS.some((re) => re.test(norm));
 
-  // Append the official enumeration as a new paragraph, preserving the
-  // draft's voice and structure. We avoid replacing the existing wording —
-  // we only ensure the explanation is present.
+  if (signsHit >= 3 && operationalHit) return { text, expanded: false };
+
+  if (signsHit >= 3 && !operationalHit) {
+    // Block A is there; we only need to append block B (operational tail).
+    const trimmed = text.replace(/\s+$/, '');
+    const out = `${trimmed}\n\nSe ao contrário ele continua agitado, mantém as mãozinhas cerradas e busca o peito novamente em pouco tempo, a mamada provavelmente não foi suficiente — ofereça o peito de novo em livre demanda e reavalie a produção/transferência no período.`;
+    return { text: out, expanded: 'operational' };
+  }
+
+  // Block A missing → append the full canonical line (A + B in one).
   const trimmed = text.replace(/\s+$/, '');
   const out = `${trimmed}\n\n${SATIETY_SIGNS_OFFICIAL_TEXT}`;
-  return { text: out, expanded: true };
+  return { text: out, expanded: 'list' };
+}
+
+/**
+ * Patterns that indicate the mother is explicitly asking whether the
+ * described behavior is normal/expected for the age. Detected on the
+ * user message; if present the FIRST sentence of the response must carry
+ * a direct affirmation (Sim / Em parte sim / Não), not an empathic
+ * opening like "É compreensível que você esteja preocupada…".
+ *
+ * Test feedback 001 (RN 9d) explicitly graded this as a clarity error.
+ */
+const ASKS_IF_NORMAL_PATTERNS = [
+  /isso\s+[eé]\s+normal/,
+  /[eé]\s+normal\s+(pr[ao]|para\s+a)\s+idade/,
+  /[eé]\s+normal\s+nessa\s+(idade|fase)/,
+  /[eé]\s+normal\s+(para|nessa|nesta)\s+fase/,
+  /isso\s+[eé]\s+esperado/,
+  /[eé]\s+esperado\s+nessa\s+(idade|fase)/,
+  /[eé]\s+comum\s+nessa\s+(idade|fase)/,
+  /isso\s+[eé]\s+comum/,
+];
+
+/**
+ * Returns { text, prepended: boolean }.
+ *
+ * If the user asked "is this normal?" (any of the patterns above) AND
+ * the first sentence of the response does NOT carry a direct affirmation,
+ * prepend a method-aligned direct answer so the response opens by
+ * answering the question, not by deflecting into empathy.
+ */
+export function ensureDirectNormalityAnswer({ text, userMessage }) {
+  if (!text || !userMessage) return { text: text || '', prepended: false };
+  const normUser = normalize(userMessage);
+  const triggered = ASKS_IF_NORMAL_PATTERNS.some((re) => re.test(normUser));
+  if (!triggered) return { text, prepended: false };
+
+  // First sentence (up to first ".", "?" or "!" followed by space/newline).
+  const firstSentenceRaw = text.split(/(?<=[\.!\?])\s+/)[0] || text;
+  const firstSentence = normalize(firstSentenceRaw);
+
+  const directOpeners = [
+    /^\s*sim[\s,—\-:]/, // "Sim, ..." / "Sim — ..."
+    /^\s*em\s+parte\s+sim/, // "Em parte sim..."
+    /^\s*n[aã]o[\s,—\-:]/, // "Não, ..."
+    /^\s*sim\s+e\s+n[aã]o/, // "Sim e não..."
+    /^\s*esse\s+padr[aã]o\s+(pode|costuma|[eé])/, // "Esse padrão pode/costuma/é..."
+    /^\s*esse\s+comportamento\s+(pode|costuma|[eé])/, // "Esse comportamento..."
+    /^\s*isso\s+(pode|costuma|[eé])/, // "Isso pode/é..."
+    /^\s*[eé]\s+(comum|esperado|fisiol[oó]gico)/, // "É comum/esperado/fisiológico..."
+    /^\s*com\s+\d{1,3}\s+dias?\s+(isso|esse|esses?|esse comportamento|esse padr[aã]o|[eé])/, // "Com 9 dias isso é..."
+    /^\s*sim\s*[—\-]/, // "Sim — ..."
+  ];
+  const hasDirectOpener = directOpeners.some((re) => re.test(firstSentence));
+  if (hasDirectOpener) return { text, prepended: false };
+
+  // Tailored, neutral, method-safe direct opener. We avoid claiming
+  // anything beyond the methodology: it just affirms the pattern can
+  // occur and reframes it as alimentary, then yields to the LLM's text.
+  const directOpener =
+    'Sim — esse padrão pode ocorrer no RN nessa fase, e o método trata como uma questão alimentar (transferência/produção de leite no fim do dia/noite), não como associação negativa.';
+  const out = `${directOpener}\n\n${text.trimStart()}`;
+  return { text: out, prepended: true };
+}
+
+/**
+ * Phrases the mother uses to express the fear of "creating a negative
+ * association". Test feedback 001 (RN 9d): the mother literally wrote
+ * "Tenho medo dessa associação negativa, mas muitas vezes nada mais
+ * funciona." If she explicitly raises this fear, the method requires the
+ * Zlaya to address it head-on (tranquilizar) — never to dodge it.
+ */
+const NEG_ASSOC_TRIGGERS_USER = [
+  /medo\s+(d[aeo]?ss?[ae]?\s+)?associa[çc][aã]o\s+negativ/,
+  /tenho\s+medo\s+(d[aeo]\s+)?(criar|estar\s+criando)\s+(uma\s+)?associa[çc][aã]o/,
+  /(criar|criando|crio)\s+(uma\s+)?associa[çc][aã]o\s+negativ/,
+  /associa[çc][aã]o\s+negativa/,
+  /associa[çc][aã]o\s+ruim/,
+  /vai\s+criar\s+m[aá]\s+associa/,
+];
+
+/**
+ * Phrases that indicate the response already reassures the mother that
+ * what she described is NOT a negative association (and is fisiológico in
+ * the RN). If any of these is present we consider point (6) of the
+ * vespertine framework already covered.
+ */
+const NEG_ASSOC_REASSURE_TOKENS = [
+  /n[aã]o\s+(configura|caracteriza|representa)\s+(uma\s+)?associa[çc][aã]o\s+negativa/,
+  /n[aã]o\s+[eé]\s+(uma\s+)?associa[çc][aã]o\s+negativa/,
+  /essa\s+leitura\s+n[aã]o\s+se\s+aplica/,
+  /[eé]\s+fisiol[oó]gico\s+e\s+esperado/,
+  /comportamento\s+fisiol[oó]gico\s+e\s+esperado/,
+  /no\s+rn[\s,]+(dormir|mamar|estar\s+no\s+colo)/,
+];
+
+/**
+ * Returns { text, appended: boolean }.
+ *
+ * If the user explicitly raised the fear of "associação negativa" and
+ * the response does NOT contain an explicit reassurance, appends a
+ * method-aligned reassurance paragraph. Point (6) of the vespertine
+ * 6-point framework — fail-safe.
+ */
+export function ensureNegativeAssociationReassurance({ text, userMessage }) {
+  if (!text || !userMessage) return { text: text || '', appended: false };
+  const normUser = normalize(userMessage);
+  const triggered = NEG_ASSOC_TRIGGERS_USER.some((re) => re.test(normUser));
+  if (!triggered) return { text, appended: false };
+
+  const normText = normalize(text);
+  const hasReassurance = NEG_ASSOC_REASSURE_TOKENS.some((re) => re.test(normText));
+  if (hasReassurance) return { text, appended: false };
+
+  const trimmed = text.replace(/\s+$/, '');
+  const append =
+    'Sobre o seu receio de associação negativa: o que você descreve — bebê que só se acalma mamando, dorme no peito ou no colo, dificuldade de permanência no berço — NÃO configura associação negativa de sono no RN. Nessa faixa etária isso é fisiológico e esperado, e a leitura metodológica correta é alimentar (transferência e produção de leite no fim do dia/noite), não comportamental.';
+  return { text: `${trimmed}\n\n${append}`, appended: true };
 }
 
 /**

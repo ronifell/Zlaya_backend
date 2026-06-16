@@ -30,6 +30,21 @@ function normalize(text) {
  */
 const SIGNAL_DEFS = [
   {
+    id: 'asks_if_normal',
+    label: 'Mãe pergunta diretamente se o comportamento é normal para a idade',
+    directive: true,
+    phrases: [
+      'isso e normal', 'isso é normal', 'e normal pra idade', 'é normal pra idade',
+      'e normal para a idade', 'é normal para a idade', 'e normal nessa idade',
+      'é normal nessa idade', 'e normal nessa fase', 'é normal nessa fase',
+      'isso e esperado', 'isso é esperado', 'isso e comum', 'isso é comum',
+      'e comum nessa idade', 'é comum nessa idade',
+    ],
+    boostThemes: [],
+    priority:
+      'TESTE 001 — A mãe perguntou EXPLICITAMENTE se o comportamento é normal pra idade. A PRIMEIRA FRASE da sua resposta DEVE responder essa pergunta de forma direta e metodológica, antes de qualquer acolhimento. PROIBIDO abrir com "É compreensível que você esteja preocupada", "Entendo a sua preocupação", "Imagino o quanto isso é desafiador" ou similares — esses recursos podem entrar DEPOIS da resposta direta, jamais antes. Formatos aceitos para a primeira frase (escolha o mais adequado ao caso): "Sim — esse padrão pode ocorrer no RN nessa fase e o método trata como questão alimentar, não comportamental." | "Em parte sim — é comum no RN, mas merece investigação alimentar (transferência e produção de leite no fim do dia/noite)." | "Sim, é esperado nessa fase, e a leitura metodológica é alimentar — não associação negativa." Só DEPOIS dessa frase direta vêm: (a) acolhimento/validação se necessário, (b) hipótese principal nomeada, (c) conduta prática, (d) investigação complementar. Começar com "É compreensível..." antes da resposta direta é erro de clareza pela rubrica oficial.',
+  },
+  {
     id: 'evening_pattern',
     label: 'Piora no final do dia / após as 18h',
     directive: true,
@@ -49,7 +64,7 @@ const SIGNAL_DEFS = [
       'irritabilidade_final_tarde',
     ],
     priority:
-      'A piora no final do dia (após as 18h) é um padrão vespertino típico no RN. NOMEIE a hipótese principal de forma direta: "A principal hipótese é baixa transferência de leite ou menor produção materna no final do dia/noite." Use o ENQUADRAMENTO METODOLÓGICO OFICIAL em SEIS pontos: (1) produção de leite da mãe no fim da tarde/noite; (2) efetividade da transferência (sucção ativa, deglutição, sinais de saciedade); (3) necessidade de sucção do RN; (4) tempo em posição vertical após a mamada (30 a 40 min); (5) motivo do despertar imediato ao ser transferido para o berço, se houver; (6) tranquilizar explicitamente a mãe sobre o receio de associação negativa (no RN essa leitura não se aplica). Use APENAS o vocabulário do Método Eliana Dias para descrever o fenômeno (produção e transferência de leite, eficácia da mamada, necessidade de sucção, medidas posturais pós-mamada, transição colo→berço, hora da bruxa, reflexo de Moro). Pode citar a "hora da bruxa", que é do método.',
+      'A piora no final do dia (após as 18h) é um padrão vespertino típico no RN. NOMEIE a hipótese principal de forma direta: "A principal hipótese é baixa transferência de leite ou menor produção materna no final do dia/noite." Use o ENQUADRAMENTO METODOLÓGICO OFICIAL em SEIS pontos: (1) produção de leite da mãe no fim da tarde/noite; (2) efetividade da transferência (sucção ativa, deglutição, sinais de saciedade); (3) necessidade de sucção do RN; (4) tempo em posição vertical após a mamada (30 a 40 min); (5) motivo do despertar imediato ao ser transferido para o berço, se houver; (6) tranquilizar explicitamente a mãe sobre o receio de associação negativa (no RN essa leitura não se aplica). Use APENAS o vocabulário do Método Eliana Dias para descrever o fenômeno (produção e transferência de leite, eficácia da mamada, necessidade de sucção, medidas posturais pós-mamada, transição colo→berço, hora da bruxa, reflexo de Moro). Pode citar a "hora da bruxa", que é do método. APROFUNDAR a investigação da produção noturna: inclua na investigação complementar PELO MENOS uma pergunta concreta sobre o período noturno especificamente — escolha uma das seguintes: (i) "Como você percebe os seios no fim da tarde/noite em comparação com o início do dia (mais flácidos, sensação de menor enchimento)?"; (ii) "Nas mamadas após as 18h, você consegue ouvir a deglutição? Quanto tempo cada peito dura nessa fase do dia, comparado com as mamadas da manhã?"; (iii) "Se faz ordenha de avaliação no fim do dia, qual o volume comparado com o de manhã?"; (iv) quando houver complemento à noite: "Qual volume e intervalo do complemento à noite? Ele costuma satisfazer a bebê até a próxima mamada?". Perguntar só "como está a produção de leite?" genericamente NÃO atende essa exigência.',
   },
   {
     id: 'night_production_drop',
@@ -70,7 +85,7 @@ const SIGNAL_DEFS = [
       'padrao_vespertino',
     ],
     priority:
-      'NOMEIE a hipótese principal de forma direta, com esta leitura: "Pelo horário em que isso começa — final da tarde, madrugada difícil e manhã mais tranquila — a principal hipótese é baixa produção OU menor transferência de leite no período final do dia/noite, mesmo com complemento." Não leia como desorganização do sono. Investigue transferência efetiva (sucção ativa e deglutição) e produção materna nesse período. Nessa fase (poucos dias de vida), NÃO force intervalo de 2h se houver sinais de fome/saciedade insuficiente — a prioridade é garantir a ingestão (livre demanda). Seja interpretativa e direta, não genérica.',
+      'NOMEIE a hipótese principal de forma direta, com esta leitura: "Pelo horário em que isso começa — final da tarde, madrugada difícil e manhã mais tranquila — a principal hipótese é baixa produção OU menor transferência de leite no período final do dia/noite, mesmo com complemento." Não leia como desorganização do sono. APROFUNDE a investigação da produção de leite especificamente no PERÍODO NOTURNO — pergunte concretamente: (a) como os seios ficam ao final da tarde (mais flácidos, sensação de "vazios" comparado ao começo do dia?); (b) há quanto tempo foi a última ordenha completa e o que costuma ser obtido nesse período vs. de manhã; (c) na mamada noturna o bebê deglute audivelmente e por quanto tempo (tempo efetivo de mamada após as 18h vs. as mamadas do dia); (d) com que volume e em qual intervalo o complemento está sendo oferecido à noite. Investigue transferência efetiva (sucção ativa e deglutição) e produção materna nesse período. Nessa fase (poucos dias de vida), NÃO force intervalo de 2h se houver sinais de fome/saciedade insuficiente — a prioridade é garantir a ingestão (livre demanda). Seja interpretativa e direta, não genérica.',
   },
   {
     id: 'short_feeding_interval',

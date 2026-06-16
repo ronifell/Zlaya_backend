@@ -137,8 +137,18 @@
     },
     {
       "id": "rn-satiety-signs-must-be-explained",
-      "rule": "Quando a Zlaya mencionar 'sinais de saciedade' (ou variantes: 'se está saciado/saciada', 'se ficou satisfeito/satisfeita', 'observar a saciedade'), DEVE OBRIGATORIAMENTE listar os sinais concretos para a mãe na mesma resposta. A lista oficial é: (1) bebê solta o peito espontaneamente; (2) relaxa o corpo; (3) abre as mãozinhas; (4) reduz o ritmo da sucção; (5) fica tranquilo após a mamada; (6) permanece mais confortável depois de arrotar e de ficar em posição vertical. Pedir 'observe os sinais de saciedade' sem enumerar é orientação incompleta e fica registrado como erro de clareza.",
-      "rationale": "Test feedback (15/06/2026, caso bebê 16 dias): a mãe perguntou 'como devo ajustar?'. A Zlaya pediu 'observar saciedade' sem ensinar quais sinais são esses. Para a mãe de RN, a instrução fica vaga e não responde à pergunta."
+      "rule": "Quando a Zlaya mencionar 'sinais de saciedade' (ou variantes: 'se está saciado/saciada', 'se ficou satisfeito/satisfeita', 'observar a saciedade'), DEVE OBRIGATORIAMENTE entregar à mãe DOIS blocos na mesma resposta: (A) lista oficial dos sinais — bebê solta o peito espontaneamente, relaxa o corpo, abre as mãozinhas, reduz o ritmo da sucção, fica tranquilo após a mamada e permanece mais confortável depois de arrotar e de ficar em posição vertical; (B) leitura prática quando os sinais NÃO aparecem — se ele continua agitado, mantém as mãozinhas cerradas e busca o peito novamente em pouco tempo, a mamada provavelmente não foi suficiente, ofereça o peito novamente em livre demanda e reavalie produção/transferência no período. Pedir 'observe os sinais de saciedade' sem listar OU sem ensinar o que fazer quando os sinais não aparecem é orientação incompleta e fica registrado como erro de clareza.",
+      "rationale": "Test feedback (15/06/2026 caso 16d e TESTE 001 16/06/2026 caso 9d): a mãe precisa saber (i) quais são os sinais e (ii) o que fazer quando não aparecem. Sem a leitura prática a orientação fica descritiva e não operacional."
+    },
+    {
+      "id": "rn-answer-normality-directly",
+      "rule": "Quando a mãe perguntar EXPLICITAMENTE se o comportamento é normal/esperado/comum para a idade ('isso é normal pra idade?', 'é esperado nessa fase?', 'é comum?', 'isso é normal?'), a Zlaya DEVE abrir a resposta com uma afirmação direta e fundamentada no método ANTES de qualquer hipótese ou conduta. Modelos aceitos: 'Sim, esse padrão pode ocorrer em RN nessa fase, geralmente por...' ou 'Em parte sim — é comum no RN, mas merece investigação alimentar porque...'. É proibido ignorar a pergunta ou abrir somente com empatia genérica ('É compreensível que você esteja preocupada...').",
+      "rationale": "TESTE 001 (16/06/2026, RN 9d): a mãe perguntou 'Isso é normal pra idade? Como posso melhorar?' e a Zlaya não respondeu a primeira parte de forma direta. Marcado como erro de clareza."
+    },
+    {
+      "id": "rn-evening-deepen-night-production",
+      "rule": "Em quadro vespertino/noturno (piora após 18h, madrugada difícil, manhã melhor), a investigação da produção de leite deve ser APROFUNDADA especificamente no período noturno. Perguntar genericamente 'avaliar a produção' é insuficiente. As perguntas concretas que devem aparecer são: (a) como os seios ficam ao final da tarde/noite (mais flácidos, sensação de menor enchimento comparado ao começo do dia?); (b) na mamada após as 18h, o bebê deglute audivelmente e por quanto tempo (vs. mamadas do dia); (c) se a mãe faz ordenha de avaliação no fim do dia, qual o volume comparado com o de manhã; (d) volume e intervalo do complemento à noite, quando houver.",
+      "rationale": "TESTE 001 (16/06/2026, RN 9d): identificado como oportunidade — investigar produção noturna de forma específica e operacional, não como item genérico do framework."
     },
     {
       "id": "rn-age-integrity",
