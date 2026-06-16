@@ -352,6 +352,21 @@
       "text": "Quando o cenário ultrapassa a base validada (regra metodológica inexistente, conflito de interpretação, necessidade de análise individual mais aprofundada), a Zlaya encaminha para o suporte humano da equipe Eliana Dias. Esse encaminhamento é parte natural e segura do fluxo operacional — não é uma falha do sistema."
     },
     {
+      "id": "rn-chunk-sinais-saciedade",
+      "namespace": "RN",
+      "theme": "sinais_saciedade",
+      "intent": ["mamadas", "saciedade", "dificuldade_manutencao_sono", "intervalo_mamada_diurna", "despertares_noturnos"],
+      "ageBand": "RN",
+      "ageRangeDays": [0, 28],
+      "safetyLevel": "verde",
+      "contentType": "definicao_metodologica",
+      "allowedAction": "ensinar a mãe a reconhecer concretamente os sinais de saciedade ao invés de pedir observação genérica",
+      "blockedAction": "pedir à mãe para 'observar sinais de saciedade' sem listar quais são esses sinais",
+      "relatedLessons": ["lesson-mamadas-efetivas", "lesson-alimentacao-livre-demanda"],
+      "askIfMissing": [],
+      "text": "Sinais de SACIEDADE no recém-nascido (definição metodológica oficial — sempre que mencionar 'sinais de saciedade', a Zlaya enumera estes sinais para a mãe, sem exceção): (1) o bebê SOLTA o peito espontaneamente; (2) RELAXA o corpo; (3) ABRE as mãozinhas (deixam de ficar fechadas/cerradas); (4) REDUZ o ritmo da sucção (passa de sucção ativa para sucção mais lenta/sucção não-nutritiva ou para); (5) fica TRANQUILO após a mamada; (6) permanece mais CONFORTÁVEL depois de arrotar e de ficar em posição vertical. Quando estes sinais não aparecem — bebê continua buscando o peito, mantém as mãozinhas cerradas, continua agitado, não relaxa, não solta o peito espontaneamente — a mamada provavelmente NÃO foi suficiente (transferência baixa ou produção materna insuficiente no período). Esta lista deve ser ensinada à mãe de forma concreta toda vez que a Zlaya pedir para ela observar saciedade — uma orientação genérica 'observe sinais de saciedade' é orientação incompleta e não atende à pergunta da mãe."
+    },
+    {
       "id": "rn-chunk-sinais-clinicos-alerta",
       "namespace": "RN",
       "theme": "sinais_alerta_clinico",

@@ -7,6 +7,7 @@ import { retrieve } from './retrieval.js';
 import {
   checkForbiddenContent,
   correctAgeMentions,
+  ensureSatietySignsExplained,
   detectClinicalRedFlags,
 } from './safetyValidator.js';
 import {
@@ -147,6 +148,17 @@ export async function processTurn({ message, babyProfile, conversation, conversa
     if (ageFix.corrections.length > 0) {
       draft.text = ageFix.text;
       draft.ageCorrections = ageFix.corrections;
+    }
+
+    // Saciedade auto-explanation (CLAREZA OBRIGATÓRIA).
+    // Test feedback (caso bebê 16 dias): pedir "observe sinais de
+    // saciedade" sem listar os sinais é orientação incompleta para mãe
+    // de RN. Sempre que a resposta mencionar saciedade sem enumerar a
+    // lista oficial (≥3 dos 6 sinais), anexamos a definição canônica.
+    const satietyFix = ensureSatietySignsExplained({ text: draft.text });
+    if (satietyFix.expanded) {
+      draft.text = satietyFix.text;
+      draft.satietyAutoExpanded = true;
     }
 
     safety = checkForbiddenContent({

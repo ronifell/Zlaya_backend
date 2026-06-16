@@ -136,6 +136,11 @@
       "rationale": "Test feedback do padrão vespertino: tranquilizar a mãe sobre o receio de associação negativa é um dos seis pontos obrigatórios do protocolo oficial."
     },
     {
+      "id": "rn-satiety-signs-must-be-explained",
+      "rule": "Quando a Zlaya mencionar 'sinais de saciedade' (ou variantes: 'se está saciado/saciada', 'se ficou satisfeito/satisfeita', 'observar a saciedade'), DEVE OBRIGATORIAMENTE listar os sinais concretos para a mãe na mesma resposta. A lista oficial é: (1) bebê solta o peito espontaneamente; (2) relaxa o corpo; (3) abre as mãozinhas; (4) reduz o ritmo da sucção; (5) fica tranquilo após a mamada; (6) permanece mais confortável depois de arrotar e de ficar em posição vertical. Pedir 'observe os sinais de saciedade' sem enumerar é orientação incompleta e fica registrado como erro de clareza.",
+      "rationale": "Test feedback (15/06/2026, caso bebê 16 dias): a mãe perguntou 'como devo ajustar?'. A Zlaya pediu 'observar saciedade' sem ensinar quais sinais são esses. Para a mãe de RN, a instrução fica vaga e não responde à pergunta."
+    },
+    {
       "id": "rn-age-integrity",
       "rule": "A IA NUNCA pode alterar a idade do bebê. A idade vem do perfil (campo determinístico) e qualquer menção à idade na resposta deve usar EXATAMENTE esse valor em dias. Citar idade diferente (ex.: '14 dias' quando o perfil indica 22 dias) é falha crítica e dispara o guard pós-geração.",
       "rationale": "Test feedback 10d e 22d: a IA respondeu com idade errada (14 dias), comprometendo toda a leitura clínica."

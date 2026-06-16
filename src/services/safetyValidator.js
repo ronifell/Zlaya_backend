@@ -140,6 +140,72 @@ export function checkAgeConsistency({ text, ageDays }) {
 }
 
 /**
+ * Canonical list of satiety signs (Método Eliana Dias, RN 0–28 days).
+ * Used by ensureSatietySignsExplained() to expand any vague "observe
+ * sinais de saciedade" mention into a concrete, teachable enumeration.
+ *
+ * Test feedback (caso bebê 16 dias): a mother asked "como devo ajustar?"
+ * and the IA answered "observe sinais de saciedade" without ever listing
+ * what those signs are. For a RN mother the instruction is unusable.
+ */
+export const SATIETY_SIGNS_OFFICIAL_TEXT =
+  'Sinais de saciedade no RN: o bebê solta o peito espontaneamente, relaxa o corpo, abre as mãozinhas, reduz o ritmo da sucção, fica tranquilo após a mamada e permanece mais confortável depois de arrotar e de ficar em posição vertical.';
+
+/**
+ * Words that, on their own or co-occurring with "saciedade", indicate the
+ * IA listed the satiety signs concretely (so no expansion is needed).
+ * We require at least 3 of these to consider the enumeration present —
+ * the official list has 6 items so 3 is a conservative quorum.
+ */
+const SATIETY_SIGN_TOKENS = [
+  /solt[ae]r?\s+(o\s+)?peito/, // "solta o peito"
+  /relaxa(r|do)?\s+(o\s+)?corpo/, // "relaxa o corpo"
+  /(abre|abrir|abrindo)\s+(as\s+)?(maozinhas|m[ãa]ozinhas|maos|m[ãa]os)/, // "abre as mãozinhas"
+  /(reduz|reduzir|diminui|diminuir)\s+(o\s+)?ritmo\s+(d[ae]\s+)?suc[çc][aã]o/, // "reduz o ritmo da sucção"
+  /tranquil[oa]\s+(ap[óo]s|depois\s+(de|d[ao]))\s+(a\s+)?mamada/, // "tranquilo após a mamada"
+  /confort[aá]vel\s+(depois|ap[óo]s)\s+(de\s+)?(arrotar|posi[çc][aã]o\s+vertical)/, // "confortável depois de arrotar / posição vertical"
+];
+
+/**
+ * Phrases that mention satiety (and therefore trigger the enumeration
+ * requirement). Matched on the normalized text.
+ */
+const SATIETY_TRIGGER_PATTERNS = [
+  /sinais\s+de\s+sacied/, // "sinais de saciedade"
+  /sinais\s+de\s+que\s+(ela|ele|o\s+beb[êe])\s+(est[aá]\s+)?sacia/, // "sinais de que está saciado/a"
+  /(se\s+)?(ela|ele|o\s+beb[êe])\s+(est[aá]|fica|ficou|fic[ao]u)\s+sacia/, // "se está saciada"
+  /observ(ar|e|ando|a)\s+(a\s+|os\s+sinais\s+de\s+)?sacied/, // "observar a saciedade"
+  /(est[aá]|fica|ficou|ficar)\s+satisfeit/, // "está/fica/ficou satisfeito/a"
+  /sinais\s+de\s+que\s+(ela|ele|o\s+beb[êe])\s+(est[aá]\s+|fica\s+|ficou\s+)?satisfeit/,
+];
+
+/**
+ * Returns { text, expanded: boolean } — if the draft mentions satiety
+ * (any trigger pattern) without listing at least 3 of the official signs,
+ * the canonical SATIETY_SIGNS_OFFICIAL_TEXT line is appended to the text.
+ *
+ * This is content-preserving: the rest of the draft is untouched. The
+ * appended sentence carries the method's official enumeration so the
+ * mother always receives a teachable, concrete list.
+ */
+export function ensureSatietySignsExplained({ text }) {
+  if (!text) return { text: text || '', expanded: false };
+  const norm = normalize(text);
+  const triggered = SATIETY_TRIGGER_PATTERNS.some((re) => re.test(norm));
+  if (!triggered) return { text, expanded: false };
+
+  const signsHit = SATIETY_SIGN_TOKENS.reduce((n, re) => (re.test(norm) ? n + 1 : n), 0);
+  if (signsHit >= 3) return { text, expanded: false };
+
+  // Append the official enumeration as a new paragraph, preserving the
+  // draft's voice and structure. We avoid replacing the existing wording —
+  // we only ensure the explanation is present.
+  const trimmed = text.replace(/\s+$/, '');
+  const out = `${trimmed}\n\n${SATIETY_SIGNS_OFFICIAL_TEXT}`;
+  return { text: out, expanded: true };
+}
+
+/**
  * Surgical auto-correction of age mentions in a drafted response.
  * Replaces any "<N> dias" / "<N> dia" / "<N>d" mention inside the RN window
  * (0–60 d) that diverges from the profile age with the canonical
