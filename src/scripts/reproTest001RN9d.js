@@ -91,7 +91,7 @@ const signs = [
   /confort[aá]vel\s+(depois|ap[óo]s)/,
 ];
 const signsHit = signs.filter((re) => re.test(norm)).length;
-const operationalOk = /(ofere[çc]a\s+(o\s+peito\s+)?(de\s+)?novo|ofere[çc]a\s+novamente\s+o\s+peito|n[aã]o\s+foi\s+suficient|se\s+ao\s+contr[aá]rio|se\s+(ele|ela)\s+continua\s+agitad)/.test(norm);
+const operationalOk = /(ofere[çc]a\s+(o\s+peito\s+)?(de\s+)?novo|ofere[çc]a\s+novamente\s+o\s+peito|pode\s+indicar\s+que\s+a\s+mamada|n[aã]o\s+foi\s+suficient|se\s+ao\s+contr[aá]rio|se\s+(ele|ela)\s+continua\s+agitad)/.test(norm);
 
 // 4) tranquilização sobre associação negativa
 const reassureOk = /(n[aã]o\s+configura\s+associa[çc][aã]o\s+negativa|essa\s+leitura\s+n[aã]o\s+se\s+aplica|n[aã]o\s+[eé]\s+associa[çc][aã]o\s+negativa|n[aã]o\s+caracter[ií]za\s+associa[çc][aã]o\s+negativa|fisiol[oó]gico\s+e\s+esperado)/.test(norm);

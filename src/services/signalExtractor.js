@@ -45,6 +45,19 @@ const SIGNAL_DEFS = [
       'TESTE 001 — A mãe perguntou EXPLICITAMENTE se o comportamento é normal pra idade. A PRIMEIRA FRASE da sua resposta DEVE responder essa pergunta de forma direta e metodológica, antes de qualquer acolhimento. PROIBIDO abrir com "É compreensível que você esteja preocupada", "Entendo a sua preocupação", "Imagino o quanto isso é desafiador" ou similares — esses recursos podem entrar DEPOIS da resposta direta, jamais antes. Formatos aceitos para a primeira frase (escolha o mais adequado ao caso): "Sim — esse padrão pode ocorrer no RN nessa fase e o método trata como questão alimentar, não comportamental." | "Em parte sim — é comum no RN, mas merece investigação alimentar (transferência e produção de leite no fim do dia/noite)." | "Sim, é esperado nessa fase, e a leitura metodológica é alimentar — não associação negativa." Só DEPOIS dessa frase direta vêm: (a) acolhimento/validação se necessário, (b) hipótese principal nomeada, (c) conduta prática, (d) investigação complementar. Começar com "É compreensível..." antes da resposta direta é erro de clareza pela rubrica oficial.',
   },
   {
+    id: 'asks_how_to_improve',
+    label: 'Mãe pergunta como melhorar / como ajustar',
+    directive: true,
+    phrases: [
+      'como posso melhorar', 'como devo ajustar', 'como ajustar', 'como melhorar',
+      'o que posso fazer', 'como devo proceder', 'como resolver', 'como consigo resolver',
+      'como faço para melhorar', 'como posso ajustar',
+    ],
+    boostThemes: ['padrao_vespertino', 'dificuldade_berco', 'acorda_ao_deitar', 'mamadas_ineficientes'],
+    priority:
+      'A mãe pediu conduta prática ("como melhorar/ajustar"). NÃO responda só com investigação — entregue na ORIENTAÇÃO PRÁTICA a SEQUÊNCIA NOTURNA OFICIAL: (1) mamada o mais efetiva possível; (2) oferecer o segundo peito se necessário; (3) observar sinais de saciedade (listar os 6); (4) colocar para arrotar; (5) manter em posição vertical 30 a 40 minutos; (6) ambiente escuro, calmo e com baixa estimulação; (7) charutinho se houver reflexo de Moro ou desorganização corporal; (8) só então tentar a transferência para o berço. Se houver desconforto ao deitar (choro na transferência, dificuldade de arrotar), verbalize explicitamente a hipótese de desconforto leve pós-mamada ao deitar.',
+  },
+  {
     id: 'evening_pattern',
     label: 'Piora no final do dia / após as 18h',
     directive: true,
@@ -64,7 +77,7 @@ const SIGNAL_DEFS = [
       'irritabilidade_final_tarde',
     ],
     priority:
-      'A piora no final do dia (após as 18h) é um padrão vespertino típico no RN. NOMEIE a hipótese principal de forma direta: "A principal hipótese é baixa transferência de leite ou menor produção materna no final do dia/noite." Use o ENQUADRAMENTO METODOLÓGICO OFICIAL em SEIS pontos: (1) produção de leite da mãe no fim da tarde/noite; (2) efetividade da transferência (sucção ativa, deglutição, sinais de saciedade); (3) necessidade de sucção do RN; (4) tempo em posição vertical após a mamada (30 a 40 min); (5) motivo do despertar imediato ao ser transferido para o berço, se houver; (6) tranquilizar explicitamente a mãe sobre o receio de associação negativa (no RN essa leitura não se aplica). Use APENAS o vocabulário do Método Eliana Dias para descrever o fenômeno (produção e transferência de leite, eficácia da mamada, necessidade de sucção, medidas posturais pós-mamada, transição colo→berço, hora da bruxa, reflexo de Moro). Pode citar a "hora da bruxa", que é do método. APROFUNDAR a investigação da produção noturna: inclua na investigação complementar PELO MENOS uma pergunta concreta sobre o período noturno especificamente — escolha uma das seguintes: (i) "Como você percebe os seios no fim da tarde/noite em comparação com o início do dia (mais flácidos, sensação de menor enchimento)?"; (ii) "Nas mamadas após as 18h, você consegue ouvir a deglutição? Quanto tempo cada peito dura nessa fase do dia, comparado com as mamadas da manhã?"; (iii) "Se faz ordenha de avaliação no fim do dia, qual o volume comparado com o de manhã?"; (iv) quando houver complemento à noite: "Qual volume e intervalo do complemento à noite? Ele costuma satisfazer a bebê até a próxima mamada?". Perguntar só "como está a produção de leite?" genericamente NÃO atende essa exigência.',
+      'A piora no final do dia (após as 18h) é um padrão vespertino típico no RN. NOMEIE a hipótese principal de forma direta: "A principal hipótese é baixa transferência de leite ou menor produção materna no final do dia/noite." Use o ENQUADRAMENTO METODOLÓGICO OFICIAL em SEIS pontos: (1) produção de leite da mãe no fim da tarde/noite; (2) efetividade da transferência (sucção ativa, deglutição, sinais de saciedade); (3) necessidade de sucção do RN; (4) tempo em posição vertical após a mamada (30 a 40 min); (5) motivo do despertar imediato ao ser transferido para o berço, se houver — incluindo desconforto leve pós-mamada ao deitar quando houver dificuldade de arrotar e choro na transferência; (6) tranquilizar explicitamente a mãe sobre o receio de associação negativa (no RN essa leitura não se aplica). Se a mãe perguntou "como melhorar", entregue a SEQUÊNCIA PRÁTICA NOTURNA (mamada efetiva → segundo peito → saciedade → arroto → vertical 30-40 min → ambiente calmo → charutinho se Moro → transferência). A Estratégia do Travesseiro só como apoio secundário — NÃO como eixo principal quando alimentação/arroto/desconforto forem prioritários. APROFUNDAR a investigação da produção noturna com pergunta concreta — escolha uma: (i) "No fim da tarde/noite, você percebe os seios mais flácidos ou com menor enchimento? Durante a mamada, ele faz sucção ativa e você escuta deglutição, ou adormece rapidamente? Depois que solta o peito, relaxa e permanece tranquilo, ou volta a procurar o peito em pouco tempo?"; (ii) "Nas mamadas após as 18h, você consegue ouvir a deglutição?"; (iii) ordenha de avaliação no fim do dia vs. manhã; (iv) quando houver complemento: "O complemento foi orientado apenas para as mamadas da noite, ou já foi avaliada a necessidade de suporte também no final da tarde, quando o comportamento começa?".',
   },
   {
     id: 'night_production_drop',
@@ -74,6 +87,7 @@ const SIGNAL_DEFS = [
       'piora na madrugada', 'piora de madrugada', 'madrugada dificil', 'madrugada difícil',
       'na madrugada', 'de madrugada', 'a noite procura mais', 'a noite quer mais',
       'de manha melhora', 'de manhã melhora', 'manha mais tranquila', 'manhã mais tranquila',
+      'manhas tranquilas', 'manhãs tranquilas', 'madrugadas dificeis', 'madrugadas difíceis',
       'manha e mais tranquila', 'manhã é mais tranquila', 'de manha e tranquila', 'pela manha melhora',
       'comeca no fim da tarde e piora a noite', 'a tarde e a noite procura mais',
     ],
@@ -85,7 +99,7 @@ const SIGNAL_DEFS = [
       'padrao_vespertino',
     ],
     priority:
-      'NOMEIE a hipótese principal de forma direta, com esta leitura: "Pelo horário em que isso começa — final da tarde, madrugada difícil e manhã mais tranquila — a principal hipótese é baixa produção OU menor transferência de leite no período final do dia/noite, mesmo com complemento." Não leia como desorganização do sono. APROFUNDE a investigação da produção de leite especificamente no PERÍODO NOTURNO — pergunte concretamente: (a) como os seios ficam ao final da tarde (mais flácidos, sensação de "vazios" comparado ao começo do dia?); (b) há quanto tempo foi a última ordenha completa e o que costuma ser obtido nesse período vs. de manhã; (c) na mamada noturna o bebê deglute audivelmente e por quanto tempo (tempo efetivo de mamada após as 18h vs. as mamadas do dia); (d) com que volume e em qual intervalo o complemento está sendo oferecido à noite. Investigue transferência efetiva (sucção ativa e deglutição) e produção materna nesse período. Nessa fase (poucos dias de vida), NÃO force intervalo de 2h se houver sinais de fome/saciedade insuficiente — a prioridade é garantir a ingestão (livre demanda). Seja interpretativa e direta, não genérica.',
+      'NOMEIE a hipótese principal de forma direta, com esta leitura: "Pelo horário em que isso começa — final da tarde, madrugada difícil e manhã mais tranquila — a principal hipótese é baixa produção OU menor transferência de leite no período final do dia/noite, mesmo com complemento." Não leia como desorganização do sono. Se houver complemento com sonda, dê peso a isso: oriente reavaliar com quem acompanha a amamentação e o pediatra se o complemento precisa ser ajustado também no FINAL DA TARDE (não só 22h/madrugada). Inclua suporte à produção: oferta dos dois seios, ordenha como ferramenta de avaliação (nunca solução isolada) e acompanhamento de amamentação. APROFUNDE a investigação da produção de leite especificamente no PERÍODO NOTURNO — pergunte concretamente: (a) como os seios ficam ao final da tarde; (b) deglutição audível na mamada após as 18h; (c) volume de ordenha de avaliação no fim do dia vs. manhã; (d) "O complemento foi orientado apenas para as mamadas da noite, ou já foi avaliada a necessidade de suporte também no final da tarde, quando o comportamento começa?". Investigue transferência efetiva e produção materna nesse período. Nessa fase, NÃO force intervalo de 2h se houver sinais de fome/saciedade insuficiente — prioridade é garantir a ingestão (livre demanda).',
   },
   {
     id: 'short_feeding_interval',
@@ -115,7 +129,7 @@ const SIGNAL_DEFS = [
     ],
     boostThemes: ['mamadas_ineficientes', 'baixa_producao_leite', 'baixa_producao_fim_dia'],
     priority:
-      'Há contexto que afeta a transferência de leite (icterícia, linguinha/frênulo, sonda, complemento, baixo peso). Faça uma leitura cuidadosa da AMAMENTAÇÃO: verifique se o bebê mama de forma efetiva (sucção ativa e deglutição) e não apenas por cansaço/conforto; reavalie o plano de complemento com quem acompanha a amamentação e com o pediatra. Não oriente alteração de complemento por conta própria.',
+      'Há contexto de icterícia, linguinha/frênulo, sonda ou complemento. REGRA CRÍTICA: se a mãe informou que o bebê AGORA mama bem, é PROIBIDO citar icterícia ou linguinha como fator que impacta a transferência ou a mamada no contexto ATUAL — trate APENAS como histórico do início. NÃO abra a resposta explicando icterícia/linguinha como causa do comportamento atual. Leitura atual: mamada efetiva (sucção ativa e deglutição) + reavaliar COMPLEMENTO com quem acompanha a amamentação e o pediatra — incluindo se precisa de ajuste no FINAL DA TARDE (não só 22h/madrugada). Inclua suporte à produção: dois seios, ordenha como ferramenta de avaliação (nunca solução isolada). PERGUNTA OBRIGATÓRIA na investigação: "O complemento foi orientado apenas para as mamadas da noite, ou já foi avaliada a necessidade de suporte também no final da tarde, quando o comportamento começa?". Não oriente alteração de complemento por conta própria.',
   },
   {
     id: 'prolonged_awake_after_feed',
@@ -233,10 +247,13 @@ const SIGNAL_DEFS = [
       'acorda ao colocar no berco', 'acorda assim que coloco', 'desperta assim que coloco',
       'acorda na transferencia', 'acorda ao colocar', 'desperta quando coloco',
       'acorda assim que deito', 'acorda no berco',
+      'coloco no berco desperta', 'coloco no berco e desperta', 'assim que coloco no berco',
+      'nao deixa colocar para arrotar', 'nao deixa colocar pra arrotar',
+      'dificuldade para arrotar', 'dificuldade de arrotar',
     ],
     boostThemes: ['acorda_ao_deitar', 'dificuldade_berco', 'reflexo_moro'],
     priority:
-      'O despertar na transferência para o berço segue a hierarquia: (1) tempo vertical após a mamada, (2) arroto, (3) reflexo de Moro, (4) adaptação à superfície, (5) refluxo. Oriente EXPLICITAMENTE manter o bebê em POSIÇÃO VERTICAL POR 30 A 40 MINUTOS após a mamada antes da transição para o berço — não basta perguntar se a mãe faz, a conduta prática precisa estar na resposta. Depois disso, transição gradual colo→superfície com o corpo bem contido.',
+      'O despertar na transferência para o berço segue a hierarquia: (1) tempo vertical após a mamada, (2) arroto, (3) reflexo de Moro, (4) adaptação à superfície, (5) refluxo/desconforto pós-mamada ao deitar. VERBALIZE EXPLICITAMENTE a hipótese de desconforto leve pós-mamada ao deitar quando houver dificuldade de arrotar, choro logo ao colocar no berço ou melhora ao voltar ao peito/colo. Oriente EXPLICITAMENTE manter o bebê em POSIÇÃO VERTICAL POR 30 A 40 MINUTOS após a mamada antes da transição — não basta perguntar. Se a mãe perguntou "como melhorar", inclua a sequência prática noturna completa. A Estratégia do Travesseiro só como apoio secundário, não eixo principal. Depois disso, transição gradual colo→superfície com o corpo bem contido.',
   },
   {
     id: 'mama_bem_with_concurrent_symptoms',
@@ -270,7 +287,7 @@ const SIGNAL_DEFS = [
       'reflexo_moro',
     ],
     priority:
-      'Queixa envolvendo chupeta no RN (0–28 dias) é lida como REFLEXO DE SUCÇÃO e NECESSIDADE DE REGULAÇÃO, combinada com investigação alimentar e medidas posturais. Hierarquia: (1) reflexo de sucção / regulação; (2) ALIMENTAÇÃO — mamada efetiva e produção materna no período; (3) transição colo→berço e MEDIDAS POSTURAIS pós-mamada (POSIÇÃO VERTICAL 30 A 40 MIN após mamada); (4) ritmo dia/noite. Para DESCREVER a relação do bebê com a chupeta/peito/colo, use SEMPRE vocabulário fisiológico/metodológico (reflexo de sucção, regulação, transição, ingestão/saciedade, produção/transferência) — rótulos comportamentais são proibidos. NUNCA oriente "manter a chupeta presa/segura/fixa na boca" nem indique chupetas com "design para não cair". Se a chupeta cai e o bebê acorda, isso é sinal para investigar mamada/saciedade/desconforto, não para fixar a chupeta.',
+      'Queixa envolvendo chupeta no RN (0–28 dias) é REFLEXO DE SUCÇÃO e NECESSIDADE DE REGULAÇÃO — use esses termos explicitamente na resposta. PERGUNTA OBRIGATÓRIA sobre forma de alimentação se a mãe não informou: "Ela mama no peito, usa fórmula ou recebe complemento?" — é proibido orientar "ofereça o peito" antes dessa confirmação. MANEJO PRÁTICO: se a chupeta cair e o bebê continuar dormindo, não precisa recolocar; se acordar logo que cai, diferencie fome, desconforto pós-mamada, sucção e transição para o berço. POSIÇÃO VERTICAL 30 A 40 MIN após mamada. Mantenha o gênero gramatical que a mãe usa (ela/dele) — não alterne para "ele" se a mãe fala "minha bebê/ela". NUNCA oriente prender a chupeta.',
   },
 ];
 

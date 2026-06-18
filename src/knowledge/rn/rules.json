@@ -137,7 +137,7 @@
     },
     {
       "id": "rn-satiety-signs-must-be-explained",
-      "rule": "Quando a Zlaya mencionar 'sinais de saciedade' (ou variantes: 'se está saciado/saciada', 'se ficou satisfeito/satisfeita', 'observar a saciedade'), DEVE OBRIGATORIAMENTE entregar à mãe DOIS blocos na mesma resposta: (A) lista oficial dos sinais — bebê solta o peito espontaneamente, relaxa o corpo, abre as mãozinhas, reduz o ritmo da sucção, fica tranquilo após a mamada e permanece mais confortável depois de arrotar e de ficar em posição vertical; (B) leitura prática quando os sinais NÃO aparecem — se ele continua agitado, mantém as mãozinhas cerradas e busca o peito novamente em pouco tempo, a mamada provavelmente não foi suficiente, ofereça o peito novamente em livre demanda e reavalie produção/transferência no período. Pedir 'observe os sinais de saciedade' sem listar OU sem ensinar o que fazer quando os sinais não aparecem é orientação incompleta e fica registrado como erro de clareza.",
+      "rule": "Quando a Zlaya mencionar 'sinais de saciedade' (ou variantes: 'se está saciado/saciada', 'se ficou satisfeito/satisfeita', 'observar a saciedade'), DEVE OBRIGATORIAMENTE entregar à mãe DOIS blocos na mesma resposta: (A) lista oficial dos sinais — bebê solta o peito espontaneamente, relaxa o corpo, abre as mãozinhas, reduz o ritmo da sucção, fica tranquilo após a mamada e permanece mais confortável depois de arrotar e de ficar em posição vertical; (B) leitura prática quando os sinais NÃO aparecem — se ele continua agitado, mantém as mãozinhas cerradas e busca o peito novamente em pouco tempo, isso PODE INDICAR que a mamada não foi suficiente ou que houve dificuldade de transferência (avaliar junto com os demais sinais); se for peito, ofereça novamente em livre demanda e reavalie produção/transferência no período. Pedir 'observe os sinais de saciedade' sem listar OU sem ensinar o que fazer quando os sinais não aparecem é orientação incompleta e fica registrado como erro de clareza.",
       "rationale": "Test feedback (15/06/2026 caso 16d e TESTE 001 16/06/2026 caso 9d): a mãe precisa saber (i) quais são os sinais e (ii) o que fazer quando não aparecem. Sem a leitura prática a orientação fica descritiva e não operacional."
     },
     {
@@ -154,6 +154,51 @@
       "id": "rn-age-integrity",
       "rule": "A IA NUNCA pode alterar a idade do bebê. A idade vem do perfil (campo determinístico) e qualquer menção à idade na resposta deve usar EXATAMENTE esse valor em dias. Citar idade diferente (ex.: '14 dias' quando o perfil indica 22 dias) é falha crítica e dispara o guard pós-geração.",
       "rationale": "Test feedback 10d e 22d: a IA respondeu com idade errada (14 dias), comprometendo toda a leitura clínica."
+    },
+    {
+      "id": "rn-post-feed-discomfort",
+      "rule": "Quando a mãe relata choro ao colocar no berço após a mamada, dificuldade para arrotar e melhora ao voltar ao peito/colo, a IA DEVE verbalizar explicitamente a hipótese de desconforto leve pós-mamada ao deitar (ar preso, refluxo fisiológico, digestão em curso) — especialmente no fim da tarde/noite. Não basta citar a aula de refluxo: a conduta de posição vertical 30 a 40 minutos antes de deitar precisa estar explicada nesse contexto.",
+      "rationale": "TESTE 001 (RN 9d, 17/06/2026): a resposta indicou refluxo e posição vertical, mas faltou explicitar o desconforto ao deitar como hipótese central quando há dificuldade de arrotar e choro na transferência."
+    },
+    {
+      "id": "rn-night-practical-sequence",
+      "rule": "Quando a mãe pergunta 'como posso melhorar?' ou o quadro envolve piora vespertina/noite com dificuldade no berço, a IA DEVE transformar a investigação em SEQUÊNCIA PRÁTICA objetiva: (1) mamada o mais efetiva possível; (2) oferecer o segundo peito se necessário; (3) observar sinais de saciedade; (4) colocar para arrotar; (5) manter em posição vertical 30 a 40 minutos; (6) ambiente escuro, calmo e com baixa estimulação; (7) charutinho se houver reflexo de Moro ou desorganização corporal; (8) só então tentar a transferência para o berço.",
+      "rationale": "TESTE 001 (RN 9d): a investigação estava correta, mas faltou conduta prática direta para a noite quando a mãe perguntou como melhorar."
+    },
+    {
+      "id": "rn-travesseiro-support-only",
+      "rule": "A Estratégia do Travesseiro é recurso de APOIO para transição colo→berço — NÃO deve aparecer como solução principal quando a hipótese prioritária for alimentação, arroto, posição vertical ou desconforto ao deitar. Priorize mamada efetiva, medidas posturais e investigação alimentar antes de destacar o travesseiro.",
+      "rationale": "TESTE 001 (RN 9d): travesseiro pode ser útil, mas não como eixo principal antes de resolver alimentação, arroto e desconforto pós-mamada."
+    },
+    {
+      "id": "rn-clinical-history-not-current",
+      "rule": "Quando a mãe informa que o bebê AGORA mama bem, icterícia e procedimento de linguinha/frênulo devem ser tratados APENAS como histórico do início da amamentação — a IA NÃO deve citá-los como fatores que impactam a transferência ou a mamada no contexto ATUAL. O foco deve ser produção, transferência e suficiência alimentar no período em que o comportamento piora.",
+      "rationale": "TESTE 001/16 (RN 16d, 17/06/2026): a Zlaya citou icterícia e linguinha como possíveis fatores atuais quando a mãe disse que a bebê agora mama bem."
+    },
+    {
+      "id": "rn-complement-sonda-guidance",
+      "rule": "Quando houver complemento com sonda e busca pelo peito em intervalo curto no fim da tarde/madrugada, a IA DEVE: (1) ler o complemento como sinal de necessidade de suporte alimentar; (2) orientar reavaliar com quem acompanha a amamentação e o pediatra se o complemento precisa ser ajustado também no FINAL DA TARDE (não só 22h/madrugada); (3) incluir suporte à produção (dois seios, ordenha como ferramenta de avaliação — nunca solução isolada, acompanhamento de amamentação); (4) perguntar se o complemento foi orientado só para a noite ou também para o período em que a piora começa.",
+      "rationale": "TESTE 001/16 (RN 16d): faltou interpretar melhor o complemento, orientar ajuste no fim da tarde e incluir estímulo/avaliação de produção."
+    },
+    {
+      "id": "rn-confirm-feeding-before-breast",
+      "rule": "Antes de orientar 'ofereça o peito novamente' ou condutas específicas de amamentação, a IA DEVE confirmar a forma de alimentação (peito exclusivo, fórmula ou complemento) quando a mãe não informou. Essa pergunta é indispensável em casos de chupeta, despertares e busca pelo peito quando o tipo de alimentação não está claro.",
+      "rationale": "TESTE 002 (RN 22d): a Zlaya orientou 'oferecer o peito' sem confirmar se a bebê mama no peito, usa fórmula ou complemento."
+    },
+    {
+      "id": "rn-pacifier-practical-management",
+      "rule": "Em queixas de chupeta no RN: se a chupeta cair e o bebê continuar dormindo, NÃO oriente recolocar; se acordar imediatamente quando cai, investigue fome, desconforto pós-mamada, mamada efetiva, arroto e transição para o berço — diferenciando fome real, necessidade de sucção, desconforto, sono leve e dificuldade de transferência. O foco NÃO é prender melhor a chupeta nem recolocar repetidamente.",
+      "rationale": "TESTE 002 (RN 22d): faltou orientação prática sobre o que fazer quando a chupeta cai."
+    },
+    {
+      "id": "rn-satiety-cautious-language",
+      "rule": "Ao interpretar sinais de saciedade ausentes, use linguagem cautelosa: 'isso PODE INDICAR que a mamada não foi suficiente ou que houve dificuldade de transferência — avalie junto com os demais sinais' — em vez de afirmar com certeza que 'a mamada provavelmente não foi suficiente'.",
+      "rationale": "TESTE 002 (RN 22d): a ideia estava correta, mas a formulação precisa ser mais cautelosa e considerar o conjunto de sinais."
+    },
+    {
+      "id": "rn-gender-consistency",
+      "rule": "A IA deve manter consistência de gênero gramatical (ele/ela, dele/dela) com o modo como a mãe se refere ao bebê ao longo de toda a resposta. Não alternar entre masculino e feminino.",
+      "rationale": "TESTE 002 (RN 22d): a resposta alternou entre 'bebê' no feminino e 'ele' depois."
     }
   ],
 
