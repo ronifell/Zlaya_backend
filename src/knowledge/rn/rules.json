@@ -198,7 +198,27 @@
     {
       "id": "rn-gender-consistency",
       "rule": "A IA deve manter consistência de gênero gramatical (ele/ela, dele/dela) com o modo como a mãe se refere ao bebê ao longo de toda a resposta. Não alternar entre masculino e feminino.",
-      "rationale": "TESTE 002 (RN 22d): a resposta alternou entre 'bebê' no feminino e 'ele' depois."
+      "rationale": "TESTE 002 (RN 22d) e TESTE 003/16 (RN 16d): a resposta alternou para 'ele' quando a mãe usa 'ela'."
+    },
+    {
+      "id": "rn-sonda-equals-low-production",
+      "rule": "O uso de complemento com sonda, por si só, é INDICADOR de baixa produção materna ou necessidade de suporte de produção. A IA DEVE nomear isso explicitamente como hipótese principal e tratá-lo como EIXO CENTRAL da análise — não apenas mencionar 'produção/transferência' de passagem. O déficit pode ocorrer DURANTE O DIA também (não só à noite) e gerar madrugada mais instável. Orientações obrigatórias: (a) avaliar complemento também durante o dia; (b) ORDENHAS como estratégia para estimular a produção materna; (c) oferta dos dois seios; (d) livre demanda quando houver sinais de fome; (e) acompanhamento de amamentação. Perguntas indispensáveis: 'O complemento foi orientado também para o final da tarde e durante o dia?', 'Você está fazendo ordenhas para estimular a produção?', 'Durante o dia ela também busca o peito em menos de 2h?'.",
+      "rationale": "TESTE 003/16 (18/06/2026, RN 16d): a Zlaya perguntou sobre complemento no final da tarde mas não interpretou a sonda como sinal de baixa produção materna, nem orientou complemento durante o dia, nem citou estratégia de ordenhas."
+    },
+    {
+      "id": "rn-crib-ok-day-night-problem",
+      "rule": "Quando a mãe relata que o bebê faz sonecas no berço DURANTE O DIA mas NÃO permanece no berço à NOITE, o berço NÃO é o problema central — a hipótese prioritária é MAMADA NOTURNA INSUFICIENTE OU BAIXA PRODUÇÃO MATERNA NO PERÍODO DA NOITE. A IA NÃO deve abrir a resposta por adaptação ao berço, Moisés, Estratégia do Travesseiro ou reflexo de Moro. Deve NOMEAR diretamente: 'Como ele/ela aceita o berço durante o dia, o problema não é adaptação ao berço — a primeira coisa a investigar é a mamada noturna e a produção de leite nesse período.' HIERARQUIA OBRIGATÓRIA: (1) mamada noturna; (2) baixa produção/transferência no período da noite; (3) sinais de saciedade; (4) tempo em posição vertical (30 a 40 min); (5) arroto; (6) refluxo/desconforto; (7) reflexo de Moro; (8) só por último berço/Travesseiro. Perguntas indispensáveis: 'Antes de tentar colocá-lo no berço à noite, ele mama? Como é essa mamada? Ele parece ficar satisfeito ou continua procurando o peito?' e 'Ele mama no peito, fórmula ou os dois?'.",
+      "rationale": "TESTE 003 (18/06/2026, RN 6d): a Zlaya tratou como adaptação ao berço quando o bebê aceita berço de dia — perdeu a hipótese central de mamada noturna insuficiente."
+    },
+    {
+      "id": "rn-night-hunger-signs",
+      "rule": "Sinais clássicos de fome no RN — sugar mãozinhas + ficar nervoso/agitado + choramingar (especialmente entre 23h e 02h) — devem ser lidos como SINAL CLARO DE FOME, não como desorganização do sono ou agitação genérica. Perguntas INDISPENSÁVEIS antes de qualquer outra hipótese: 'Nesse horário, ela já mamou?' e 'Esse comportamento de ficar nervosa, sugar as mãozinhas e choramingar acontece ANTES ou DEPOIS da mamada?'. Conduta: se ANTES da mamada → alimentar imediatamente (livre demanda); se DEPOIS → investigar mamada efetiva (sucção ativa, deglutição), produção no período, sinais de saciedade, conforto após arroto, posição vertical por 30 a 40 minutos. A IA NÃO deve presumir ordenha ou complemento se a mãe não informou — só pode mencionar de forma CONDICIONAL.",
+      "rationale": "TESTE 003 (18/06/2026, RN 10d): a Zlaya não reconheceu sugar mãozinhas + nervosismo + choramingo como sinal claro de fome, não fez a pergunta sobre se a bebê mamou no horário, e presumiu ordenha/complemento sem informação da mãe."
+    },
+    {
+      "id": "rn-nap-duration-direct-answer",
+      "rule": "Quando a mãe perguntar diretamente se a soneca de 3h está longa demais ou se deve diminuir, a IA DEVE responder DIRETAMENTE: 'Para um RN nessa fase, sonecas de 2h30 a 3h podem ser esperadas — não é necessário diminuir automaticamente.' Só DEPOIS conduzir a investigação do desconforto real (ex.: nervosismo entre 23h e 02h, que é sinal de fome). 'Janelas de sono' rígidas NÃO são o eixo do método para RN — o ritmo é livre demanda e observação dos sinais da bebê.",
+      "rationale": "TESTE 003 (18/06/2026, RN 10d): a mãe perguntou 'Devo diminuir?' e a Zlaya não respondeu diretamente, transformou a dúvida em hipótese alimentar sem antes esclarecer a duração esperada da soneca."
     }
   ],
 

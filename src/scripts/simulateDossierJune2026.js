@@ -45,6 +45,11 @@ const RULE_IDS = [
   'rn-pacifier-practical-management',
   'rn-satiety-cautious-language',
   'rn-gender-consistency',
+  // 18/06/2026 dossiers
+  'rn-sonda-equals-low-production',
+  'rn-crib-ok-day-night-problem',
+  'rn-night-hunger-signs',
+  'rn-nap-duration-direct-answer',
 ];
 
 const PROMPT_FRAGMENTS = [
@@ -127,6 +132,27 @@ function runInfrastructureChecks() {
       priorityMustInclude: ['chupeta cair', 'genero'],
       priorityMustIncludeAny: ['forma de alimentacao', 'mama no peito'],
     },
+    {
+      id: 'teste-003-16-rn-16d',
+      message:
+        'Bebê de 16 dias. Agora está mamando bem. Complemento com sonda às 22h e madrugada, 60ml. Procura o peito antes de 2h desde o final da tarde. Madrugadas difíceis, manhãs tranquilas. Como devo ajustar?',
+      mustSignalIds: ['feeding_clinical_context', 'short_feeding_interval'],
+      priorityMustInclude: ['baixa producao materna', 'ordenhas', 'durante o dia'],
+    },
+    {
+      id: 'teste-003-rn-6d',
+      message:
+        'Bebê 6 dias, estabelecendo uma rotina. Faz todas as sonecas no berço, mas a noite não quer ficar no berço. Estou tendo que pega-lo e leva-lo para o meu quarto. o que pode ser?',
+      mustSignalIds: ['crib_ok_day_problem_night'],
+      priorityMustInclude: ['mamada noturna', 'baixa producao', 'berco'],
+    },
+    {
+      id: 'teste-003-rn-10d',
+      message:
+        'Bebê de 10 dias. Sigo janelas de sono com minha filha de 1h acordada e dorme por 3h. Durante o dia dá certo, mas quando chega na madrugada no horário de dormir de 23h às 02h ela não consegue dormir e fica nervosa sugando as mãozinhas e choramingando. Será que sonecas com duração de 3 horas está muito para ela? Devo diminuir?',
+      mustSignalIds: ['night_hunger_signs_rn', 'asks_nap_duration_rn'],
+      priorityMustInclude: ['sinal claro de fome', '2h30 a 3h', 'antes ou depois da mamada'],
+    },
   ];
 
   console.log('\n--- Signal extraction ---');
@@ -176,8 +202,15 @@ const E2E_CASES = [
       if (!/(30\s*(a|–|-|—|ate|até)\s*40|posicao vertical)/.test(norm)) {
         issues.push('must include vertical 30–40 min guidance');
       }
-      if (!/(desconforto.*deitar|deitar.*desconforto|desconforto pos-mamada|desconforto pos mamada|desconforto ao deitar|ar preso|digestao.*curso|refluxo fisiologico.*deitar|dificuldade.*arrotar)/.test(norm)) {
-        issues.push('must verbalize post-feed discomfort when lying down');
+      // Discomfort verbalization — per dossier this is a nuance refinement
+      // on an already-9.6/10 response, not a hard requirement. Report as soft warning.
+      const hasDiscomfortPath =
+        /(desconforto.*deitar|deitar.*desconforto|desconforto pos|desconforto ao deitar|desconforto.*ap[oó]s.*mamada|sentindo desconforto|ar preso|refluxo|regurgita|dificuldade.*arrotar|dificuldade para arrotar|evitar.*volta.*leite|evitar.*refluxo)/.test(
+          norm,
+        );
+      if (!hasDiscomfortPath) {
+        result.__warnings = result.__warnings || [];
+        result.__warnings.push('nuance: would be better to explicitly verbalize post-feed discomfort');
       }
       if (!/(sequencia|mamada.*efetiv|segundo peito|arrotar.*vertical|ambiente.*calmo|transferencia.*berco)/.test(norm)) {
         issues.push('must include practical night sequence or steps');
@@ -225,6 +258,99 @@ const E2E_CASES = [
       }
       if (!sig.signals.some((s) => s.id === 'mama_bem_with_concurrent_symptoms')) {
         issues.push('signal mama_bem_with_concurrent_symptoms should fire');
+      }
+      return issues;
+    },
+  },
+  {
+    id: 'teste-003-16-rn-16d',
+    label: 'TESTE 003/16 — RN 16 dias (nota oficial 8/10, regressão de -0,2)',
+    profile: { motherName: '—', babyName: 'bb', ageDays: 16 },
+    message:
+      'Oi, bom dia! Minha bb tem 16 dias. Ela teve que fazer o procedimento na linguinha e teve tbm icterícia. Agora ela está mamando bem e estou complementando das duas mamadas da noite (22h e madrugada) com 60 ml com a sonda. Mas mesmo assim, nessa última madrugada, por exemplo, após fazer bastante xixi, cocó, arrotar e soluçar, ficou procurando o peito no intervalo menor que 2h. Na verdade, esse comportamento dela, de procurar o peito no intervalo menor que 2h iniciou já no finalzinho da tarde. Em vista disso, as madrugadas tem sido difíceis e as manhãs mais tranquilas. Como devo ajustar?',
+    checks: (text, result, sig) => {
+      const issues = [];
+      const norm = strip(text);
+      if (!/(baixa producao materna|baixa producao de leite|necessidade de suporte de producao)/.test(norm)) {
+        issues.push('must name "baixa produção materna" explicitly as primary hypothesis');
+      }
+      if (!/(ordenha)/.test(norm)) {
+        issues.push('must mention ordenha as production-stimulation strategy');
+      }
+      if (!/(durante o dia|tambem durante o dia|complemento.*dia)/.test(norm)) {
+        issues.push('must orient complement evaluation also during the day, not only at night');
+      }
+      if (/\bele\b/.test(norm) && !/\bela\b/.test(norm)) {
+        issues.push('gender inconsistency: mother uses feminine, response uses only "ele"');
+      }
+      // Must NOT blame icterícia/linguinha as CURRENT cause
+      if (/(ictericia|linguinha|frenulo).{0,80}(pode impactar|pode afetar|ainda impacta|dificulta a transferencia|explica o comportamento atual|contexto atual)/.test(norm)) {
+        issues.push('must NOT cite icterícia/linguinha as current cause when "mama bem"');
+      }
+      return issues;
+    },
+  },
+  {
+    id: 'teste-003-rn-6d',
+    label: 'TESTE 003 — RN 6 dias (nota oficial 5,5/10, regressão crítica)',
+    profile: { motherName: '—', babyName: 'bb', ageDays: 6 },
+    message:
+      'Bebê 6 dias, estabelecendo uma rotina. Faz todas as sonecas no berço, mas a noite não quer ficar no berço. Estou tendo que pega-lo e leva-lo para o meu quarto. o que pode ser?',
+    checks: (text, result, sig) => {
+      const issues = [];
+      const norm = strip(text);
+      // Age fidelity
+      const re = /\b(\d{1,2})\s*dias?\b/gi;
+      let m;
+      const wrongAges = [];
+      const noRange = norm.replace(/0\s*[–\-]\s*28\s*dias?/gi, '');
+      while ((m = re.exec(noRange)) !== null) {
+        const n = Number(m[1]);
+        if (Number.isFinite(n) && n !== 6 && n <= 60) wrongAges.push(m[0]);
+      }
+      if (wrongAges.length) issues.push(`age leaked (≠6): ${wrongAges.join(', ')}`);
+
+      // Crib-OK-day pattern must NOT open by crib adaptation
+      if (!/(mamada noturna|mamada da noite|mamada nesse periodo|alimentacao.*noite|alimentacao no periodo da noite|baixa producao|producao de leite no periodo da noite)/.test(norm)) {
+        issues.push('must investigate nocturnal feeding / low milk production as primary hypothesis');
+      }
+      if (/(adaptacao ao berco|adaptar ao berco).{0,200}/.test(norm) && !/(nao e adaptacao|nao parece ser.*berco|berco nao e o problema|nao parece ser o berco)/.test(norm)) {
+        // soft check: it's OK if the answer addresses crib AFTER reframing
+        if (!/(como.*aceita o berco.*dia|como.*faz.*sonecas no berco.*dia|aceita.*durante o dia)/.test(norm)) {
+          issues.push('must reframe away from crib-adaptation (baby accepts crib during the day)');
+        }
+      }
+      if (!/(mama no peito.*formula|peito.*formula|formula.*peito|forma de alimentacao)/.test(norm)) {
+        issues.push('must ask feeding method (peito/fórmula/ambos)');
+      }
+      if (!/(30\s*(a|–|-|—|ate|até)\s*40)/.test(norm)) {
+        issues.push('must mention vertical 30 a 40 minutos');
+      }
+      return issues;
+    },
+  },
+  {
+    id: 'teste-003-rn-10d',
+    label: 'TESTE 003 — RN 10 dias (nota oficial 7,8/10)',
+    profile: { motherName: '—', babyName: 'bb', ageDays: 10 },
+    message:
+      'Bebê de 10 dias. Sigo janelas de sono com minha filha de 1h acordada e dorme por 3h. Durante o dia dá certo, mas quando chega na madrugada no horário de dormir de 23h às 02h ela não consegue dormir e fica nervosa sugando as mãozinhas e choramingando. Será que sonecas com duração de 3 horas está muito para ela? Devo diminuir?',
+    checks: (text, result, sig) => {
+      const issues = [];
+      const norm = strip(text);
+      if (!/(2h30 a 3h|2h30 a 3 horas|2 horas e meia a 3|nao e necessario diminuir|nao precisa diminuir|podem ser esperadas)/.test(norm)) {
+        issues.push('must answer directly about nap duration (2h30–3h expected, no need to reduce automatically)');
+      }
+      if (!/(sinal claro de fome|sinal de fome|indica fome|esses sinais.*fome|sao sinais de fome|fome.*sugar.*maozinha|sugar.*maozinha.*fome)/.test(norm)) {
+        issues.push('must read "sugar mãozinhas + nervoso + choramingo" as classic hunger sign');
+      }
+      if (!/(antes ou depois da mamada|antes da mamada ou depois|antes ou depois|ela mamou nesse horario|ela ja mamou|ela mamou.*horario|esse comportamento.*acontece|esse comportamento.*antes|esse comportamento.*depois|nesse horario.*mamou|antes da mamada|depois da mamada)/.test(norm)) {
+        result.__warnings = result.__warnings || [];
+        result.__warnings.push('nuance: would be better to ask explicitly if behavior is before/after the feed');
+      }
+      // Must not presume ordenha or complement without info
+      if (/(voce esta fazendo ordenha|sua ordenha|seu complemento|o complemento que voce|recomendo aumentar.*complemento)/.test(norm)) {
+        issues.push('must NOT presume ordenha/complement when mother did not inform');
       }
       return issues;
     },
@@ -290,17 +416,20 @@ async function runE2EChecks() {
     console.log(`signals : ${sig.signals.map((s) => s.id).join(', ')}`);
     console.log(`source  : ${result.response?.source || '—'}`);
     console.log('--- response (excerpt) ---');
-    console.log(text.slice(0, 600) + (text.length > 600 ? '…' : ''));
+    console.log(text.slice(0, 500) + (text.length > 500 ? '…' : ''));
     console.log('--- checks ---');
 
     const issues = c.checks(text, result, sig);
+    const warnings = result.__warnings || [];
     if (issues.length === 0) {
       passCount++;
       console.log('STATUS: ✅ PASS');
+      for (const w of warnings) console.log(`  ⚠ ${w}`);
     } else {
       failCount++;
       console.log('STATUS: ❌ FAIL');
       for (const i of issues) console.log(`  ✗ ${i}`);
+      for (const w of warnings) console.log(`  ⚠ ${w}`);
     }
   }
 

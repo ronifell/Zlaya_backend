@@ -129,7 +129,7 @@ const SIGNAL_DEFS = [
     ],
     boostThemes: ['mamadas_ineficientes', 'baixa_producao_leite', 'baixa_producao_fim_dia'],
     priority:
-      'Há contexto de icterícia, linguinha/frênulo, sonda ou complemento. REGRA CRÍTICA: se a mãe informou que o bebê AGORA mama bem, é PROIBIDO citar icterícia ou linguinha como fator que impacta a transferência ou a mamada no contexto ATUAL — trate APENAS como histórico do início. NÃO abra a resposta explicando icterícia/linguinha como causa do comportamento atual. Leitura atual: mamada efetiva (sucção ativa e deglutição) + reavaliar COMPLEMENTO com quem acompanha a amamentação e o pediatra — incluindo se precisa de ajuste no FINAL DA TARDE (não só 22h/madrugada). Inclua suporte à produção: dois seios, ordenha como ferramenta de avaliação (nunca solução isolada). PERGUNTA OBRIGATÓRIA na investigação: "O complemento foi orientado apenas para as mamadas da noite, ou já foi avaliada a necessidade de suporte também no final da tarde, quando o comportamento começa?". Não oriente alteração de complemento por conta própria.',
+      'Há contexto de icterícia, linguinha/frênulo, sonda ou complemento. REGRA CRÍTICA: se a mãe informou que o bebê AGORA mama bem, é PROIBIDO citar icterícia ou linguinha como fator que impacta a transferência ou a mamada no contexto ATUAL — trate APENAS como histórico do início. NÃO abra a resposta explicando icterícia/linguinha como causa do comportamento atual. COMPLEMENTO COM SONDA é, por si só, indicador de BAIXA PRODUÇÃO MATERNA ou necessidade de suporte de produção — NOMEIE explicitamente: "Como sua bebê já recebe complemento com sonda, isso indica baixa produção materna ou necessidade de suporte de produção". O déficit pode ocorrer também DURANTE O DIA (não só à noite) e gerar madrugada mais instável. Oriente: (a) avaliar complemento também durante o dia; (b) avaliar suporte no final da tarde quando o comportamento começa; (c) ORDENHAS como estratégia para estimular a produção materna; (d) oferta dos dois seios; (e) livre demanda quando houver sinais de fome; (f) posição vertical 30 a 40 min; (g) acompanhamento de amamentação. PERGUNTAS OBRIGATÓRIAS: "O complemento foi orientado apenas para as mamadas da noite, ou já foi avaliada a necessidade de suporte também no final da tarde e durante o dia?" e "Você está fazendo ordenhas para estimular a produção?" e "Durante o dia, ela também apresenta sinais de buscar peito em menos de 2h ou dificuldade de sustentar as mamadas?". Não oriente alteração de complemento por conta própria.',
   },
   {
     id: 'prolonged_awake_after_feed',
@@ -196,7 +196,77 @@ const SIGNAL_DEFS = [
     ],
     boostThemes: ['acordar_para_mamar_dia', 'intervalos_alimentacao'],
     priority:
-      'Para dúvida de soneca diurna longa / acordar para mamar no RN: NÃO normalize uma soneca de 3-4h à tarde como rotina. Durante o DIA, oriente acordar para oferecer a mamada (peito ~2h a 2h30; fórmula ~3h). À noite a regra é outra e depende de idade, peso, ganho e orientação do pediatra. NÃO use "afetar o sono noturno" como critério principal e NÃO investigue berço, arroto ou posição vertical se a mãe não relatou desconforto/refluxo.',
+      'Para dúvida de soneca diurna no RN: sonecas de 2h30 a 3h podem ser ESPERADAS nessa fase — RESPONDA DIRETAMENTE que não é necessário diminuir automaticamente. Acima disso (3h30/4h) DURANTE O DIA, oriente acordar para oferecer a mamada (peito ~2h-2h30 a 3h; fórmula ~3h). À noite a regra é outra e depende de idade, peso, ganho e orientação do pediatra. NÃO use "afetar o sono noturno" como critério principal e NÃO investigue berço, arroto ou posição vertical se a mãe não relatou desconforto/refluxo.',
+  },
+  {
+    id: 'crib_ok_day_problem_night',
+    label: 'Aceita o berço durante o dia, problema só à noite (foco em mamada noturna, não em berço)',
+    directive: true,
+    phrases: [
+      'sonecas no berco', 'sonecas todas no berco', 'todas as sonecas no berco',
+      'faz as sonecas no berco', 'dorme no berco de dia', 'aceita o berco de dia',
+      'aceita berco no dia', 'durante o dia dorme no berco', 'de dia fica no berco',
+      'a noite nao quer ficar no berco', 'a noite nao fica no berco',
+      'noite nao quer o berco', 'a noite nao aceita o berco',
+      'so nao aceita o berco a noite', 'so a noite nao quer o berco',
+      'leva-lo para o meu quarto', 'levo para o meu quarto', 'leva para o quarto',
+      'tenho que pegar a noite', 'tenho que pega-lo', 'tenho que pega lo',
+    ],
+    boostThemes: [
+      'baixa_producao_fim_dia',
+      'baixa_producao_leite',
+      'mamadas_ineficientes',
+      'padrao_vespertino',
+      'busca_excessiva_peito',
+    ],
+    priority:
+      'PADRÃO DIAGNÓSTICO CRÍTICO: bebê faz sonecas no berço DURANTE O DIA mas NÃO permanece no berço à NOITE. Isso significa que o berço NÃO é o problema central — a hipótese prioritária é MAMADA NOTURNA INSUFICIENTE OU BAIXA PRODUÇÃO MATERNA NO PERÍODO DA NOITE. A IA NÃO deve abrir por adaptação ao berço, Moisés, Estratégia do Travesseiro ou reflexo de Moro. NOMEIE diretamente: "Como ele/ela aceita o berço durante o dia, o problema não é adaptação ao berço — a primeira coisa a investigar é a mamada noturna e a produção de leite nesse período." HIERARQUIA OBRIGATÓRIA: (1) mamada noturna — pergunte EXPLICITAMENTE: "Antes de tentar colocá-lo no berço à noite, ele mama? Como é essa mamada? Ele parece ficar satisfeito ou continua procurando o peito?"; (2) possível baixa produção de leite no período da noite; (3) sinais de saciedade; (4) tempo em posição vertical (30 a 40 min); (5) arroto; (6) refluxo/desconforto; (7) reflexo de Moro; (8) só por último berço/Travesseiro. PERGUNTA OBRIGATÓRIA também: "Ele mama no peito, fórmula ou os dois?".',
+  },
+  {
+    id: 'night_hunger_signs_rn',
+    label: 'Sinais clássicos de fome no RN à noite (suga mãozinhas, fica nervoso, choraminga)',
+    directive: true,
+    phrases: [
+      'suga as mãozinhas', 'suga as maozinhas', 'sugando as maozinhas', 'sugando as mãozinhas',
+      'suga a mao', 'suga a mão', 'leva a mao a boca', 'leva a mão à boca',
+      'chupa a maozinha', 'chupa a mãozinha', 'chupa as mãos', 'chupa as maos',
+      'fica nervosa', 'fica nervoso', 'muito nervosa', 'muito nervoso',
+      'chorammingando', 'choramingando', 'choraminga', 'choraminga e nervos',
+      'nervosa sugando', 'nervoso sugando', 'agitada sugando', 'agitado sugando',
+      'inquieta sugando', 'inquieto sugando',
+      '23h as 02h', '23h às 02h', '23 as 02', '23 às 02',
+      '23h as 2h', '23h às 2h', 'das 23 ate as 2', 'das 23 às 2',
+      'meia noite as 2', 'meia-noite as 2',
+    ],
+    boostThemes: [
+      'baixa_producao_leite',
+      'baixa_producao_fim_dia',
+      'mamadas_ineficientes',
+      'busca_excessiva_peito',
+      'despertar_noturno_investigar_fome',
+    ],
+    priority:
+      'SINAIS CLÁSSICOS DE FOME NO RN detectados (sugar mãozinhas + nervoso/agitado + choramingo, especialmente entre 23h e 02h). Esse conjunto é SINAL CLARO DE FOME, não desorganização do sono nem agitação genérica. PERGUNTAS INDISPENSÁVEIS (faça antes de qualquer outra hipótese): "Nesse horário, ela já mamou?" e "Esse comportamento de ficar nervosa, sugar as mãozinhas e choramingar acontece ANTES ou DEPOIS da mamada?". Use esta árvore: (a) se ANTES da mamada → prioridade é alimentar imediatamente (livre demanda); (b) se DEPOIS da mamada → investigar se a mamada foi efetiva (sucção ativa, deglutição), produção de leite no período, sinais de saciedade, conforto após arroto, posição vertical por 30 a 40 minutos. NÃO presuma ordenha nem complemento se a mãe não informou — só sugira de forma CONDICIONAL ("se confirmar baixa produção, pode-se considerar ordenha como ferramenta de avaliação"). NÃO normalize o comportamento como "comum no RN" sem antes investigar fome.',
+  },
+  {
+    id: 'asks_nap_duration_rn',
+    label: 'Mãe pergunta se a soneca está longa demais / se deve diminuir',
+    directive: true,
+    phrases: [
+      'soneca de 3 horas esta muito', 'soneca de 3 horas está muito',
+      'sonecas de 3 horas esta muito', 'sonecas de 3 horas está muito',
+      'sonecas com duracao de 3 horas', 'sonecas com duração de 3 horas',
+      'devo diminuir', 'tenho que diminuir', 'preciso diminuir',
+      'soneca esta longa demais', 'soneca está longa demais',
+      'sonecas estao longas demais', 'sonecas estão longas demais',
+      'soneca muito longa', 'esta dormindo demais', 'está dormindo demais',
+      'duracao da soneca', 'duração da soneca',
+      'janela de 1h acordada', 'janela de 1 hora acordada', '1h acordada',
+      'segue janelas', 'sigo janelas', 'janelas de sono',
+    ],
+    boostThemes: ['intervalos_alimentacao', 'acordar_para_mamar_dia'],
+    priority:
+      'A mãe perguntou DIRETAMENTE se a soneca de 3h está longa demais e se deve diminuir. RESPONDA DIRETAMENTE na PRIMEIRA frase do bloco prático: "Para um RN nessa fase, sonecas de 2h30 a 3h podem ser esperadas — não é necessário diminuir automaticamente." Só DEPOIS conduza a investigação do comportamento que está incomodando (ex.: nervosismo entre 23h e 02h, que é sinal de fome). NÃO transforme a dúvida sobre duração da soneca em desvio para outra hipótese sem antes responder diretamente. Para o RN, "janelas de sono" rígidas não são o eixo do método — o ritmo é livre demanda e observação dos sinais da bebê.',
   },
   {
     id: 'breast_soothing',
@@ -253,7 +323,7 @@ const SIGNAL_DEFS = [
     ],
     boostThemes: ['acorda_ao_deitar', 'dificuldade_berco', 'reflexo_moro'],
     priority:
-      'O despertar na transferência para o berço segue a hierarquia: (1) tempo vertical após a mamada, (2) arroto, (3) reflexo de Moro, (4) adaptação à superfície, (5) refluxo/desconforto pós-mamada ao deitar. VERBALIZE EXPLICITAMENTE a hipótese de desconforto leve pós-mamada ao deitar quando houver dificuldade de arrotar, choro logo ao colocar no berço ou melhora ao voltar ao peito/colo. Oriente EXPLICITAMENTE manter o bebê em POSIÇÃO VERTICAL POR 30 A 40 MINUTOS após a mamada antes da transição — não basta perguntar. Se a mãe perguntou "como melhorar", inclua a sequência prática noturna completa. A Estratégia do Travesseiro só como apoio secundário, não eixo principal. Depois disso, transição gradual colo→superfície com o corpo bem contido.',
+      'O despertar na transferência para o berço segue a hierarquia: (1) tempo vertical após a mamada, (2) arroto, (3) reflexo de Moro, (4) adaptação à superfície, (5) refluxo/desconforto pós-mamada ao deitar. VERBALIZAÇÃO OBRIGATÓRIA: quando houver dificuldade de arrotar, choro logo ao colocar no berço ou melhora ao voltar ao peito/colo, a resposta DEVE conter uma frase explícita do tipo "isso pode indicar desconforto leve pós-mamada ao deitar" ou "o bebê pode estar sentindo desconforto ao deitar após a mamada" — não basta orientar a posição vertical, é preciso NOMEAR a hipótese de desconforto ao deitar. Oriente EXPLICITAMENTE manter em POSIÇÃO VERTICAL POR 30 A 40 MINUTOS após a mamada antes da transição. Se a mãe perguntou "como melhorar", inclua a sequência prática noturna completa. A Estratégia do Travesseiro só como apoio secundário, não eixo principal.',
   },
   {
     id: 'mama_bem_with_concurrent_symptoms',

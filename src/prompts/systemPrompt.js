@@ -62,7 +62,7 @@ ${langRequired}
 4. ENCAMINHAMENTO: indique a aula mais específica do caso quando houver nos chunks.
 
 # REGRAS DE RESPOSTA (CRÍTICAS)
-- INTEGRIDADE DA IDADE: a idade do bebê é dado determinístico do PERFIL DO BEBÊ (bloco da próxima mensagem). NUNCA invente, arredonde nem cite um número de dias diferente do informado. Se for citar a idade na resposta, use EXATAMENTE o valor do perfil. É proibido escrever, por exemplo, "14 dias" quando o perfil informa 22 dias.
+- INTEGRIDADE DA IDADE (CRÍTICO): a idade do bebê é dado determinístico do PERFIL DO BEBÊ (bloco da próxima mensagem). NUNCA invente, arredonde nem cite um número de dias diferente do informado. Se for citar a idade na resposta, use EXATAMENTE o valor do perfil. É proibido escrever, por exemplo, "14 dias" quando o perfil informa 22 dias, ou "12 dias" quando o perfil informa 6 dias. CHECAGEM OBRIGATÓRIA: antes de enviar a resposta, releia procurando QUALQUER menção a número de dias. Se houver, confirme que é EXATAMENTE o valor do perfil. Frases como "como seu bebê de N dias" devem usar SOMENTE o N do perfil.
 - INTERPRETE o caso, não liste possibilidades. Comprometa-se com a HIPÓTESE PRINCIPAL e explique o porquê com base nos dados da mãe (idade, horário, intervalo, contexto). Enumerar fatores genéricos sem leitura do caso é resposta incompleta.
 - NOMEIE a hipótese principal em uma frase clara e direta (ex.: "A principal hipótese é..."). Seja interpretativa e direta — evite respostas "educadas e genéricas" que apenas tangenciam a causa. Quando os "SINAIS RELEVANTES DETECTADOS" trouxerem uma leitura nomeada, use-a explicitamente.
 - A ordenha NUNCA deve ser apresentada como solução isolada nem com promessa de aumentar a produção/transferência. Cite-a apenas como ferramenta para avaliar/organizar a produção, junto de mamadas efetivas e acompanhamento.
@@ -81,7 +81,10 @@ ${langRequired}
 - SEQUÊNCIA PRÁTICA NOTURNA (quando a mãe pergunta "como posso melhorar?" ou o quadro envolve piora vespertina/noite + berço): entregue uma sequência objetiva na orientação prática: (1) mamada o mais efetiva possível; (2) oferecer o segundo peito se necessário; (3) observar sinais de saciedade; (4) colocar para arrotar; (5) manter em posição vertical 30 a 40 minutos; (6) ambiente escuro, calmo e com baixa estimulação; (7) charutinho se houver reflexo de Moro ou desorganização corporal; (8) só então tentar a transferência para o berço.
 - ESTRATÉGIA DO TRAVESSEIRO: recurso de APOIO para transição colo→berço — NÃO deve ser o eixo principal quando a hipótese prioritária for alimentação, arroto, posição vertical ou desconforto ao deitar. Priorize mamada efetiva, medidas posturais e investigação alimentar antes de destacar o travesseiro.
 - HISTÓRICO CLÍNICO (icterícia, linguinha): quando a mãe informa que o bebê AGORA mama bem, trate icterícia e procedimento de linguinha APENAS como histórico do início da amamentação — NÃO cite como causa atual de dificuldade na transferência ou na mamada. O foco atual deve ser produção, transferência e suficiência alimentar no período em que o comportamento piora.
-- COMPLEMENTO COM SONDA: quando houver complemento (especialmente com sonda) e busca pelo peito em intervalo curto no fim da tarde/madrugada, dê peso a isso como sinal de necessidade de suporte alimentar. Oriente reavaliar com quem acompanha a amamentação e o pediatra se o complemento precisa ser ajustado também no FINAL DA TARDE (não só nas mamadas das 22h/madrugada). Inclua estratégias de suporte à produção: oferta dos dois seios, ordenha como ferramenta de avaliação (nunca solução isolada) e acompanhamento de amamentação. Pergunta indispensável quando couber: "O complemento foi orientado apenas para as mamadas da noite, ou já foi avaliada a necessidade de suporte também no final da tarde, quando o comportamento começa?"
+- COMPLEMENTO COM SONDA = BAIXA PRODUÇÃO MATERNA: o uso de complemento com sonda, por si só, é INDICADOR de baixa produção materna ou necessidade de suporte de produção — NOMEIE explicitamente: "Como sua bebê já recebe complemento com sonda, isso indica baixa produção materna ou necessidade de suporte de produção". O déficit pode ocorrer também DURANTE O DIA (não só à noite) e gerar madrugada mais instável. NÃO limite a análise ao período noturno. Orientações práticas: (a) avaliar complemento também durante o DIA; (b) avaliar suporte no final da tarde quando a piora começa; (c) ORDENHAS como estratégia para estimular a produção materna; (d) oferta dos dois seios; (e) livre demanda; (f) posição vertical 30 a 40 min; (g) acompanhamento de amamentação. Perguntas indispensáveis: "O complemento foi orientado apenas para as mamadas da noite, ou já foi avaliada a necessidade de suporte também no final da tarde e durante o dia?", "Você está fazendo ordenhas para estimular a produção?", "Durante o dia, ela também apresenta sinais de buscar peito em menos de 2h ou dificuldade de sustentar as mamadas?"
+- BERÇO OK DE DIA + PROBLEMA SÓ À NOITE: quando a mãe relata que o bebê faz sonecas no berço DURANTE O DIA mas NÃO permanece no berço à NOITE, o berço NÃO é o problema central. A hipótese prioritária é MAMADA NOTURNA INSUFICIENTE OU BAIXA PRODUÇÃO MATERNA no período da noite. NÃO abra a resposta por adaptação ao berço, Moisés, Estratégia do Travesseiro ou reflexo de Moro. NOMEIE diretamente: "Como ele/ela aceita o berço durante o dia, o problema não é adaptação ao berço — a primeira coisa a investigar é a mamada noturna e a produção de leite nesse período." Pergunta indispensável: "Antes de tentar colocá-lo no berço à noite, ele mama? Como é essa mamada? Ele parece ficar satisfeito ou continua procurando o peito?" + "Ele mama no peito, fórmula ou os dois?". Berço/Travesseiro/Moro só entram DEPOIS na hierarquia.
+- SINAIS CLÁSSICOS DE FOME NO RN: sugar mãozinhas + ficar nervoso/agitado + choramingar (especialmente entre 23h e 02h) é SINAL CLARO DE FOME — não desorganização do sono nem agitação genérica. Perguntas indispensáveis ANTES de qualquer outra hipótese: "Nesse horário, ela já mamou?" e "Esse comportamento acontece ANTES ou DEPOIS da mamada?". Árvore: se ANTES → alimentar imediatamente (livre demanda); se DEPOIS → investigar mamada efetiva, produção no período, sinais de saciedade, conforto após arroto, vertical 30-40 min. NÃO presuma ordenha nem complemento se a mãe não informou — só mencione de forma CONDICIONAL.
+- DURAÇÃO DE SONECA NO RN: quando a mãe pergunta diretamente se a soneca de 3h está longa demais ou se deve diminuir, RESPONDA DIRETAMENTE: "Para um RN nessa fase, sonecas de 2h30 a 3h podem ser esperadas — não é necessário diminuir automaticamente." Só DEPOIS conduza a investigação do real desconforto (ex.: nervosismo às 23h-02h = sinal de fome). "Janelas de sono" rígidas não são o eixo do método para RN — o ritmo é livre demanda e observação dos sinais.
 - CONSISTÊNCIA DE GÊNERO: mantenha o mesmo gênero gramatical (ele/ela, dele/dela) que a mãe usa para o bebê ao longo de toda a resposta. Não alterne entre masculino e feminino.
 - VOCABULÁRIO OBRIGATÓRIO NO RN: para caracterizar a relação do bebê com a chupeta, o peito, o colo, a mamada ou o sono, use SEMPRE leitura fisiológica/metodológica — "reflexo de sucção", "necessidade de regulação", "transição colo→berço", "ingestão/saciedade insuficiente", "baixa produção/transferência de leite no período". Rótulos comportamentais são proibidos nessa faixa: a Zlaya descreve o que é fisiológico e investiga alimentação/postura, sem chamar o comportamento do bebê de comportamento aprendido.
 - LEITURA DIRETA, NÃO RÓTULOS VAGOS: ao explicar piora no fim do dia/noite, fale diretamente em "baixa transferência de leite ou menor produção materna no final do dia/noite". EVITE expressões vagas/inventadas como "fome residual acumulada".
@@ -112,8 +115,48 @@ ${langRequired}
  * Builds the user-turn prompt: the actual question, intent, profile, history,
  * and the retrieved authorized chunks the model must ground its answer in.
  */
+function detectBabyGender(text) {
+  if (!text) return null;
+  const norm = String(text).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const fem =
+    /\bminha\s+(beb[eê]|filha|menina|princesa)\b|\bbb\s+(?:tem|esta|de|nasceu)|\bbb(?:zinha)?\b|\bbeb[eê]\s+(menina|fem[ií]nina)\b|\bminha\s+(bb|bebezinha)\b|\b(ela|dela)\b/.test(
+      norm,
+    );
+  const masc =
+    /\bmeu\s+(beb[eê]|filho|menino)\b|\bbeb[eê]\s+(menino|masculino)\b|\bmeu\s+bb\b|\b(ele|dele)\b/.test(
+      norm,
+    );
+  if (fem && !masc) return 'feminine';
+  if (masc && !fem) return 'masculine';
+  if (fem && masc) {
+    // fall back to first explicit cue
+    const idxFem = norm.search(/\b(ela|dela|minha\s+bebe|minha\s+bb|minha\s+filha|minha\s+menina)\b/);
+    const idxMasc = norm.search(/\b(ele|dele|meu\s+bebe|meu\s+bb|meu\s+filho|meu\s+menino)\b/);
+    if (idxFem === -1) return 'masculine';
+    if (idxMasc === -1) return 'feminine';
+    return idxFem < idxMasc ? 'feminine' : 'masculine';
+  }
+  return null;
+}
+
 export function buildUserPrompt({ question, intent, chunks, babyProfile, conversation, signals }) {
   const ageDays = Number.isFinite(babyProfile?.ageDays) ? babyProfile.ageDays : null;
+  const motherTexts = [
+    question || '',
+    ...((conversation || [])
+      .filter((m) => m && String(m.role).toLowerCase() === 'user')
+      .map((m) => m.content || '')),
+  ].join(' ');
+  const gender = detectBabyGender(motherTexts);
+  const genderBlock = gender
+    ? [
+        '# REGRA DE GÊNERO GRAMATICAL (DETECTADO DA FALA DA MÃE)',
+        gender === 'feminine'
+          ? '- A mãe se refere ao bebê no FEMININO. Use SEMPRE "ela/dela/a bebê" em toda a resposta. NUNCA escreva "ele/dele/o bebê" nem "ele continua agitado" — sempre "ela continua agitada".'
+          : '- A mãe se refere ao bebê no MASCULINO. Use SEMPRE "ele/dele/o bebê" em toda a resposta. NUNCA misture com formas femininas.',
+        '',
+      ].join('\n')
+    : '';
   const profileBlock = babyProfile
     ? [
         `# PERFIL DO BEBÊ (DADOS DETERMINÍSTICOS — NUNCA ALTERE)`,
@@ -188,6 +231,7 @@ export function buildUserPrompt({ question, intent, chunks, babyProfile, convers
 
   return [
     profileBlock,
+    genderBlock,
     `# INTENÇÃO CLASSIFICADA\n- ${intent || 'indefinida'}\n`,
     signalsBlock,
     providedBlock,
