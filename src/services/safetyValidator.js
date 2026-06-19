@@ -357,20 +357,305 @@ const NEG_ASSOC_REASSURE_TOKENS = [
  * method-aligned reassurance paragraph. Point (6) of the vespertine
  * 6-point framework — fail-safe.
  */
-export function ensureNegativeAssociationReassurance({ text, userMessage }) {
+// Strict reassurance tokens — beyond the soft NEG_ASSOC_REASSURE_TOKENS, the
+// methodology requires an EXPLICIT "AINDA NÃO CRIA associação comportamental"
+// formulation alongside an explicit RN age citation. Test feedback 001/003
+// (RN 9d) treats these as hard requirements.
+const NEG_ASSOC_STRICT_AINDA_NAO_CRIA = /(aind?a?\s+n[aã]o\s+cria\s+(?:essa\s+|uma\s+|a\s+)?associa[çc][aã]o(?:\s+comportamental(?:\s+negativa)?)?|n[aã]o\s+cria\s+associa[çc][aã]o\s+comportamental\s+negativa)/;
+const NEG_ASSOC_STRICT_ALIMENTO_REGULACAO = /(peito\s+(?:[eé]\s+)?(?:alimento|regulac[aã]o|conforto|organizac[aã]o)|alimento[\s,]+regulac[aã]o|regulac[aã]o[\s,]+conforto|n[aã]o\s+[eé]\s+v[íi]cio[\s,]+(?:manha|mau\s+h[aá]bito))/;
+
+export function ensureNegativeAssociationReassurance({ text, userMessage, ageDays } = {}) {
   if (!text || !userMessage) return { text: text || '', appended: false };
   const normUser = normalize(userMessage);
   const triggered = NEG_ASSOC_TRIGGERS_USER.some((re) => re.test(normUser));
   if (!triggered) return { text, appended: false };
 
   const normText = normalize(text);
-  const hasReassurance = NEG_ASSOC_REASSURE_TOKENS.some((re) => re.test(normText));
-  if (hasReassurance) return { text, appended: false };
+  // The methodology has TWO completeness requirements when this trigger fires:
+  //   (a) explicit age citation: "<N> dias" mention;
+  //   (b) the canonical AINDA NÃO CRIA associação comportamental phrasing,
+  //       PLUS the alimento/regulação/conforto reframing for the peito.
+  // We only return early ("already covered") when BOTH (a) and (b) are
+  // satisfied — otherwise we append the missing pieces below.
+  const hasAgeMention = !Number.isFinite(ageDays) || new RegExp(`\\b${ageDays}\\s*dias\\b`).test(normText);
+  const hasStrictAindaNaoCria = NEG_ASSOC_STRICT_AINDA_NAO_CRIA.test(normText);
+  const hasStrictAlimentoRegulacao = NEG_ASSOC_STRICT_ALIMENTO_REGULACAO.test(normText);
+  if (hasAgeMention && hasStrictAindaNaoCria && hasStrictAlimentoRegulacao) {
+    return { text, appended: false };
+  }
 
+  const ageLabel = Number.isFinite(ageDays) ? `${ageDays} dias` : 'essa idade (RN)';
   const trimmed = text.replace(/\s+$/, '');
-  const append =
-    'Sobre o seu receio de associação negativa: o que você descreve — bebê que só se acalma mamando, dorme no peito ou no colo, dificuldade de permanência no berço — NÃO configura associação negativa de sono no RN. Nessa faixa etária isso é fisiológico e esperado, e a leitura metodológica correta é alimentar (mamada efetiva, transferência e produção de leite) e de conforto/postura, não comportamental.';
+  const append = `Sobre o seu receio de associação negativa: com ${ageLabel}, sua bebê AINDA NÃO CRIA associação comportamental negativa por dormir no peito, buscar o peito ou precisar voltar ao peito para se acalmar — nessa idade o peito é alimento, regulação, conforto e organização fisiológica, não é vício, manha ou mau hábito. A leitura metodológica correta é alimentar (mamada efetiva, transferência e produção de leite) e de conforto/postura, não comportamental.`;
   return { text: `${trimmed}\n\n${append}`, appended: true };
+}
+
+/**
+ * Sonda + ordenha completeness check (TESTE 004 RN 16d).
+ *
+ * Quando a mãe relata uso de SONDA / COMPLEMENTO COM SONDA (sinal
+ * `feeding_clinical_context` com "sonda" no texto), o método exige que a
+ * resposta carregue, no corpo do texto:
+ *   (A) a expressão literal "complemento com sonda" (palavras exatas, na
+ *       narrativa principal) — não basta dizer só "complemento";
+ *   (B) a palavra "ordenha" / "ordenhas" como estratégia explícita de
+ *       estimulação da produção materna (não basta sugerir "estimular a
+ *       produção" genericamente).
+ *
+ * O LLM, mesmo com a regra no system prompt, varia entre runs e às vezes
+ * omite uma ou as duas. Esta função é a malha de proteção.
+ *
+ * Returns { text, appended: boolean, missing: string[] }.
+ */
+const SONDA_TRIGGER_TOKENS = [
+  /\bsonda\b/,
+  /complement(o|a|ando)\b[\s\S]{0,40}\bsonda\b/,
+  /translacta[çc][aã]o/,
+  /relacta[çc][aã]o/,
+];
+const SONDA_PHRASE_LITERAL = /complemento\s+com\s+sonda/;
+const ORDENHA_PHRASE = /\bordenh(a|as|ar|ando)\b/;
+
+export function ensureSondaOrdenhaComplete({ text, userMessage, signalIds = [] } = {}) {
+  if (!text) return { text: text || '', appended: false, missing: [] };
+  const userNorm = normalize(userMessage || '');
+  const sigSet = new Set(signalIds || []);
+  const triggered =
+    sigSet.has('feeding_clinical_context') &&
+    SONDA_TRIGGER_TOKENS.some((re) => re.test(userNorm));
+  if (!triggered) return { text, appended: false, missing: [] };
+
+  const norm = normalize(text);
+  const missing = [];
+  if (!SONDA_PHRASE_LITERAL.test(norm)) missing.push('complemento_com_sonda');
+  if (!ORDENHA_PHRASE.test(norm)) missing.push('ordenha');
+
+  if (missing.length === 0) return { text, appended: false, missing: [] };
+
+  const fragmentByKey = {
+    complemento_com_sonda:
+      'Como o seu bebê já recebe complemento com sonda, isso indica baixa produção materna ou necessidade de suporte de produção — o déficit pode ocorrer também durante o dia e não apenas à noite. Avalie o complemento também no fim da tarde, quando o comportamento de busca pelo peito começa.',
+    ordenha:
+      'Considere fazer ordenhas no fim da tarde e ao longo do dia para estimular a produção materna, como ferramenta de avaliação e organização (sempre como apoio à mamada efetiva, não como solução isolada).',
+  };
+  const order = ['complemento_com_sonda', 'ordenha'];
+  const sentences = order
+    .filter((k) => missing.includes(k))
+    .map((k) => fragmentByKey[k]);
+  const append = sentences.join(' ');
+  const trimmed = text.replace(/\s+$/, '');
+  return { text: `${trimmed}\n\n${append}`, appended: true, missing };
+}
+
+/**
+ * Reflux-routing completeness check (TESTE 004 RN 20d).
+ *
+ * When the case shows the methodology's reflux pattern — bebê é colocado no
+ * berço, permanece poucos minutos, acorda chorando e melhora no colo, OR a
+ * resposta cita "refluxo" / "regurgita" / "desconforto pós-mamada" — o método
+ * exige que a resposta carregue, no corpo do texto, OS QUATRO ITENS abaixo
+ * (não basta indicar como aulas avulsas):
+ *   (A) posição vertical 30 a 40 minutos após a mamada;
+ *   (B) elevação do colchão em 45° como medida postural complementar;
+ *   (C) condução para o material do Pediatra Roberto Franklin nas Aulas
+ *       Extras/Bônus do curso (a própria suspeita de refluxo patológico já
+ *       indica esse encaminhamento);
+ *   (D) encaminhamento ao suporte humano (idem).
+ *
+ * Além disso, deve diferenciar EXPLICITAMENTE "refluxo fisiológico" de
+ * "refluxo patológico" — não basta dizer só "refluxo".
+ *
+ * Esta função é a malha de proteção: quando o LLM omite qualquer item, ela
+ * completa a resposta com um parágrafo metodológico canônico, sem alterar o
+ * conteúdo já escrito.
+ *
+ * Returns { text, appended: boolean, missing: string[] }.
+ */
+const REFLUX_TRIGGER_TOKENS = [
+  /refluxo/,
+  /regurgit/,
+  /desconforto\s+(p[oó]s[\s-]?mamada|ao\s+deitar)/,
+  /acorda(?:r)?\s+chorando.*ber[cç]o/,
+  /permanece\s+(?:cerca\s+de\s+)?\d+\s*min(?:utos)?\s*(?:no\s+ber[cç]o)?[\s\S]{0,200}colo/,
+];
+const REFLUX_PHRASE_PHYSIOLOGICAL = /refluxo\s+fisiol[oó]gico/;
+const REFLUX_PHRASE_PATHOLOGICAL = /refluxo\s+patol[oó]gico/;
+const REFLUX_PHRASE_VERTICAL_30_40 = /(30\s*(?:a|–|-|—|at[eé])\s*40\s*min|posi[çc][aã]o\s+vertical[\s\S]{0,40}30\s*(?:a|–|-|—|at[eé])\s*40)/;
+const REFLUX_PHRASE_MATTRESS_45 = /(eleva[çc][aã]o\s+do\s+colch[aã]o\s+(?:em|a|de)?\s*45|colch[aã]o\s+(?:em|a|de)?\s*45[\s°º]*|inclinar\s+(?:o\s+)?colch[aã]o.*45|45[\s°º]+(?:no|do)?\s*colch)/;
+const REFLUX_PHRASE_PEDIATRA_MATERIAL = /(material\s+do\s+pediatra|pediatra\s+roberto|roberto\s+franklin|aulas?\s+extras?|aulas?\s+b[oô]nus|aulas?\s+bonus)/;
+const REFLUX_PHRASE_HUMAN_SUPPORT = /(suporte\s+humano|equipe\s+de\s+suporte|suporte\s+do\s+curso|encaminh\w*\s+(?:para\s+)?(?:o\s+)?suporte)/;
+
+export function ensureRefluxRoutingComplete({ text, signalIds = [] } = {}) {
+  if (!text) return { text: text || '', appended: false, missing: [] };
+  const norm = normalize(text);
+  const sigSet = new Set(signalIds || []);
+
+  const triggeredBySignal =
+    sigSet.has('wakes_short_after_crib_back_to_lap') ||
+    sigSet.has('reflux_discomfort_suspicion');
+  const triggeredByText = REFLUX_TRIGGER_TOKENS.some((re) => re.test(norm));
+  if (!triggeredBySignal && !triggeredByText) {
+    return { text, appended: false, missing: [] };
+  }
+
+  const missing = [];
+  if (!REFLUX_PHRASE_PHYSIOLOGICAL.test(norm)) missing.push('refluxo_fisiologico');
+  if (!REFLUX_PHRASE_PATHOLOGICAL.test(norm)) missing.push('refluxo_patologico');
+  if (!REFLUX_PHRASE_VERTICAL_30_40.test(norm)) missing.push('vertical_30_40');
+  if (!REFLUX_PHRASE_MATTRESS_45.test(norm)) missing.push('colchao_45');
+  if (!REFLUX_PHRASE_PEDIATRA_MATERIAL.test(norm)) missing.push('material_pediatra');
+  if (!REFLUX_PHRASE_HUMAN_SUPPORT.test(norm)) missing.push('suporte_humano');
+
+  if (missing.length === 0) return { text, appended: false, missing: [] };
+
+  // Build a single complementary paragraph with ONLY the missing pieces, in
+  // a stable order so the appended text reads naturally regardless of which
+  // items the LLM already covered.
+  const order = [
+    'refluxo_fisiologico',
+    'refluxo_patologico',
+    'vertical_30_40',
+    'colchao_45',
+    'material_pediatra',
+    'suporte_humano',
+  ];
+  const fragmentByKey = {
+    refluxo_fisiologico:
+      'Acordar chorando logo após o berço e melhorar no colo pode sugerir desconforto pós-mamada ou REFLUXO FISIOLÓGICO.',
+    refluxo_patologico:
+      'Sinais como vômitos intensos ou em jato, engasgos frequentes, recusa alimentar, arqueamento corporal importante ou irritabilidade persistente são sugestivos de POSSIBILIDADE DE REFLUXO PATOLÓGICO — sem que isso signifique diagnóstico.',
+    vertical_30_40:
+      'Mantenha em posição vertical por 30 a 40 minutos após a mamada antes de transferir para o berço.',
+    colchao_45:
+      'Considere também a elevação do colchão em 45° como medida postural complementar (aplicável tanto ao refluxo fisiológico quanto à suspeita de refluxo patológico, quando indicada pelo método/material do pediatra).',
+    material_pediatra:
+      'Como há sinais que podem sugerir refluxo, recomendo consultar o material do Pediatra Roberto Franklin nas Aulas Extras/Bônus do curso.',
+    suporte_humano:
+      'Diante dessa possibilidade, procure também o suporte humano para acompanhamento — a própria suspeita já justifica esse encaminhamento, não depende da persistência do quadro.',
+  };
+  const sentences = order
+    .filter((k) => missing.includes(k))
+    .map((k) => fragmentByKey[k]);
+  const append = sentences.join(' ');
+  const trimmed = text.replace(/\s+$/, '');
+  return { text: `${trimmed}\n\n${append}`, appended: true, missing };
+}
+
+/**
+ * Travesseiro (pillow strategy) eixos completeness — TESTE 004 RN 19d.
+ *
+ * Quando a mãe relata que TENTOU a Estratégia do Travesseiro sem sucesso
+ * (sinal `travesseiro_tried_without_success`), o método exige que a resposta
+ * contemple os EIXOS PRÁTICOS DO RN no corpo do texto:
+ *   (A) postura: posição vertical por 30 a 40 minutos após a mamada;
+ *   (B) desconforto gástrico: arroto / refluxo / desconforto / ar preso
+ *       (basta um termo do conjunto, não exige todos);
+ *   (C) reasseguramento explícito anti-associação com a idade do bebê
+ *       — "com X dias, sua bebê AINDA NÃO CRIA associação...".
+ *
+ * O LLM, mesmo com a regra no system prompt, varia entre runs e às vezes
+ * omite (A), (B) ou (C). Esta função é a malha de proteção: completa apenas
+ * os itens que faltam, em parágrafo curto, sem alterar o que o LLM já
+ * escreveu corretamente.
+ *
+ * Returns { text, appended: boolean, missing: string[] }.
+ */
+const TRAVESSEIRO_PHRASE_VERTICAL_30_40 = /(30\s*(?:a|–|-|—|at[eé])\s*40\s*min|posi[çc][aã]o\s+vertical[\s\S]{0,40}30\s*(?:a|–|-|—|at[eé])\s*40)/;
+const TRAVESSEIRO_PHRASE_GASTRIC_EIXO = /(arrot|refluxo|desconforto|ar\s+preso|regurgit)/;
+const TRAVESSEIRO_PHRASE_NO_NEG_ASSOC = /(aind?a?\s+n[aã]o\s+cria\s+(uma\s+)?associa[çc][aã]o|n[aã]o\s+(e|é|configura|significa|representa)\s+(uma\s+)?(associa[çc][aã]o\s+negativa|v[íi]cio|mau\s+h[aá]bito|manha))/;
+// Triggers that show the LLM is leaning on behavioral framing ("adaptar ao
+// berço") instead of the physiological reframing required for RN.
+const TRAVESSEIRO_PHRASE_BEHAVIORAL_FRAMING_TRIGGER = /(adaptar\s+(?:[ao]o|para\s+o)\s+ber[cç]o|adaptac[aã]o\s+ao\s+ber[cç]o|acostumar\s+ao\s+ber[cç]o)/;
+// Acceptable physiological reframing tokens.
+const TRAVESSEIRO_PHRASE_PHYSIOLOGICAL_REFRAMING = /(adapta[çc][aã]o\s+fisiol[oó]gica|fase\s+de\s+adapta[çc][aã]o\s+fisiol[oó]gica|transi[çc][aã]o\s+de\s+superf[ií]cie|transi[çc][aã]o\s+de\s+textura|transi[çc][aã]o\s+colo[\s-]+(?:superf[ií]cie|berco|berço)|organiza[çc][aã]o\s+corporal)/;
+
+export function ensureTravesseiroEixosComplete({ text, signalIds = [], ageDays } = {}) {
+  if (!text) return { text: text || '', appended: false, missing: [] };
+  const sigSet = new Set(signalIds || []);
+  if (!sigSet.has('travesseiro_tried_without_success')) {
+    return { text, appended: false, missing: [] };
+  }
+
+  const norm = normalize(text);
+  const missing = [];
+  if (!TRAVESSEIRO_PHRASE_VERTICAL_30_40.test(norm)) missing.push('vertical_30_40');
+  if (!TRAVESSEIRO_PHRASE_GASTRIC_EIXO.test(norm)) missing.push('gastric_eixo');
+  if (!TRAVESSEIRO_PHRASE_NO_NEG_ASSOC.test(norm)) missing.push('no_neg_assoc');
+  // Only require the physiological reframing when the response actually
+  // uses behavioral framing ("adaptar ao berço") and lacks a physiological
+  // reframing token. We don't impose it on responses that simply skip the
+  // word "adaptar" altogether.
+  if (
+    TRAVESSEIRO_PHRASE_BEHAVIORAL_FRAMING_TRIGGER.test(norm)
+    && !TRAVESSEIRO_PHRASE_PHYSIOLOGICAL_REFRAMING.test(norm)
+  ) {
+    missing.push('physiological_reframing');
+  }
+
+  if (missing.length === 0) return { text, appended: false, missing: [] };
+
+  const ageLabel = Number.isFinite(ageDays) ? `${ageDays} dias` : 'essa idade (RN)';
+  const fragmentByKey = {
+    physiological_reframing: `Para o RN, prefira ler o caso como FASE DE ADAPTAÇÃO FISIOLÓGICA, ORGANIZAÇÃO CORPORAL e TRANSIÇÃO DE SUPERFÍCIE/TEXTURA — a "adaptação ao berço" é consequência desse processo, não a causa principal.`,
+    vertical_30_40:
+      'Antes de tentar transferir para o berço, mantenha em posição vertical por 30 a 40 minutos após a mamada.',
+    gastric_eixo:
+      'Observe também o eixo de desconforto gástrico — se ela arrotou, se há sinais de refluxo fisiológico ou desconforto pós-mamada que possam estar sustentando o despertar quando deitada.',
+    no_neg_assoc: `Com ${ageLabel}, sua bebê AINDA NÃO CRIA associação comportamental negativa por dormir no colo, no peito ou precisar de contenção — nessa idade isso é fisiológico e esperado, não é vício, manha nem mau hábito.`,
+  };
+  const order = ['no_neg_assoc', 'physiological_reframing', 'vertical_30_40', 'gastric_eixo'];
+  const sentences = order.filter((k) => missing.includes(k)).map((k) => fragmentByKey[k]);
+  const append = sentences.join(' ');
+  const trimmed = text.replace(/\s+$/, '');
+  return { text: `${trimmed}\n\n${append}`, appended: true, missing };
+}
+
+/**
+ * Pacifier (chupeta cai) practical management completeness — TESTE 002 RN 22d.
+ *
+ * Quando dispara o sinal `pacifier_in_rn` E a mãe relata o padrão "chupeta
+ * cai e bebê acorda" (mensagem original ou seus sinônimos), o método exige
+ * no corpo da resposta:
+ *   (A) reflexo de sucção / necessidade de regulação como leitura;
+ *   (B) manejo prático: se a chupeta cair e o bebê continuar dormindo,
+ *       NÃO precisa recolocar; se acordar logo que cai, diferenciar fome,
+ *       desconforto pós-mamada, sucção e transição para o berço.
+ *
+ * O LLM, mesmo com a regra no system prompt e nos chunks, varia entre runs
+ * e às vezes salta para sinais de saciedade sem ancorar o manejo prático.
+ * Esta função é a malha de proteção: completa apenas os itens faltantes.
+ *
+ * Returns { text, appended: boolean, missing: string[] }.
+ */
+const PACIFIER_USER_TRIGGER = /(chupeta\s+cai|cai\s+a\s+chupeta|recolocar\s+a\s+chupeta|acorda\s+(?:porque|quando)\s+a\s+chupeta\s+cai|fico\s+(?:colocando|recolocando)\s+(?:a\s+)?chupeta)/;
+const PACIFIER_PHRASE_REFLEX_REGULATION = /(reflexo\s+de\s+suc[çc][aã]o|necessidade\s+de\s+suc[çc][aã]o|necessidade\s+de\s+regula[çc][aã]o|regula[çc][aã]o)/;
+const PACIFIER_PHRASE_PRACTICAL_MGMT = /(se\s+a\s+chupeta\s+cair[\s\S]{0,80}(?:n[aã]o\s+precis(?:a|e)\s+recolocar|continuar\s+dormindo|deix[ae]\s+dormir)|n[aã]o\s+precis(?:a|e)\s+recolocar\s+a\s+chupeta|chupeta\s+cair[\s\S]{0,40}continuar\s+dormindo)/;
+
+export function ensurePacifierPracticalComplete({ text, userMessage, signalIds = [] } = {}) {
+  if (!text || !userMessage) return { text: text || '', appended: false, missing: [] };
+  const sigSet = new Set(signalIds || []);
+  if (!sigSet.has('pacifier_in_rn')) return { text, appended: false, missing: [] };
+  const userNorm = normalize(userMessage);
+  if (!PACIFIER_USER_TRIGGER.test(userNorm)) return { text, appended: false, missing: [] };
+
+  const norm = normalize(text);
+  const missing = [];
+  if (!PACIFIER_PHRASE_REFLEX_REGULATION.test(norm)) missing.push('reflexo_regulacao');
+  if (!PACIFIER_PHRASE_PRACTICAL_MGMT.test(norm)) missing.push('practical_mgmt');
+
+  if (missing.length === 0) return { text, appended: false, missing: [] };
+
+  const fragmentByKey = {
+    reflexo_regulacao:
+      'Para o RN, a chupeta é leitura de REFLEXO DE SUCÇÃO e NECESSIDADE DE REGULAÇÃO — não é vício nem hábito comportamental.',
+    practical_mgmt:
+      'Sobre a chupeta cair: se ela cair e o bebê continuar dormindo, NÃO PRECISA RECOLOCAR; se ele acordar logo que cai, diferencie entre fome, desconforto pós-mamada, necessidade de sucção e transição para o berço — investigue o eixo correspondente em vez de reposicionar a chupeta repetidas vezes. NUNCA prenda ou fixe a chupeta.',
+  };
+  const order = ['reflexo_regulacao', 'practical_mgmt'];
+  const sentences = order.filter((k) => missing.includes(k)).map((k) => fragmentByKey[k]);
+  const append = sentences.join(' ');
+  const trimmed = text.replace(/\s+$/, '');
+  return { text: `${trimmed}\n\n${append}`, appended: true, missing };
 }
 
 /**

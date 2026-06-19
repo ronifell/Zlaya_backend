@@ -10,6 +10,10 @@ import {
   ensureSatietySignsExplained,
   ensureDirectNormalityAnswer,
   ensureNegativeAssociationReassurance,
+  ensurePacifierPracticalComplete,
+  ensureRefluxRoutingComplete,
+  ensureSondaOrdenhaComplete,
+  ensureTravesseiroEixosComplete,
   enforceGenderConsistency,
   detectClinicalRedFlags,
 } from './safetyValidator.js';
@@ -208,10 +212,83 @@ export async function processTurn({ message, babyProfile, conversation, conversa
     const negAssocFix = ensureNegativeAssociationReassurance({
       text: draft.text,
       userMessage: message,
+      ageDays: age?.days ?? null,
     });
     if (negAssocFix.appended) {
       draft.text = negAssocFix.text;
       draft.negativeAssociationReassuranceAppended = true;
+    }
+
+    // Reflux-routing completeness (TESTE 004 RN 20d).
+    // Quando o caso dispara o sinal `wakes_short_after_crib_back_to_lap`
+    // (bebê é colocado no berço, permanece poucos minutos, acorda chorando
+    // e melhora no colo) ou a resposta já cita refluxo/desconforto, o
+    // método exige presença explícita de quatro itens no corpo do texto:
+    //   (a) posição vertical 30 a 40 min;
+    //   (b) elevação do colchão em 45°;
+    //   (c) condução para o material do Pediatra Roberto Franklin (Aulas
+    //       Extras/Bônus) — a própria suspeita de refluxo patológico já
+    //       indica esse encaminhamento;
+    //   (d) encaminhamento ao suporte humano (idem).
+    // Também exige diferenciação literal entre "refluxo fisiológico" e
+    // "refluxo patológico". Se algum item ficar de fora, o enricher anexa
+    // um parágrafo metodológico SOMENTE com os itens faltantes.
+    const refluxFix = ensureRefluxRoutingComplete({
+      text: draft.text,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+    });
+    if (refluxFix.appended) {
+      draft.text = refluxFix.text;
+      draft.refluxRoutingMissing = refluxFix.missing;
+    }
+
+    // Sonda + ordenha completeness (TESTE 004 RN 16d).
+    // Quando a mãe relata uso de complemento com sonda, o método exige a
+    // expressão literal "complemento com sonda" e a palavra "ordenha(s)"
+    // explícitas no corpo do texto. Se faltar, anexamos o(s) item(ns)
+    // faltante(s) sem alterar o restante.
+    const sondaFix = ensureSondaOrdenhaComplete({
+      text: draft.text,
+      userMessage: message,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+    });
+    if (sondaFix.appended) {
+      draft.text = sondaFix.text;
+      draft.sondaOrdenhaMissing = sondaFix.missing;
+    }
+
+    // Pacifier (chupeta cai) practical management (TESTE 002 RN 22d).
+    // Quando dispara `pacifier_in_rn` E a mãe relata o padrão "chupeta cai/
+    // recoloco/acorda quando cai", o método exige no corpo do texto: (a)
+    // leitura como reflexo de sucção / necessidade de regulação e (b)
+    // manejo prático ("se cair e continuar dormindo, não precisa recolocar;
+    // se acordar, diferencie fome/desconforto/sucção/transição"). Se algum
+    // ficar faltando, o enricher anexa SOMENTE o(s) item(ns) faltante(s).
+    const pacifierFix = ensurePacifierPracticalComplete({
+      text: draft.text,
+      userMessage: message,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+    });
+    if (pacifierFix.appended) {
+      draft.text = pacifierFix.text;
+      draft.pacifierPracticalMissing = pacifierFix.missing;
+    }
+
+    // Travesseiro eixos completeness (TESTE 004 RN 19d).
+    // Quando dispara `travesseiro_tried_without_success` (mãe tentou a
+    // Estratégia do Travesseiro sem sucesso), o método exige no corpo do
+    // texto: posição vertical 30 a 40 min, eixo de desconforto gástrico
+    // (arroto / refluxo / desconforto / ar preso) e reasseguramento
+    // explícito anti-associação com a idade do bebê. Se algum eixo ficar
+    // de fora, o enricher anexa SOMENTE o(s) faltante(s).
+    const travesseiroFix = ensureTravesseiroEixosComplete({
+      text: draft.text,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+      ageDays: age?.days ?? null,
+    });
+    if (travesseiroFix.appended) {
+      draft.text = travesseiroFix.text;
+      draft.travesseiroEixosMissing = travesseiroFix.missing;
     }
 
     // Gender post-fix: when the mother uses feminine cues (minha bebê / ela /

@@ -70,9 +70,12 @@ const SIGNAL_DEFS = [
       'depois das 18', 'apos as 18', 'apos 18', 'após 18', 'a partir das 18',
       '18h', '18 horas', 'das 18', 'final do dia', 'fim do dia',
       'final da tarde', 'fim da tarde', 'no fim da tarde', 'fim de tarde',
+      'finalzinho da tarde', 'finalzinho do dia', 'no finalzinho da tarde',
       'a noite piora', 'piora a noite', 'piora de noite', 'piora a tarde',
       'comeca a noite', 'comeca de noite', 'entardecer', 'anoitecer',
       'hora da bruxa', 'final do dia ele', 'no final do dia',
+      'iniciou ja no finalzinho da tarde', 'comecou ja no fim da tarde',
+      'comecou ja no final da tarde', 'comeca ja no fim da tarde',
     ],
     boostThemes: [
       'padrao_vespertino',
@@ -93,6 +96,9 @@ const SIGNAL_DEFS = [
       'na madrugada', 'de madrugada', 'a noite procura mais', 'a noite quer mais',
       'de manha melhora', 'de manhã melhora', 'manha mais tranquila', 'manhã mais tranquila',
       'manhas tranquilas', 'manhãs tranquilas', 'madrugadas dificeis', 'madrugadas difíceis',
+      'manhas mais tranquilas', 'manhãs mais tranquilas',
+      'madrugadas tem sido dificeis', 'madrugadas têm sido difíceis',
+      'as madrugadas tem sido dificeis', 'as madrugadas têm sido difíceis',
       'manha e mais tranquila', 'manhã é mais tranquila', 'de manha e tranquila', 'pela manha melhora',
       'comeca no fim da tarde e piora a noite', 'a tarde e a noite procura mais',
     ],
@@ -112,10 +118,14 @@ const SIGNAL_DEFS = [
     directive: true,
     phrases: [
       'antes de 2 horas', 'antes de duas horas', 'menos de 2 horas', 'menos de duas horas',
+      'menor que 2 horas', 'menor que 2h', 'intervalo menor que 2', 'intervalo menor que 2h',
+      'em intervalo menor que 2', 'em intervalo menor que 2h',
+      'em menos de 2', 'em menos de duas',
       'a cada 1 hora', 'a cada uma hora', 'a cada hora', 'de hora em hora',
       'quer mamar toda hora', 'quer mamar o tempo todo', 'mama de hora em hora',
       'procura o peito antes de', 'logo apos mamar quer de novo', 'logo após mamar quer de novo',
       'quer mamar de novo logo', 'volta a querer mamar logo',
+      'procurando o peito no intervalo menor que 2', 'ficou procurando o peito',
     ],
     boostThemes: ['baixa_producao_leite', 'baixa_producao_fim_dia', 'mamadas_ineficientes', 'busca_excessiva_peito'],
     priority:
@@ -134,7 +144,7 @@ const SIGNAL_DEFS = [
     ],
     boostThemes: ['mamadas_ineficientes', 'baixa_producao_leite', 'baixa_producao_fim_dia'],
     priority:
-      'Há contexto de icterícia, linguinha/frênulo, sonda ou complemento. REGRA CRÍTICA: se a mãe informou que o bebê AGORA mama bem, é PROIBIDO citar icterícia ou linguinha como fator que impacta a transferência ou a mamada no contexto ATUAL — trate APENAS como histórico do início. NÃO abra a resposta explicando icterícia/linguinha como causa do comportamento atual. COMPLEMENTO COM SONDA é, por si só, indicador de BAIXA PRODUÇÃO MATERNA ou necessidade de suporte de produção — NOMEIE explicitamente: "Como sua bebê já recebe complemento com sonda, isso indica baixa produção materna ou necessidade de suporte de produção". O déficit pode ocorrer também DURANTE O DIA (não só à noite) e gerar madrugada mais instável. Oriente: (a) avaliar complemento também durante o dia; (b) avaliar suporte no final da tarde quando o comportamento começa; (c) ORDENHAS como estratégia para estimular a produção materna; (d) oferta dos dois seios; (e) livre demanda quando houver sinais de fome; (f) posição vertical 30 a 40 min; (g) acompanhamento de amamentação. PERGUNTAS OBRIGATÓRIAS: "O complemento foi orientado apenas para as mamadas da noite, ou já foi avaliada a necessidade de suporte também no final da tarde e durante o dia?" e "Você está fazendo ordenhas para estimular a produção?" e "Durante o dia, ela também apresenta sinais de buscar peito em menos de 2h ou dificuldade de sustentar as mamadas?". Não oriente alteração de complemento por conta própria.',
+      'Há contexto de icterícia, linguinha/frênulo, sonda ou complemento. REGRA CRÍTICA: se a mãe informou que o bebê AGORA mama bem, é PROIBIDO citar icterícia ou linguinha como fator que impacta a transferência ou a mamada no contexto ATUAL — trate APENAS como histórico do início. NÃO abra a resposta explicando icterícia/linguinha como causa do comportamento atual. COMPLEMENTO COM SONDA é, por si só, indicador de BAIXA PRODUÇÃO MATERNA ou necessidade de suporte de produção — NOMEIE explicitamente: "Como sua bebê já recebe complemento com sonda, isso indica baixa produção materna ou necessidade de suporte de produção". O déficit pode ocorrer também DURANTE O DIA (não só à noite) e gerar madrugada mais instável. Oriente: (a) avaliar complemento também durante o dia; (b) avaliar suporte no final da tarde quando o comportamento começa; (c) ORDENHAS como estratégia para estimular a produção materna; (d) oferta dos dois seios; (e) livre demanda quando houver sinais de fome; (f) posição vertical 30 a 40 min; (g) acompanhamento de amamentação. INCLUA OBRIGATORIAMENTE NA RESPOSTA, COMO TEXTO EXPLÍCITO, A PALAVRA "ORDENHA(S)" — não basta sugerir investigação genérica de produção; o método exige que a estratégia da ordenha apareça nominalmente quando há complemento com sonda (modelo aceito: "Considere fazer ordenhas no fim da tarde e ao longo do dia para estimular a produção materna, como ferramenta de avaliação e organização"). PERGUNTAS OBRIGATÓRIAS: "O complemento foi orientado apenas para as mamadas da noite, ou já foi avaliada a necessidade de suporte também no final da tarde e durante o dia?" e "Você está fazendo ordenhas para estimular a produção?" e "Durante o dia, ela também apresenta sinais de buscar peito em menos de 2h ou dificuldade de sustentar as mamadas?". Não oriente alteração de complemento por conta própria. AULA OBRIGATÓRIA: indique a aula "Amamentação Prática e Descomplicada" (não apenas "Mamadas Efetivas") sempre que houver complemento com sonda + busca pelo peito antes de 2h, porque esse é o material de referência do método para esse cenário.',
   },
   {
     id: 'prolonged_awake_after_feed',
@@ -502,7 +512,7 @@ const SIGNAL_DEFS = [
     ],
     boostThemes: ['estrategia_travesseiro_execucao', 'dificuldade_berco', 'acorda_ao_deitar', 'reflexo_moro'],
     priority:
-      'A mãe JÁ TENTOU a Estratégia do Travesseiro e NÃO teve sucesso. NÃO cite a estratégia de forma genérica nem se limite a investigar — CORRIJA a aplicação e seja RESOLUTIVA. (1) Oriente ASSISTIR/REASSISTIR à aula da Estratégia do Travesseiro e repetir o processo EXATAMENTE como é ensinado. (2) Explique a ETAPA INTERMEDIÁRIA: nos primeiros dias, muitas sonecas podem acontecer com o bebê NO TRAVESSEIRO EM CIMA DO COLO, com a mão da mãe fazendo a CONTENÇÃO enquanto necessário — isso ajuda o bebê a se organizar, sentir outra textura e se preparar para o berço com mais leveza. (3) Deixe claro que ela NÃO precisa colocar o bebê direto no berço e esperar que ele aceite — o travesseiro sobre o colo com contenção é parte do processo, não falha. (4) Reforce CONSISTÊNCIA, leveza e repetição; manter o bebê dia e noite EXCLUSIVAMENTE no colo tende a reforçar a dificuldade (sem tratar como associação negativa, vício ou mau hábito). Inclua também: avaliar a produção de leite (especialmente queda de fluxo à TARDE, com possibilidade de complemento conforme o curso/suporte), arroto e posição vertical 30 a 40 min após a mamada.',
+      'A mãe JÁ TENTOU a Estratégia do Travesseiro e NÃO teve sucesso. NÃO cite a estratégia de forma genérica nem se limite a investigar — CORRIJA a aplicação e seja RESOLUTIVA. (1) Oriente ASSISTIR/REASSISTIR à aula da Estratégia do Travesseiro e repetir o processo EXATAMENTE como é ensinado. (2) Explique a ETAPA INTERMEDIÁRIA: nos primeiros dias, muitas sonecas podem acontecer com o bebê NO TRAVESSEIRO EM CIMA DO COLO, com a mão da mãe fazendo a CONTENÇÃO enquanto necessário — isso ajuda o bebê a se organizar, sentir outra textura e se preparar para o berço com mais leveza. (3) Deixe claro que ela NÃO precisa colocar o bebê direto no berço e esperar que ele aceite — o travesseiro sobre o colo com contenção é parte do processo, não falha. (4) Reforce CONSISTÊNCIA, leveza e repetição; manter o bebê dia e noite EXCLUSIVAMENTE no colo tende a reforçar a dificuldade (sem tratar como associação negativa, vício ou mau hábito). LINGUAGEM FISIOLÓGICA OBRIGATÓRIA: é PROIBIDO formular a dificuldade como "bebê acostumado ao colo", "precisa se adaptar ao berço" ou "adaptação ao berço" como eixo principal — para RN, a leitura correta é "FASE DE ADAPTAÇÃO FISIOLÓGICA", "ORGANIZAÇÃO CORPORAL" e "TRANSIÇÃO DE SUPERFÍCIE/TEXTURA". Sempre que falar de adaptação, qualifique com o termo fisiológico (ex.: "adaptação fisiológica ao berço com transição de superfície/textura"). Inclua, como frase EXPLÍCITA, uma reasseguração do tipo: "Com [N] dias, sua bebê AINDA NÃO CRIA associação comportamental negativa, vício ou mau hábito por dormir no colo." Organize a explicação pela TRÍADE DO RN (alimentação + desconforto gástrico + ambiente desajustado ao sono) — cite os TRÊS eixos da tríade no texto. Inclua também: avaliar a produção de leite (especialmente queda de fluxo à TARDE, com possibilidade de complemento conforme o curso/suporte), arroto e posição vertical 30 a 40 min após a mamada.',
   },
   {
     id: 'reflux_discomfort_suspicion',
@@ -527,6 +537,8 @@ const SIGNAL_DEFS = [
     directive: true,
     phrases: [
       'sonecas diurnas curtas', 'soneca diurna curta', 'sonecas do dia curtas',
+      'sonecas diurnas muito curtas', 'soneca diurna muito curta',
+      'sonecas diurnas curtas no berco', 'sonecas diurnas curtas no berço',
       'sonecas diurnas estao mais dificeis', 'sonecas diurnas estão mais difíceis',
       'sonecas estao mais dificeis durante o dia', 'sonecas mais dificeis de dia', 'sonecas mais difíceis de dia',
       'de dia somente dorme no colo', 'de dia so dorme no colo', 'de dia só dorme no colo',
@@ -534,10 +546,28 @@ const SIGNAL_DEFS = [
       'a noite dorme bem no berco', 'à noite dorme bem no berço', 'a noite dorme bem', 'à noite dorme bem',
       'a noite ela dorme bem no berco', 'de noite dorme bem no berco', 'de noite dorme bem',
       'a noite no berco dorme bem', 'no berco a noite dorme', 'a noite ele dorme bem no berco',
+      'a noite, dorme bem no berco', 'a noite, dorme bem',
     ],
     boostThemes: ['ajuste_periodo_queixa', 'mamadas_ineficientes', 'estrategia_travesseiro_execucao', 'reflexo_moro'],
     priority:
       'A queixa principal é de SONECAS DIURNAS curtas/difíceis e o sono NOTURNO está preservado. NÃO encaixe automaticamente o caso em "queda de produção no fim do dia/noite" — ajuste a hipótese alimentar ao PERÍODO CORRETO: foque nas MAMADAS DIURNAS (sustentação da soneca, saciedade e transferência de leite durante o DIA). O enquadramento vespertino/noturno NÃO se aplica aqui. Se houver reflexo de Moro impactando as sonecas, oriente o CHARUTINHO TAMBÉM DURANTE O DIA, especialmente nas sonecas diurnas. NÃO repita apenas recursos que a mãe já disse usar (Travesseiro, ruído, luminosidade) — avance para mamada efetiva, produção de leite (inclusive à tarde), saciedade e busca precoce pelo peito.',
+  },
+  {
+    id: 'wakes_short_after_crib_back_to_lap',
+    label: 'Soneca curta no berço + acorda chorando após N minutos + melhora no colo (TESTE 004 RN 20d)',
+    directive: true,
+    // Composite signal — fired programmatically (see post-processing below).
+    phrases: [],
+    boostThemes: [
+      'refluxo_fisiologico',
+      'acorda_ao_deitar',
+      'dificuldade_berco',
+      'reflexo_moro',
+      'mamadas_ineficientes',
+      'baixa_producao_leite',
+    ],
+    priority:
+      'PADRÃO CRÍTICO TESTE 004 (RN 20d): bebê é colocado no berço, permanece poucos minutos (~20 min), acorda chorando e SÓ MELHORA quando volta ao colo, com NOITE PRESERVADA. NÃO normalize esse padrão como "esperado". Exige investigação obrigatória em CINCO eixos: (1) MAMADA EFETIVA / SACIEDADE / BUSCA PRECOCE — pergunte se o bebê fica saciado após a mamada, se dorme antes de mamar o suficiente, se volta a buscar o peito em pouco tempo; (2) PRODUÇÃO/TRANSFERÊNCIA DE LEITE NO DIA — a queixa é diurna, não vespertina; (3) DESCONFORTO PÓS-MAMADA / REFLUXO FISIOLÓGICO — verbalize EXPLICITAMENTE que acordar chorando ~20 min após o berço e melhorar no colo pode sugerir desconforto pós-mamada ao deitar ou refluxo fisiológico; (4) POSSIBILIDADE DE REFLUXO PATOLÓGICO — pergunte sobre vômitos intensos/em jato, engasgos frequentes, recusa alimentar, arqueamento corporal importante, irritabilidade persistente; (5) REFLEXO DE MORO / CHARUTINHO / CONTENÇÃO — investigue sobressaltos. INCLUA OBRIGATORIAMENTE NA RESPOSTA, COMO TEXTO EXPLÍCITO E NÃO RESUMÍVEL, OS QUATRO ITENS ABAIXO (sem omitir nenhum, mesmo se a resposta ficar mais longa): (A) POSIÇÃO VERTICAL POR 30 A 40 MIN após a mamada; (B) ELEVAÇÃO DO COLCHÃO EM 45° como medida postural complementar (aplicável tanto ao refluxo fisiológico quanto à suspeita de patológico, quando indicada pelo método); (C) condução ao MATERIAL DO PEDIATRA Roberto Franklin nas AULAS EXTRAS/BÔNUS quando a investigação levantar suspeita de refluxo patológico — cite o nome explicitamente; (D) ENCAMINHAMENTO ao SUPORTE HUMANO sempre que houver suspeita ou investigação de refluxo patológico — a própria suspeita já exige suporte humano, não depende da persistência. Travesseiro só como apoio posterior, com a etapa intermediária explicada (travesseiro sobre o colo + contenção das mãos). NÃO repita pergunta cuja resposta a mãe já forneceu (a mãe já disse "permanece cerca de 20 minutos" — aprofunde o que acontece nesses 20 min, não pergunte de novo o tempo). MODELO ACEITO PARA OS 4 ITENS NA RESPOSTA: "Mantenha em posição vertical por 30 a 40 minutos após a mamada. Considere também a elevação do colchão em 45° como medida postural complementar. Como há sinais que podem sugerir refluxo, recomendo que você consulte o material do Pediatra Roberto Franklin nas Aulas Extras/Bônus do curso e procure o suporte humano para acompanhamento — diante de suspeita de refluxo patológico, esse encaminhamento é parte do método, não depende da persistência do quadro."',
   },
 ];
 
@@ -581,8 +611,24 @@ const PROVIDED_FACTS = [
   {
     id: 'wake_latency',
     label: 'em quanto tempo desperta após ser deitado',
-    phrases: ['acorda logo', 'acorda em seguida', 'acorda na hora', 'desperta em', 'acorda depois de', 'acorda assim que', 'desperta logo'],
-    askKeywords: ['em quanto tempo', 'desperta apos', 'desperta após'],
+    phrases: [
+      'acorda logo', 'acorda em seguida', 'acorda na hora', 'desperta em',
+      'acorda depois de', 'acorda assim que', 'desperta logo',
+      // Explicit minutes-based latencies the mother volunteers (TESTE 004 RN 20d):
+      // "permanece cerca de 20 minutos", "fica 15 minutos", "depois de 10 minutos"
+      'permanece cerca de', 'permanece por cerca de', 'permanece por',
+      'fica cerca de', 'fica por cerca de', 'fica por',
+      'apos cerca de', 'após cerca de', 'depois de cerca de',
+      'apos uns', 'após uns', 'depois de uns',
+      'em cerca de', 'em poucos minutos', 'apos poucos minutos', 'após poucos minutos',
+      'depois de poucos minutos',
+      'permanece 10', 'permanece 15', 'permanece 20', 'permanece 25', 'permanece 30',
+      'fica 10 min', 'fica 15 min', 'fica 20 min', 'fica 25 min', 'fica 30 min',
+      'apos 10 min', 'apos 15 min', 'apos 20 min', 'apos 25 min', 'apos 30 min',
+      'após 10 min', 'após 15 min', 'após 20 min', 'após 25 min', 'após 30 min',
+      'depois de 10 min', 'depois de 15 min', 'depois de 20 min', 'depois de 25 min', 'depois de 30 min',
+    ],
+    askKeywords: ['em quanto tempo', 'desperta apos', 'desperta após', 'quanto tempo ele desperta', 'quanto tempo ela desperta'],
   },
 ];
 
@@ -622,6 +668,7 @@ const SYNTHETIC_SIGNAL_IDS = new Set([
   'mama_bem_with_concurrent_symptoms',
   'cite_explicit_age_rn',
   'cautious_seios_flacidos_rn',
+  'wakes_short_after_crib_back_to_lap',
 ]);
 
 export function extractSignals({ message, conversation, ageBand, ageDays } = {}) {
@@ -704,6 +751,31 @@ export function extractSignals({ message, conversation, ageBand, ageDays } = {})
     def.boostThemes.forEach((t) => boostThemes.add(t));
     priorities.push(def.priority);
     hasDirectiveSignal = true;
+  }
+
+  // Composite signal — TESTE 004 (RN 20d): bebê é colocado no berço, permanece
+  // poucos minutos, acorda chorando e SÓ MELHORA NO COLO. Este padrão exige
+  // investigação obrigatória de refluxo (fisiológico x patológico), Moro/
+  // charutinho, elevação do colchão em 45° e suporte humano. Detectamos via
+  // composição de fragmentos textuais para tolerar variações.
+  const cribStayPattern =
+    /(permane[cç]e\s+(cerca\s+de\s+)?\d+\s*min|fica\s+(cerca\s+de\s+)?\d+\s*min(?:\s+no\s+ber[cç]o)?|dura\s+\d+\s*min|por\s+(volta\s+de\s+)?\d+\s*min(?:utos)?\s+no\s+ber[cç]o|ap[oó]s\s+(cerca\s+de\s+)?\d+\s*min|depois\s+de\s+\d+\s*min|sonecas?\s+diurnas?\s+muito\s+curtas?|sonecas?\s+diurnas?\s+curtas?\s+no\s+ber[cç]o|sonecas?\s+curtas?\s+no\s+ber[cç]o)/;
+  const cryAtCribPattern =
+    /(acorda\s+chorando|desperta\s+chorando|acorda\s+e\s+chora|chora\s+ao\s+acordar|acorda\s+chorando\s+no\s+ber[cç]o)/;
+  const improvesOnLapPattern =
+    /(volta\s+a\s+dormir\s+(bem\s+)?(apenas\s+)?(se\s+)?(no\s+|ao\s+ir\s+para\s+o\s+|ao\s+colo|no\s+colo)|melhora(?:r)?\s+(?:s[oó]\s+)?(no\s+colo|ao\s+ir\s+para\s+o\s+colo)|s[oó]\s+(?:dorme|relaxa|fica\s+bem)\s+no\s+colo|pego\s+e\s+ficar?\s+no\s+colo|pega-?lo\s+no\s+colo|peg(?:a-)?lo\s+e\s+ficar\s+no\s+colo|volta\s+(?:bem|tranquilo)\s+no\s+colo|fica\s+bem\s+no\s+colo)/;
+  if (
+    cribStayPattern.test(norm) &&
+    cryAtCribPattern.test(norm) &&
+    improvesOnLapPattern.test(norm)
+  ) {
+    const def = SIGNAL_DEFS.find((d) => d.id === 'wakes_short_after_crib_back_to_lap');
+    if (def) {
+      signals.push({ id: def.id, label: def.label, matched: ['composite-pattern'] });
+      def.boostThemes.forEach((t) => boostThemes.add(t));
+      priorities.push(def.priority);
+      hasDirectiveSignal = true;
+    }
   }
 
   const provided = PROVIDED_FACTS.filter((f) =>

@@ -149,7 +149,14 @@ const E2E = [
       if (!/(travesseiro.*(em cima|sobre).*colo|colo.*travesseiro|contencao.*mao|mao.*contencao|conter com.*mao)/.test(n)) issues.push('must explain intermediate step (pillow over lap + hand containment)');
       if (!/(producao|transferencia|mamada efetiv)/.test(n)) warn.push('nuance: ideally evaluate milk production (afternoon flow)');
       if (!/(30\s*(a|–|-|—|ate|até)\s*40)/.test(n)) warn.push('nuance: vertical 30 a 40 min');
-      if (/(vicio|mau habito|fazendo manha)/.test(n) && !/(nao e vicio|nao e um vicio|nao significa vicio|nao e mau habito|nao caracteriza)/.test(n)) issues.push('must NOT label as vício/mau hábito');
+      // Forbid vício/mau hábito/manha framing — but accept the same vocabulary
+      // inside an explicit negation (the methodologically correct
+      // anti-association reassurance for RN: "AINDA NÃO CRIA associação ...
+      // não é vício, manha ou mau hábito").
+      if (
+        /(vicio|mau habito|fazendo manha)/.test(n)
+        && !/(n[aã]o\s+(e|é|um|uma|caracteriza|significa|configura|cria|deve\s+ser\s+(visto|tratado|entendido)\s+como)?\s*(vicio|mau habito|manha|associacao)|aind?a?\s+n[aã]o\s+cria|n[aã]o\s+(vicio|mau habito|manha))/.test(n)
+      ) issues.push('must NOT label as vício/mau hábito');
       result.__warnings = warn; return issues;
     },
   },

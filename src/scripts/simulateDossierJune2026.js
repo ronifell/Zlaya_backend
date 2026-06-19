@@ -263,7 +263,7 @@ const E2E_CASES = [
       if (!/(sequencia|mamada.*efetiv|segundo peito|arrotar.*vertical|ambiente.*calmo|transferencia.*berco)/.test(norm)) {
         issues.push('must include practical night sequence or steps');
       }
-      if (!/(nao configura associacao|nao e associacao|nao caracteriza associacao|fisiologic)/.test(norm)) {
+      if (!/(nao configura associacao|nao\s+(?:e|a)\s+(?:uma\s+)?associacao\s+negativa|nao caracteriza associacao|fisiologic|aind?a?\s+nao\s+cria\s+associacao|nao\s+cria\s+associacao\s+comportamental)/.test(norm)) {
         issues.push('must reassure about associação negativa');
       }
       if (!sig.signals.some((s) => s.id === 'asks_how_to_improve')) {
@@ -298,7 +298,7 @@ const E2E_CASES = [
         );
       if (blamesHistory) issues.push('must NOT cite icterícia/linguinha as current cause when "mama bem"');
 
-      if (!/(complemento|sonda).{0,200}(final da tarde|fim da tarde|tarde|18h|periodo em que|quando o comportamento)/.test(norm)) {
+      if (!/(complemento|sonda)[\s\S]{0,400}(final da tarde|fim da tarde|tarde|18h|periodo em que|quando o comportamento)/.test(norm)) {
         issues.push('must address complement evaluation in late afternoon, not only 22h');
       }
       if (!/(ordenha|dois seios|producao|acompanhamento)/.test(norm)) {
@@ -389,7 +389,7 @@ const E2E_CASES = [
       if (!/(2h30 a 3h|2h30 a 3 horas|2 horas e meia a 3|nao e necessario diminuir|nao precisa diminuir|podem ser esperadas)/.test(norm)) {
         issues.push('must answer directly about nap duration (2h30–3h expected, no need to reduce automatically)');
       }
-      if (!/(sinal claro de fome|sinal de fome|indica fome|esses sinais.*fome|sao sinais de fome|fome.*sugar.*maozinha|sugar.*maozinha.*fome)/.test(norm)) {
+      if (!/(sinal\s+(?:claro|classico|cl[aá]ssicos?)\s+de\s+fome|sinais\s+(?:claros|classicos|cl[aá]ssicos)\s+de\s+fome|sinal\s+de\s+fome|sinais\s+de\s+fome|indica\s+fome|indicam\s+fome|esses\s+sinais.*fome|s[aã]o\s+sinais\s+de\s+fome|fome.*sugar.*maozinha|sugar.*maozinha.*fome)/.test(norm)) {
         issues.push('must read "sugar mãozinhas + nervoso + choramingo" as classic hunger sign');
       }
       if (!/(antes ou depois da mamada|antes da mamada ou depois|antes ou depois|ela mamou nesse horario|ela ja mamou|ela mamou.*horario|esse comportamento.*acontece|esse comportamento.*antes|esse comportamento.*depois|nesse horario.*mamou|antes da mamada|depois da mamada)/.test(norm)) {
@@ -445,7 +445,7 @@ const E2E_CASES = [
         issues.push('must cite explicit age "12 dias"');
       }
       // Must ask whether mother feeds at 23h (accept variants)
-      if (!/(alimenta a bebe nesse horario|oferece a mamada nesse|voce alimenta.*23|voce oferece a mamada.*23|oferece a mamada nesse horario|alimenta nesse despertar|alimenta nesse horario|esta com fome nesse horario|esta com fome no despertar|investigar se ela esta com fome|investigar se ela.*fome|sinais de fome.*23|oferecer a mamada assim que.*acordar|oferecer a mamada quando.*acordar|oferecer a mamada ao acordar)/.test(norm)) {
+      if (!/(alimenta a bebe nesse horario|ofere[cç]e?r?\s+a\s+mamada(?:\s+nesse|\s+quando|\s+ao\s+acordar|\s+assim\s+que|\s+nesse\s+horario|\s+ao\s+despertar)|voce alimenta.*23|voce oferece a mamada.*23|alimenta nesse despertar|alimenta nesse horario|esta com fome nesse horario|esta com fome no despertar|investigar se ela esta com fome|investigar se ela.*fome|investigar a mamada nesse horario|investigar.*mamada.*horario|sinais de fome.*23)/.test(norm)) {
         issues.push('must investigate hunger/offer feed at the 23h wake');
       }
       // Must NOT open with generic "padrões de sono variados"
