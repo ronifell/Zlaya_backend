@@ -359,6 +359,105 @@ const SIGNAL_DEFS = [
     priority:
       'Queixa envolvendo chupeta no RN (0–28 dias) é REFLEXO DE SUCÇÃO e NECESSIDADE DE REGULAÇÃO — use esses termos explicitamente na resposta. PERGUNTA OBRIGATÓRIA sobre forma de alimentação se a mãe não informou: "Ela mama no peito, usa fórmula ou recebe complemento?" — é proibido orientar "ofereça o peito" antes dessa confirmação. MANEJO PRÁTICO: se a chupeta cair e o bebê continuar dormindo, não precisa recolocar; se acordar logo que cai, diferencie fome, desconforto pós-mamada, sucção e transição para o berço. POSIÇÃO VERTICAL 30 A 40 MIN após mamada. Mantenha o gênero gramatical que a mãe usa (ela/dele) — não alterne para "ele" se a mãe fala "minha bebê/ela". NUNCA oriente prender a chupeta.',
   },
+  {
+    id: 'fear_negative_association_rn',
+    label: 'Mãe verbaliza MEDO de associação negativa / vício / mau hábito no RN',
+    directive: true,
+    phrases: [
+      'associacao negativa', 'associação negativa', 'medo de associacao', 'medo de associação',
+      'medo de criar associacao', 'medo de criar associação', 'medo de criar vicio', 'medo de criar vício',
+      'criar vicio', 'criar vício', 'estou criando vicio', 'estou criando vício',
+      'criar mau habito', 'criar mau hábito', 'mau habito', 'mau hábito', 'manha',
+      'esta acostumando mal', 'está acostumando mal', 'acostumando mal',
+      'medo de acostumar mal', 'medo de viciar', 'estou viciando',
+      'mal habito', 'mal hábito', 'medo dessa associacao', 'medo dessa associação',
+    ],
+    boostThemes: ['busca_excessiva_peito', 'mamadas_ineficientes'],
+    priority:
+      'A mãe VERBALIZOU MEDO de associação negativa / vício / mau hábito. NO RN (0–28 dias) ESSA PREOCUPAÇÃO PRECISA SER AFASTADA DE FORMA DIRETA E EXPLÍCITA — não basta dizer que "não configura associação negativa". Inclua, com clareza, uma frase do tipo: "Com [N] dias, seu bebê AINDA NÃO CRIA associação comportamental negativa por dormir no peito, buscar o peito ou precisar voltar ao peito para se acalmar." Use o N exato do PERFIL DO BEBÊ. Reforce que nessa idade o peito é alimento, regulação, conforto e organização fisiológica — não vício, manha ou mau hábito. NÃO use as palavras "vício", "manha" ou "mau hábito" como categoria válida para o RN. Após afastar a hipótese comportamental, conduza pela hierarquia alimentar (mamada efetiva, saciedade, produção, transferência, conforto pós-mamada).',
+  },
+  {
+    id: 'cite_explicit_age_rn',
+    label: 'Caso RN — cite a idade exata (N dias) ao menos uma vez na resposta',
+    directive: true,
+    phrases: [], // matched programmatically when ageDays is set
+    boostThemes: [],
+    priority:
+      'CITAÇÃO EXPLÍCITA DA IDADE: ao menos uma vez na resposta, cite a idade exata do bebê — "para um bebê de [N] dias", "com [N] dias", "seu bebê de [N] dias" — usando EXATAMENTE o N do PERFIL DO BEBÊ. Isso aumenta a segurança da resposta e mostra que a leitura da informação da mãe foi precisa.',
+  },
+  {
+    id: 'wake_after_early_sleep_rn',
+    label: 'RN dormiu cedo (19h–20h) e acorda 22h–00h — investigar mamada nesse horário',
+    directive: true,
+    phrases: [
+      'acorda 22h', 'acorda 22:00', 'acorda as 22', 'acorda às 22',
+      'acorda 23h', 'acorda 23:00', 'acorda as 23', 'acorda às 23',
+      'acorda umas 22', 'acorda umas 23', 'acorda por volta das 22', 'acorda por volta das 23',
+      'desperta as 22', 'desperta às 22', 'desperta as 23', 'desperta às 23',
+      'dorme as 19', 'dorme às 19', 'dorme as 20', 'dorme às 20',
+      'sono da noite por volta de 19', 'sono da noite por volta de 20',
+      'inicia o sono.*19', 'inicia o sono.*20',
+      'demora a pegar o sono novamente', 'demora a voltar a dormir',
+      'demora para voltar a dormir', 'nao consegue voltar a dormir',
+      'demora a pegar no sono', 'demora para pegar no sono',
+    ],
+    boostThemes: [
+      'despertar_noturno_investigar_fome',
+      'mamadas_ineficientes',
+      'baixa_producao_leite',
+      'baixa_producao_fim_dia',
+    ],
+    priority:
+      'PADRÃO CRÍTICO: RN inicia o sono cedo (19h–20h) e acorda nas primeiras horas da noite (22h–00h), demorando a voltar a dormir. Esse cenário, por si só, indica intervalo importante desde a última mamada. PERGUNTA INDISPENSÁVEL antes de qualquer outra: "Você alimenta a bebê nesse horário em que ela acorda?" / "Nesse despertar das [23h], você oferece a mamada?". CONTEXTUALIZE explicitamente: como ele/ela iniciou o sono às 19h/20h e acorda perto das 23h, já está vindo de um intervalo importante desde a última mamada — se acorda com sinais de fome, deve ser alimentado. NÃO ABRA com "É comum que os bebês apresentem padrões de sono variados" nem com "É normal nessa fase" — esse tipo de abertura genérica deve ser substituída por uma condução direta para fome/mamada. Só DEPOIS de oferecer mamada → vertical 30-40 min → arroto → transferência ao berço, vem o ambiente escuro/calmo. Reflexo de Moro, charutinho e Travesseiro só se a mãe relatou susto/desorganização — não os puxe especulativamente.',
+  },
+  {
+    id: 'start_day_or_keep_night_rn',
+    label: 'Mãe pergunta se "começa o dia" ou mantém ambiente noturno (madrugada difícil RN)',
+    directive: true,
+    phrases: [
+      'comecar o dia', 'começar o dia', 'comeco do dia', 'começo do dia',
+      'abrir a janela', 'abro a janela', 'trocar o pijama', 'troco o pijama',
+      'ja era pra ter comecado o dia', 'já era pra ter começado o dia',
+      'devo comecar o dia', 'devo começar o dia',
+      'manter ambiente noturno', 'manter o ambiente noturno',
+      'fiz certo em manter', 'fiz errado em manter',
+      'manter no quarto', 'mantive no quarto', 'manter ele no quarto',
+      'comecar a rotina do dia', 'começar a rotina do dia',
+    ],
+    boostThemes: [
+      'acorda_ao_deitar',
+      'dificuldade_berco',
+      'reflexo_moro',
+    ],
+    priority:
+      'DECISÃO PRÁTICA DA MÃE NA MADRUGADA: ela pergunta se deveria ter "começado o dia" (abrir janela, trocar pijama) ou se fez certo em manter ambiente noturno. RESPONDA DIRETAMENTE na PRIMEIRA frase: "Você fez certo em manter o ambiente noturno. Para um bebê de [N] dias, não precisa começar o dia nesse horário." Tranquilize a mãe sobre o horário da manhã: acordar perto de 8h/8h30 depois de uma madrugada difícil NÃO é problema para o RN. ORIENTAÇÕES NA MADRUGADA: trocar fralda com MÍNIMA luz, pouco manuseio, sem estímulo (para não sinalizar início do dia); manter ruído branco/escuro/calmo; se ele estiver desperto sem desconforto, manter ambiente noturno. INVESTIGUE a mamada de madrugada: foi efetiva, ele arrotou, permaneceu em posição vertical 30 a 40 minutos? NÃO use frases comportamentais como "ajudar o bebê a se adaptar melhor ao sono" — para RN o foco é organização fisiológica.',
+  },
+  {
+    id: 'bath_crying_rn',
+    label: 'Choro durante o banho no RN — não desviar para investigação alimentar',
+    directive: true,
+    phrases: [
+      'chora no banho', 'chora muito no banho', 'chorando no banho',
+      'chora muuuito no banho', 'chora muuuuito no banho',
+      'choro no banho', 'choro do banho', 'hora do banho',
+      'na hora do banho', 'durante o banho', 'no momento do banho',
+      'almofada de banho', 'almofadas de banho', 'almofada para o banho',
+      'almofadinha de banho', 'banho ele chora', 'banho ela chora',
+      'nao gosta do banho', 'não gosta do banho', 'detesta o banho',
+    ],
+    boostThemes: ['choro_banho_rn'],
+    priority:
+      'QUEIXA SOBRE CHORO NO BANHO no RN: NÃO desvie para investigação alimentar (mamada efetiva, saciedade, produção/transferência) — a queixa é específica sobre BANHO. NÃO indique aulas de cólicas / Hora da Bruxa / Mamadas efetivas como prioritárias para essa queixa. CONDUTA PRÁTICA para o banho do RN: (1) explicar que o choro no banho costuma vir de SENSAÇÃO DE QUEDA, INSEGURANÇA ou FRIO; (2) ENROLAR o bebê em uma FRALDA DE PANO durante o banho para aumentar a sensação de CONTENÇÃO, molhando o corpinho aos poucos; (3) observar se ele melhora quando fica com o CORPINHO MAIS SUBMERSO na água, sempre com apoio firme e supervisão total; (4) experimentar a posição DE BARRIGUINHA PARA BAIXO apoiado com segurança no braço do adulto (apoio firme, controle do corpo); (5) manter AMBIENTE AQUECIDO, sem correntes de ar; (6) deixar TUDO PREPARADO antes de começar; (7) escolher um momento em que ele NÃO esteja com muita fome nem muito irritado — banho logo após uma mamada cheia pode aumentar desconforto/regurgitação; (8) banho CURTO. NÃO faça perguntas sobre saciedade, mamada efetiva ou produção de leite a menos que a mãe traga essa pista — a queixa do banho deve permanecer no eixo do banho.',
+  },
+  {
+    id: 'cautious_seios_flacidos_rn',
+    label: 'Pergunta sobre "seios flácidos / menor enchimento" exige cuidado (não diagnóstico isolado)',
+    directive: true,
+    phrases: [], // matched programmatically when retrieval mentions flaccid breast
+    boostThemes: [],
+    priority:
+      'Ao investigar PRODUÇÃO de leite, EVITE dar a entender que "seio flácido" = pouco leite. Use linguagem cautelosa e prefira investigar EFETIVIDADE da mamada: o bebê faz sucção ativa? Você escuta deglutição? Adormece muito rapidamente no peito? Volta a procurar o peito em pouco tempo? Apresenta sinais reais de saciedade? Se for citar enchimento, contextualize que ele varia naturalmente e não deve ser interpretado isoladamente como diagnóstico de baixa produção.',
+  },
 ];
 
 /**
@@ -437,7 +536,14 @@ function collectMotherText({ message, conversation }) {
   return parts.join('\n');
 }
 
-export function extractSignals({ message, conversation } = {}) {
+// Synthetic signals that are computed programmatically (not from phrase matching).
+const SYNTHETIC_SIGNAL_IDS = new Set([
+  'mama_bem_with_concurrent_symptoms',
+  'cite_explicit_age_rn',
+  'cautious_seios_flacidos_rn',
+]);
+
+export function extractSignals({ message, conversation, ageBand, ageDays } = {}) {
   const motherText = collectMotherText({ message, conversation });
   const norm = normalize(motherText);
   const currentNorm = normalize(message);
@@ -448,16 +554,49 @@ export function extractSignals({ message, conversation } = {}) {
   let hasDirectiveSignal = false;
 
   for (const def of SIGNAL_DEFS) {
-    // Skip the synthetic 'mama bem + concurrent symptoms' signal here; it
-    // is computed after the main pass when we know which other signals
-    // fired.
-    if (def.id === 'mama_bem_with_concurrent_symptoms') continue;
+    // Skip synthetic signals here; they are computed after the main pass.
+    if (SYNTHETIC_SIGNAL_IDS.has(def.id)) continue;
     const matched = def.phrases.filter((p) => norm.includes(normalize(p)));
     if (matched.length) {
       signals.push({ id: def.id, label: def.label, matched });
       def.boostThemes.forEach((t) => boostThemes.add(t));
       priorities.push(def.priority);
       if (def.directive) hasDirectiveSignal = true;
+    }
+  }
+
+  // Synthetic: ALWAYS cite explicit age when we're in the RN band and have ageDays.
+  const isRnBand =
+    String(ageBand || '').toLowerCase() === 'rn' ||
+    (Number.isFinite(ageDays) && ageDays >= 0 && ageDays <= 28);
+  if (isRnBand && Number.isFinite(ageDays)) {
+    const def = SIGNAL_DEFS.find((d) => d.id === 'cite_explicit_age_rn');
+    if (def) {
+      signals.push({ id: def.id, label: def.label, matched: [`${ageDays} dias`] });
+      priorities.push(def.priority.replace(/\[N\]/g, String(ageDays)));
+      hasDirectiveSignal = true;
+    }
+
+    // Also substitute [N] in other RN priorities already added that reference [N] dias.
+    for (let i = 0; i < priorities.length; i++) {
+      if (typeof priorities[i] === 'string' && priorities[i].includes('[N]')) {
+        priorities[i] = priorities[i].replace(/\[N\]/g, String(ageDays));
+      }
+    }
+  }
+
+  // Synthetic: when feeding/production signals fire, attach the cautious-flaccid-breast
+  // directive so the LLM uses careful language about "seios flácidos".
+  const productionSignalIds = new Set([
+    'evening_pattern', 'night_production_drop', 'short_feeding_interval',
+    'feeding_clinical_context', 'mama_bem_with_concurrent_symptoms',
+    'late_crib_placement', 'wakes_on_transfer',
+  ]);
+  if (signals.some((s) => productionSignalIds.has(s.id))) {
+    const def = SIGNAL_DEFS.find((d) => d.id === 'cautious_seios_flacidos_rn');
+    if (def) {
+      signals.push({ id: def.id, label: def.label, matched: ['production-cautious'] });
+      priorities.push(def.priority);
     }
   }
 

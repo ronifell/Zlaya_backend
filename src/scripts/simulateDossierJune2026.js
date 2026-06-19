@@ -45,11 +45,18 @@ const RULE_IDS = [
   'rn-pacifier-practical-management',
   'rn-satiety-cautious-language',
   'rn-gender-consistency',
-  // 18/06/2026 dossiers
+  // 18/06/2026 (afternoon) dossiers
   'rn-sonda-equals-low-production',
   'rn-crib-ok-day-night-problem',
   'rn-night-hunger-signs',
   'rn-nap-duration-direct-answer',
+  // 18/06/2026 (evening) dossiers
+  'rn-cite-explicit-age',
+  'rn-fear-of-association-direct-rebuttal',
+  'rn-23h-wake-ask-feeding',
+  'rn-madrugada-keep-night-direct-answer',
+  'rn-bath-crying-stay-on-topic',
+  'rn-cautious-flaccid-breast',
 ];
 
 const PROMPT_FRAGMENTS = [
@@ -153,12 +160,53 @@ function runInfrastructureChecks() {
       mustSignalIds: ['night_hunger_signs_rn', 'asks_nap_duration_rn'],
       priorityMustInclude: ['sinal claro de fome', '2h30 a 3h', 'antes ou depois da mamada'],
     },
+    {
+      id: 'teste-003-rn-9d-evening',
+      message:
+        'Bebê de 9 dias. Acorda à noite, só se acalma no peito. Tenho medo dessa associação negativa, é normal para a idade?',
+      mustSignalIds: ['fear_negative_association_rn', 'asks_if_normal'],
+      ageBand: 'RN',
+      ageDays: 9,
+      priorityMustInclude: ['ainda nao cria', '9 dias', 'alimento, regulacao'],
+    },
+    {
+      id: 'teste-003-rn-12d-23h',
+      message:
+        'Minha neném tem 12 dias. Última soneca dela é 17:30, no máximo 18:00. Inicio o banho entre 18:30 e iniciar o sono da noite por volta de 19:00 a 20:00. Ela acorda umas 23:00 da noite e demora a pegar o sono novamente. Tem alguma sugestão pra melhorar, voltar a dormir ou é normal pela idade?',
+      mustSignalIds: ['wake_after_early_sleep_rn'],
+      ageBand: 'RN',
+      ageDays: 12,
+      priorityMustInclude: ['alimenta a bebe nesse horario', 'intervalo importante', '12 dias'],
+    },
+    {
+      id: 'teste-003-rn-12d-madrugada',
+      message:
+        'Bebê de 12 dias acordou às 4h40 para mamar, terminou de mamar às 5h20 e demorou bastante para voltar a dormir, pegando no sono apenas perto de 6h50. Eu deveria ter começado o dia com ele, abrindo janela e trocando o pijama, ou fiz certo em manter no quarto, com ambiente escuro e calmo?',
+      mustSignalIds: ['start_day_or_keep_night_rn'],
+      ageBand: 'RN',
+      ageDays: 12,
+      priorityMustInclude: ['fez certo em manter o ambiente noturno', '12 dias', 'minima luz'],
+    },
+    {
+      id: 'teste-003-rn-13d-banho',
+      message:
+        'Olá, meu bebê tem 13 dias, percebi que ele chora muuuuuito na hora do banho e ainda uso aquelas almofadas para dar mais segurança e conforto. O que eu poderia fazer para diminuir esse choro?',
+      mustSignalIds: ['bath_crying_rn'],
+      ageBand: 'RN',
+      ageDays: 13,
+      priorityMustInclude: ['fralda de pano', 'barriguinha para baixo', 'ambiente aquecido', 'nao desvie para investigacao alimentar'],
+    },
   ];
 
   console.log('\n--- Signal extraction ---');
   for (const sc of signalCases) {
     console.log(`\n  Case: ${sc.id}`);
-    const sig = extractSignals({ message: sc.message, conversation: [] });
+    const sig = extractSignals({
+      message: sc.message,
+      conversation: [],
+      ageBand: sc.ageBand,
+      ageDays: sc.ageDays,
+    });
     const ids = sig.signals.map((s) => s.id);
     console.log(`    signals fired: ${ids.join(', ') || '—'}`);
 
@@ -356,6 +404,121 @@ const E2E_CASES = [
     },
   },
   {
+    id: 'teste-003-rn-9d-evening',
+    label: 'TESTE 003 — RN 9 dias evening (nota oficial 9,3/10) — explicit age + medo associação',
+    profile: { motherName: '—', babyName: 'bb', ageDays: 9 },
+    message:
+      'Bebê de 9 dias. Depois das 18h fica agitado, só se acalma se voltar para o peito. Tenho medo dessa associação negativa, mas muitas vezes nada mais funciona. Eu queria que ele dormisse à noite como dorme de dia. Isso é normal pra idade? Como posso melhorar?',
+    checks: (text, result, sig) => {
+      const issues = [];
+      const norm = strip(text);
+      // Must cite explicit age "9 dias"
+      if (!/\b9\s*dias\b/.test(norm)) {
+        issues.push('must cite explicit age "9 dias"');
+      }
+      // Must directly rebut associação negativa with the age
+      if (!/(ainda nao cria associacao|nao cria associacao comportamental negativa|ainda nao forma associacao|com\s*9\s*dias.*associacao|nao cria essa associacao|seu bebe.*ainda nao|nao cria.*comportamental)/.test(norm)) {
+        issues.push('must directly say "with 9 days, baby does NOT yet create comportamental negative association"');
+      }
+      // Must reframe peito as alimento/regulação/conforto
+      if (!/(alimento.*regulacao|regulacao.*conforto|conforto.*organizacao|nao e vicio|nao e manha|peito.*alimento|peito.*regulacao|peito.*conforto)/.test(norm)) {
+        issues.push('must reframe peito as alimento/regulação/conforto (not vício/manha)');
+      }
+      // Must not use vício / manha / mau hábito as valid category
+      if (/(criou um vicio|criou vicio|esse e o vicio|isso e manha|isso e um mau habito|seu bebe esta viciado)/.test(norm)) {
+        issues.push('forbidden: must not validate vício/manha/mau hábito as category for RN');
+      }
+      return issues;
+    },
+  },
+  {
+    id: 'teste-003-rn-12d-23h',
+    label: 'TESTE 003 — RN 12 dias (nota oficial 8,2/10) — despertar às 23h',
+    profile: { motherName: '—', babyName: 'bb', ageDays: 12 },
+    message:
+      'Minha neném tem 12 dias. Última soneca dela é 17:30, no máximo 18:00. Inicio o banho entre 18:30 e iniciar o sono da noite por volta de 19:00 a 20:00. Ela acorda umas 23:00 da noite e demora a pegar o sono novamente. Tem alguma sugestão pra melhorar, voltar a dormir ou é normal pela idade?',
+    checks: (text, result, sig) => {
+      const issues = [];
+      const norm = strip(text);
+      // Must cite explicit age
+      if (!/\b12\s*dias\b/.test(norm)) {
+        issues.push('must cite explicit age "12 dias"');
+      }
+      // Must ask whether mother feeds at 23h (accept variants)
+      if (!/(alimenta a bebe nesse horario|oferece a mamada nesse|voce alimenta.*23|voce oferece a mamada.*23|oferece a mamada nesse horario|alimenta nesse despertar|alimenta nesse horario|esta com fome nesse horario|esta com fome no despertar|investigar se ela esta com fome|investigar se ela.*fome|sinais de fome.*23|oferecer a mamada assim que.*acordar|oferecer a mamada quando.*acordar|oferecer a mamada ao acordar)/.test(norm)) {
+        issues.push('must investigate hunger/offer feed at the 23h wake');
+      }
+      // Must NOT open with generic "padrões de sono variados"
+      const firstParagraph = strip(text.split(/\n\n/)[0] || text.slice(0, 400));
+      if (/padroes de sono variados|padrao de sono variado|padroes variados|despertares noturnos e dificuldade para se reacomodar/.test(firstParagraph)) {
+        issues.push('must NOT open with generic "padrões de sono variados"');
+      }
+      return issues;
+    },
+  },
+  {
+    id: 'teste-003-rn-12d-madrugada',
+    label: 'TESTE 003 — RN 12d/02 (nota oficial 8,2/10) — madrugada manter noturno',
+    profile: { motherName: '—', babyName: 'bb', ageDays: 12 },
+    message:
+      'Bebê de 12 dias acordou às 4h40 para mamar, terminou de mamar às 5h20 e demorou bastante para voltar a dormir, pegando no sono apenas perto de 6h50. Eu deveria ter começado o dia com ele, abrindo janela e trocando o pijama, ou fiz certo em manter no quarto, com ambiente escuro e calmo? Provavelmente vou ter que acordá-lo perto de 8h30 para mamar.',
+    checks: (text, result, sig) => {
+      const issues = [];
+      const norm = strip(text);
+      if (!/\b12\s*dias\b/.test(norm)) {
+        issues.push('must cite explicit age "12 dias"');
+      }
+      // Must answer directly that she was right to keep night ambience
+      if (!/(fez certo em manter|voce fez certo|fez bem em manter|fez bem.*ambiente noturno|nao precisa(va)? comecar o dia|nao precisava abrir.*janela|nao era preciso comecar o dia)/.test(norm)) {
+        issues.push('must DIRECTLY say "você fez certo em manter o ambiente noturno"');
+      }
+      // Must reassure about 8h30 wake-up
+      if (!/(8h30|8:30|perto de 8|por volta de 8|8h da manha|8 da manha|acordar mais tarde|nao e problema|nao significa que.*rotina|sem que isso signifique)/.test(norm)) {
+        issues.push('must reassure about waking up around 8h/8h30 not being a problem');
+      }
+      // Diaper change with minimal stimulation
+      if (!/(minima luz|pouca luz|pouco estimulo|sem estimulo|pouco manuseio|baixa estimulacao)/.test(norm)) {
+        issues.push('must guide diaper change with minimal light/stimulation');
+      }
+      // Must not use comportamental sleep adaptation language
+      if (/(adaptar.*sono|treinar o sono|treino de sono|associacao com o sono|aprenda a dormir)/.test(norm)) {
+        issues.push('forbidden: must not use behavioral sleep-adaptation language for RN');
+      }
+      return issues;
+    },
+  },
+  {
+    id: 'teste-003-rn-13d-banho',
+    label: 'TESTE 003 — RN 13 dias (nota oficial 7,4/10) — choro no banho',
+    profile: { motherName: '—', babyName: 'bb', ageDays: 13 },
+    message:
+      'Olá, meu bebê tem 13 dias, percebi que ele chora muuuuuito na hora do banho e ainda uso aquelas almofadas para dar mais segurança e conforto. O que eu poderia fazer para diminuir esse choro?',
+    checks: (text, result, sig) => {
+      const issues = [];
+      const norm = strip(text);
+      if (!/\b13\s*dias\b/.test(norm)) {
+        issues.push('must cite explicit age "13 dias"');
+      }
+      // Must mention at least 2 of the bath-specific strategies
+      const strategies = [
+        /fralda de pano/,
+        /(barriguinha para baixo|barriga para baixo|de bru[cç]os no bra[cç]o)/,
+        /(corpo (mais )?submerso|corpinho (mais )?submerso|ficar mais.*submerso)/,
+        /(ambiente aquecido|sem correntes de ar|ambiente quente|temperatura adequada)/,
+        /(sensacao de queda|sensacao de cair|inseguranca|sentir frio|por frio)/,
+      ];
+      const matches = strategies.filter((re) => re.test(norm)).length;
+      if (matches < 2) {
+        issues.push(`must include at least 2 bath-specific strategies (found ${matches}): fralda de pano, barriguinha para baixo, corpo submerso, ambiente aquecido, sensação de queda/frio`);
+      }
+      // Must NOT pivot to feeding investigation
+      if (/(sucao ativa|sinais de saciedade|mamada efetiva|producao.*leite|transferencia.*leite|recomendo a aula.*hora da bruxa|hora da bruxa|colicas|aulas sobre mamadas efetivas)/.test(norm)) {
+        issues.push('forbidden: must NOT pivot bath complaint to feeding investigation or recommend Hora da Bruxa/cólicas');
+      }
+      return issues;
+    },
+  },
+  {
     id: 'teste-002-rn-22d',
     label: 'TESTE 002 — RN 22 dias (nota oficial 8,5/10)',
     profile: { motherName: '—', babyName: 'Liz', ageDays: 22 },
@@ -371,7 +534,7 @@ const E2E_CASES = [
       if (!/(forma de alimentacao|peito.*formula|formula.*peito|peito exclusivo|usa formula|recebe complemento)/.test(norm)) {
         issues.push('must ask or confirm feeding method before advising breast');
       }
-      if (!/(chupeta cai|continuar dormindo|nao precisa recolocar|recolocar)/.test(norm)) {
+      if (!/(chupeta cai|continuar dormindo|nao precisa recolocar|recolocar|chupeta.*cair|cair.*chupeta|se a chupeta cai|quando a chupeta cai|se ela acordar.*chupeta|chupeta.*sinal|chupeta.*investigar)/.test(norm)) {
         issues.push('must include practical pacifier management');
       }
       if (!/(reflexo de succao|necessidade de succao|necessidade de regulacao|regulacao)/.test(norm)) {
@@ -402,7 +565,12 @@ async function runE2EChecks() {
 
   for (const c of E2E_CASES) {
     console.log(`\n--- ${c.label} ---`);
-    const sig = extractSignals({ message: c.message, conversation: [] });
+    const sig = extractSignals({
+      message: c.message,
+      conversation: [],
+      ageBand: 'RN',
+      ageDays: c.profile?.ageDays,
+    });
     const result = await processTurn({
       message: c.message,
       babyProfile: c.profile,

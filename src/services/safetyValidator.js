@@ -433,6 +433,79 @@ export function correctAgeMentions({ text, ageDays }) {
 }
 
 /**
+ * Detects baby gender from the mother's wording. Returns 'feminine' | 'masculine' | null.
+ * Mirrors the logic in systemPrompt.js so we can apply the same fix downstream.
+ */
+function detectMotherGenderCue(text) {
+  if (!text) return null;
+  const norm = String(text)
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+  const fem =
+    /\bminha\s+(beb[eê]|bb|filha|menina|princesa|nenem|nen[eé]m|bebezinha)\b|\bbeb[eê]\s+(menina|fem[ií]nina)\b|\b(ela|dela)\b/.test(
+      norm,
+    );
+  const masc =
+    /\bmeu\s+(beb[eê]|bb|filho|menino|principe|nenem|nen[eé]m|bebezinho)\b|\bbeb[eê]\s+(menino|masculino)\b|\b(ele|dele)\b/.test(
+      norm,
+    );
+  if (fem && !masc) return 'feminine';
+  if (masc && !fem) return 'masculine';
+  if (fem && masc) {
+    const idxFem = norm.search(/\b(ela|dela|minha\s+(bebe|bb|filha|menina))\b/);
+    const idxMasc = norm.search(/\b(ele|dele|meu\s+(bebe|bb|filho|menino))\b/);
+    if (idxFem === -1) return 'masculine';
+    if (idxMasc === -1) return 'feminine';
+    return idxFem < idxMasc ? 'feminine' : 'masculine';
+  }
+  return null;
+}
+
+/**
+ * Surgical grammatical-gender post-fix. When the mother uses feminine (ela/dela/
+ * minha bebê), the response should not slip back to masculine in known templated
+ * phrases (especially the satiety closing "se ao contrário ele continua agitado").
+ * We only fix UNAMBIGUOUS templated phrases — never general "ele/ela" elsewhere,
+ * to avoid mistakes on quoted text or third-person references.
+ *
+ * Returns { text, corrections: [{ before, after }] }.
+ */
+export function enforceGenderConsistency({ text, userMessage }) {
+  if (!text || !userMessage) return { text: text || '', corrections: [] };
+  const gender = detectMotherGenderCue(userMessage);
+  if (gender !== 'feminine') return { text, corrections: [] };
+
+  const corrections = [];
+  const rules = [
+    // satiety closing block
+    [/\bele\s+continua\s+agitado\b/gi, 'ela continua agitada'],
+    [/\bele\s+permanece\s+agitado\b/gi, 'ela permanece agitada'],
+    [/\bele\s+est[áa]\s+agitado\b/gi, 'ela está agitada'],
+    [/\bele\s+continua\s+(tranquilo|sonolento|inquieto)\b/gi, (_, w) => `ela continua ${w === 'tranquilo' ? 'tranquila' : w === 'sonolento' ? 'sonolenta' : 'inquieta'}`],
+    // common templated openers/sequences
+    [/\bcoloque-o\s+para\s+arrotar\b/gi, 'coloque-a para arrotar'],
+    [/\bcoloc[áa]-lo\s+(no\s+ber[cç]o|para\s+arrotar)\b/gi, (m, w) => `colocá-la ${w}`],
+    [/\bsegur[áa]-lo\b/gi, 'segurá-la'],
+    [/\btransferi-lo\b/gi, 'transferi-la'],
+    [/\bdeit[áa]-lo\b/gi, 'deitá-la'],
+    [/\boferec[êe]-lo\b/gi, 'oferecê-la'],
+    [/\bmant[êe]-lo\b/gi, 'mantê-la'],
+    [/\bmant[êe]nha-o\b/gi, 'mantenha-a'],
+    [/\bcoloc[áa]-lo\b/gi, 'colocá-la'],
+  ];
+  let out = text;
+  for (const [re, replacement] of rules) {
+    out = out.replace(re, (match, ...rest) => {
+      const sub = typeof replacement === 'function' ? replacement(match, ...rest) : replacement;
+      if (sub !== match) corrections.push({ before: match, after: sub });
+      return sub;
+    });
+  }
+  return { text: out, corrections };
+}
+
+/**
  * Checks if the user's input contains explicit clinical red flags that should
  * short-circuit the pipeline into the "professional evaluation" path.
  */

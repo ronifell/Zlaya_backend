@@ -10,6 +10,7 @@ import {
   ensureSatietySignsExplained,
   ensureDirectNormalityAnswer,
   ensureNegativeAssociationReassurance,
+  enforceGenderConsistency,
   detectClinicalRedFlags,
 } from './safetyValidator.js';
 import {
@@ -95,7 +96,12 @@ export async function processTurn({ message, babyProfile, conversation, conversa
 
   // 2c) Contextual signals (vespertine pattern, breast-soothing, crib
   //     transition, already-provided info, already-used techniques) -----
-  const signals = extractSignals({ message, conversation });
+  const signals = extractSignals({
+    message,
+    conversation,
+    ageBand: namespace,
+    ageDays: age?.days ?? null,
+  });
 
   // 3) Context evaluation ---------------------------------------------
   const babyContext = {
@@ -196,6 +202,19 @@ export async function processTurn({ message, babyProfile, conversation, conversa
     if (negAssocFix.appended) {
       draft.text = negAssocFix.text;
       draft.negativeAssociationReassuranceAppended = true;
+    }
+
+    // Gender post-fix: when the mother uses feminine cues (minha bebê / ela /
+    // dela), surgically rewrite known templated phrases that may have leaked
+    // in masculine form (e.g. "ele continua agitado" from the satiety closing
+    // block). Conservative: only fixes unambiguous templated patterns.
+    const genderFix = enforceGenderConsistency({
+      text: draft.text,
+      userMessage: message,
+    });
+    if (genderFix.corrections.length) {
+      draft.text = genderFix.text;
+      draft.genderCorrections = genderFix.corrections;
     }
 
     safety = checkForbiddenContent({

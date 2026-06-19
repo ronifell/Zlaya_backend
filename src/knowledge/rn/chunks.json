@@ -380,6 +380,64 @@
       "relatedLessons": [],
       "escalateTo": ["familyPediatrician", "humanSupport"],
       "text": "Sinais como dificuldade respiratória, coloração arroxeada, letargia importante, febre, vômitos em jato persistentes, sangue nas fezes, recusa alimentar persistente, sinais de desidratação (fralda seca por mais de 6h, fontanela afundada) ou perda de peso são sinais de alerta clínico. Nesses casos, a Zlaya não conduz orientação metodológica — encaminha imediatamente para avaliação com o pediatra da família e/ou suporte humano."
+    },
+    {
+      "id": "rn-chunk-choro-no-banho",
+      "namespace": "RN",
+      "theme": "choro_banho_rn",
+      "intent": ["choro_banho", "conforto_rotina"],
+      "ageBand": "RN",
+      "ageRangeDays": [0, 28],
+      "safetyLevel": "verde",
+      "contentType": "orientacao_pratica",
+      "allowedAction": "orientar contenção corporal, posições seguras e ajustes ambientais para reduzir o choro durante o banho",
+      "blockedAction": "tratar choro no banho como problema alimentar; submergir o bebê sem apoio firme; deixar o bebê sozinho na água por qualquer fração de tempo; trocar o foco da queixa para mamada efetiva ou produção de leite sem que a mãe tenha trazido essa pista",
+      "relatedLessons": [],
+      "askIfMissing": ["se a mãe percebe que o bebê chora ANTES de entrar na água, na ENTRADA da água ou ao LONGO do banho", "temperatura do ambiente onde o banho é feito", "duração do banho"],
+      "text": "CHORO DURANTE O BANHO NO RN — orientação prática (NÃO desviar para investigação alimentar). É comum que recém-nascidos chorem durante o banho, especialmente nos primeiros dias. Causas mais frequentes: SENSAÇÃO DE QUEDA / INSEGURANÇA (falta de contenção), FRIO (ambiente, água ou correnteza de ar), MUDANÇA ABRUPTA de ambiente. CONDUTA: (1) ENROLAR o bebê em uma FRALDA DE PANO durante o banho, mantendo a contenção enquanto molha o corpinho aos poucos — isso costuma trazer mais segurança e reduz o reflexo de queda; (2) observar se ele melhora quando fica com o CORPINHO MAIS SUBMERSO na água, SEMPRE com APOIO FIRME e SUPERVISÃO TOTAL do adulto; (3) testar a posição DE BARRIGUINHA PARA BAIXO apoiado no braço do adulto — essa posição costuma acalmar muitos bebês, mas SÓ deve ser feita com APOIO FIRME, CONTROLE TOTAL DO CORPO e SUPERVISÃO permanente; (4) manter o AMBIENTE AQUECIDO, evitar correntes de ar; (5) deixar TUDO PREPARADO (toalha, roupinha, fralda) ANTES de começar o banho, para não deixar o bebê molhado e exposto; (6) escolher um momento em que o bebê NÃO esteja com muita fome nem muito irritado — banho logo após uma mamada cheia pode aumentar desconforto ou regurgitação em alguns bebês; (7) banho CURTO; (8) com repetição e segurança, o banho tende a ficar mais tranquilo. NÃO indicar como prioritárias as aulas de cólicas, Hora da Bruxa ou Mamadas Efetivas para essa queixa específica."
+    },
+    {
+      "id": "rn-chunk-medo-associacao-negativa-rebuttal",
+      "namespace": "RN",
+      "theme": "associacao_sono_mamada",
+      "intent": ["medo_associacao_negativa", "dificuldade_para_dormir"],
+      "ageBand": "RN",
+      "ageRangeDays": [0, 28],
+      "safetyLevel": "verde",
+      "contentType": "tranquilizacao_direta",
+      "allowedAction": "afastar de forma direta e explícita a hipótese de associação negativa quando a mãe verbalizar medo de vício/manha/mau hábito",
+      "blockedAction": "usar 'vício', 'manha' ou 'mau hábito' como categoria válida; afastar a hipótese apenas de forma genérica sem citar a idade do bebê",
+      "relatedLessons": ["lesson-passo-4-alimentacao-sono"],
+      "text": "QUANDO A MÃE VERBALIZA MEDO DE ASSOCIAÇÃO NEGATIVA / VÍCIO / MAU HÁBITO NO RN: a resposta DEVE conter, de forma direta e explícita, uma frase do tipo: 'Com [N] dias, seu bebê AINDA NÃO CRIA associação comportamental negativa por dormir no peito, buscar o peito ou precisar voltar ao peito para se acalmar.' Use o N exato da idade do PERFIL. Reforce: nessa idade o peito é alimento, regulação, conforto e organização fisiológica — não vício, manha ou mau hábito. NÃO use as palavras 'vício', 'manha' ou 'mau hábito' como categoria válida para o RN. Depois de afastar a hipótese comportamental, conduza pela hierarquia alimentar (mamada efetiva, saciedade, produção/transferência, conforto pós-mamada, vertical 30-40 min, transição calma)."
+    },
+    {
+      "id": "rn-chunk-despertar-cedo-fome",
+      "namespace": "RN",
+      "theme": "despertar_noturno_investigar_fome",
+      "intent": ["despertares_noturnos", "dificuldade_manutencao_sono"],
+      "ageBand": "RN",
+      "ageRangeDays": [0, 28],
+      "safetyLevel": "verde",
+      "contentType": "hierarquia_investigacao",
+      "allowedAction": "investigar a mamada no horário do despertar como prioridade quando o bebê dorme cedo (19h-20h) e acorda 22h-00h",
+      "blockedAction": "abrir a resposta com 'É comum bebês apresentarem padrões de sono variados'; puxar Moro/charutinho/Travesseiro especulativamente sem que a mãe tenha relatado susto/desorganização",
+      "relatedLessons": ["lesson-mamadas-efetivas", "lesson-passo-4-alimentacao-sono"],
+      "askIfMissing": ["se a mãe oferece a mamada nesse horário do despertar", "se o bebê apresenta sinais de fome ao acordar (sucção ativa, busca pelo peito, mãozinhas na boca)", "se a mamada ao deitar foi efetiva"],
+      "text": "PADRÃO: RN inicia o sono entre 19h e 20h e acorda entre 22h e 00h demorando a voltar a dormir. Esse cenário, por si só, indica intervalo importante desde a última mamada. PERGUNTA INDISPENSÁVEL: 'Você alimenta a bebê nesse horário em que ela acorda?' / 'Nesse despertar, você oferece a mamada?'. Contextualize explicitamente: 'Como ele/ela iniciou o sono às 19h/20h e acorda perto das 23h, já está vindo de um intervalo importante desde a última mamada — se acorda com sinais de fome, deve ser alimentado.' SEQUÊNCIA: oferecer mamada → vertical 30-40 min → arroto → ambiente escuro/calmo → transferência ao berço. NÃO ABRA com 'É comum bebês apresentarem padrões variados'. Moro/charutinho/Travesseiro só se a mãe relatou susto/desorganização."
+    },
+    {
+      "id": "rn-chunk-madrugada-manter-noite",
+      "namespace": "RN",
+      "theme": "acorda_ao_deitar",
+      "intent": ["despertares_noturnos", "decisao_pratica_madrugada"],
+      "ageBand": "RN",
+      "ageRangeDays": [0, 28],
+      "safetyLevel": "verde",
+      "contentType": "decisao_pratica_direta",
+      "allowedAction": "responder de forma direta que a mãe fez certo em manter o ambiente noturno; orientar trocas de fralda com mínima luz/estímulo; tranquilizar sobre acordar perto de 8h-8h30",
+      "blockedAction": "usar linguagem comportamental como 'ajudar o bebê a se adaptar melhor ao sono' para RN; sugerir começar o dia em horários muito cedo após madrugada difícil",
+      "relatedLessons": [],
+      "text": "DECISÃO PRÁTICA DA MÃE NA MADRUGADA: a mãe pergunta se deveria ter 'começado o dia' (abrir janela, trocar pijama) ou se fez certo em manter ambiente noturno. RESPOSTA DIRETA na PRIMEIRA frase: 'Você fez certo em manter o ambiente noturno. Para um bebê de [N] dias, não precisa começar o dia nesse horário.' TRANQUILIZAR sobre o horário da manhã: acordar perto de 8h-8h30 depois de uma madrugada difícil NÃO é problema para o RN, não 'estraga' a rotina. ORIENTAÇÕES PRÁTICAS NA MADRUGADA: troca de fralda com MÍNIMA LUZ, POUCO MANUSEIO, SEM ESTÍMULO (para não sinalizar início do dia); ruído branco/escuro/calmo; se ele estiver desperto mas sem desconforto, manter ambiente noturno. INVESTIGAR a mamada da madrugada: foi efetiva, ele arrotou, ficou em posição vertical 30-40 min? Para o RN o foco é ORGANIZAÇÃO FISIOLÓGICA, NÃO adaptação comportamental ao sono."
     }
   ]
 }
