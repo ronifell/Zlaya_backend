@@ -141,8 +141,10 @@ const CASES = [
       // (not only with empathy). We accept several phrasings.
       mustContainOneOf: [
         ['sim, esse padrão', 'sim, esse comportamento', 'sim, é comum', 'sim, é esperado', 'em parte sim', 'pode ocorrer em rn', 'é comum no rn', 'é esperado no rn', 'é frequente no rn'],
-        // Satiety signs concretely listed
-        ['solta o peito', 'abre as mãozinhas'],
+        // Satiety signs concretely listed (accept both conjugated and
+        // infinitive forms — the LLM often switches between "ele solta o
+        // peito" and "ele deve soltar o peito").
+        ['solta o peito', 'soltar o peito', 'abre as mãozinhas', 'abrir as mãozinhas', 'abre as maozinhas', 'abrir as maozinhas'],
         // The 30-40 min vertical position
         ['30 a 40 minutos', '30 a 40 min', 'posição vertical'],
         // Reassurance about negative association
@@ -158,6 +160,76 @@ const CASES = [
         'fazendo manha',
       ],
       ageMustStayAt: 9,
+    },
+  },
+  {
+    id: 'teste-004-rn-6d-crib-day-night',
+    label: 'TESTE 004 (RN 6d) — bebê faz sonecas no berço de DIA mas não fica no berço à NOITE; intent NÃO pode ser adaptacao_ao_berco',
+    profile: { motherName: 'Sara', babyName: 'Bento', ageDays: 6 },
+    message:
+      'Bebê 6 dias, estabelecendo uma rotina. Faz todas as sonecas no berço, mas a noite não quer ficar no berço. Estou tendo que pega-lo e leva-lo para o meu quarto. o que pode ser?',
+    checks: {
+      // Internal classification must NOT be `adaptacao_ao_berco` for this
+      // pattern — Hayato/dossier feedback explicitly asked for the override.
+      intentMustNotBe: ['adaptacao_ao_berco'],
+      // The response must name the night-feeding hypothesis directly
+      // (and NOT lead with crib adaptation / lessons about "day-night swap"
+      // or "starting nighttime sleep").
+      mustContainAny: [
+        'mamada noturna',
+        'producao de leite',
+        'produção de leite',
+        'baixa produção',
+        'baixa producao',
+        'menor produção',
+        'menor producao',
+        'menor transferência',
+        'menor transferencia',
+      ],
+      mustNotContain: [
+        'fome residual acumulada',
+        'mamadas agrupadas',
+        'mamada agrupada',
+        'cluster feeding',
+        'cluster',
+        'autorregulação',
+        'fazendo manha',
+        'a produção de leite da mãe diminui após as 18h',
+        'a produção diminui após as 18h',
+        'a produção cai após as 18h',
+      ],
+      ageMustStayAt: 6,
+    },
+  },
+  {
+    id: 'teste-004-rn-12d-diaper-before-feed',
+    label: 'TESTE 004 (RN 12d/02 — Hayato) — orientação de troca de fralda ANTES da mamada na madrugada',
+    profile: { motherName: 'Aline', babyName: 'Théo', ageDays: 12 },
+    message:
+      'Meu bebe esta noite acordou para mamar 4:40. Troquei a fralda de xixi pois estava muito cheia. Terminou de mamar era 5:20. Mas demorou para engrenar no sono novamente. Era quase 6:50 da manha quando ele realmente dormiu. Neste caso, seria interessante ter "começado o dia" com ele, abrindo janela, trocando o pijaminha e tentado colocar pra dormir de nvo, ou, manter ele ali no quarto - como fiz - para que ele dormisse? Sempre respeito a janela de sono, mas ele não estava dormindo de jeito nenhum. Ambiente estava adequado, escuro, ruido, fralda trocada, mama. Minha questão é: o dia dele nao vai inicar muito tarde? Provavelmente ele irá acordar umas 8:30 (maximo), pois irei acorda-lo prs mamar.',
+    checks: {
+      // Must validate keeping the night ambient + must include the
+      // diaper-before-feed orientation that Hayato flagged as missing
+      // from the base, plus the 30-40 min vertical position. The
+      // "before-or-after" question is only mandatory when the mother
+      // hasn't already provided the info — in this exact message she
+      // already said she changed BEFORE feeding, so we don't require it.
+      mustContainAny: ['fez certo', 'manter o ambiente noturno'],
+      mustContainOneOf: [
+        // the diaper-before-feed orientation
+        ['antes da mamada', 'antes de mamar', 'inverter a sequencia', 'inverter a sequência', 'trocar a fralda antes', 'troca da fralda antes'],
+        // 30-40 min vertical
+        ['30 a 40 minutos', '30 a 40 min'],
+      ],
+      mustNotContain: [
+        'fome residual acumulada',
+        'mamadas agrupadas',
+        'cluster feeding',
+        'cluster',
+        'ajudar o bebê a se adaptar melhor ao sono',
+        'treinamento de sono',
+      ],
+      ageMustStayAt: 12,
     },
   },
   {

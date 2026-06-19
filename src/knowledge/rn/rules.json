@@ -279,6 +279,21 @@
       "id": "rn-cautious-flaccid-breast",
       "rule": "Ao investigar produção materna, a IA DEVE usar linguagem cautelosa ao falar sobre 'seios flácidos' ou 'enchimento'. NÃO sugerir que seio flácido = pouco leite. Priorizar investigação de EFETIVIDADE da mamada: sucção ativa, deglutição audível, adormecimento muito rápido, busca pelo peito em pouco tempo, sinais reais de saciedade. Se citar enchimento, contextualizar que ele varia naturalmente e não é diagnóstico isolado.",
       "rationale": "TESTE 003 (18/06/2026, RN 9d): a pergunta sobre 'seios mais flácidos' precisa de cuidado — o avaliador pediu que não dê a entender diagnóstico isolado."
+    },
+    {
+      "id": "rn-evening-production-cautious-phrasing",
+      "rule": "Ao explicar o padrão vespertino/noturno, a IA DEVE usar SEMPRE formulação CONDICIONAL/POSSIBILÍSTICA — 'pode haver menor produção, menor fluxo ou menor transferência de leite no fim da tarde/noite'. É PROIBIDO usar formulações categóricas/absolutas como 'a produção de leite da mãe diminui após as 18h' ou 'no fim da tarde a produção cai', porque isso transforma uma tendência fisiológica em regra para todas as mães e gera ansiedade. A formulação correta apresenta a queda de produção/fluxo/transferência como POSSIBILIDADE a investigar, não como certeza diagnóstica.",
+      "rationale": "TESTE 004 (19/06/2026, RN 9d): o avaliador pediu trocar 'a produção de leite da mãe diminua após as 18h' por 'pode haver menor produção, menor fluxo ou menor transferência de leite' para não gerar ansiedade na mãe."
+    },
+    {
+      "id": "rn-night-diaper-change-before-feed",
+      "rule": "Quando o RN acorda à noite e a troca de fralda for necessária, a SEQUÊNCIA OFICIAL do método é: trocar a fralda ANTES da mamada (não depois), com MÍNIMA LUZ, POUCO MANUSEIO e SEM CONVERSA. Isso preserva o efeito de relaxamento da mamada e evita que o bebê desperte novamente após mamar. Se a troca for feita DEPOIS da mamada, é comum o bebê despertar e demorar muito mais para voltar a dormir. Quando a mãe relata despertar prolongado após a mamada de madrugada, a IA DEVE perguntar: 'A troca de fralda foi feita antes ou depois da mamada?' — e, se foi depois, orientar a inversão da sequência nas próximas madrugadas. NUNCA orientar acender a luz do teto, conversar, abrir janela ou trocar pijama nessa troca de fralda — esses estímulos sinalizam início do dia.",
+      "rationale": "TESTE 004 (19/06/2026, RN 12d/02 — observação do Hayato): a orientação sobre trocar a fralda ANTES da mamada na madrugada não estava na base e é decisiva para a nota do caso."
+    },
+    {
+      "id": "rn-crib-day-ok-night-lessons-priority",
+      "rule": "Para o caso de bebê que aceita o berço durante o dia mas não fica no berço à noite (mamada noturna insuficiente / baixa produção materna no período da noite), as aulas prioritárias devem ser: MAMADAS EFETIVAS, ESTIMULE O ARROTO, O QUE É O REFLUXO?, CHARUTINHO E REFLEXOS DE MORO. A Estratégia do Travesseiro entra apenas como apoio posterior. As aulas ESTABELEÇA O HORÁRIO DO INÍCIO DO SONO NOTURNO e EVITE QUE O BEBÊ TROQUE O DIA PELA NOITE NÃO devem ser indicadas como principais nesse cenário, porque o caso não aponta primariamente para troca dia-noite nem para organização do início do sono noturno.",
+      "rationale": "TESTE 004 (RN 6d): o avaliador pediu para retirar 'Início do Sono Noturno' e 'Troca dia-noite' como aulas principais e priorizar Mamadas Efetivas, Estimule o Arroto, Refluxo, Charutinho/Moro."
     }
   ],
 

@@ -172,6 +172,50 @@ export function applyRnIntentOverrides({ intent, message, ageDays }) {
   const mentionsCrib = /berco|berço|moises|moisés|deitar|colocar no berco|coloco no berco/.test(norm);
   const mentionsFeeding = /mama|mamada|peito|leite|amament|formula|fórmula|mamadeira/.test(norm);
 
+  // RN crib pattern: baby accepts the crib during the DAY but not at NIGHT.
+  // Test feedback (TESTE 004 RN 6d): the developer asked us to STOP logging
+  // this pattern as `adaptacao_ao_berco` because the methodologically correct
+  // hypothesis is night-feeding insufficient / low milk transfer at night —
+  // not crib adaptation. We reclassify to `mamadas` so retrieval, audit and
+  // the prompt all line up with the actual hypothesis.
+  const dayInCrib =
+    /(sonecas?|cochilo|dorme|aceita)[^.]{0,40}(no\s+ber[cç]o|no\s+ber[cç]inho|no\s+moise[s]?)/.test(norm) ||
+    /(durante\s+o\s+dia|de\s+dia)[^.]{0,40}(ber[cç]o|moise[s]?)/.test(norm) ||
+    /(faz\s+todas?\s+as?\s+sonecas?|todas\s+as\s+sonecas?)[^.]{0,40}(ber[cç]o|moise[s]?)/.test(norm) ||
+    /(ber[cç]o|moise[s]?)[^.]{0,40}(durante\s+o\s+dia|de\s+dia)/.test(norm);
+  const nightOutOfCrib =
+    /(a\s+noite|à\s+noite|de\s+noite|noite|madrugada)[^.]{0,80}(n[aã]o\s+quer|n[aã]o\s+fica|n[aã]o\s+aceita|n[aã]o\s+dorme)[^.]{0,40}(ber[cç]o|moise[s]?)/.test(norm) ||
+    /(n[aã]o\s+quer|n[aã]o\s+fica|n[aã]o\s+aceita)[^.]{0,40}(no\s+ber[cç]o|no\s+moise[s]?)[^.]{0,40}(a\s+noite|à\s+noite|de\s+noite|noite)/.test(norm) ||
+    /(tenho\s+que\s+pega[\- ]?lo|tenho\s+que\s+pega[\- ]?la|levar?\s+para\s+o\s+(meu\s+)?quarto|levo\s+para\s+o\s+(meu\s+)?quarto)/.test(norm);
+  const cribDayOkNightProblem = dayInCrib && nightOutOfCrib;
+
+  if (
+    cribDayOkNightProblem &&
+    (intent?.intent === 'adaptacao_ao_berco' ||
+      intent?.intent === 'dificuldade_manutencao_sono' ||
+      intent?.intent === 'comportamento_esperado' ||
+      intent?.intent === 'ambiguo' ||
+      intent?.intent === 'dificuldade_para_dormir')
+  ) {
+    const target = 'mamadas';
+    return {
+      intent: {
+        ...intent,
+        intent: target,
+        rationale:
+          (intent.rationale ? intent.rationale + ' | ' : '') +
+          `override_rn: bebê aceita o berço de dia mas não fica no berço à noite — hipótese central é mamada noturna insuficiente / baixa produção materna no período da noite, não adaptação ao berço → ${target}`,
+        source: (intent.source || 'unknown') + '+rn_override',
+        originalIntent: intent.intent,
+      },
+      override: {
+        from: intent.intent,
+        to: target,
+        reason: 'rn_crib_day_ok_night_problem',
+      },
+    };
+  }
+
   if (intent?.intent === 'associacao_comportamental' && (mentionsPacifier || mentionsFeeding)) {
     const target = mentionsCrib
       ? 'adaptacao_ao_berco'

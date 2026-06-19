@@ -218,6 +218,7 @@ const SIGNAL_DEFS = [
       'tenho que pegar a noite', 'tenho que pega-lo', 'tenho que pega lo',
     ],
     boostThemes: [
+      'mamada_noturna_insuficiente',
       'baixa_producao_fim_dia',
       'baixa_producao_leite',
       'mamadas_ineficientes',
@@ -225,7 +226,7 @@ const SIGNAL_DEFS = [
       'busca_excessiva_peito',
     ],
     priority:
-      'PADRÃO DIAGNÓSTICO CRÍTICO: bebê faz sonecas no berço DURANTE O DIA mas NÃO permanece no berço à NOITE. Isso significa que o berço NÃO é o problema central — a hipótese prioritária é MAMADA NOTURNA INSUFICIENTE OU BAIXA PRODUÇÃO MATERNA NO PERÍODO DA NOITE. A IA NÃO deve abrir por adaptação ao berço, Moisés, Estratégia do Travesseiro ou reflexo de Moro. NOMEIE diretamente: "Como ele/ela aceita o berço durante o dia, o problema não é adaptação ao berço — a primeira coisa a investigar é a mamada noturna e a produção de leite nesse período." HIERARQUIA OBRIGATÓRIA: (1) mamada noturna — pergunte EXPLICITAMENTE: "Antes de tentar colocá-lo no berço à noite, ele mama? Como é essa mamada? Ele parece ficar satisfeito ou continua procurando o peito?"; (2) possível baixa produção de leite no período da noite; (3) sinais de saciedade; (4) tempo em posição vertical (30 a 40 min); (5) arroto; (6) refluxo/desconforto; (7) reflexo de Moro; (8) só por último berço/Travesseiro. PERGUNTA OBRIGATÓRIA também: "Ele mama no peito, fórmula ou os dois?".',
+      'PADRÃO DIAGNÓSTICO CRÍTICO: bebê faz sonecas no berço DURANTE O DIA mas NÃO permanece no berço à NOITE. Isso significa que o berço NÃO é o problema central — a hipótese prioritária é MAMADA NOTURNA INSUFICIENTE OU BAIXA PRODUÇÃO MATERNA NO PERÍODO DA NOITE. A IA NÃO deve abrir por adaptação ao berço, Moisés, Estratégia do Travesseiro ou reflexo de Moro. NOMEIE diretamente: "Como ele/ela aceita o berço durante o dia, o problema não é adaptação ao berço — a primeira coisa a investigar é a mamada noturna e a produção de leite nesse período." HIERARQUIA OBRIGATÓRIA: (1) mamada noturna — pergunte EXPLICITAMENTE: "Antes de tentar colocá-lo no berço à noite, ele mama? Como é essa mamada? Ele parece ficar satisfeito ou continua procurando o peito?"; (2) possível baixa produção de leite no período da noite (pode haver menor produção, menor fluxo ou menor transferência — formule de forma condicional); (3) sinais de saciedade; (4) tempo em posição vertical (30 a 40 min); (5) arroto; (6) refluxo/desconforto; (7) reflexo de Moro; (8) só por último berço/Travesseiro. PERGUNTA OBRIGATÓRIA também: "Ele mama no peito, fórmula ou os dois?". AULAS PRIORITÁRIAS: MAMADAS EFETIVAS, ESTIMULE O ARROTO, O QUE É O REFLUXO?, CHARUTINHO E REFLEXOS DE MORO. NÃO indique como principais ESTABELEÇA O HORÁRIO DO INÍCIO DO SONO NOTURNO nem EVITE QUE O BEBÊ TROQUE O DIA PELA NOITE — o caso não aponta para troca dia-noite. A Estratégia do Travesseiro entra apenas como apoio posterior, nunca como eixo principal.',
   },
   {
     id: 'night_hunger_signs_rn',
@@ -436,6 +437,26 @@ const SIGNAL_DEFS = [
     ],
     priority:
       'DECISÃO PRÁTICA DA MÃE NA MADRUGADA: ela pergunta se deveria ter "começado o dia" (abrir janela, trocar pijama) ou se fez certo em manter ambiente noturno. RESPONDA DIRETAMENTE na PRIMEIRA frase: "Você fez certo em manter o ambiente noturno. Para um bebê de [N] dias, não precisa começar o dia nesse horário." Tranquilize a mãe sobre o horário da manhã: acordar perto de 8h/8h30 depois de uma madrugada difícil NÃO é problema para o RN. ORIENTAÇÕES NA MADRUGADA: trocar fralda com MÍNIMA luz, pouco manuseio, sem estímulo (para não sinalizar início do dia); manter ruído branco/escuro/calmo; se ele estiver desperto sem desconforto, manter ambiente noturno. INVESTIGUE a mamada de madrugada: foi efetiva, ele arrotou, permaneceu em posição vertical 30 a 40 minutos? NÃO use frases comportamentais como "ajudar o bebê a se adaptar melhor ao sono" — para RN o foco é organização fisiológica.',
+  },
+  {
+    id: 'night_diaper_change_routine',
+    label: 'Troca de fralda na madrugada — orientar trocar ANTES da mamada (Hayato)',
+    directive: true,
+    phrases: [
+      'troquei a fralda', 'trocou a fralda', 'troquei fralda', 'trocar a fralda',
+      'fralda de xixi', 'fralda muito cheia', 'fralda cheia', 'fralda estava cheia',
+      'troquei a fralda pois', 'troquei a fralda porque',
+      'fralda na madrugada', 'troca de fralda na madrugada',
+      'troca a fralda', 'trocar fralda', 'trocou fralda',
+      'troquei o pijama', 'troquei a roupinha',
+      'depois da mamada troco', 'apos mamada troco', 'após mamada troco',
+      'antes da mamada troco', 'antes de mamar troco',
+      'troquei e depois mamou', 'mamou e troquei', 'mamou e depois troquei',
+      'troquei e ele mamou', 'troquei e ela mamou',
+    ],
+    boostThemes: ['rotina_madrugada', 'acorda_ao_deitar', 'baixa_producao_fim_dia', 'mamadas_ineficientes'],
+    priority:
+      'TROCA DE FRALDA NA MADRUGADA — ORIENTAÇÃO PRÁTICA OFICIAL DO MÉTODO: a sequência ideal é TROCAR A FRALDA ANTES DA MAMADA, NUNCA DEPOIS. Trocar a fralda DEPOIS da mamada tende a despertar o bebê novamente, faz ele perder o estado de sonolência conquistado pela mamada e prolonga muito o tempo até o retorno ao sono. Trocando ANTES, o bebê mama em seguida, relaxa, arrota e adormece com mais naturalidade. CONDUTA OPERACIONAL OBRIGATÓRIA NA RESPOSTA: (1) trocar a fralda com MÍNIMA LUZ (luz indireta/abajur baixo, NUNCA luz do teto), POUCO MANUSEIO e SEM CONVERSA; (2) NÃO abrir janela, NÃO trocar de pijama, NÃO estimular o bebê; (3) em seguida, oferecer a mamada; (4) após a mamada, manter em POSIÇÃO VERTICAL POR 30 A 40 MINUTOS, observar arroto; (5) só então transferir para o berço com calma. PERGUNTA INDISPENSÁVEL quando a mãe relata despertar prolongado após a mamada de madrugada: "A troca de fralda foi feita antes ou depois da mamada?". Se a mãe relatou ter feito DEPOIS, EXPLIQUE de forma direta que isso pode ter contribuído para o despertar prolongado e oriente INVERTER a sequência nas próximas madrugadas (trocar antes, mamar depois). NÃO trate a troca de fralda noturna como sinal de início do dia. Não há problema, para o RN, em o dia começar um pouco mais tarde após uma madrugada difícil.',
   },
   {
     id: 'bath_crying_rn',
