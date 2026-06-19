@@ -157,12 +157,12 @@
       "ageRangeDays": [0, 28],
       "safetyLevel": "amarelo",
       "contentType": "explicacao_fisiologica",
-      "allowedAction": "explicar refluxo fisiológico, investigar fatores associados e encaminhar para conteúdos médicos/suporte quando sinais persistentes",
-      "blockedAction": "diagnosticar refluxo patológico",
+      "allowedAction": "explicar refluxo fisiológico, diferenciá-lo da possibilidade de refluxo patológico, orientar medidas posturais (vertical 30-40 min e elevação do colchão em 45°) e encaminhar para o material do pediatra nas aulas extras + suporte humano sempre que houver suspeita/investigação de refluxo patológico",
+      "blockedAction": "diagnosticar refluxo patológico; tratar suspeita de refluxo patológico sem encaminhar para suporte humano",
       "relatedLessons": ["lesson-refluxo", "lesson-estimule-arroto"],
       "escalateTo": ["pediatricianBonus", "humanSupport", "familyPediatrician"],
-      "askIfMissing": ["frequência de regurgitações", "comportamento após mamar", "irritabilidade ao deitar", "arqueamento corporal", "padrão de sono associado", "facilidade de retorno ao sono"],
-      "text": "O refluxo fisiológico é comum no RN devido à imaturidade do sistema digestivo. A investigação inclui: tempo em posição vertical após alimentação, manipulação após a mamada, elevação do berço, volume das mamadas. ORIENTAÇÃO PRÁTICA OFICIAL: quando há regurgitação, soluço, dificuldade para arrotar ou despertar ao deitar, manter o bebê em POSIÇÃO VERTICAL POR 30 A 40 MINUTOS após a mamada antes de tentar colocá-lo no berço/Moisés. Essa conduta precisa estar na resposta à mãe, não apenas em forma de pergunta. A Zlaya não emite diagnóstico de refluxo patológico — diante de sinais persistentes ou desconforto importante, encaminha para as aulas bônus com o pediatra Roberto Franklin, suporte humano e/ou avaliação com o pediatra da família."
+      "askIfMissing": ["frequência de regurgitações", "comportamento após mamar", "irritabilidade ao deitar", "arqueamento corporal", "padrão de sono associado", "facilidade de retorno ao sono", "presença de vômitos intensos/em jato, engasgos frequentes ou recusa alimentar"],
+      "text": "O refluxo fisiológico é comum no RN devido à imaturidade do sistema digestivo. Quando o bebê acorda chorando de sonecas curtas no berço, melhora ao ser pego no colo e desperta cerca de 20 minutos depois de ser deitado, esse padrão pede investigação de desconforto pós-mamada e refluxo fisiológico. A investigação inclui: tempo em posição vertical após alimentação, manipulação após a mamada, elevação do berço, volume das mamadas. DIFERENCIAÇÃO OBRIGATÓRIA: o refluxo fisiológico (regurgitações leves, soluço, desconforto leve ao deitar) deve ser diferenciado da POSSIBILIDADE de refluxo patológico — sinais de alerta: vômitos intensos/em jato, engasgos frequentes, recusa alimentar, arqueamento corporal importante, irritabilidade persistente. MEDIDAS POSTURAIS OFICIAIS (aplicáveis TANTO ao refluxo fisiológico QUANTO à suspeita/investigação de refluxo patológico, quando indicadas pelo método/material do pediatra): (1) manter o bebê em POSIÇÃO VERTICAL POR 30 A 40 MINUTOS após a mamada antes de colocá-lo no berço/Moisés; (2) ELEVAÇÃO DO COLCHÃO EM 45°. Essas condutas precisam estar na resposta à mãe, não apenas em forma de pergunta. A Zlaya NUNCA emite diagnóstico de refluxo patológico. ENCAMINHAMENTO OBRIGATÓRIO: sempre que houver SUSPEITA e/ou INVESTIGAÇÃO de refluxo patológico, a Zlaya deve (a) conduzir a mãe para o material do pediatra Roberto Franklin nas aulas extras/bônus do curso; (b) encaminhar para o SUPORTE HUMANO. Esse encaminhamento NÃO depende da persistência do padrão — a própria suspeita de refluxo patológico já exige suporte humano. Também orientar avaliação com o pediatra da família."
     },
     {
       "id": "rn-chunk-mamadas-ineficientes",
@@ -209,7 +209,7 @@
       "blockedAction": "concluir dependência emocional ou associação negativa de sono",
       "relatedLessons": ["lesson-travesseiro", "lesson-berco-do-bebe", "lesson-charutinho-moro"],
       "askIfMissing": ["tempo em posição vertical após alimentação", "padrão do despertar após ser deitado", "presença de regurgitação", "irritabilidade ao deitar", "padrão alimentar associado"],
-      "text": "Diante de dificuldade recorrente de permanência no berço no RN, a investigação prioritária é: (1) pouco tempo em posição vertical após mamada; (2) necessidade de arroto e desconforto leve pós-mamada ao deitar; (3) reflexo de Moro; (4) dificuldade de adaptação à superfície; (5) comportamento de vigília por fome; (6) refluxo fisiológico. ORIENTAÇÃO PRÁTICA OFICIAL: manter o bebê em POSIÇÃO VERTICAL POR 30 A 40 MINUTOS após a mamada antes da transição para o berço, com arroto estimulado — verbalize explicitamente a hipótese de desconforto ao deitar quando houver choro na transferência e dificuldade de arrotar. SEQUÊNCIA PRÁTICA quando a mãe pergunta como melhorar: mamada efetiva → segundo peito → saciedade → arroto → vertical 30-40 min → ambiente calmo → charutinho se Moro → transferência. A Estratégia do Travesseiro é recurso de APOIO para adaptação à superfície — NÃO eixo principal quando alimentação, arroto ou desconforto pós-mamada forem prioritários. NÃO oriente 'manter a chupeta presa/segura'."
+      "text": "Diante de dificuldade recorrente de permanência no berço no RN, a investigação prioritária é: (1) pouco tempo em posição vertical após mamada; (2) necessidade de arroto e desconforto leve pós-mamada ao deitar; (3) reflexo de Moro; (4) dificuldade de adaptação à superfície; (5) comportamento de vigília por fome; (6) refluxo fisiológico. ORIENTAÇÃO PRÁTICA OFICIAL: manter o bebê em POSIÇÃO VERTICAL POR 30 A 40 MINUTOS após a mamada antes da transição para o berço, com arroto estimulado — verbalize explicitamente a hipótese de desconforto ao deitar quando houver choro na transferência e dificuldade de arrotar. SEQUÊNCIA PRÁTICA quando a mãe pergunta como melhorar: garantir uma mamada/oferta alimentar efetiva (de acordo com a forma de alimentação — se for peito, oferecer o segundo peito quando necessário) → saciedade → arroto → vertical 30-40 min → ambiente calmo → charutinho se Moro (inclusive nas sonecas diurnas) → transferência. A Estratégia do Travesseiro é recurso de APOIO para adaptação à superfície — NÃO eixo principal quando alimentação, arroto ou desconforto pós-mamada forem prioritários. NÃO oriente 'manter a chupeta presa/segura'."
     },
     {
       "id": "rn-chunk-hora-da-bruxa",
@@ -438,6 +438,66 @@
       "blockedAction": "usar linguagem comportamental como 'ajudar o bebê a se adaptar melhor ao sono' para RN; sugerir começar o dia em horários muito cedo após madrugada difícil",
       "relatedLessons": [],
       "text": "DECISÃO PRÁTICA DA MÃE NA MADRUGADA: a mãe pergunta se deveria ter 'começado o dia' (abrir janela, trocar pijama) ou se fez certo em manter ambiente noturno. RESPOSTA DIRETA na PRIMEIRA frase: 'Você fez certo em manter o ambiente noturno. Para um bebê de [N] dias, não precisa começar o dia nesse horário.' TRANQUILIZAR sobre o horário da manhã: acordar perto de 8h-8h30 depois de uma madrugada difícil NÃO é problema para o RN, não 'estraga' a rotina. ORIENTAÇÕES PRÁTICAS NA MADRUGADA: troca de fralda com MÍNIMA LUZ, POUCO MANUSEIO, SEM ESTÍMULO (para não sinalizar início do dia); ruído branco/escuro/calmo; se ele estiver desperto mas sem desconforto, manter ambiente noturno. INVESTIGAR a mamada da madrugada: foi efetiva, ele arrotou, ficou em posição vertical 30-40 min? Para o RN o foco é ORGANIZAÇÃO FISIOLÓGICA, NÃO adaptação comportamental ao sono."
+    },
+    {
+      "id": "rn-chunk-travesseiro-execucao-pratica",
+      "namespace": "RN",
+      "theme": "estrategia_travesseiro_execucao",
+      "intent": ["adaptacao_ao_berco", "transicao_colo_berco", "dificuldade_manutencao_sono"],
+      "ageBand": "RN",
+      "ageRangeDays": [0, 28],
+      "safetyLevel": "verde",
+      "contentType": "conduta_pratica_oficial",
+      "allowedAction": "corrigir a aplicação da Estratégia do Travesseiro quando a mãe já tentou sem sucesso, explicando a etapa intermediária (travesseiro sobre o colo com contenção das mãos) e orientando reassistir à aula e repetir com consistência",
+      "blockedAction": "citar a Estratégia do Travesseiro de forma genérica quando a mãe já tentou sem sucesso; orientar colocar o bebê diretamente no berço e esperar que ele aceite, sem explicar a etapa intermediária",
+      "relatedLessons": ["lesson-travesseiro", "lesson-charutinho-moro", "lesson-berco-do-bebe"],
+      "askIfMissing": ["como está a produção de leite, especialmente no período da tarde", "se a bebê mama e parece saciada antes de tentar o berço ou acorda chorando poucos minutos depois", "como a mãe está aplicando o travesseiro atualmente"],
+      "text": "EXECUÇÃO PRÁTICA DA ESTRATÉGIA DO TRAVESSEIRO (quando a mãe já tentou e não teve sucesso): a Zlaya NÃO deve apenas citar a estratégia de forma genérica — deve CORRIGIR a forma de aplicação. Oriente a mãe a ASSISTIR ou REASSISTIR à aula da Estratégia do Travesseiro e repetir o processo EXATAMENTE como é ensinado. ETAPA INTERMEDIÁRIA OBRIGATÓRIA: nos primeiros dias, muitas sonecas podem acontecer com o bebê NO TRAVESSEIRO EM CIMA DO COLO, com a mão da mãe fazendo a CONTENÇÃO enquanto for necessário. Essa etapa ajuda o bebê a se organizar, sentir outra textura e se preparar para a transição para o berço com mais leveza. A mãe NÃO deve entender que precisa colocar o bebê diretamente no berço e esperar que ele aceite — o travesseiro sobre o colo com contenção é uma ETAPA do processo, não uma falha. CONSISTÊNCIA: a estratégia precisa ser feita com LEVEZA e REPETIÇÃO, de forma consistente. Manter o bebê dia e noite EXCLUSIVAMENTE no colo tende a reforçar a dificuldade de transição — mas isso não deve ser tratado como associação negativa, vício ou mau hábito (no RN essas categorias não se aplicam). Antes do berço, observe também se mamou bem, se arrotou e mantenha em posição vertical por 30 a 40 minutos após a mamada."
+    },
+    {
+      "id": "rn-chunk-rn-triade-dificuldade",
+      "namespace": "RN",
+      "theme": "estrategia_travesseiro_execucao",
+      "intent": ["adaptacao_ao_berco", "dificuldade_manutencao_sono", "desconforto_fisiologico"],
+      "ageBand": "RN",
+      "ageRangeDays": [0, 28],
+      "safetyLevel": "verde",
+      "contentType": "enquadramento_metodologico",
+      "allowedAction": "organizar a leitura do caso pela tríade alimentação + desconforto gástrico + ambiente desajustado ao sono antes de concluir que é apenas dificuldade com o berço",
+      "blockedAction": "concluir que é apenas dificuldade com o berço sem avaliar alimentação e desconforto gástrico",
+      "relatedLessons": ["lesson-mamadas-efetivas", "lesson-refluxo", "lesson-estimule-arroto", "lesson-travesseiro"],
+      "askIfMissing": ["como está a produção de leite, especialmente no período da tarde", "se há queda de fluxo de leite ou maior irritação à tarde", "se há regurgitação ou desconforto ao deitar"],
+      "text": "ENQUADRAMENTO DO RN COM DIFICULDADE DE SONO/BERÇO: nessa idade, muitas dificuldades estão relacionadas a uma TRÍADE — (1) ALIMENTAÇÃO (mamada efetiva, produção/transferência de leite, especialmente queda de fluxo no período da TARDE); (2) DESCONFORTO GÁSTRICO (arroto, refluxo fisiológico, desconforto pós-mamada ao deitar); (3) AMBIENTE DESAJUSTADO AO SONO. A Zlaya deve organizar a resposta nessa tríade antes de concluir que é apenas 'dificuldade com o berço'. AVALIAÇÃO DA PRODUÇÃO: pergunte como está a produção de leite, principalmente no período da tarde. Se houver queda de fluxo à tarde ou sinais de que o bebê não fica satisfeito, pode ser necessário COMPLEMENTAR conforme orientação do curso/suporte. POSIÇÃO VERTICAL: 30 a 40 minutos após a mamada. PERGUNTA INDISPENSÁVEL: 'Você percebe queda no fluxo de leite ou maior irritação no período da tarde? Ela mama e parece saciada antes de tentar colocar no berço, ou acorda chorando poucos minutos depois como se ainda estivesse desconfortável ou buscando mais peito?'"
+    },
+    {
+      "id": "rn-chunk-match-periodo-queixa",
+      "namespace": "RN",
+      "theme": "ajuste_periodo_queixa",
+      "intent": ["mamadas", "dificuldade_manutencao_sono"],
+      "ageBand": "RN",
+      "ageRangeDays": [0, 28],
+      "safetyLevel": "verde",
+      "contentType": "regra_de_leitura",
+      "allowedAction": "ajustar a hipótese alimentar ao período correto da queixa (diurno x noturno)",
+      "blockedAction": "encaixar automaticamente o caso em queda de produção no fim do dia/noite quando a queixa principal é diurna e a noite está preservada",
+      "relatedLessons": ["lesson-mamadas-efetivas", "lesson-alimentacao-livre-demanda"],
+      "askIfMissing": ["em que período do dia o problema acontece", "como estão as mamadas e a saciedade nesse período específico"],
+      "text": "AJUSTE DA HIPÓTESE ALIMENTAR AO PERÍODO DA QUEIXA: a hipótese alimentar é válida, mas precisa ser aplicada ao PERÍODO CORRETO. Quando a queixa principal é de SONECAS DIURNAS curtas/difíceis e o sono NOTURNO está preservado (bebê dorme bem no berço à noite), a Zlaya NÃO deve encaixar automaticamente o caso em 'queda de produção no fim do dia/noite'. Nesse caso, a investigação alimentar deve focar nas MAMADAS DIURNAS: sustentação da soneca, saciedade e transferência de leite durante o DIA. Inverter o período (falar de produção no fim do dia/noite quando a queixa é diurna) é erro de leitura. Confirme em qual período o comportamento acontece antes de aplicar o enquadramento vespertino/noturno."
+    },
+    {
+      "id": "rn-chunk-charutinho-diurno",
+      "namespace": "RN",
+      "theme": "reflexo_moro",
+      "intent": ["sonecas_curtas", "adaptacao_ao_berco", "dificuldade_manutencao_sono"],
+      "ageBand": "RN",
+      "ageRangeDays": [0, 28],
+      "safetyLevel": "verde",
+      "contentType": "conduta_pratica_oficial",
+      "allowedAction": "orientar uso do charutinho também durante o dia, especialmente nas sonecas diurnas, quando o reflexo de Moro impacta as sonecas do dia",
+      "blockedAction": "restringir o charutinho apenas ao período noturno quando o problema principal é nas sonecas diurnas",
+      "relatedLessons": ["lesson-charutinho-moro"],
+      "askIfMissing": ["se os sobressaltos/desorganização acontecem também nas sonecas diurnas"],
+      "text": "CHARUTINHO TAMBÉM NAS SONECAS DIURNAS: o charutinho é recurso de contenção para o reflexo de Moro e a desorganização corporal e NÃO se limita ao sono noturno. Quando o reflexo de Moro impacta as SONECAS DIURNAS (despertares com sobressaltos durante o dia), a Zlaya deve orientar EXPLICITAMENTE que o charutinho pode ser usado também durante o DIA, especialmente nas sonecas, já que muitas vezes o problema principal relatado pela mãe acontece de dia. Também é importante NÃO repetir apenas recursos que a mãe já informou estar usando (Estratégia do Travesseiro, ruído, controle de luminosidade) — quando ela já os utiliza, avance para os próximos pontos de investigação e conduta (mamada efetiva, produção de leite, saciedade, busca precoce pelo peito)."
     }
   ]
 }

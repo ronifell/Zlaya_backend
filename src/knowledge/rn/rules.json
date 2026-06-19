@@ -162,8 +162,38 @@
     },
     {
       "id": "rn-night-practical-sequence",
-      "rule": "Quando a mãe pergunta 'como posso melhorar?' ou o quadro envolve piora vespertina/noite com dificuldade no berço, a IA DEVE transformar a investigação em SEQUÊNCIA PRÁTICA objetiva: (1) mamada o mais efetiva possível; (2) oferecer o segundo peito se necessário; (3) observar sinais de saciedade; (4) colocar para arrotar; (5) manter em posição vertical 30 a 40 minutos; (6) ambiente escuro, calmo e com baixa estimulação; (7) charutinho se houver reflexo de Moro ou desorganização corporal; (8) só então tentar a transferência para o berço.",
-      "rationale": "TESTE 001 (RN 9d): a investigação estava correta, mas faltou conduta prática direta para a noite quando a mãe perguntou como melhorar."
+      "rule": "Quando a mãe pergunta 'como posso melhorar?' ou o quadro envolve piora vespertina/noite com dificuldade no berço, a IA DEVE transformar a investigação em SEQUÊNCIA PRÁTICA objetiva: (1) garantir uma mamada/oferta alimentar o mais efetiva possível, DE ACORDO COM A FORMA DE ALIMENTAÇÃO (se for peito, oferecer o segundo peito quando necessário) — NÃO assumir peito antes de confirmar se o bebê mama no peito, usa fórmula ou recebe complemento; (2) observar sinais de saciedade; (3) colocar para arrotar; (4) manter em posição vertical 30 a 40 minutos; (5) ambiente escuro, calmo e com baixa estimulação; (6) charutinho se houver reflexo de Moro ou desorganização corporal (inclusive nas sonecas diurnas); (7) só então tentar a transferência para o berço. Apresentar a sequência de forma fluida e simples para a mãe, sem sensação de lista técnica.",
+      "rationale": "TESTE 001 (RN 9d): a investigação estava correta, mas faltou conduta prática direta. TESTE 003 (RN 22d): a sequência não deve orientar 'segundo peito' antes de confirmar a forma de alimentação e deve ser apresentada de forma mais fluida."
+    },
+    {
+      "id": "rn-travesseiro-practical-execution",
+      "rule": "Quando a mãe relata que JÁ TENTOU a Estratégia do Travesseiro e não teve sucesso, a IA NÃO deve apenas citá-la de forma genérica — deve CORRIGIR a forma de aplicação. Conduta obrigatória: (1) orientar a mãe a ASSISTIR ou REASSISTIR à aula da Estratégia do Travesseiro e repetir o processo EXATAMENTE como é ensinado; (2) explicar a ETAPA INTERMEDIÁRIA: nos primeiros dias, muitas sonecas podem acontecer com o bebê NO TRAVESSEIRO EM CIMA DO COLO, com a mão da mãe fazendo a CONTENÇÃO enquanto for necessário — essa etapa ajuda o bebê a se organizar, sentir outra textura e se preparar para a transição ao berço com mais leveza; (3) deixar claro que a mãe NÃO precisa colocar o bebê diretamente no berço e esperar que ele aceite — o travesseiro sobre o colo com contenção é parte do processo, não falha; (4) reforçar CONSISTÊNCIA, leveza e repetição; manter o bebê dia e noite EXCLUSIVAMENTE no colo tende a reforçar a dificuldade de transição (sem tratar como associação negativa, vício ou mau hábito). A resposta deve ser RESOLUTIVA (corrigir a aplicação), não apenas investigativa, quando a mãe já informou que tentou sem sucesso.",
+      "rationale": "TESTE 003 (RN 19d): a Zlaya apenas citou a Estratégia do Travesseiro de forma genérica; a mãe já tinha tentado sem sucesso e faltou explicar a execução prática e a etapa intermediária (travesseiro sobre o colo com contenção das mãos)."
+    },
+    {
+      "id": "rn-difficulty-triad",
+      "rule": "Em RN com dificuldade de sono/berço, a IA deve lembrar que muitas dificuldades nessa idade estão relacionadas a uma TRÍADE: (1) ALIMENTAÇÃO (mamada efetiva, produção/transferência de leite, especialmente queda de fluxo no período da TARDE); (2) DESCONFORTO GÁSTRICO (arroto, refluxo fisiológico, desconforto pós-mamada ao deitar); (3) AMBIENTE DESAJUSTADO AO SONO. A resposta deve organizar a leitura nessa tríade ANTES de concluir que é apenas dificuldade com o berço. Inclui avaliar a PRODUÇÃO DE LEITE principalmente à tarde e, se houver queda de fluxo ou sinais de que o bebê não fica satisfeito, considerar COMPLEMENTO conforme orientação do curso/suporte.",
+      "rationale": "TESTE 003 (RN 19d): faltou organizar a resposta na tríade alimentação + desconforto gástrico + ambiente e avaliar a produção de leite (queda de fluxo à tarde) com possibilidade de complemento."
+    },
+    {
+      "id": "rn-reflux-physiological-vs-pathological",
+      "rule": "Quando o quadro envolver refluxo/desconforto (ex.: bebê acorda chorando de sonecas curtas no berço, melhora no colo, desperta cerca de 20 min após ser deitado), a IA DEVE diferenciar o REFLUXO FISIOLÓGICO da POSSIBILIDADE de refluxo patológico. Sinais que indicam possibilidade de refluxo patológico: vômitos intensos/em jato, engasgos frequentes, recusa alimentar, arqueamento corporal importante, irritabilidade persistente. A IA NUNCA diagnostica. A medida postural de ELEVAÇÃO DO COLCHÃO EM 45° aplica-se TANTO ao refluxo fisiológico QUANTO à suspeita/investigação de refluxo patológico, quando indicada pelo método/material do pediatra, e complementa a posição vertical 30 a 40 min após a mamada.",
+      "rationale": "TESTE 003 (RN 20d): a Zlaya citou refluxo fisiológico mas não diferenciou da possibilidade de refluxo patológico, nem orientou a elevação do colchão em 45° como medida postural para os dois casos."
+    },
+    {
+      "id": "rn-pathological-reflux-routing",
+      "rule": "Sempre que houver SUSPEITA e/ou INVESTIGAÇÃO de refluxo patológico, a IA DEVE OBRIGATORIAMENTE: (a) conduzir a mãe para o MATERIAL DO PEDIATRA (Roberto Franklin) nas AULAS EXTRAS/BÔNUS do curso; (b) encaminhar para o SUPORTE HUMANO. Esse encaminhamento NÃO depende da persistência do padrão — a própria suspeita de refluxo patológico já exige suporte humano. Citar apenas a aula de refluxo é insuficiente nesses casos.",
+      "rationale": "TESTE 003 (RN 20d): faltou conduzir para o material do Pediatra nas aulas extras e para o suporte humano diante da suspeita/investigação de refluxo patológico."
+    },
+    {
+      "id": "rn-match-complaint-period",
+      "rule": "A hipótese alimentar deve ser aplicada ao PERÍODO CORRETO da queixa. Quando a queixa principal é de SONECAS DIURNAS curtas/difíceis e o sono NOTURNO está preservado, a IA NÃO deve encaixar automaticamente o caso em 'queda de produção no fim do dia/noite'. A investigação alimentar deve focar nas MAMADAS DIURNAS: sustentação da soneca, saciedade e transferência de leite durante o DIA. O enquadramento vespertino/noturno só se aplica quando a queixa for, de fato, vespertina/noturna.",
+      "rationale": "TESTE 003 (RN 20d): a Zlaya falou em 'produção de leite no fim do dia/noite' quando a queixa principal era de sonecas diurnas curtas e a noite estava preservada — período errado."
+    },
+    {
+      "id": "rn-charutinho-daytime-naps",
+      "rule": "O charutinho não se restringe ao período noturno. Quando o reflexo de Moro/desorganização corporal impacta as SONECAS DIURNAS, a IA deve orientar EXPLICITAMENTE que o charutinho pode ser usado também durante o DIA, especialmente nas sonecas — sobretudo quando o problema principal relatado pela mãe acontece de dia. Além disso, a IA NÃO deve repetir apenas recursos que a mãe já informou usar (Estratégia do Travesseiro, ruído, controle de luminosidade); quando ela já os utiliza, deve avançar para os próximos pontos de investigação e conduta (mamada efetiva, produção de leite, saciedade, busca precoce pelo peito).",
+      "rationale": "TESTE 003 (RN 23d): a orientação do charutinho deveria ser explícita também para as sonecas diurnas e a resposta não deveria repetir técnicas que a mãe já disse usar."
     },
     {
       "id": "rn-travesseiro-support-only",
@@ -344,7 +374,7 @@
       "priorityOrder": [
         "tempo insuficiente em posição vertical após alimentação",
         "excesso de manipulação após mamada",
-        "berço totalmente reto sem elevação",
+        "berço totalmente reto sem elevação (avaliar elevação do colchão em 45°)",
         "mamadas muito volumosas",
         "desconforto associado ao deitar"
       ],
@@ -358,7 +388,30 @@
         "facilidade de retorno ao sono",
         "relação entre alimentação e despertares"
       ],
+      "posturalMeasures": [
+        "posição vertical por 30 a 40 minutos após a mamada",
+        "elevação do colchão em 45° (aplicável tanto ao refluxo fisiológico quanto à suspeita/investigação de refluxo patológico, quando indicada pelo método/material do pediatra)"
+      ],
       "doNot": "diagnosticar refluxo patológico"
+    },
+    "refluxo_patologico_suspeita": {
+      "label": "Suspeita / investigação de refluxo patológico",
+      "signals": [
+        "vômitos intensos ou em jato",
+        "engasgos frequentes",
+        "recusa alimentar",
+        "arqueamento corporal importante",
+        "irritabilidade persistente"
+      ],
+      "posturalMeasures": [
+        "posição vertical por 30 a 40 minutos após a mamada",
+        "elevação do colchão em 45°, quando indicada pelo método/material do pediatra"
+      ],
+      "mandatoryRouting": [
+        "material do pediatra Roberto Franklin nas aulas extras/bônus do curso",
+        "suporte humano (obrigatório diante da própria suspeita — não depende da persistência do padrão)"
+      ],
+      "doNot": "diagnosticar refluxo patológico; tratar a suspeita sem encaminhar para suporte humano"
     },
     "mamadas_ineficientes": {
       "label": "Mamadas ineficientes",

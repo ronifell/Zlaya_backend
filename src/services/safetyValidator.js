@@ -263,7 +263,7 @@ const ASKS_IF_NORMAL_PATTERNS = [
  * prepend a method-aligned direct answer so the response opens by
  * answering the question, not by deflecting into empathy.
  */
-export function ensureDirectNormalityAnswer({ text, userMessage }) {
+export function ensureDirectNormalityAnswer({ text, userMessage, diurnalOnly = false }) {
   if (!text || !userMessage) return { text: text || '', prepended: false };
   const normUser = normalize(userMessage);
   const triggered = ASKS_IF_NORMAL_PATTERNS.some((re) => re.test(normUser));
@@ -291,8 +291,12 @@ export function ensureDirectNormalityAnswer({ text, userMessage }) {
   // Tailored, neutral, method-safe direct opener. We avoid claiming
   // anything beyond the methodology: it just affirms the pattern can
   // occur and reframes it as alimentary, then yields to the LLM's text.
-  const directOpener =
-    'Sim — esse padrão pode ocorrer no RN nessa fase, e o método trata como uma questão alimentar (transferência/produção de leite no fim do dia/noite), não como associação negativa.';
+  // PERIOD-AWARE: when the complaint is diurnal-only (night preserved),
+  // we must NOT bind the hypothesis to "fim do dia/noite" — the dossier
+  // (TESTE 003, RN 20d) flags that as a period mismatch.
+  const directOpener = diurnalOnly
+    ? 'Sim — esse padrão pode ocorrer no RN nessa fase. Como a dificuldade está nas sonecas diurnas e a noite está preservada, a leitura do método é alimentar (mamada efetiva e produção/transferência de leite durante o dia) e de conforto/postura, não associação negativa.'
+    : 'Sim — esse padrão pode ocorrer no RN nessa fase, e o método o trata como uma questão alimentar (mamada efetiva, transferência e produção de leite) e de conforto/postura, não como associação negativa.';
   const out = `${directOpener}\n\n${text.trimStart()}`;
   return { text: out, prepended: true };
 }
@@ -348,7 +352,7 @@ export function ensureNegativeAssociationReassurance({ text, userMessage }) {
 
   const trimmed = text.replace(/\s+$/, '');
   const append =
-    'Sobre o seu receio de associação negativa: o que você descreve — bebê que só se acalma mamando, dorme no peito ou no colo, dificuldade de permanência no berço — NÃO configura associação negativa de sono no RN. Nessa faixa etária isso é fisiológico e esperado, e a leitura metodológica correta é alimentar (transferência e produção de leite no fim do dia/noite), não comportamental.';
+    'Sobre o seu receio de associação negativa: o que você descreve — bebê que só se acalma mamando, dorme no peito ou no colo, dificuldade de permanência no berço — NÃO configura associação negativa de sono no RN. Nessa faixa etária isso é fisiológico e esperado, e a leitura metodológica correta é alimentar (mamada efetiva, transferência e produção de leite) e de conforto/postura, não comportamental.';
   return { text: `${trimmed}\n\n${append}`, appended: true };
 }
 

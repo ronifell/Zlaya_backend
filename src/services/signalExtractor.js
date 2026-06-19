@@ -39,6 +39,11 @@ const SIGNAL_DEFS = [
       'é normal nessa idade', 'e normal nessa fase', 'é normal nessa fase',
       'isso e esperado', 'isso é esperado', 'isso e comum', 'isso é comum',
       'e comum nessa idade', 'é comum nessa idade',
+      'e esperado nessa fase', 'é esperado nessa fase', 'esperado nessa fase',
+      'e esperado nessa idade', 'é esperado nessa idade', 'esperado nessa idade',
+      'comportamento e esperado', 'comportamento é esperado',
+      'e esperado para a idade', 'é esperado para a idade',
+      'e comum nessa fase', 'é comum nessa fase', 'comum nessa fase',
     ],
     boostThemes: [],
     priority:
@@ -55,7 +60,7 @@ const SIGNAL_DEFS = [
     ],
     boostThemes: ['padrao_vespertino', 'dificuldade_berco', 'acorda_ao_deitar', 'mamadas_ineficientes'],
     priority:
-      'A mãe pediu conduta prática ("como melhorar/ajustar"). NÃO responda só com investigação — entregue na ORIENTAÇÃO PRÁTICA a SEQUÊNCIA NOTURNA OFICIAL: (1) mamada o mais efetiva possível; (2) oferecer o segundo peito se necessário; (3) observar sinais de saciedade (listar os 6); (4) colocar para arrotar; (5) manter em posição vertical 30 a 40 minutos; (6) ambiente escuro, calmo e com baixa estimulação; (7) charutinho se houver reflexo de Moro ou desorganização corporal; (8) só então tentar a transferência para o berço. Se houver desconforto ao deitar (choro na transferência, dificuldade de arrotar), verbalize explicitamente a hipótese de desconforto leve pós-mamada ao deitar.',
+      'A mãe pediu conduta prática ("como melhorar/ajustar"). NÃO responda só com investigação — entregue na ORIENTAÇÃO PRÁTICA a SEQUÊNCIA NOTURNA OFICIAL, de forma fluida (sem sensação de lista técnica): (1) garantir uma mamada/oferta alimentar o mais efetiva possível, DE ACORDO COM A FORMA DE ALIMENTAÇÃO — se for peito, oferecer o segundo peito quando necessário; NÃO assuma peito antes de confirmar peito/fórmula/complemento; (2) observar sinais de saciedade (listar os 6); (3) colocar para arrotar; (4) manter em posição vertical 30 a 40 minutos; (5) ambiente escuro, calmo e com baixa estimulação; (6) charutinho se houver reflexo de Moro ou desorganização corporal (inclusive nas sonecas diurnas); (7) só então tentar a transferência para o berço. Se houver desconforto ao deitar (choro na transferência, dificuldade de arrotar), verbalize explicitamente a hipótese de desconforto leve pós-mamada ao deitar.',
   },
   {
     id: 'evening_pattern',
@@ -77,7 +82,7 @@ const SIGNAL_DEFS = [
       'irritabilidade_final_tarde',
     ],
     priority:
-      'A piora no final do dia (após as 18h) é um padrão vespertino típico no RN. NOMEIE a hipótese principal de forma direta: "A principal hipótese é baixa transferência de leite ou menor produção materna no final do dia/noite." Use o ENQUADRAMENTO METODOLÓGICO OFICIAL em SEIS pontos: (1) produção de leite da mãe no fim da tarde/noite; (2) efetividade da transferência (sucção ativa, deglutição, sinais de saciedade); (3) necessidade de sucção do RN; (4) tempo em posição vertical após a mamada (30 a 40 min); (5) motivo do despertar imediato ao ser transferido para o berço, se houver — incluindo desconforto leve pós-mamada ao deitar quando houver dificuldade de arrotar e choro na transferência; (6) tranquilizar explicitamente a mãe sobre o receio de associação negativa (no RN essa leitura não se aplica). Se a mãe perguntou "como melhorar", entregue a SEQUÊNCIA PRÁTICA NOTURNA (mamada efetiva → segundo peito → saciedade → arroto → vertical 30-40 min → ambiente calmo → charutinho se Moro → transferência). A Estratégia do Travesseiro só como apoio secundário — NÃO como eixo principal quando alimentação/arroto/desconforto forem prioritários. APROFUNDAR a investigação da produção noturna com pergunta concreta — escolha uma: (i) "No fim da tarde/noite, você percebe os seios mais flácidos ou com menor enchimento? Durante a mamada, ele faz sucção ativa e você escuta deglutição, ou adormece rapidamente? Depois que solta o peito, relaxa e permanece tranquilo, ou volta a procurar o peito em pouco tempo?"; (ii) "Nas mamadas após as 18h, você consegue ouvir a deglutição?"; (iii) ordenha de avaliação no fim do dia vs. manhã; (iv) quando houver complemento: "O complemento foi orientado apenas para as mamadas da noite, ou já foi avaliada a necessidade de suporte também no final da tarde, quando o comportamento começa?".',
+      'A piora no final do dia (após as 18h) é um padrão vespertino típico no RN. NOMEIE a hipótese principal de forma direta: "A principal hipótese é baixa transferência de leite ou menor produção materna no final do dia/noite." Use o ENQUADRAMENTO METODOLÓGICO OFICIAL em SEIS pontos: (1) produção de leite da mãe no fim da tarde/noite; (2) efetividade da transferência (sucção ativa, deglutição, sinais de saciedade); (3) necessidade de sucção do RN; (4) tempo em posição vertical após a mamada (30 a 40 min); (5) motivo do despertar imediato ao ser transferido para o berço, se houver — incluindo desconforto leve pós-mamada ao deitar quando houver dificuldade de arrotar e choro na transferência; (6) tranquilizar explicitamente a mãe sobre o receio de associação negativa (no RN essa leitura não se aplica). Se a mãe perguntou "como melhorar", entregue a SEQUÊNCIA PRÁTICA NOTURNA (mamada/oferta alimentar efetiva conforme a forma de alimentação — se peito, segundo peito quando necessário → saciedade → arroto → vertical 30-40 min → ambiente calmo → charutinho se Moro → transferência). A Estratégia do Travesseiro só como apoio secundário — NÃO como eixo principal quando alimentação/arroto/desconforto forem prioritários. APROFUNDAR a investigação da produção noturna com pergunta concreta — escolha uma: (i) "No fim da tarde/noite, você percebe os seios mais flácidos ou com menor enchimento? Durante a mamada, ele faz sucção ativa e você escuta deglutição, ou adormece rapidamente? Depois que solta o peito, relaxa e permanece tranquilo, ou volta a procurar o peito em pouco tempo?"; (ii) "Nas mamadas após as 18h, você consegue ouvir a deglutição?"; (iii) ordenha de avaliação no fim do dia vs. manhã; (iv) quando houver complemento: "O complemento foi orientado apenas para as mamadas da noite, ou já foi avaliada a necessidade de suporte também no final da tarde, quando o comportamento começa?".',
   },
   {
     id: 'night_production_drop',
@@ -458,6 +463,61 @@ const SIGNAL_DEFS = [
     priority:
       'Ao investigar PRODUÇÃO de leite, EVITE dar a entender que "seio flácido" = pouco leite. Use linguagem cautelosa e prefira investigar EFETIVIDADE da mamada: o bebê faz sucção ativa? Você escuta deglutição? Adormece muito rapidamente no peito? Volta a procurar o peito em pouco tempo? Apresenta sinais reais de saciedade? Se for citar enchimento, contextualize que ele varia naturalmente e não deve ser interpretado isoladamente como diagnóstico de baixa produção.',
   },
+  {
+    id: 'travesseiro_tried_without_success',
+    label: 'Mãe JÁ TENTOU a Estratégia do Travesseiro sem sucesso — corrigir a aplicação',
+    directive: true,
+    phrases: [
+      'ja tentei o travesseiro', 'já tentei o travesseiro', 'ja tentei usar o travesseiro', 'já tentei usar o travesseiro',
+      'ja tentei o metodo do travesseiro', 'já tentei o método do travesseiro',
+      'metodo do travesseiro', 'método do travesseiro',
+      'ja usei o travesseiro', 'já usei o travesseiro', 'ja usei a estrategia do travesseiro',
+      'tentei a estrategia do travesseiro', 'tentei a estratégia do travesseiro',
+      'mesmo com a tecnica do travesseiro', 'mesmo com técnica do travesseiro',
+      'mesmo com a estrategia do travesseiro', 'mesmo com a estratégia do travesseiro',
+      'ja tentei a tecnica do travesseiro', 'já tentei a técnica do travesseiro',
+      'travesseiro mas nao', 'travesseiro mas não', 'travesseiro e nao funciona', 'travesseiro e não funciona',
+      'com o travesseiro ela acorda', 'com o travesseiro ele acorda',
+    ],
+    boostThemes: ['estrategia_travesseiro_execucao', 'dificuldade_berco', 'acorda_ao_deitar', 'reflexo_moro'],
+    priority:
+      'A mãe JÁ TENTOU a Estratégia do Travesseiro e NÃO teve sucesso. NÃO cite a estratégia de forma genérica nem se limite a investigar — CORRIJA a aplicação e seja RESOLUTIVA. (1) Oriente ASSISTIR/REASSISTIR à aula da Estratégia do Travesseiro e repetir o processo EXATAMENTE como é ensinado. (2) Explique a ETAPA INTERMEDIÁRIA: nos primeiros dias, muitas sonecas podem acontecer com o bebê NO TRAVESSEIRO EM CIMA DO COLO, com a mão da mãe fazendo a CONTENÇÃO enquanto necessário — isso ajuda o bebê a se organizar, sentir outra textura e se preparar para o berço com mais leveza. (3) Deixe claro que ela NÃO precisa colocar o bebê direto no berço e esperar que ele aceite — o travesseiro sobre o colo com contenção é parte do processo, não falha. (4) Reforce CONSISTÊNCIA, leveza e repetição; manter o bebê dia e noite EXCLUSIVAMENTE no colo tende a reforçar a dificuldade (sem tratar como associação negativa, vício ou mau hábito). Inclua também: avaliar a produção de leite (especialmente queda de fluxo à TARDE, com possibilidade de complemento conforme o curso/suporte), arroto e posição vertical 30 a 40 min após a mamada.',
+  },
+  {
+    id: 'reflux_discomfort_suspicion',
+    label: 'Sinais de refluxo/desconforto — diferenciar fisiológico x patológico e encaminhar',
+    directive: true,
+    phrases: [
+      'refluxo', 'reflux', 'regurgita', 'regurgitacao', 'regurgitação', 'golfa', 'golfada', 'golfando',
+      'vomita', 'vômita', 'vomito', 'vômito', 'vomitando', 'vomito em jato', 'vômito em jato', 'em jato',
+      'engasga', 'engasgo', 'engasgos', 'se engasga',
+      'arqueia', 'arqueando', 'arqueamento', 'arquea o corpo', 'arqueia o corpo', 'arqueia as costas',
+      'recusa o peito', 'recusa a mamada', 'recusa alimentar', 'recusa de mamar',
+      'parece com dor', 'chora de dor', 'desconforto apos mamar', 'desconforto após mamar',
+      'acorda chorando no berco', 'acorda chorando no berço',
+    ],
+    boostThemes: ['refluxo_fisiologico', 'acorda_ao_deitar', 'dificuldade_berco'],
+    priority:
+      'Há sinais de REFLUXO/DESCONFORTO. DIFERENCIE explicitamente o REFLUXO FISIOLÓGICO da POSSIBILIDADE de refluxo patológico — sinais de alerta de possível refluxo patológico: vômitos intensos/em jato, engasgos frequentes, recusa alimentar, arqueamento corporal importante, irritabilidade persistente. NUNCA diagnostique. MEDIDAS POSTURAIS (aplicáveis tanto ao refluxo fisiológico quanto à suspeita/investigação de refluxo patológico, quando indicadas pelo método/material do pediatra): (a) POSIÇÃO VERTICAL 30 A 40 MIN após a mamada; (b) ELEVAÇÃO DO COLCHÃO EM 45°. ENCAMINHAMENTO OBRIGATÓRIO sempre que houver SUSPEITA e/ou INVESTIGAÇÃO de refluxo patológico: (1) conduzir para o MATERIAL DO PEDIATRA (Roberto Franklin) nas AULAS EXTRAS/BÔNUS; (2) encaminhar para o SUPORTE HUMANO — a própria suspeita já exige suporte humano, não depende da persistência do padrão. Citar só a aula de refluxo é insuficiente.',
+  },
+  {
+    id: 'diurnal_only_difficulty',
+    label: 'Queixa só nas sonecas diurnas, noite preservada — ajustar período da hipótese',
+    directive: true,
+    phrases: [
+      'sonecas diurnas curtas', 'soneca diurna curta', 'sonecas do dia curtas',
+      'sonecas diurnas estao mais dificeis', 'sonecas diurnas estão mais difíceis',
+      'sonecas estao mais dificeis durante o dia', 'sonecas mais dificeis de dia', 'sonecas mais difíceis de dia',
+      'de dia somente dorme no colo', 'de dia so dorme no colo', 'de dia só dorme no colo',
+      'durante o dia as sonecas', 'durante o dia somente dorme no colo',
+      'a noite dorme bem no berco', 'à noite dorme bem no berço', 'a noite dorme bem', 'à noite dorme bem',
+      'a noite ela dorme bem no berco', 'de noite dorme bem no berco', 'de noite dorme bem',
+      'a noite no berco dorme bem', 'no berco a noite dorme', 'a noite ele dorme bem no berco',
+    ],
+    boostThemes: ['ajuste_periodo_queixa', 'mamadas_ineficientes', 'estrategia_travesseiro_execucao', 'reflexo_moro'],
+    priority:
+      'A queixa principal é de SONECAS DIURNAS curtas/difíceis e o sono NOTURNO está preservado. NÃO encaixe automaticamente o caso em "queda de produção no fim do dia/noite" — ajuste a hipótese alimentar ao PERÍODO CORRETO: foque nas MAMADAS DIURNAS (sustentação da soneca, saciedade e transferência de leite durante o DIA). O enquadramento vespertino/noturno NÃO se aplica aqui. Se houver reflexo de Moro impactando as sonecas, oriente o CHARUTINHO TAMBÉM DURANTE O DIA, especialmente nas sonecas diurnas. NÃO repita apenas recursos que a mãe já disse usar (Travesseiro, ruído, luminosidade) — avance para mamada efetiva, produção de leite (inclusive à tarde), saciedade e busca precoce pelo peito.',
+  },
 ];
 
 /**
@@ -590,7 +650,8 @@ export function extractSignals({ message, conversation, ageBand, ageDays } = {})
   const productionSignalIds = new Set([
     'evening_pattern', 'night_production_drop', 'short_feeding_interval',
     'feeding_clinical_context', 'mama_bem_with_concurrent_symptoms',
-    'late_crib_placement', 'wakes_on_transfer',
+    'late_crib_placement', 'wakes_on_transfer', 'diurnal_only_difficulty',
+    'travesseiro_tried_without_success',
   ]);
   if (signals.some((s) => productionSignalIds.has(s.id))) {
     const def = SIGNAL_DEFS.find((d) => d.id === 'cautious_seios_flacidos_rn');
@@ -612,6 +673,7 @@ export function extractSignals({ message, conversation, ageBand, ageDays } = {})
     'evening_pattern', 'night_production_drop', 'short_feeding_interval',
     'feeding_clinical_context', 'prolonged_awake_after_feed', 'long_daytime_nap',
     'breast_soothing', 'late_crib_placement', 'wakes_on_transfer', 'pacifier_in_rn',
+    'diurnal_only_difficulty', 'reflux_discomfort_suspicion', 'travesseiro_tried_without_success',
   ]);
   const mamaBemMatch = mamaBemPhrases.filter((p) => norm.includes(normalize(p)));
   const hasConcurrent = signals.some((s) => concurrentSignalIds.has(s.id));

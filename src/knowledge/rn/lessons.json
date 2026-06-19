@@ -38,6 +38,7 @@
     { "situation": "Irritabilidade final da tarde",                 "lessons": ["lesson-hora-da-bruxa"] },
     { "situation": "Choro persistente",                             "lessons": ["lesson-colicas"] },
     { "situation": "Suspeita de refluxo",                           "lessons": ["lesson-refluxo"] },
+    { "situation": "Suspeita de refluxo patológico",                "lessons": ["lesson-refluxo", "lesson-aplv"], "escalateTo": ["pediatricianBonus", "humanSupport", "familyPediatrician"] },
     { "situation": "Suspeita de APLV",                              "lessons": ["lesson-aplv"] },
     { "situation": "Dificuldade para arrotar",                      "lessons": ["lesson-estimule-arroto"] },
     { "situation": "Ambiente muito estimulante",                    "lessons": ["lesson-sono-luminosidade"] },
@@ -63,8 +64,8 @@
       "appPath": "/suporte/humano"
     },
     "pediatricianBonus": {
-      "label": "Aulas bônus com o pediatra Roberto Franklin",
-      "description": "Conteúdos médicos complementares (refluxo, APLV, sinais de alerta clínico).",
+      "label": "Material do pediatra Roberto Franklin nas aulas extras/bônus",
+      "description": "Conteúdos médicos complementares nas aulas extras/bônus do curso (refluxo fisiológico x patológico, APLV, sinais de alerta clínico). Conduzir a mãe para esse material sempre que houver suspeita/investigação de refluxo patológico.",
       "appPath": "/aulas/bonus/pediatra-roberto-franklin"
     },
     "familyPediatrician": {

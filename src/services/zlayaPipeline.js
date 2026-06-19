@@ -182,9 +182,19 @@ export async function processTurn({ message, babyProfile, conversation, conversa
     // a primeira frase precisa responder direto. Se a LLM abriu com
     // "É compreensível…" (acolhimento antes da resposta), prependemos
     // uma afirmação metodológica direta.
+    // Period-awareness: when the complaint is about DAYTIME naps and the
+    // night is preserved (diurnal_only_difficulty fired and no nocturnal/
+    // vespertine signal did), the normality opener must NOT bind the
+    // hypothesis to "fim do dia/noite" (TESTE 003 RN 20d).
+    const sigIds = new Set((signals?.signals || []).map((s) => s.id));
+    const diurnalOnly =
+      sigIds.has('diurnal_only_difficulty') &&
+      !['evening_pattern', 'night_production_drop', 'rn_night_waking', 'wake_after_early_sleep_rn', 'night_hunger_signs_rn', 'prolonged_awake_after_feed'].some((id) => sigIds.has(id));
+
     const normalityFix = ensureDirectNormalityAnswer({
       text: draft.text,
       userMessage: message,
+      diurnalOnly,
     });
     if (normalityFix.prepended) {
       draft.text = normalityFix.text;
