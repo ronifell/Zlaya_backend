@@ -35,6 +35,13 @@ const NEW_RULE_IDS = [
   'rn-do-not-normalize-crib-cry-pattern',
   'rn-mattress-elevation-45',
   'rn-do-not-repeat-wake-latency',
+  // 22d/23d additions — IDs already present in rules.json (RN base
+  // methodological rules) that we re-anchor to ensure they remain.
+  'rn-satiety-cautious-language',
+  'rn-confirm-feeding-before-breast',
+  'rn-pacifier-practical-management',
+  'rn-charutinho-daytime-naps',
+  'rn-mama-bem-not-sufficient',
 ];
 
 const PROMPT_FRAGMENTS = [
@@ -53,6 +60,13 @@ const PROMPT_FRAGMENTS = [
   'permanece cerca de',
   // 16d: complemento com sonda → conduta firme
   'complemento com sonda',
+  // 22d: chupeta cai → linguagem cautelosa + adaptação por forma de alimentação
+  'isso pode indicar',
+  'forma de alimentacao',
+  // 23d: charutinho funciona à noite → orientar durante o dia
+  'charutinho tambem de dia',
+  // 23d: "mama bem" não confirma mamada efetiva
+  '"mama bem" nao e confirmacao',
 ];
 
 const FORBIDDEN_FRAGMENTS = [
@@ -60,6 +74,14 @@ const FORBIDDEN_FRAGMENTS = [
   'adaptar ao berco',
   'normalizar choro ao acordar',
   'repetir pergunta cuja resposta a mae ja forneceu',
+  // 22d: afirmação dura sobre mamada insuficiente
+  'a mamada provavelmente nao foi suficiente',
+  // 22d: encerramento "ofereça o peito" sem qualificar forma de alimentação
+  'sem qualificar pela forma de alimentacao',
+  // 23d: framing comportamental do colo em RN
+  'manter exclusivamente no colo reforca a dificuldade',
+  // 23d: "mama bem" como confirmação de mamada efetiva (já existe)
+  "'mama bem' como confirmacao de mamada efetiva",
 ];
 
 function runInfrastructureChecks() {
@@ -118,6 +140,20 @@ function runInfrastructureChecks() {
         'Ele mama, dorme, \u00e9 colocado no ber\u00e7o, permanece cerca de 20 minutos, acorda chorando e volta a dormir bem apenas se for pego e ficar no colo. ' +
         '\u00c0 noite, dorme bem no ber\u00e7o. Esse comportamento \u00e9 esperado nessa fase?',
       must: ['asks_if_normal', 'diurnal_only_difficulty', 'wakes_short_after_crib_back_to_lap'],
+    },
+    {
+      id: 'rn-22d',
+      ageDays: 22,
+      message:
+        'Ol\u00e1, minha beb\u00ea tem 22 dias. Ela est\u00e1 usando chupeta devido \u00e0 necessidade de suc\u00e7\u00e3o, por\u00e9m, quando ela dorme com a chupeta, ela acorda porque a chupeta cai e preciso ficar colocando novamente. Como consigo resolver?',
+      must: ['pacifier_in_rn'],
+    },
+    {
+      id: 'rn-23d',
+      ageDays: 23,
+      message:
+        'Minha beb\u00ea tem 23 dias, dorme bem \u00e0 noite por cerca de 3 horas, mas apenas com charutinho. Sem o charutinho, apresenta muitos espasmos pelo reflexo de Moro e desperta. Durante o dia, as sonecas est\u00e3o mais dif\u00edceis: mama bem, dorme no colo, mas acorda logo ao ser colocada no ber\u00e7o ou no Mois\u00e9s, mesmo com t\u00e9cnica do travesseiro, ru\u00eddo e controle de luminosidade. A d\u00favida principal \u00e9 o que mais pode ser feito para a beb\u00ea se acostumar a dormir fora do colo.',
+      must: ['travesseiro_tried_without_success', 'diurnal_only_difficulty', 'mama_bem_with_concurrent_symptoms', 'charutinho_night_only_rn'],
     },
   ];
   for (const sc of signalCases) {
@@ -270,6 +306,89 @@ const E2E = [
       result.__warnings = warn; return issues;
     },
   },
+  {
+    id: 'teste-004-rn-22d',
+    label: 'TESTE 004 \u2014 RN 22 dias (chupeta cai \u2014 ajustes m\u00ednimos)',
+    profile: { motherName: '\u2014', babyName: 'bb', ageDays: 22 },
+    message:
+      'Ol\u00e1, minha beb\u00ea tem 22 dias. Ela est\u00e1 usando chupeta devido \u00e0 necessidade de suc\u00e7\u00e3o, por\u00e9m, quando ela dorme com a chupeta, ela acorda porque a chupeta cai e preciso ficar colocando novamente. Como consigo resolver?',
+    checks: (text, result, sig) => {
+      const issues = []; const warn = []; const n = strip(text);
+      if (!/\b22\s*dias\b/.test(n)) issues.push('must cite explicit age "22 dias"');
+      // Chupeta as reflexo de sucção / regulação (RN, never as habit)
+      if (!/(reflexo de succao|necessidade de succao|necessidade de regulacao|regulacao)/.test(n))
+        issues.push('must frame chupeta as reflexo de sucção / necessidade de regulação');
+      // Practical management: NÃO recolocar se continuar dormindo
+      if (!/(se a chupeta cair[\s\S]{0,80}(continuar dormindo|continua dormindo|deix[ae]\s+dormir)|n[aã]o precis[ae]\s+recolocar|n[aã]o\s+e\s+necessario\s+recoloca|n[aã]o e necessario recolocar)/.test(n))
+        issues.push('must say "if pacifier falls and baby keeps sleeping, no need to recolocá-la"');
+      // Chupeta cai com bebê acordando → diferenciar fome/desconforto/sucção
+      if (!/(fome|desconforto|necessidade de succao|succao para regulacao|transicao para o ber)/.test(n))
+        issues.push('must differentiate fome / desconforto pós-mamada / necessidade de sucção when baby wakes');
+      // Forma de alimentação — pergunta obrigatória
+      if (!/(mama no peito|usa formula|recebe complemento|forma de alimentacao|peito.{0,20}formula.{0,20}complemento)/.test(n))
+        issues.push('must ask or confirm feeding method (peito/fórmula/complemento) before instructing peito');
+      // Posição vertical 30 a 40
+      if (!/(30\s*(a|–|-|—|ate|até)\s*40)/.test(n))
+        issues.push('must include vertical 30 a 40 minutos');
+      // Sinais de saciedade (lista)
+      if (!/(solta o peito espontaneamente|sinais de saciedade|relax[ao]\s+o\s+corpo|abre as mao|reduz o ritmo)/.test(n))
+        issues.push('must list sinais de saciedade');
+      // Suavizar afirmação sobre mamada insuficiente — proibido afirmar
+      // como certeza ("provavelmente não foi suficiente"); aceitável é a
+      // formulação condicional ("isso pode indicar...").
+      if (/mamada provavelmente nao foi suficiente/.test(n))
+        issues.push('must NOT use the strong claim "a mamada provavelmente não foi suficiente" — prefer cautious "isso pode indicar..."');
+      // Encerramento adaptado à forma de alimentação — não cair só no peito
+      // sem qualificar com "se mama no peito" / fórmula / complemento.
+      if (/ofereca o peito de novo em livre demanda/.test(n)
+          && !/(se\s+(ela|ele)\s+mama\s+no\s+peito|mama\s+no\s+peito[\s,]+ofere[cç]a|formula\s+ou\s+complemento|forma\s+de\s+alimentacao)/.test(n))
+        issues.push('must adapt closing to feeding form — not blindly "ofereça o peito" if formula/complement');
+      // Reforço opcional: chupeta como apoio, não solução principal
+      if (!/(chupeta\s+(?:e\s+|como\s+)?apoio|chupeta\s+n[aã]o\s+(?:e\s+a\s+)?(?:estrategia\s+principal|solucao)|nao\s+e\s+a\s+estrategia\s+principal\s+de\s+(?:manter|manutencao))/.test(n))
+        warn.push('nuance: ideally reinforce that chupeta is "apoio" (não a estratégia principal de manter o sono)');
+      result.__warnings = warn; return issues;
+    },
+  },
+  {
+    id: 'teste-004-rn-23d',
+    label: 'TESTE 004 \u2014 RN 23 dias (charutinho noite \u2192 dia + investigar mamada efetiva quando "mama bem")',
+    profile: { motherName: '\u2014', babyName: 'bb', ageDays: 23 },
+    message:
+      'Minha beb\u00ea tem 23 dias, dorme bem \u00e0 noite por cerca de 3 horas, mas apenas com charutinho. Sem o charutinho, apresenta muitos espasmos pelo reflexo de Moro e desperta. Durante o dia, as sonecas est\u00e3o mais dif\u00edceis: mama bem, dorme no colo, mas acorda logo ao ser colocada no ber\u00e7o ou no Mois\u00e9s, mesmo com t\u00e9cnica do travesseiro, ru\u00eddo e controle de luminosidade. A d\u00favida principal \u00e9 o que mais pode ser feito para a beb\u00ea se acostumar a dormir fora do colo.',
+    checks: (text, result, sig) => {
+      const issues = []; const warn = []; const n = strip(text);
+      if (!/\b23\s*dias\b/.test(n)) issues.push('must cite explicit age "23 dias"');
+      // Charutinho TAMBÉM durante o dia — explícito (mãe já usa à noite)
+      if (!/(charutinho.*(durante o dia|nas sonecas diurnas|tambem.*dia|nas sonecas|durante as sonecas|de dia)|durante o dia.*charutinho|nas sonecas diurnas.*charutinho)/.test(n))
+        issues.push('must EXPLICITLY orient charutinho also DURING THE DAY (during diurnal naps)');
+      // Investigar mamada efetiva concretamente — NÃO confiar em "mama bem"
+      if (!/(succao\s+(com\s+ritmo|ativa|com\s+pausa|pausada|ritmica|ritmo\s+e\s+pausa)|pausa\s+entre\s+sucçoes|ouve\s+a\s+deglu|escut[ae].*degluti|degluticao\s+aud[ií]vel|ritmo\s+de\s+succao|ritmica\s+e\s+pausada|pausas\s+ritmicas)/.test(n))
+        issues.push('must investigate sucção/deglutição concretely (NOT trust "mama bem" as confirmation)');
+      if (!/(saciedade|saciad|solta o peito|relaxa o corpo|abre as mao|reduz o ritmo|fica tranquil)/.test(n))
+        issues.push('must investigate saciedade after the feed');
+      if (!/(busca.*peito.*pouco tempo|volta a buscar o peito|busca pelo peito em pouco tempo|busca precoce|continua procurando o peito|volta a buscar.*peito)/.test(n))
+        issues.push('must investigate busca precoce pelo peito');
+      // NÃO usar framing comportamental do colo em RN
+      if (/(manter\s+(a\s+)?bebe\s+exclusivamente\s+no\s+colo\s+(reforc|aumenta|cria))/.test(n)
+          && !/(adaptacao fisiologica|organizacao corporal|recurso\s+de\s+(?:organizacao|seguranca)|colo\s+(?:e|continua\s+sendo)\s+recurso)/.test(n))
+        issues.push('must NOT frame "exclusivamente no colo reforça a dificuldade" without RN reframing (organização/segurança/recurso)');
+      // Sequência prática: vertical, arroto, travesseiro com etapa intermediária
+      if (!/(30\s*(a|–|-|—|ate|até)\s*40)/.test(n))
+        issues.push('must include vertical 30 a 40 minutos');
+      if (!/(arrot|ar preso)/.test(n))
+        issues.push('must include arroto / desconforto gástrico');
+      // Travesseiro: etapa intermediária (mãe já tentou)
+      if (!/(travesseiro.*(em cima|sobre).*colo|colo.*travesseiro|contencao.*mao|mao.*contencao|conter com.*mao)/.test(n))
+        issues.push('must explain Travesseiro intermediate step (pillow over lap + hand containment) — mother already tried');
+      // Reflexo de Moro — manter como eixo (mãe já citou)
+      if (!/(reflexo de moro|moro)/.test(n))
+        issues.push('must maintain reflexo de Moro as axis (mother explicitly mentioned it)');
+      // Producao + complemento conforme suporte/curso (cautious)
+      if (/complement/.test(n) && !/(orientacao do suporte|conforme orientacao|suporte do curso|curso\/suporte|acompanhamento)/.test(n))
+        warn.push('nuance: when mentioning complemento, prefer language "conforme orientação do suporte/curso"');
+      result.__warnings = warn; return issues;
+    },
+  },
 ];
 
 async function runE2EChecks() {
@@ -305,7 +424,7 @@ async function runE2EChecks() {
 }
 
 async function main() {
-  console.log('ZLAYA LAB \u2014 Simulation TESTE 004 (19/06/2026) RN 16/19/20 dias');
+  console.log('ZLAYA LAB \u2014 Simulation TESTE 004 (19/06/2026) RN 16/19/20/22/23 dias');
   const a = runInfrastructureChecks();
   const b = await runE2EChecks();
   console.log('\n\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550');

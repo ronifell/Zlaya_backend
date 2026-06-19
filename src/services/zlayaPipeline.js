@@ -14,6 +14,8 @@ import {
   ensureRefluxRoutingComplete,
   ensureSondaOrdenhaComplete,
   ensureTravesseiroEixosComplete,
+  ensureCharutinhoNightOnlyComplete,
+  softenMamadaInsufficientClaim,
   enforceGenderConsistency,
   detectClinicalRedFlags,
 } from './safetyValidator.js';
@@ -289,6 +291,32 @@ export async function processTurn({ message, babyProfile, conversation, conversa
     if (travesseiroFix.appended) {
       draft.text = travesseiroFix.text;
       draft.travesseiroEixosMissing = travesseiroFix.missing;
+    }
+
+    // Charutinho noite + sonecas diurnas difíceis (TESTE 004 RN 23d).
+    // Quando dispara `charutinho_night_only_rn`, o método exige (a) orientar
+    // charutinho TAMBÉM DURANTE O DIA, (b) investigar mamada efetiva
+    // concretamente (não confiar em "mama bem"), (c) busca precoce pelo
+    // peito e (d) reposicionar o colo como recurso de organização em RN
+    // (sem framing comportamental).
+    const charutinhoFix = ensureCharutinhoNightOnlyComplete({
+      text: draft.text,
+      userMessage: message,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+    });
+    if (charutinhoFix.appended) {
+      draft.text = charutinhoFix.text;
+      draft.charutinhoNightOnlyMissing = charutinhoFix.missing;
+    }
+
+    // Soften any residual hard claim "a mamada provavelmente não foi
+    // suficiente" into the cautious form (TESTE 004 RN 22d). The canonical
+    // satiety closing is already cautious; this is defense-in-depth for any
+    // independent emission by the LLM.
+    const softenFix = softenMamadaInsufficientClaim({ text: draft.text });
+    if (softenFix.rewritten) {
+      draft.text = softenFix.text;
+      draft.mamadaClaimSoftened = true;
     }
 
     // Gender post-fix: when the mother uses feminine cues (minha bebê / ela /

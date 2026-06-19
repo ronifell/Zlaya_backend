@@ -362,7 +362,7 @@ const E2E_CASES = [
       if (!/(mamada noturna|mamada da noite|mamada nesse periodo|alimentacao.*noite|alimentacao no periodo da noite|baixa producao|producao de leite no periodo da noite)/.test(norm)) {
         issues.push('must investigate nocturnal feeding / low milk production as primary hypothesis');
       }
-      if (/(adaptacao ao berco|adaptar ao berco).{0,200}/.test(norm) && !/(nao e adaptacao|nao parece ser.*berco|berco nao e o problema|nao parece ser o berco)/.test(norm)) {
+      if (/(adaptacao ao berco|adaptar ao berco).{0,200}/.test(norm) && !/(nao e (?:a |o )?adaptacao|nao parece ser.*berco|berco nao e o problema|nao parece ser o berco|problema nao e (?:a )?adaptacao|nao e (?:a |o )?adapta)/.test(norm)) {
         // soft check: it's OK if the answer addresses crib AFTER reframing
         if (!/(como.*aceita o berco.*dia|como.*faz.*sonecas no berco.*dia|aceita.*durante o dia)/.test(norm)) {
           issues.push('must reframe away from crib-adaptation (baby accepts crib during the day)');

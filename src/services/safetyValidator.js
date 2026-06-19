@@ -149,7 +149,7 @@ export function checkAgeConsistency({ text, ageDays }) {
  * what those signs are. For a RN mother the instruction is unusable.
  */
 export const SATIETY_SIGNS_OFFICIAL_TEXT =
-  'Sinais de saciedade no RN: o bebê solta o peito espontaneamente, relaxa o corpo, abre as mãozinhas, reduz o ritmo da sucção, fica tranquilo após a mamada e permanece mais confortável depois de arrotar e de ficar em posição vertical. Se ao contrário ele continua agitado, mantém as mãozinhas cerradas e busca o peito novamente em pouco tempo, a mamada provavelmente não foi suficiente — ofereça o peito de novo em livre demanda e reavalie a produção/transferência no período.';
+  'Sinais de saciedade no RN: o bebê solta o peito espontaneamente, relaxa o corpo, abre as mãozinhas, reduz o ritmo da sucção, fica tranquilo após a mamada e permanece mais confortável depois de arrotar e de ficar em posição vertical. Se ao contrário ele continua agitado, mantém as mãozinhas cerradas e busca o peito novamente em pouco tempo, isso pode indicar que a mamada não foi suficiente ou que houve dificuldade de transferência — se ele mama no peito, ofereça o peito de novo em livre demanda; se usa fórmula ou complemento, avalie volume, intervalo e sinais de saciedade conforme orientação individual. Em qualquer caso, reavalie a produção/transferência no período.';
 
 /**
  * Words that, on their own or co-occurring with "saciedade", indicate the
@@ -242,7 +242,7 @@ export function ensureSatietySignsExplained({ text, forceTrigger = false }) {
   if (signsHit >= 3 && !operationalHit) {
     // Block A is there; we only need to append block B (operational tail).
     const trimmed = text.replace(/\s+$/, '');
-    const out = `${trimmed}\n\nSe ao contrário ele continua agitado, mantém as mãozinhas cerradas e busca o peito novamente em pouco tempo, a mamada provavelmente não foi suficiente — ofereça o peito de novo em livre demanda e reavalie a produção/transferência no período.`;
+    const out = `${trimmed}\n\nSe ao contrário ele continua agitado, mantém as mãozinhas cerradas e busca o peito novamente em pouco tempo, isso pode indicar que a mamada não foi suficiente ou que houve dificuldade de transferência — se ele mama no peito, ofereça o peito de novo em livre demanda; se usa fórmula ou complemento, avalie volume, intervalo e sinais de saciedade conforme orientação individual. Em qualquer caso, reavalie a produção/transferência no período.`;
     return { text: out, expanded: 'operational' };
   }
 
@@ -561,7 +561,7 @@ export function ensureRefluxRoutingComplete({ text, signalIds = [] } = {}) {
  * Returns { text, appended: boolean, missing: string[] }.
  */
 const TRAVESSEIRO_PHRASE_VERTICAL_30_40 = /(30\s*(?:a|–|-|—|at[eé])\s*40\s*min|posi[çc][aã]o\s+vertical[\s\S]{0,40}30\s*(?:a|–|-|—|at[eé])\s*40)/;
-const TRAVESSEIRO_PHRASE_GASTRIC_EIXO = /(arrot|refluxo|desconforto|ar\s+preso|regurgit)/;
+const TRAVESSEIRO_PHRASE_GASTRIC_EIXO = /(arrot|ar\s+preso|regurgit)/;
 const TRAVESSEIRO_PHRASE_NO_NEG_ASSOC = /(aind?a?\s+n[aã]o\s+cria\s+(uma\s+)?associa[çc][aã]o|n[aã]o\s+(e|é|configura|significa|representa)\s+(uma\s+)?(associa[çc][aã]o\s+negativa|v[íi]cio|mau\s+h[aá]bito|manha))/;
 // Triggers that show the LLM is leaning on behavioral framing ("adaptar ao
 // berço") instead of the physiological reframing required for RN.
@@ -581,6 +581,16 @@ export function ensureTravesseiroEixosComplete({ text, signalIds = [], ageDays }
   if (!TRAVESSEIRO_PHRASE_VERTICAL_30_40.test(norm)) missing.push('vertical_30_40');
   if (!TRAVESSEIRO_PHRASE_GASTRIC_EIXO.test(norm)) missing.push('gastric_eixo');
   if (!TRAVESSEIRO_PHRASE_NO_NEG_ASSOC.test(norm)) missing.push('no_neg_assoc');
+  // Etapa intermediária do Travesseiro: travesseiro sobre o colo + contenção
+  // das mãos. Quando a mãe já tentou (signal disparado), é OBRIGATÓRIO
+  // descrever a etapa prática — independentemente de a resposta voltar a
+  // citar a palavra "travesseiro" ou não. Isso é uma travado da execução
+  // prática que o método pede.
+  const intermediateStepPattern =
+    /(travesseiro\s+(?:em\s+cima|sobre)\s+(?:do\s+)?colo|colo\s+(?:com\s+)?(?:o\s+)?travesseiro|conten[cç][aã]o\s+(?:das\s+)?(?:m[aã]o|mao)|(?:m[aã]o|mao)[\s\S]{0,30}conten[cç][aã]o)/;
+  if (!intermediateStepPattern.test(norm)) {
+    missing.push('travesseiro_intermediate_step');
+  }
   // Only require the physiological reframing when the response actually
   // uses behavioral framing ("adaptar ao berço") and lacks a physiological
   // reframing token. We don't impose it on responses that simply skip the
@@ -602,8 +612,10 @@ export function ensureTravesseiroEixosComplete({ text, signalIds = [], ageDays }
     gastric_eixo:
       'Observe também o eixo de desconforto gástrico — se ela arrotou, se há sinais de refluxo fisiológico ou desconforto pós-mamada que possam estar sustentando o despertar quando deitada.',
     no_neg_assoc: `Com ${ageLabel}, sua bebê AINDA NÃO CRIA associação comportamental negativa por dormir no colo, no peito ou precisar de contenção — nessa idade isso é fisiológico e esperado, não é vício, manha nem mau hábito.`,
+    travesseiro_intermediate_step:
+      'Como você já tentou a Estratégia do Travesseiro, o passo prático que costuma faltar é a ETAPA INTERMEDIÁRIA: nos primeiros dias, muitas sonecas podem acontecer com a bebê NO TRAVESSEIRO EM CIMA DO COLO, com sua mão fazendo a CONTENÇÃO das mãozinhas/braços enquanto necessário — isso ajuda a bebê a se organizar e se preparar para a transição ao berço com mais leveza. Você não precisa colocá-la diretamente no berço e esperar que ela aceite — o travesseiro sobre o colo com contenção é parte do processo, não falha.',
   };
-  const order = ['no_neg_assoc', 'physiological_reframing', 'vertical_30_40', 'gastric_eixo'];
+  const order = ['no_neg_assoc', 'physiological_reframing', 'travesseiro_intermediate_step', 'vertical_30_40', 'gastric_eixo'];
   const sentences = order.filter((k) => missing.includes(k)).map((k) => fragmentByKey[k]);
   const append = sentences.join(' ');
   const trimmed = text.replace(/\s+$/, '');
@@ -652,6 +664,90 @@ export function ensurePacifierPracticalComplete({ text, userMessage, signalIds =
       'Sobre a chupeta cair: se ela cair e o bebê continuar dormindo, NÃO PRECISA RECOLOCAR; se ele acordar logo que cai, diferencie entre fome, desconforto pós-mamada, necessidade de sucção e transição para o berço — investigue o eixo correspondente em vez de reposicionar a chupeta repetidas vezes. NUNCA prenda ou fixe a chupeta.',
   };
   const order = ['reflexo_regulacao', 'practical_mgmt'];
+  const sentences = order.filter((k) => missing.includes(k)).map((k) => fragmentByKey[k]);
+  const append = sentences.join(' ');
+  const trimmed = text.replace(/\s+$/, '');
+  return { text: `${trimmed}\n\n${append}`, appended: true, missing };
+}
+
+/**
+ * TESTE 004 (RN 22d): the methodology requires the satiety closing to be
+ * cautious ("isso pode indicar que a mamada não foi suficiente ou que houve
+ * dificuldade de transferência") and to adapt the conduct to the feeding
+ * form (peito × fórmula × complemento). The canonical text in
+ * SATIETY_SIGNS_OFFICIAL_TEXT is already cautious + adaptive; this enricher
+ * is a defense-in-depth that REWRITES any residual hard claim ("a mamada
+ * provavelmente não foi suficiente") that the LLM might still emit on its
+ * own (independent of the satiety enricher).
+ *
+ * Returns { text, rewritten: boolean }.
+ */
+export function softenMamadaInsufficientClaim({ text } = {}) {
+  if (!text) return { text: text || '', rewritten: false };
+  // Only rewrite when the categorical claim is present and the cautious
+  // counterpart isn't already adjacent — avoids double-softening the
+  // canonical satiety closing.
+  const norm = normalize(text);
+  if (!/a\s+mamada\s+provavelmente\s+n[aã]o\s+foi\s+suficiente/.test(norm)) {
+    return { text, rewritten: false };
+  }
+  // The replacement keeps the canonical operational continuation intact and
+  // only swaps the leading clause for the cautious formulation. We use a
+  // diacritics-tolerant pattern to handle both "não" and "nao" variants.
+  const out = text.replace(
+    /a\s+mamada\s+provavelmente\s+n(?:ã|a)o\s+foi\s+suficiente/gi,
+    'isso pode indicar que a mamada não foi suficiente ou que houve dificuldade de transferência',
+  );
+  return { text: out, rewritten: out !== text };
+}
+
+/**
+ * TESTE 004 (RN 23d): mãe relata charutinho funcionando à NOITE com Moro/
+ * espasmos sem ele, e SONECAS DIURNAS DIFÍCEIS. A leitura metodológica
+ * exige (a) charutinho TAMBÉM DURANTE O DIA explicitamente; (b) investigação
+ * concreta de mamada efetiva (sucção/deglutição/saciedade/busca precoce),
+ * não confiar em "mama bem"; (c) reposicionar o colo como recurso de
+ * organização/segurança em RN, sem framing comportamental.
+ *
+ * Returns { text, appended: boolean, missing: string[] }.
+ */
+const CHARUTINHO_DAY_PATTERN =
+  /charutinho.{0,80}(durante o dia|nas sonecas diurnas|tambem.{0,10}dia|nas sonecas|durante as sonecas|de dia)|durante o dia.{0,80}charutinho|nas sonecas diurnas.{0,80}charutinho/;
+const EFFECTIVE_FEEDING_INVESTIGATION_PATTERN =
+  /(succao\s+(com\s+ritmo|ativa|com\s+pausa|pausada|ritmica|ritmo\s+e\s+pausa)|pausa\s+entre\s+sucçoes|ouve\s+a\s+deglu|escut[ae].*degluti|degluticao\s+aud[ií]vel|ritmo\s+de\s+succao|ritmica\s+e\s+pausada|pausas\s+ritmicas)/;
+const EARLY_BREAST_SEEK_PATTERN =
+  /(busca.*peito.*pouco tempo|volta a buscar o peito|busca pelo peito em pouco tempo|busca precoce|continua procurando o peito|volta a buscar.*peito)/;
+const COLO_BEHAVIORAL_FRAMING_RISK =
+  /(manter\s+(?:a\s+)?bebe\s+exclusivamente\s+no\s+colo\s+(?:reforc|aumenta|cria))|(?:exclusivamente\s+no\s+colo\s+(?:reforc|aumenta|cria))/;
+const COLO_RN_REFRAMING_PHRASES =
+  /(adaptacao fisiologica|organizacao corporal|recurso\s+de\s+(?:organizacao|seguranca)|colo\s+(?:e|continua\s+sendo)\s+recurso)/;
+
+export function ensureCharutinhoNightOnlyComplete({ text, userMessage, signalIds = [] } = {}) {
+  if (!text || !userMessage) return { text: text || '', appended: false, missing: [] };
+  const sigSet = new Set(signalIds || []);
+  if (!sigSet.has('charutinho_night_only_rn')) return { text, appended: false, missing: [] };
+
+  const norm = normalize(text);
+  const missing = [];
+  if (!CHARUTINHO_DAY_PATTERN.test(norm)) missing.push('charutinho_dia');
+  if (!EFFECTIVE_FEEDING_INVESTIGATION_PATTERN.test(norm)) missing.push('effective_feeding');
+  if (!EARLY_BREAST_SEEK_PATTERN.test(norm)) missing.push('early_breast_seek');
+  if (COLO_BEHAVIORAL_FRAMING_RISK.test(norm) && !COLO_RN_REFRAMING_PHRASES.test(norm)) {
+    missing.push('colo_rn_reframing');
+  }
+  if (missing.length === 0) return { text, appended: false, missing: [] };
+
+  const fragmentByKey = {
+    charutinho_dia:
+      'Como o CHARUTINHO funciona à noite e os espasmos pelo reflexo de Moro voltam quando ele não está, oriente o uso do CHARUTINHO TAMBÉM DURANTE O DIA, especialmente nas SONECAS DIURNAS — não restrinja ao período noturno.',
+    effective_feeding:
+      'Quando a mãe diz que a bebê "mama bem", isso NÃO confirma mamada efetiva no RN. Investigue concretamente: SUCÇÃO ATIVA com pausas rítmicas, DEGLUTIÇÃO AUDÍVEL durante a mamada e SACIEDADE após mamar (solta o peito espontaneamente, relaxa o corpo, abre as mãozinhas, reduz o ritmo da sucção, fica tranquila depois de arrotar e em posição vertical).',
+    early_breast_seek:
+      'Observe também a BUSCA PRECOCE PELO PEITO — se ela volta a buscar o peito em pouco tempo após mamar, é sinal de que a mamada pode não ter sido suficiente ou houve dificuldade de transferência; avalie produção e transferência junto com os demais sinais.',
+    colo_rn_reframing:
+      'No RN, o COLO continua sendo RECURSO de organização, segurança e transição — não é associação negativa, vício nem mau hábito. A transição para o berço/Moisés é gradual: travesseiro sobre o colo com contenção das mãos, repetição e leveza, em paralelo às medidas de mamada efetiva, arroto, posição vertical 30 a 40 minutos e charutinho nas sonecas diurnas.',
+  };
+  const order = ['colo_rn_reframing', 'charutinho_dia', 'effective_feeding', 'early_breast_seek'];
   const sentences = order.filter((k) => missing.includes(k)).map((k) => fragmentByKey[k]);
   const append = sentences.join(' ');
   const trimmed = text.replace(/\s+$/, '');

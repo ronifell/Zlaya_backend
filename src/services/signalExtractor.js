@@ -541,16 +541,37 @@ const SIGNAL_DEFS = [
       'sonecas diurnas curtas no berco', 'sonecas diurnas curtas no berço',
       'sonecas diurnas estao mais dificeis', 'sonecas diurnas estão mais difíceis',
       'sonecas estao mais dificeis durante o dia', 'sonecas mais dificeis de dia', 'sonecas mais difíceis de dia',
+      'durante o dia, as sonecas estao mais dificeis', 'durante o dia, as sonecas estão mais difíceis',
+      'durante o dia as sonecas estao mais dificeis', 'durante o dia as sonecas estão mais difíceis',
+      'sonecas estao mais dificeis', 'sonecas estão mais difíceis',
+      'sonecas diurnas dificeis', 'sonecas diurnas difíceis',
       'de dia somente dorme no colo', 'de dia so dorme no colo', 'de dia só dorme no colo',
       'durante o dia as sonecas', 'durante o dia somente dorme no colo',
       'a noite dorme bem no berco', 'à noite dorme bem no berço', 'a noite dorme bem', 'à noite dorme bem',
       'a noite ela dorme bem no berco', 'de noite dorme bem no berco', 'de noite dorme bem',
       'a noite no berco dorme bem', 'no berco a noite dorme', 'a noite ele dorme bem no berco',
       'a noite, dorme bem no berco', 'a noite, dorme bem',
+      'dorme bem a noite', 'dorme bem à noite',
     ],
     boostThemes: ['ajuste_periodo_queixa', 'mamadas_ineficientes', 'estrategia_travesseiro_execucao', 'reflexo_moro'],
     priority:
       'A queixa principal é de SONECAS DIURNAS curtas/difíceis e o sono NOTURNO está preservado. NÃO encaixe automaticamente o caso em "queda de produção no fim do dia/noite" — ajuste a hipótese alimentar ao PERÍODO CORRETO: foque nas MAMADAS DIURNAS (sustentação da soneca, saciedade e transferência de leite durante o DIA). O enquadramento vespertino/noturno NÃO se aplica aqui. Se houver reflexo de Moro impactando as sonecas, oriente o CHARUTINHO TAMBÉM DURANTE O DIA, especialmente nas sonecas diurnas. NÃO repita apenas recursos que a mãe já disse usar (Travesseiro, ruído, luminosidade) — avance para mamada efetiva, produção de leite (inclusive à tarde), saciedade e busca precoce pelo peito.',
+  },
+  {
+    id: 'charutinho_night_only_rn',
+    label: 'Charutinho funciona à noite + Moro/espasmos sem ele + sonecas diurnas difíceis (TESTE 004 RN 23d)',
+    directive: true,
+    // Composite signal — fired programmatically (see post-processing below).
+    phrases: [],
+    boostThemes: [
+      'reflexo_moro',
+      'estrategia_travesseiro_execucao',
+      'mamadas_ineficientes',
+      'baixa_producao_leite',
+      'dificuldade_berco',
+    ],
+    priority:
+      'PADRÃO CRÍTICO TESTE 004 (RN 23d): a mãe relata que o bebê dorme bem à NOITE com CHARUTINHO e que SEM o charutinho aparecem ESPASMOS pelo REFLEXO DE MORO; durante o DIA, as sonecas estão mais difíceis (mama bem, dorme no colo, acorda logo ao ser colocada no berço/Moisés mesmo com técnica do travesseiro). REGRAS OBRIGATÓRIAS NA RESPOSTA: (1) ORIENTE EXPLICITAMENTE que o CHARUTINHO TAMBÉM DEVE SER USADO DURANTE O DIA, especialmente nas SONECAS DIURNAS — escreva isso de forma direta, não basta indicar a aula. (2) "MAMA BEM" não confirma mamada efetiva — investigue concretamente SUCÇÃO COM RITMO, DEGLUTIÇÃO AUDÍVEL, SACIEDADE após a mamada e BUSCA PRECOCE pelo peito (volta a buscar o peito em pouco tempo). (3) Diferencie produção de leite × mamada efetiva. (4) Sequência prática organizada: mamada efetiva → arroto → posição vertical 30-40 min → CHARUTINHO NAS SONECAS DIURNAS → Estratégia do Travesseiro (com etapa intermediária no colo + contenção das mãos, porque a mãe já tentou) → transição gradual ao berço/Moisés. (5) NÃO formule como "manter exclusivamente no colo reforça a dificuldade de adaptação" — em RN o colo é RECURSO de organização, segurança e transição; reposicione como FASE DE ADAPTAÇÃO FISIOLÓGICA, ORGANIZAÇÃO CORPORAL e TRANSIÇÃO DE SUPERFÍCIE/TEXTURA, sem framing comportamental.',
   },
   {
     id: 'wakes_short_after_crib_back_to_lap',
@@ -669,6 +690,7 @@ const SYNTHETIC_SIGNAL_IDS = new Set([
   'cite_explicit_age_rn',
   'cautious_seios_flacidos_rn',
   'wakes_short_after_crib_back_to_lap',
+  'charutinho_night_only_rn',
 ]);
 
 export function extractSignals({ message, conversation, ageBand, ageDays } = {}) {
@@ -772,6 +794,31 @@ export function extractSignals({ message, conversation, ageBand, ageDays } = {})
     const def = SIGNAL_DEFS.find((d) => d.id === 'wakes_short_after_crib_back_to_lap');
     if (def) {
       signals.push({ id: def.id, label: def.label, matched: ['composite-pattern'] });
+      def.boostThemes.forEach((t) => boostThemes.add(t));
+      priorities.push(def.priority);
+      hasDirectiveSignal = true;
+    }
+  }
+
+  // Composite signal — TESTE 004 (RN 23d): mãe relata que charutinho funciona
+  // À NOITE e que SEM ele aparecem espasmos pelo Moro; e que durante o DIA as
+  // sonecas estão difíceis. A leitura correta exige orientar charutinho TAMBÉM
+  // DURANTE O DIA e investigar mamada efetiva concretamente (não basta "mama
+  // bem").
+  const charutinhoNightPattern =
+    /(charutinho|charuto|enrolad).{0,80}(a\s+noite|à\s+noite|de\s+noite|noite|dorme\s+bem)|(dorme\s+bem\s+(a|à)\s+noite|dorme\s+bem\s+de\s+noite|noite\s+dorme\s+bem).{0,80}(charutinho|charuto|enrolad)|apenas\s+com\s+charutinho|s[oó]\s+com\s+charutinho/;
+  const moroSpasmsPattern =
+    /(espasmos|sobressaltos|sustos|sustos\s+e\s+espasmos|espasmos\s+do\s+moro|reflexo\s+de\s+moro)/;
+  const diurnalNapDifficultyPattern =
+    /(durante\s+o\s+dia|de\s+dia|sonecas?\s+diurnas?|nas\s+sonecas\s+do\s+dia).{0,120}(mais\s+dif[ií]ceis|dif[ií]ceis|curtas?|acorda\s+logo|n[aã]o\s+permanece|n[aã]o\s+fica)|sonecas?\s+est[aã]o\s+(mais\s+)?dif[ií]ceis/;
+  if (
+    charutinhoNightPattern.test(norm) &&
+    moroSpasmsPattern.test(norm) &&
+    diurnalNapDifficultyPattern.test(norm)
+  ) {
+    const def = SIGNAL_DEFS.find((d) => d.id === 'charutinho_night_only_rn');
+    if (def) {
+      signals.push({ id: def.id, label: def.label, matched: ['composite-charutinho-night-only'] });
       def.boostThemes.forEach((t) => boostThemes.add(t));
       priorities.push(def.priority);
       hasDirectiveSignal = true;
