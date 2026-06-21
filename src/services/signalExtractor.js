@@ -110,7 +110,7 @@ const SIGNAL_DEFS = [
       'padrao_vespertino',
     ],
     priority:
-      'NOMEIE a hipótese principal de forma direta, com esta leitura: "Pelo horário em que isso começa — final da tarde, madrugada difícil e manhã mais tranquila — a principal hipótese é baixa produção OU menor transferência de leite no período final do dia/noite, mesmo com complemento." Não leia como desorganização do sono. Se houver complemento com sonda, dê peso a isso: oriente reavaliar com quem acompanha a amamentação e o pediatra se o complemento precisa ser ajustado também no FINAL DA TARDE (não só 22h/madrugada). Inclua suporte à produção: oferta dos dois seios, ordenha como ferramenta de avaliação (nunca solução isolada) e acompanhamento de amamentação. APROFUNDE a investigação da produção de leite especificamente no PERÍODO NOTURNO — pergunte concretamente: (a) como os seios ficam ao final da tarde; (b) deglutição audível na mamada após as 18h; (c) volume de ordenha de avaliação no fim do dia vs. manhã; (d) "O complemento foi orientado apenas para as mamadas da noite, ou já foi avaliada a necessidade de suporte também no final da tarde, quando o comportamento começa?". Investigue transferência efetiva e produção materna nesse período. Nessa fase, NÃO force intervalo de 2h se houver sinais de fome/saciedade insuficiente — prioridade é garantir a ingestão (livre demanda).',
+      'NOMEIE a hipótese principal de forma direta, com esta leitura: "Pelo horário em que isso começa — final da tarde, madrugada difícil e manhã mais tranquila — a principal hipótese é baixa produção OU menor transferência de leite no período final do dia/noite." Não leia como desorganização do sono. NUNCA escreva "mesmo com complemento" se a mãe não citou complemento — esse trecho só pode entrar se a mãe explicitamente mencionou complemento/sonda no relato; caso contrário, complemento aparece apenas em formulação CONDICIONAL ("caso haja complemento, avalie volume, intervalo e sinais de saciedade conforme orientação individual"). APROFUNDE a investigação da produção de leite especificamente no PERÍODO NOTURNO — pergunte concretamente: (a) como os seios ficam ao final da tarde; (b) deglutição audível na mamada após as 18h. SOMENTE quando a mãe relatar complemento/sonda: oriente reavaliar com quem acompanha a amamentação e o pediatra se o complemento precisa ser ajustado também no FINAL DA TARDE (não só 22h/madrugada); inclua suporte à produção (ordenha como ferramenta de avaliação, nunca solução isolada) e acompanhamento. Investigue transferência efetiva e produção materna nesse período. Nessa fase, NÃO force intervalo de 2h se houver sinais de fome/saciedade insuficiente — prioridade é garantir a ingestão (livre demanda). SEMPRE QUE MENCIONAR posição vertical, declare EXPLICITAMENTE os 30 a 40 minutos.',
   },
   {
     id: 'short_feeding_interval',
@@ -308,7 +308,11 @@ const SIGNAL_DEFS = [
       'depois da 1h', 'depois da uma', 'depois da meia noite', 'depois da meia-noite',
       'so consigo colocar no berco depois', 'so coloco no berco depois',
       'so vai pro berco depois', 'apos a 1h da manha', 'depois da 1 da manha',
-      '1h da manha', 'uma da manha', 'so dorme no berco de madrugada',
+      'depois de 1 da manha', 'depois de uma da manha',
+      '1h da manha', 'uma da manha', '1 da manha', 'so dorme no berco de madrugada',
+      'so consigo coloca-lo no berco depois', 'so consigo coloca lo no berco depois',
+      'so consigo coloca-la no berco depois', 'so consigo coloca la no berco depois',
+      'so consigo colocar ele no berco depois', 'so consigo colocar ela no berco depois',
       'so vai pro berco de madrugada', 'so coloco no moises depois', 'so vai pro moises depois',
       'so consigo colocar no moises depois',
     ],
