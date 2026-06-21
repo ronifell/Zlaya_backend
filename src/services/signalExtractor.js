@@ -428,7 +428,7 @@ const SIGNAL_DEFS = [
       'baixa_producao_fim_dia',
     ],
     priority:
-      'PADRÃO CRÍTICO: RN inicia o sono cedo (19h–20h) e acorda nas primeiras horas da noite (22h–00h), demorando a voltar a dormir. Esse cenário, por si só, indica intervalo importante desde a última mamada. PERGUNTA INDISPENSÁVEL antes de qualquer outra: "Você alimenta a bebê nesse horário em que ela acorda?" / "Nesse despertar das [23h], você oferece a mamada?". CONTEXTUALIZE explicitamente: como ele/ela iniciou o sono às 19h/20h e acorda perto das 23h, já está vindo de um intervalo importante desde a última mamada — se acorda com sinais de fome, deve ser alimentado. NÃO ABRA com "É comum que os bebês apresentem padrões de sono variados" nem com "É normal nessa fase" — esse tipo de abertura genérica deve ser substituída por uma condução direta para fome/mamada. Só DEPOIS de oferecer mamada → vertical 30-40 min → arroto → transferência ao berço, vem o ambiente escuro/calmo. Reflexo de Moro, charutinho e Travesseiro só se a mãe relatou susto/desorganização — não os puxe especulativamente.',
+      'PADRÃO CRÍTICO: RN inicia o sono cedo (19h–20h) e acorda nas primeiras horas da noite (22h–00h), demorando a voltar a dormir. Esse cenário, por si só, indica intervalo importante desde a última mamada. PERGUNTA INDISPENSÁVEL antes de qualquer outra: "Você alimenta a bebê nesse horário em que ela acorda?" / "Nesse despertar das [23h], você oferece a mamada?". CONTEXTUALIZE explicitamente: como ele/ela iniciou o sono às 19h/20h e acorda perto das 23h, já está vindo de um intervalo importante desde a última mamada — se acorda com sinais de fome, deve ser alimentado. NÃO ABRA com "É comum que os bebês apresentem padrões de sono variados" nem com "É normal nessa fase" — esse tipo de abertura genérica deve ser substituída por uma condução direta para fome/mamada. Só DEPOIS de oferecer mamada → vertical 30-40 min → arroto → transferência ao berço, vem o ambiente escuro/calmo. Reflexo de Moro, charutinho e Travesseiro só se a mãe relatou susto/desorganização — não os puxe especulativamente. É OBRIGATÓRIO incluir na resposta a LISTA OFICIAL DE SINAIS DE SACIEDADE NO RN como parte da investigação da mamada (palavra-chave "sinais de saciedade" + lista completa, observável): "O bebê solta o peito espontaneamente, relaxa o corpo, abre as mãozinhas, reduz o ritmo da sucção, fica tranquila após a mamada e permanece mais confortável depois de arrotar e de ficar em posição vertical." Nunca omita essa lista neste cenário — ela é a ferramenta que a mãe usa para julgar se a mamada das 23h foi suficiente. Em seguida, oriente o que fazer quando os sinais NÃO aparecem: se ele continua agitado, mantém as mãozinhas cerradas e busca o peito novamente em pouco tempo, isso pode indicar mamada insuficiente ou dificuldade de transferência — se mama no peito, ofereça em livre demanda e reavalie produção/transferência no período.',
   },
   {
     id: 'start_day_or_keep_night_rn',
@@ -436,13 +436,23 @@ const SIGNAL_DEFS = [
     directive: true,
     phrases: [
       'comecar o dia', 'começar o dia', 'comeco do dia', 'começo do dia',
-      'abrir a janela', 'abro a janela', 'trocar o pijama', 'troco o pijama',
+      'comecado o dia', 'começado o dia',
+      'ter comecado o dia', 'ter começado o dia',
+      'abrir a janela', 'abro a janela', 'abrindo janela', 'abrindo a janela',
+      'trocar o pijama', 'troco o pijama',
+      'trocando o pijama', 'trocando o pijaminha', 'trocar o pijaminha', 'troco o pijaminha',
       'ja era pra ter comecado o dia', 'já era pra ter começado o dia',
       'devo comecar o dia', 'devo começar o dia',
       'manter ambiente noturno', 'manter o ambiente noturno',
       'fiz certo em manter', 'fiz errado em manter',
       'manter no quarto', 'mantive no quarto', 'manter ele no quarto',
+      'manter ele ali no quarto', 'manter ela ali no quarto', 'manter ele ali', 'manter ela ali',
+      'ali no quarto',
       'comecar a rotina do dia', 'começar a rotina do dia',
+      'o dia dele nao vai inicar muito tarde', 'o dia dele não vai iniciar muito tarde',
+      'o dia dele nao vai iniciar muito tarde',
+      'dia comecar muito tarde', 'dia começar muito tarde',
+      'dia vai inicar muito tarde', 'dia vai iniciar muito tarde',
     ],
     boostThemes: [
       'acorda_ao_deitar',
