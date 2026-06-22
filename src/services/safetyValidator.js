@@ -148,8 +148,14 @@ export function checkAgeConsistency({ text, ageDays }) {
  * and the IA answered "observe sinais de saciedade" without ever listing
  * what those signs are. For a RN mother the instruction is unusable.
  */
+// TESTE 006 (RN 22d): a lista de sinais de saciedade foi tornada FEEDING-FORM-
+// ADAPTIVA. A formulação "solta o peito espontaneamente" só faz sentido para
+// peito; para fórmula/mamadeira o equivalente é "reduz o ritmo da sucção e
+// demonstra saciedade após a oferta". Como a forma de alimentação muitas
+// vezes não está confirmada quando o bloco é anexado, mantemos a leitura
+// condicional explícita logo no início.
 export const SATIETY_SIGNS_OFFICIAL_TEXT =
-  'Sinais de saciedade no RN: o bebê solta o peito espontaneamente, relaxa o corpo, abre as mãozinhas, reduz o ritmo da sucção, fica tranquilo após a mamada e permanece mais confortável depois de arrotar e de ficar em posição vertical por 30 a 40 minutos. Se ao contrário ele continua agitado, mantém as mãozinhas cerradas e busca o peito novamente em pouco tempo, isso pode indicar que a mamada não foi suficiente ou que houve dificuldade de transferência — se ele mama no peito, ofereça o peito de novo em livre demanda; se usa fórmula ou complemento, avalie volume, intervalo e sinais de saciedade conforme orientação individual. Em qualquer caso, reavalie a produção/transferência no período.';
+  'Sinais de saciedade no RN: se mama no peito, observe se solta o peito espontaneamente; se usa fórmula ou mamadeira, observe se reduz o ritmo da sucção e demonstra saciedade após a oferta. Em qualquer forma de alimentação, o bebê relaxa o corpo, abre as mãozinhas, fica tranquilo após a mamada e permanece mais confortável depois de arrotar e de ficar em posição vertical por 30 a 40 minutos. Se ao contrário ele continua agitado, mantém as mãozinhas cerradas e busca o peito ou a oferta novamente em pouco tempo, isso pode indicar que a mamada não foi suficiente ou que houve dificuldade de transferência — se ele mama no peito, ofereça o peito de novo em livre demanda; se usa fórmula ou complemento, avalie volume, intervalo e sinais de saciedade conforme orientação individual. Em qualquer caso, reavalie a produção/transferência no período.';
 
 /**
  * Words that, on their own or co-occurring with "saciedade", indicate the
@@ -242,7 +248,7 @@ export function ensureSatietySignsExplained({ text, forceTrigger = false }) {
   if (signsHit >= 3 && !operationalHit) {
     // Block A is there; we only need to append block B (operational tail).
     const trimmed = text.replace(/\s+$/, '');
-    const out = `${trimmed}\n\nApós a mamada, mantenha em posição vertical por 30 a 40 minutos antes de transferir para o berço. Se ao contrário ele continua agitado, mantém as mãozinhas cerradas e busca o peito novamente em pouco tempo, isso pode indicar que a mamada não foi suficiente ou que houve dificuldade de transferência — se ele mama no peito, ofereça o peito de novo em livre demanda; se usa fórmula ou complemento, avalie volume, intervalo e sinais de saciedade conforme orientação individual. Em qualquer caso, reavalie a produção/transferência no período.`;
+    const out = `${trimmed}\n\nApós a mamada, mantenha em posição vertical por 30 a 40 minutos antes de transferir para o berço. Se ao contrário ele continua agitado, mantém as mãozinhas cerradas e busca o peito ou a oferta novamente em pouco tempo, isso pode indicar que a mamada não foi suficiente ou que houve dificuldade de transferência — se ele mama no peito, ofereça o peito de novo em livre demanda; se usa fórmula ou complemento, avalie volume, intervalo e sinais de saciedade conforme orientação individual. Em qualquer caso, reavalie a produção/transferência no período.`;
     return { text: out, expanded: 'operational' };
   }
 
@@ -642,9 +648,15 @@ export function ensureTravesseiroEixosComplete({ text, signalIds = [], ageDays }
       'Antes de tentar transferir para o berço, mantenha em posição vertical por 30 a 40 minutos após a mamada.',
     gastric_eixo:
       'Observe também o eixo de desconforto gástrico — se ela arrotou, se há sinais de refluxo fisiológico ou desconforto pós-mamada que possam estar sustentando o despertar quando deitada.',
-    no_neg_assoc: `Com ${ageLabel}, sua bebê AINDA NÃO CRIA associação comportamental negativa por dormir no colo, no peito ou precisar de contenção — nessa idade isso é fisiológico e esperado, não é vício, manha nem mau hábito.`,
+    // TESTE 006 (RN 23d): a frase de não-associação foi ampliada para
+    // explicitar TRÊS modos legítimos de organização no RN (colo, peito e
+    // contenção), pois o dossiê pediu que essa frase contemple os três.
+    no_neg_assoc: `Com ${ageLabel}, sua bebê AINDA NÃO CRIA associação comportamental negativa por dormir no colo, dormir no peito ou precisar de contenção — nessa idade isso é fisiológico e esperado, não é vício, manha nem mau hábito.`,
+    // TESTE 006 (RN 23d): reforço explícito de que travesseiro sobre o colo
+    // com contenção é PARTE DO PROCESSO, não falha. O dossiê classificou
+    // esse reforço como ajuste fino para subir de 9,5 para nota máxima.
     travesseiro_intermediate_step:
-      'Como você já tentou a Estratégia do Travesseiro, o passo prático que costuma faltar é a ETAPA INTERMEDIÁRIA: nos primeiros dias, muitas sonecas podem acontecer com a bebê NO TRAVESSEIRO EM CIMA DO COLO, com sua mão fazendo a CONTENÇÃO das mãozinhas/braços enquanto necessário — isso ajuda a bebê a se organizar e se preparar para a transição ao berço com mais leveza. Você não precisa colocá-la diretamente no berço e esperar que ela aceite — o travesseiro sobre o colo com contenção é parte do processo, não falha.',
+      'Como você já tentou a Estratégia do Travesseiro, o passo prático que costuma faltar é a ETAPA INTERMEDIÁRIA: nos primeiros dias, muitas sonecas podem acontecer com a bebê NO TRAVESSEIRO EM CIMA DO COLO, com sua mão fazendo a CONTENÇÃO das mãozinhas/braços enquanto necessário — isso ajuda a bebê a se organizar e se preparar para a transição ao berço com mais leveza. Você não precisa colocá-la diretamente no berço e esperar que ela aceite — o TRAVESSEIRO SOBRE O COLO COM CONTENÇÃO É PARTE DO PROCESSO, NÃO FALHA: é a etapa fisiológica de transição de superfície/textura, e repeti-la com leveza é justamente o caminho para a transferência gradual ao berço.',
   };
   const order = ['no_neg_assoc', 'physiological_reframing', 'travesseiro_intermediate_step', 'vertical_30_40', 'gastric_eixo'];
   const sentences = order.filter((k) => missing.includes(k)).map((k) => fragmentByKey[k]);
@@ -673,6 +685,9 @@ export function ensureTravesseiroEixosComplete({ text, signalIds = [], ageDays }
 const PACIFIER_USER_TRIGGER = /(chupeta\s+cai|cai\s+a\s+chupeta|recolocar\s+a\s+chupeta|acorda\s+(?:porque|quando)\s+a\s+chupeta\s+cai|fico\s+(?:colocando|recolocando)\s+(?:a\s+)?chupeta)/;
 const PACIFIER_PHRASE_REFLEX_REGULATION = /(reflexo\s+de\s+suc[çc][aã]o|necessidade\s+de\s+suc[çc][aã]o|necessidade\s+de\s+regula[çc][aã]o|regula[çc][aã]o)/;
 const PACIFIER_PHRASE_PRACTICAL_MGMT = /(se\s+a\s+chupeta\s+cair[\s\S]{0,80}(?:n[aã]o\s+precis(?:a|e)\s+recolocar|continuar\s+dormindo|deix[ae]\s+dormir)|n[aã]o\s+precis(?:a|e)\s+recolocar\s+a\s+chupeta|chupeta\s+cair[\s\S]{0,40}continuar\s+dormindo)/;
+// TESTE 006 (RN 22d): exigência explícita de afirmar que nessa fase
+// a chupeta não representa associação comportamental negativa.
+const PACIFIER_PHRASE_EXPLICIT_NOT_NEG_ASSOC = /(n[aã]o\s+(deve\s+ser\s+|representa\s+|configura\s+|caracteriza\s+)?(interpretad[ao]\s+como\s+)?associa[çc][aã]o\s+(comportamental\s+)?negativa\s+nessa\s+fase|nessa\s+fase\s+(a\s+)?chupeta\s+n[aã]o\s+(deve\s+ser\s+|representa\s+|configura\s+|caracteriza\s+)?(interpretad[ao]\s+como\s+)?associa[çc][aã]o|nessa\s+fase\s+(isso|essa\s+(necessidade|leitura))\s+n[aã]o\s+(e|configura|representa)\s+associa[çc][aã]o\s+(comportamental\s+)?negativa)/;
 
 export function ensurePacifierPracticalComplete({ text, userMessage, signalIds = [] } = {}) {
   if (!text || !userMessage) return { text: text || '', appended: false, missing: [] };
@@ -685,16 +700,28 @@ export function ensurePacifierPracticalComplete({ text, userMessage, signalIds =
   const missing = [];
   if (!PACIFIER_PHRASE_REFLEX_REGULATION.test(norm)) missing.push('reflexo_regulacao');
   if (!PACIFIER_PHRASE_PRACTICAL_MGMT.test(norm)) missing.push('practical_mgmt');
+  if (!PACIFIER_PHRASE_EXPLICIT_NOT_NEG_ASSOC.test(norm)) missing.push('explicit_not_neg_assoc');
 
   if (missing.length === 0) return { text, appended: false, missing: [] };
 
+  // TESTE 006 (RN 22d): gender-aware practical_mgmt fragment. When the
+  // mother used feminine cues ("minha bebê", "ela"), the practical
+  // management block needs to keep grammatical gender consistent —
+  // the dossiê explicitly flagged "se ela cair e o bebê continuar dormindo
+  // ... se ele acordar" as a coerência problem.
+  const motherGender = detectMotherGenderCue(userMessage);
+  const isFem = motherGender === 'feminine';
   const fragmentByKey = {
     reflexo_regulacao:
       'Para o RN, a chupeta é leitura de REFLEXO DE SUCÇÃO e NECESSIDADE DE REGULAÇÃO — não é vício nem hábito comportamental.',
-    practical_mgmt:
-      'Sobre a chupeta cair: se ela cair e o bebê continuar dormindo, NÃO PRECISA RECOLOCAR; se ele acordar logo que cai, diferencie entre fome, desconforto pós-mamada, necessidade de sucção e transição para o berço — investigue o eixo correspondente em vez de reposicionar a chupeta repetidas vezes. NUNCA prenda ou fixe a chupeta.',
+    explicit_not_neg_assoc: isFem
+      ? 'Nessa fase, a chupeta NÃO representa associação comportamental negativa para a bebê — é apoio fisiológico de regulação, não vício, manha nem mau hábito.'
+      : 'Nessa fase, a chupeta NÃO representa associação comportamental negativa para o bebê — é apoio fisiológico de regulação, não vício, manha nem mau hábito.',
+    practical_mgmt: isFem
+      ? 'Sobre a chupeta cair: se ela cair e a bebê continuar dormindo, NÃO PRECISA RECOLOCAR; se ela acordar logo que cai, diferencie entre fome, desconforto pós-mamada, necessidade de sucção e transição para o berço — investigue o eixo correspondente em vez de reposicionar a chupeta repetidas vezes. NUNCA prenda ou fixe a chupeta.'
+      : 'Sobre a chupeta cair: se ela cair e o bebê continuar dormindo, NÃO PRECISA RECOLOCAR; se ele acordar logo que cai, diferencie entre fome, desconforto pós-mamada, necessidade de sucção e transição para o berço — investigue o eixo correspondente em vez de reposicionar a chupeta repetidas vezes. NUNCA prenda ou fixe a chupeta.',
   };
-  const order = ['reflexo_regulacao', 'practical_mgmt'];
+  const order = ['explicit_not_neg_assoc', 'reflexo_regulacao', 'practical_mgmt'];
   const sentences = order.filter((k) => missing.includes(k)).map((k) => fragmentByKey[k]);
   const append = sentences.join(' ');
   const trimmed = text.replace(/\s+$/, '');
@@ -768,18 +795,28 @@ export function ensureCharutinhoNightOnlyComplete({ text, userMessage, signalIds
   const sigSet = new Set(signalIds || []);
   if (!sigSet.has('charutinho_night_only_rn')) return { text, appended: false, missing: [] };
 
+  // Moro fisiológico framing — required for the charutinho-night-only case.
+  // When the mother explicitly mentions Moro/espasmos and our enricher fires,
+  // the response MUST frame Moro as fisiológico/esperado/comum nessa fase.
+  // We accept several near-equivalent phrasings the LLM may pick up.
+  const MORO_PHYSIOLOGICAL_FRAMING =
+    /(reflexo\s+de\s+moro[\s\S]{0,120}(fisiologic|esperad|comum|normal|nessa\s+fase|conter)|moro[\s\S]{0,120}(fisiologic|esperad|comum|normal|conter)|fisiologic[\s\S]{0,80}(reflexo\s+de\s+moro|moro)|esperad[ao][\s\S]{0,80}(reflexo\s+de\s+moro|moro)|comum[\s\S]{0,80}(reflexo\s+de\s+moro|moro)|charutinho[\s\S]{0,40}(conter|reflexo\s+de\s+moro))/;
+
   const norm = normalize(text);
   const missing = [];
   if (!CHARUTINHO_DAY_PATTERN.test(norm)) missing.push('charutinho_dia');
   if (!EFFECTIVE_FEEDING_INVESTIGATION_PATTERN.test(norm)) missing.push('effective_feeding');
   if (!MAMA_BEM_NOT_EFFECTIVE_FRAMING.test(norm)) missing.push('mama_bem_framing');
   if (!EARLY_BREAST_SEEK_PATTERN.test(norm)) missing.push('early_breast_seek');
+  if (!MORO_PHYSIOLOGICAL_FRAMING.test(norm)) missing.push('moro_physiological');
   if (COLO_BEHAVIORAL_FRAMING_RISK.test(norm) && !COLO_RN_REFRAMING_PHRASES.test(norm)) {
     missing.push('colo_rn_reframing');
   }
   if (missing.length === 0) return { text, appended: false, missing: [] };
 
   const fragmentByKey = {
+    moro_physiological:
+      'O REFLEXO DE MORO é FISIOLÓGICO e ESPERADO no RN — nessa fase é comum que ele esteja impactando a manutenção do sono e a permanência no berço, especialmente nas sonecas diurnas. O charutinho é o recurso para CONTER o reflexo de Moro enquanto a bebê se organiza.',
     charutinho_dia:
       'Como o CHARUTINHO funciona à noite e os espasmos pelo reflexo de Moro voltam quando ele não está, oriente o uso do CHARUTINHO TAMBÉM DURANTE O DIA, especialmente nas SONECAS DIURNAS — não restrinja ao período noturno.',
     mama_bem_framing:
@@ -788,10 +825,15 @@ export function ensureCharutinhoNightOnlyComplete({ text, userMessage, signalIds
       'Investigue concretamente: SUCÇÃO ATIVA com pausas rítmicas, DEGLUTIÇÃO AUDÍVEL durante a mamada e SACIEDADE após mamar (solta o peito espontaneamente, relaxa o corpo, abre as mãozinhas, reduz o ritmo da sucção, fica tranquila depois de arrotar e em posição vertical).',
     early_breast_seek:
       'Observe também a BUSCA PRECOCE PELO PEITO — se ela volta a buscar o peito em pouco tempo após mamar, é sinal de que a mamada pode não ter sido suficiente ou houve dificuldade de transferência; avalie produção e transferência junto com os demais sinais.',
+    // TESTE 006 (RN 23d): a frase final de fechamento foi ampliada para
+    // dizer textualmente que dormir no colo, dormir no peito ou precisar de
+    // contenção não cria associação negativa nessa fase — e que o
+    // travesseiro sobre o colo com contenção é parte do processo.
     colo_rn_reframing:
-      'No RN, o COLO continua sendo RECURSO de organização, segurança e transição — não é associação negativa, vício nem mau hábito. A transição para o berço/Moisés é gradual: travesseiro sobre o colo com contenção das mãos, repetição e leveza, em paralelo às medidas de mamada efetiva, arroto, posição vertical 30 a 40 minutos e charutinho nas sonecas diurnas.',
+      'No RN, o COLO continua sendo RECURSO de organização, segurança e transição — dormir no colo, dormir no peito ou precisar de contenção AINDA NÃO CRIA associação comportamental negativa nessa fase, não é vício, manha nem mau hábito. A transição para o berço/Moisés é gradual: TRAVESSEIRO SOBRE O COLO COM CONTENÇÃO das mãos é PARTE DO PROCESSO, NÃO FALHA — repita com leveza, em paralelo às medidas de mamada efetiva, arroto, posição vertical por 30 a 40 minutos e charutinho nas sonecas diurnas.',
   };
   const order = [
+    'moro_physiological',
     'colo_rn_reframing',
     'charutinho_dia',
     'mama_bem_framing',
@@ -841,17 +883,21 @@ export function ensureNightHungerJanelaCriticaComplete({ text, signalIds = [] } 
 
   if (missing.length === 0) return { text, appended: false, missing: [] };
 
+  // TESTE 006 (RN 10d): a pergunta indispensável "ANTES ou DEPOIS da mamada?"
+  // PRECISA aparecer LOGO NO INÍCIO da condução, não no final. O dossiê
+  // explicitamente marcou como ponto de ajuste a pergunta ter ficado no
+  // último parágrafo. Mudamos a estratégia de APPEND → PREPEND para garantir
+  // que a árvore condicional seja o eixo que abre o raciocínio do caso.
   const fragmentByKey = {
     fed_at_time_question:
       'Antes de qualquer outra conduta, é fundamental confirmar o eixo alimentar nesse horário: ela já mamou nesse horário, ou você ofereceu a mamada nesse horário em que ela acorda nervosa e suga as mãozinhas?',
     before_or_after_question:
-      'Esse comportamento — nervosismo, sugar as mãozinhas, choramingo — acontece ANTES ou DEPOIS da mamada? Se for ANTES, o caminho é alimentar em livre demanda. Se for DEPOIS, é necessário investigar mamada efetiva, produção materna e os sinais de saciedade descritos acima.',
+      'Esse comportamento — nervosismo, sugar as mãozinhas, choramingo — acontece ANTES ou DEPOIS da mamada? Se for ANTES, o caminho é alimentar em livre demanda. Se for DEPOIS, é necessário investigar mamada efetiva, produção materna e os sinais de saciedade.',
   };
-  const order = ['fed_at_time_question', 'before_or_after_question'];
+  const order = ['before_or_after_question', 'fed_at_time_question'];
   const sentences = order.filter((k) => missing.includes(k)).map((k) => fragmentByKey[k]);
-  const append = sentences.join(' ');
-  const trimmed = text.replace(/\s+$/, '');
-  return { text: `${trimmed}\n\n${append}`, appended: true, missing };
+  const prepend = sentences.join(' ');
+  return { text: `${prepend}\n\n${text.replace(/^\s+/, '')}`, appended: true, missing };
 }
 
 /**
@@ -910,6 +956,58 @@ export function ensureNightDiaperRoutineComplete({ text, signalIds = [] } = {}) 
   const append = sentences.join(' ');
   const trimmed = text.replace(/\s+$/, '');
   return { text: `${trimmed}\n\n${append}`, appended: true, missing };
+}
+
+/**
+ * Removes redundant repetitions of the "posição vertical por 30 a 40 minutos"
+ * orientation within the same response. TESTE 006 (RN 22d) explicitly flagged
+ * this repetition as a calibration issue: the orientation is correct in
+ * isolation, but appearing twice in close proximity makes the response feel
+ * less polished. We keep the FIRST occurrence (which is usually inside the
+ * canonical practical sequence) and gently rewrite later occurrences into
+ * lighter back-references like "mantenha a posição vertical já mencionada".
+ *
+ * Conservative: only rewrites when there are 2+ full mentions of the canonical
+ * phrase "posição vertical por 30 a 40 minutos" / "posição vertical 30 a 40
+ * minutos" within the same response. Other shapes are left untouched.
+ *
+ * Returns { text, deduplicated: boolean, removedCount: number }.
+ */
+const VERTICAL_30_40_MENTION_RE =
+  /(?:manten?h?[ae]?[\-\s]?(?:a|o|[oa]\s+beb[êe])?\s*)?(?:em\s+)?posi[çc][aã]o\s+vertical(?:\s+(?:por|durante))?\s+(?:de\s+)?30\s*(?:a|–|-|—|at[eé])\s*40\s*(?:min(?:utos)?|m)\b/gi;
+
+export function dedupeVerticalThirtyForty({ text } = {}) {
+  if (!text) return { text: text || '', deduplicated: false, removedCount: 0 };
+  const matches = [...text.matchAll(VERTICAL_30_40_MENTION_RE)];
+  if (matches.length < 2) return { text, deduplicated: false, removedCount: 0 };
+
+  // Keep the first occurrence intact. From the second onwards, replace the
+  // whole canonical mention by a lightweight back-reference. We preserve the
+  // sentence boundaries by NOT removing leading/trailing punctuation.
+  let removed = 0;
+  let lastIndex = 0;
+  const parts = [];
+  for (let i = 0; i < matches.length; i++) {
+    const m = matches[i];
+    const start = m.index;
+    const end = start + m[0].length;
+    parts.push(text.slice(lastIndex, start));
+    if (i === 0) {
+      parts.push(m[0]);
+    } else {
+      // Replace by a back-reference. We try to keep capitalization consistent
+      // with the original token (rough heuristic: if it started with capital).
+      const startsCapital = /^[A-ZÀ-Ý]/.test(m[0]);
+      const replacement = startsCapital
+        ? 'Mantenha a posição vertical já mencionada'
+        : 'mantendo a posição vertical já mencionada';
+      parts.push(replacement);
+      removed += 1;
+    }
+    lastIndex = end;
+  }
+  parts.push(text.slice(lastIndex));
+  return { text: parts.join(''), deduplicated: removed > 0, removedCount: removed };
 }
 
 /**
@@ -1070,6 +1168,16 @@ export function enforceGenderConsistency({ text, userMessage }) {
     [/\bmant[êe]-lo\b/gi, 'mantê-la'],
     [/\bmant[êe]nha-o\b/gi, 'mantenha-a'],
     [/\bcoloc[áa]-lo\b/gi, 'colocá-la'],
+    // TESTE 006 (RN 22d): the pacifier practical block kept reading
+    // "se ela cair e o bebê continuar dormindo ... se ele acordar"
+    // alongside the mother's feminine cues — the dossiê flagged this
+    // intra-sentence gender drift. The patterns below are tightly scoped to
+    // the practical pacifier templates so we don't accidentally rewrite
+    // legitimate masculine third-person references elsewhere.
+    [/\bo\s+beb[êe]\s+continuar\s+dormindo\b/gi, 'a bebê continuar dormindo'],
+    [/\bo\s+beb[êe]\s+continuar\s+(tranquilo|sonolento|sossegado)\b/gi, (_, w) => `a bebê continuar ${w === 'tranquilo' ? 'tranquila' : w === 'sonolento' ? 'sonolenta' : 'sossegada'}`],
+    [/\bse\s+ele\s+acordar\s+logo\s+que\s+(a\s+)?(chupeta\s+)?cai\b/gi, 'se ela acordar logo que a chupeta cai'],
+    [/\bse\s+ele\s+acordar\s+logo\b/gi, 'se ela acordar logo'],
   ];
   let out = text;
   for (const [re, replacement] of rules) {

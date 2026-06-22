@@ -384,6 +384,66 @@
       "id": "rn-bath-response-add-adaptation-closing",
       "rule": "Em queixas sobre choro no banho do RN, ao final das orientações práticas (fralda de pano, corpinho submerso, barriguinha para baixo, ambiente aquecido, banho curto), a Zlaya DEVE incluir uma frase de fechamento sobre adaptação progressiva: 'Com repetição e previsibilidade, o bebê tende a se adaptar ao banho.' Essa frase tranquiliza a mãe sobre a evolução esperada e não classifica o choro como problema permanente.",
       "rationale": "TESTE 005 (RN 13d): warning do avaliador — faltou fechamento sobre adaptação ao banho com repetição/previsibilidade."
+    },
+    {
+      "id": "rn-night-hunger-questions-open-response",
+      "rule": "Para o cenário JANELA CRÍTICA 23h–02h + sugar mãozinhas + nervosismo + choramingo (sinais clássicos de fome no RN), as duas perguntas indispensáveis — (1) 'Esse comportamento acontece ANTES ou DEPOIS da mamada?' e (2) 'Nesse horário, ela já mamou?' — devem aparecer LOGO NO INÍCIO da resposta (primeiro parágrafo), NÃO no final. A árvore condicional (se ANTES → alimentar; se DEPOIS → investigar mamada efetiva) é o EIXO QUE ABRE o raciocínio do caso, não um adendo final.",
+      "rationale": "TESTE 006 (RN 10d): a pergunta indispensável apareceu no final da resposta — o avaliador marcou como ajuste fino mover para o início."
+    },
+    {
+      "id": "rn-no-previous-context-contamination",
+      "rule": "A resposta NÃO pode importar elementos do TURNO ANTERIOR ou de contextos paralelos que não fazem parte da pergunta atual. Em particular: se a mãe pergunta sobre duração de soneca / janela crítica 23h–02h SEM mencionar berço, a Zlaya NÃO pode escrever 'antes de tentar colocá-la no berço à noite' — essa frase pertencia a um turno anterior e contamina o escopo atual. O escopo é definido pela queixa ATUAL.",
+      "rationale": "TESTE 006 (RN 10d): contaminação de contexto anterior — a resposta mencionou 'colocá-la no berço à noite' quando a pergunta atual era sobre duração de soneca de 3h."
+    },
+    {
+      "id": "rn-feeding-form-question-before-practical-sequence",
+      "rule": "A pergunta indispensável sobre forma de alimentação ('Ele/ela mama no peito, fórmula ou os dois?' ou 'Ela mama no peito, usa fórmula ou recebe complemento?') deve aparecer ANTES da sequência prática, NÃO depois. Quando a Zlaya entrega a sequência prática (mamada efetiva → sinais de saciedade → arroto → posição vertical 30 a 40 minutos → ambiente → charutinho → transição para o berço) já com instruções dependentes da forma de alimentação (ex.: 'ofereça o segundo peito quando necessário'), a pergunta precisa ter sido feita ANTES, ou a sequência precisa estar formulada de modo neutro/condicional ('se mama no peito, ofereça o segundo peito quando necessário; se usa fórmula ou complemento, avalie volume e intervalo conforme orientação individual').",
+      "rationale": "TESTE 006 (RN 22d): a pergunta sobre forma de alimentação apareceu DEPOIS da sequência prática — o avaliador marcou como ajuste mínimo mover a pergunta para antes."
+    },
+    {
+      "id": "rn-pacifier-not-negative-association-explicit",
+      "rule": "Em queixas envolvendo chupeta no RN, a Zlaya DEVE dizer EXPLICITAMENTE, perto do início da resposta, que NESSA FASE a chupeta NÃO representa associação comportamental negativa — é apoio fisiológico de regulação, não vício, manha nem mau hábito. Não basta abordar como reflexo de sucção sem nomear textualmente a não-associação.",
+      "rationale": "TESTE 006 (RN 22d): a resposta não tratou como associação negativa (o que está correto), mas faltou dizer EXPLICITAMENTE que nessa fase a chupeta não representa associação comportamental negativa."
+    },
+    {
+      "id": "rn-satiety-signs-feeding-form-adaptive",
+      "rule": "A lista de sinais de saciedade no RN deve ser FEEDING-FORM-ADAPTIVA: 'se mama no peito, observe se solta o peito espontaneamente; se usa fórmula ou mamadeira, observe se reduz o ritmo da sucção e demonstra saciedade após a oferta'. Os demais sinais (relaxar o corpo, abrir as mãozinhas, ficar tranquila após a mamada, permanecer mais confortável depois de arrotar e de ficar em posição vertical por 30 a 40 minutos) são equivalentes para ambas as formas de alimentação. É PROIBIDO listar 'solta o peito espontaneamente' como sinal universal quando a forma de alimentação ainda não foi confirmada — esse sinal só se aplica a peito.",
+      "rationale": "TESTE 006 (RN 22d): a lista de sinais usou linguagem mais voltada ao peito quando a forma de alimentação ainda não estava confirmada — o avaliador pediu adaptar a leitura para fórmula/complemento."
+    },
+    {
+      "id": "rn-vertical-time-not-repeated",
+      "rule": "A orientação de posição vertical por 30 a 40 minutos após a mamada deve aparecer UMA ÚNICA VEZ na resposta (dentro da sequência prática). É PROIBIDO repetir a frase canônica 'posição vertical por 30 a 40 minutos' em dois pontos diferentes da mesma resposta. Quando precisar voltar ao tema (ex.: closing block sobre transferência ao berço), use referência leve ('mantenha a posição vertical já mencionada', 'respeitando o tempo vertical orientado'). Repetir a frase canônica completa duas vezes é considerado erro de calibragem.",
+      "rationale": "TESTE 006 (RN 22d): a orientação de posição vertical por 30 a 40 minutos apareceu duas vezes — o avaliador marcou como ajuste mínimo para enxugar a resposta."
+    },
+    {
+      "id": "rn-pacifier-gender-consistency-intra-sentence",
+      "rule": "Quando a mãe usa feminino para se referir à bebê ('minha bebê', 'ela'), a resposta NÃO pode alternar gênero gramatical DENTRO DA MESMA FRASE. Em particular, no bloco de manejo prático da chupeta caindo, a sequência canônica deve ser 'se ela cair e a bebê continuar dormindo, não precisa recolocar; se ela acordar logo que cai, diferencie...' — NÃO 'se ela cair e o bebê continuar dormindo, não precisa recolocar; se ele acordar logo que cai'. O 'ela' que se refere à chupeta e o 'o bebê / ele' que se refere à bebê dentro da mesma frase quebram a coerência do gênero.",
+      "rationale": "TESTE 006 (RN 22d): no trecho final, 'se ela cair e o bebê continuar dormindo' alternou com 'se ele acordar' enquanto a mãe se referia à bebê no feminino — o avaliador marcou como pequena inconsistência."
+    },
+    {
+      "id": "rn-broaden-no-neg-assoc-include-lap-breast-contention",
+      "rule": "A frase de tranquilização sobre não-associação negativa no RN deve contemplar TRÊS modos legítimos de organização nessa fase: (a) dormir no colo, (b) dormir no peito e (c) precisar de contenção (incluindo travesseiro sobre o colo com contenção das mãos). NÃO basta mencionar apenas 'dormir no colo' — quando a queixa envolve colo + Travesseiro tentado + necessidade de contenção, a tranquilização deve ampliar a frase para os três modos. Modelo aceito: 'Com [N] dias, sua bebê AINDA NÃO CRIA associação comportamental negativa por dormir no colo, dormir no peito ou precisar de contenção — nessa idade isso é fisiológico e esperado, não é vício, manha nem mau hábito.'",
+      "rationale": "TESTE 006 (RN 23d): o avaliador pediu ampliar a frase de não-associação para incluir explicitamente dormir no colo, dormir no peito e precisar de contenção."
+    },
+    {
+      "id": "rn-travesseiro-on-lap-is-part-of-process-not-failure",
+      "rule": "Em casos de Estratégia do Travesseiro tentada sem sucesso, a Zlaya DEVE reforçar EXPLICITAMENTE que o TRAVESSEIRO SOBRE O COLO COM CONTENÇÃO É PARTE DO PROCESSO, NÃO FALHA. Não basta descrever a etapa intermediária — é necessário nomear textualmente que essa etapa é parte legítima e esperada da transição fisiológica colo→berço, e que repeti-la com leveza é o caminho. Isso evita que a mãe interprete a necessidade da etapa intermediária como sinal de que o método não está funcionando.",
+      "rationale": "TESTE 006 (RN 23d): o avaliador pediu reforçar de forma ainda mais explícita que o travesseiro no colo com contenção é parte do processo e não uma falha."
+    },
+    {
+      "id": "rn-berco-night-feeding-narrow-lessons",
+      "rule": "Para o cenário BERÇO OK DE DIA + PROBLEMA SÓ À NOITE (mamada noturna insuficiente / baixa produção noturna), as aulas indicadas devem ser ESTRITAMENTE: MAMADAS EFETIVAS, ESTIMULE O ARROTO, O QUE É O REFLUXO?. É PROIBIDO indicar como materiais centrais: 'Estratégia do Travesseiro', 'Charutinho e Reflexos de Moro' (como recuperação principal), 'Passo 4: Atenção à Alimentação Associada ao Sono', 'Estabeleça o Horário do Início do Sono Noturno', 'Evite que o Bebê Troque o Dia pela Noite'. Esses materiais sugerem lógica comportamental inadequada para RN nessa fase. A intenção interna correta para esse cenário é RN_NOITE_MAMADA_INSUFICIENTE_BERCO (alias: RN_BERCO_NOITE_BAIXA_PRODUCAO_LEITE).",
+      "rationale": "TESTE 006 (RN 6d): a lista de materiais ainda trouxe aulas não centrais — o avaliador pediu retirar Travesseiro, Charutinho/Moro como central, Passo 4, Início do Sono Noturno, Troca dia-noite."
+    },
+    {
+      "id": "rn-berco-night-feeding-hierarchy",
+      "rule": "Para o cenário BERÇO OK DE DIA + PROBLEMA SÓ À NOITE, a hierarquia oficial da resposta é: (1) mamada noturna; (2) baixa produção de leite no período da noite; (3) sinais de saciedade; (4) peito, fórmula ou complemento; (5) posição vertical por 30 a 40 minutos; (6) arroto; (7) refluxo/desconforto fisiológico; (8) reflexo de Moro ou Estratégia do Travesseiro APENAS como apoio secundário, NUNCA como eixo principal nem como recuperação principal.",
+      "rationale": "TESTE 006 (RN 6d): correção para o desenvolvedor — a hierarquia correta da resposta deve seguir essa ordem."
+    },
+    {
+      "id": "rn-feeding-form-question-at-opening-rn-6d",
+      "rule": "Para o cenário BERÇO OK DE DIA + PROBLEMA SÓ À NOITE (RN 6d), a pergunta 'Ele/ela mama no peito, fórmula ou os dois?' deve aparecer LOGO NO INÍCIO da resposta, NÃO no final. Essa pergunta define toda a árvore de orientação prática (peito → livre demanda; fórmula/complemento → avaliar volume/intervalo) e precisa ser respondida antes da sequência prática.",
+      "rationale": "TESTE 006 (RN 6d): faltou perguntar explicitamente no início 'Ele mama no peito, fórmula ou os dois?'."
     }
   ],
 

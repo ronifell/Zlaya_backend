@@ -19,6 +19,7 @@ import {
   ensureNightHungerJanelaCriticaComplete,
   softenMamadaInsufficientClaim,
   enforceGenderConsistency,
+  dedupeVerticalThirtyForty,
   detectClinicalRedFlags,
 } from './safetyValidator.js';
 import {
@@ -362,6 +363,16 @@ export async function processTurn({ message, babyProfile, conversation, conversa
     if (genderFix.corrections.length) {
       draft.text = genderFix.text;
       draft.genderCorrections = genderFix.corrections;
+    }
+
+    // Vertical 30-40 dedup (TESTE 006 RN 22d). After all enrichers ran (some
+    // of which may have appended their own "posição vertical 30 a 40 minutos"
+    // orientation), remove redundant repetitions so the response keeps the
+    // orientation prominent without sounding repetitive.
+    const verticalDedup = dedupeVerticalThirtyForty({ text: draft.text });
+    if (verticalDedup.deduplicated) {
+      draft.text = verticalDedup.text;
+      draft.verticalDedupRemoved = verticalDedup.removedCount;
     }
 
     safety = checkForbiddenContent({
