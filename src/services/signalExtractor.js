@@ -343,7 +343,7 @@ const SIGNAL_DEFS = [
     ],
     boostThemes: ['acorda_ao_deitar', 'dificuldade_berco', 'reflexo_moro'],
     priority:
-      'O despertar na transferência para o berço segue a hierarquia: (1) tempo vertical após a mamada, (2) arroto, (3) reflexo de Moro, (4) adaptação à superfície, (5) refluxo/desconforto pós-mamada ao deitar. VERBALIZAÇÃO OBRIGATÓRIA: quando houver dificuldade de arrotar, choro logo ao colocar no berço ou melhora ao voltar ao peito/colo, a resposta DEVE conter uma frase explícita do tipo "isso pode indicar desconforto leve pós-mamada ao deitar" ou "o bebê pode estar sentindo desconforto ao deitar após a mamada" — não basta orientar a posição vertical, é preciso NOMEAR a hipótese de desconforto ao deitar. Oriente EXPLICITAMENTE manter em POSIÇÃO VERTICAL POR 30 A 40 MINUTOS após a mamada antes da transição. Se a mãe perguntou "como melhorar", inclua a sequência prática noturna completa. A Estratégia do Travesseiro só como apoio secundário, não eixo principal.',
+      'O despertar na transferência para o berço segue a hierarquia: (1) tempo vertical após a mamada (30 a 40 min — sempre explícito), (2) arroto, (3) reflexo de Moro, (4) adaptação à superfície (transição de superfície/textura), (5) refluxo FISIOLÓGICO/desconforto pós-mamada ao deitar. VERBALIZAÇÃO OBRIGATÓRIA: quando houver dificuldade de arrotar, choro logo ao colocar no berço ou melhora ao voltar ao peito/colo, a resposta DEVE conter uma frase explícita do tipo "isso pode indicar desconforto leve pós-mamada ao deitar" ou "o bebê pode estar sentindo desconforto ao deitar após a mamada" — não basta orientar a posição vertical, é preciso NOMEAR a hipótese de desconforto ao deitar. Oriente EXPLICITAMENTE manter em POSIÇÃO VERTICAL POR 30 A 40 MINUTOS após a mamada antes da transição. Se a mãe perguntou "como melhorar", inclua a sequência prática noturna completa. A Estratégia do Travesseiro só como apoio secundário, não eixo principal. GATE CLÍNICO: NÃO escalone para refluxo PATOLÓGICO + Material do Pediatra Roberto Franklin + Suporte Humano + elevação do colchão SEM que o relato da mãe contenha pelo menos um destes sinais clínicos concretos: vômitos intensos/em jato, engasgos frequentes, recusa alimentar persistente, arqueamento corporal importante, irritabilidade persistente. Sem esses sinais, basta citar refluxo FISIOLÓGICO como possibilidade. AULAS PRIORITÁRIAS quando a queixa for "só dorme no colo / Travesseiro tentado" (TESTE 005 RN 19d): UTILIZE A ESTRATÉGIA DO TRAVESSEIRO, O BERÇO DO BEBÊ, ESTIMULE O ARROTO, CHARUTINHO E REFLEXOS DE MORO (se houver Moro), MAMADAS EFETIVAS. NUNCA indicar "EVITE QUE O BEBÊ TROQUE O DIA PELA NOITE" nem "ESTABELEÇA O HORÁRIO DO INÍCIO DO SONO NOTURNO" como aulas principais — se a mãe diz que o bebê dorme bem à noite, troca dia-noite e início de sono noturno NÃO são o eixo da queixa.',
   },
   {
     id: 'mama_bem_with_concurrent_symptoms',
@@ -370,14 +370,10 @@ const SIGNAL_DEFS = [
     boostThemes: [
       'busca_excessiva_peito',
       'mamadas_ineficientes',
-      'baixa_producao_leite',
-      'baixa_producao_fim_dia',
-      'acorda_ao_deitar',
-      'dificuldade_berco',
       'reflexo_moro',
     ],
     priority:
-      'Queixa envolvendo chupeta no RN (0–28 dias) é REFLEXO DE SUCÇÃO e NECESSIDADE DE REGULAÇÃO — use esses termos explicitamente na resposta. PERGUNTA OBRIGATÓRIA sobre forma de alimentação se a mãe não informou: "Ela mama no peito, usa fórmula ou recebe complemento?" — é proibido orientar "ofereça o peito" antes dessa confirmação. MANEJO PRÁTICO: se a chupeta cair e o bebê continuar dormindo, não precisa recolocar; se acordar logo que cai, diferencie fome, desconforto pós-mamada, sucção e transição para o berço. POSIÇÃO VERTICAL 30 A 40 MIN após mamada. Mantenha o gênero gramatical que a mãe usa (ela/dele) — não alterne para "ele" se a mãe fala "minha bebê/ela". NUNCA oriente prender a chupeta.',
+      'Queixa envolvendo chupeta no RN (0–28 dias) é REFLEXO DE SUCÇÃO e NECESSIDADE DE REGULAÇÃO — use esses termos explicitamente na resposta. PERGUNTA OBRIGATÓRIA sobre forma de alimentação se a mãe não informou: "Ela mama no peito, usa fórmula ou recebe complemento?" — é proibido orientar "ofereça o peito" antes dessa confirmação. MANEJO PRÁTICO: se a chupeta cair e o bebê continuar dormindo, não precisa recolocar; se acordar logo que cai, diferencie fome real, necessidade de sucção, desconforto pós-mamada, sono leve e dificuldade de transição para o berço. POSIÇÃO VERTICAL 30 A 40 MIN após mamada. Mantenha o gênero gramatical que a mãe usa (ela/dele) — não alterne para "ele" se a mãe fala "minha bebê/ela". NUNCA oriente prender a chupeta. ESCOPO ISOLADO DA QUEIXA — REGRA DE OUTPUT (TESTE 005 RN 22d): se a única queixa da mãe é a chupeta caindo (sem que ela tenha relatado refluxo, vômitos, engasgos, recusa, arqueamento, irritabilidade persistente, espasmos do Moro, charutinho noturno ou Estratégia do Travesseiro tentada), MANTENHA a resposta dentro do escopo: chupeta + reflexo de sucção + alimentação (peito/fórmula/complemento) + sinais de saciedade + arroto + posição vertical 30 a 40 min + transição para o berço. É PROIBIDO escrever frases como "como você já tentou a Estratégia do Travesseiro", "como o charutinho funciona à noite", "como há sinais que podem sugerir refluxo" — a mãe não trouxe nada disso. NÃO escalone para refluxo patológico, NÃO mande para o material do Pediatra Roberto Franklin / Aulas Extras/Bônus, NÃO encaminhe para suporte humano, NÃO oriente elevação do colchão (em qualquer ângulo) sem sinais clínicos concretos. A resposta deve ser CURTA E FOCADA — o avaliador marcou como erro grave a inclusão de blocos não sustentados pela pergunta original. Se houver reflexo de Moro/desorganização CITADO PELA MÃE, pode mencionar charutinho. Caso contrário, fique no eixo da pergunta original.',
   },
   {
     id: 'fear_negative_association_rn',
@@ -543,7 +539,7 @@ const SIGNAL_DEFS = [
     ],
     boostThemes: ['refluxo_fisiologico', 'acorda_ao_deitar', 'dificuldade_berco'],
     priority:
-      'Há sinais de REFLUXO/DESCONFORTO. DIFERENCIE explicitamente o REFLUXO FISIOLÓGICO da POSSIBILIDADE de refluxo patológico — sinais de alerta de possível refluxo patológico: vômitos intensos/em jato, engasgos frequentes, recusa alimentar, arqueamento corporal importante, irritabilidade persistente. NUNCA diagnostique. MEDIDAS POSTURAIS (aplicáveis tanto ao refluxo fisiológico quanto à suspeita/investigação de refluxo patológico, quando indicadas pelo método/material do pediatra): (a) POSIÇÃO VERTICAL 30 A 40 MIN após a mamada; (b) ELEVAÇÃO DO COLCHÃO EM 45°. ENCAMINHAMENTO OBRIGATÓRIO sempre que houver SUSPEITA e/ou INVESTIGAÇÃO de refluxo patológico: (1) conduzir para o MATERIAL DO PEDIATRA (Roberto Franklin) nas AULAS EXTRAS/BÔNUS; (2) encaminhar para o SUPORTE HUMANO — a própria suspeita já exige suporte humano, não depende da persistência do padrão. Citar só a aula de refluxo é insuficiente.',
+      'Há sinais de REFLUXO/DESCONFORTO. DIFERENCIE explicitamente o REFLUXO FISIOLÓGICO da POSSIBILIDADE de refluxo patológico — sinais clínicos concretos de POSSÍVEL refluxo patológico (a investigar): vômitos intensos/em jato, engasgos frequentes, recusa alimentar persistente, arqueamento corporal importante, irritabilidade persistente. NUNCA diagnostique. MEDIDAS POSTURAIS (faixa metodológica atual): (A) POSIÇÃO VERTICAL 30 A 40 MIN após a mamada — SEMPRE obrigatória. (B) ELEVAÇÃO DO COLCHÃO — para REFLUXO FISIOLÓGICO, quando indicada, a faixa preferencial é 30 A 40 GRAUS; a elevação em 45° permanece aceitável quando indicada pelo método/material do Pediatra, MAS é reservada para REFLUXO PATOLÓGICO ou suspeita/investigação de refluxo patológico. NÃO escreva "elevação do colchão em 45° aplicável tanto ao refluxo fisiológico quanto à suspeita de refluxo patológico" — essa formulação foi marcada como erro pelo dossiê. ESCALONAMENTO GATED: o caminho completo (nomear "refluxo PATOLÓGICO" + MATERIAL DO PEDIATRA Roberto Franklin nas Aulas Extras/Bônus + SUPORTE HUMANO) só é OBRIGATÓRIO quando há PELO MENOS UM dos sinais clínicos concretos acima no relato da mãe. Sem esses sinais, basta citar refluxo FISIOLÓGICO como possibilidade de desconforto pós-mamada e orientar posição vertical 30 a 40 min — NÃO escalone, NÃO mencione elevação do colchão como recurso genérico, NÃO mande para o material do Pediatra/suporte humano.',
   },
   {
     id: 'diurnal_only_difficulty',
@@ -588,6 +584,27 @@ const SIGNAL_DEFS = [
       'PADRÃO CRÍTICO TESTE 004 (RN 23d): a mãe relata que o bebê dorme bem à NOITE com CHARUTINHO e que SEM o charutinho aparecem ESPASMOS pelo REFLEXO DE MORO; durante o DIA, as sonecas estão mais difíceis (mama bem, dorme no colo, acorda logo ao ser colocada no berço/Moisés mesmo com técnica do travesseiro). REGRAS OBRIGATÓRIAS NA RESPOSTA: (1) ORIENTE EXPLICITAMENTE que o CHARUTINHO TAMBÉM DEVE SER USADO DURANTE O DIA, especialmente nas SONECAS DIURNAS — escreva isso de forma direta, não basta indicar a aula. (2) "MAMA BEM" não confirma mamada efetiva — investigue concretamente SUCÇÃO COM RITMO, DEGLUTIÇÃO AUDÍVEL, SACIEDADE após a mamada e BUSCA PRECOCE pelo peito (volta a buscar o peito em pouco tempo). (3) Diferencie produção de leite × mamada efetiva. (4) Sequência prática organizada: mamada efetiva → arroto → posição vertical 30-40 min → CHARUTINHO NAS SONECAS DIURNAS → Estratégia do Travesseiro (com etapa intermediária no colo + contenção das mãos, porque a mãe já tentou) → transição gradual ao berço/Moisés. (5) NÃO formule como "manter exclusivamente no colo reforça a dificuldade de adaptação" — em RN o colo é RECURSO de organização, segurança e transição; reposicione como FASE DE ADAPTAÇÃO FISIOLÓGICA, ORGANIZAÇÃO CORPORAL e TRANSIÇÃO DE SUPERFÍCIE/TEXTURA, sem framing comportamental.',
   },
   {
+    id: 'pacifier_isolated_complaint',
+    label: 'Queixa ISOLADA sobre chupeta caindo (TESTE 005 RN 22d) — manter resposta no escopo',
+    directive: true,
+    // Composite signal — fired programmatically when pacifier_in_rn is the
+    // only relevant complaint and there are no clinical signs.
+    phrases: [],
+    boostThemes: ['busca_excessiva_peito', 'mamadas_ineficientes'],
+    priority:
+      'QUEIXA ISOLADA DE CHUPETA (TESTE 005 RN 22d, regressão −3,0): a mãe relatou EXCLUSIVAMENTE que a chupeta cai e a bebê acorda — SEM mencionar refluxo, vômitos, engasgos, recusa, arqueamento, irritabilidade persistente, espasmos do Moro, charutinho noturno OU Estratégia do Travesseiro tentada. MANTENHA a resposta CURTA E FOCADA dentro do escopo da pergunta: (1) chupeta como apoio de reflexo de sucção e regulação; (2) com [N] dias ainda não cria associação negativa; (3) confirmar forma de alimentação se a mãe não informou ("Ela mama no peito, usa fórmula ou recebe complemento?"); (4) listar sinais de saciedade; (5) manejo da chupeta caindo — se cair e a bebê continuar dormindo, não recolocar; se acordar logo que cai, diferenciar fome real, necessidade de sucção, desconforto pós-mamada, sono leve e dificuldade de transição para o berço; (6) arroto e POSIÇÃO VERTICAL 30 A 40 MIN após a mamada; (7) transição para o berço. É TERMINANTEMENTE PROIBIDO incluir nesta resposta: refluxo patológico, elevação do colchão (em qualquer ângulo), material do Pediatra Roberto Franklin, Aulas Extras/Bônus, suporte humano, charutinho noturno como recurso já em uso, Estratégia do Travesseiro como já tentada, "como há sinais de refluxo", "como você já tentou X", "como o charutinho funciona à noite". AULAS PERTINENTES (escolher entre estas, máximo 2-3): REFLEXO DE SUCÇÃO, MAMADAS EFETIVAS, ESTIMULE O ARROTO. NÃO indicar aulas de refluxo, Travesseiro, Berço do Bebê, Moro/Charutinho como prioritárias se a mãe não trouxe sinais para esses temas. CONSISTÊNCIA DE GÊNERO: a mãe usa "minha bebê" / "ela" — manter feminino em toda a resposta; nunca escrever "se ele mama".',
+  },
+  {
+    id: 'sonda_with_mama_bem_priority_production',
+    label: 'Complemento com sonda + "mama bem" (TESTE 005 RN 16d) — priorizar baixa produção',
+    directive: true,
+    // Composite signal — fired programmatically when sonda + mama bem coexist.
+    phrases: [],
+    boostThemes: ['baixa_producao_leite', 'baixa_producao_fim_dia', 'mamadas_ineficientes'],
+    priority:
+      'PADRÃO CRÍTICO TESTE 005 (RN 16d): a mãe relata que a bebê AGORA está mamando bem E há complemento com sonda. A hipótese principal a NOMEAR EXPLICITAMENTE é BAIXA PRODUÇÃO MATERNA OU NECESSIDADE DE SUPORTE DE PRODUÇÃO — NÃO "baixa transferência". Justificativa metodológica: a sonda, por si só, é indicador de produção insuficiente; afirmar baixa transferência quando a mãe diz que mama bem desloca o foco. Modelo aceito: "Como sua bebê já recebe complemento com sonda, isso indica baixa produção materna ou necessidade de suporte de produção. Mesmo que ela esteja mamando bem agora, esse déficit pode ocorrer também durante o dia e gerar maior instabilidade no fim da tarde e na madrugada." A resposta DEVE incluir, como texto explícito: (a) nomear baixa produção materna como hipótese principal (não secundária); (b) orientar avaliar complemento TAMBÉM DURANTE O DIA (não só no fim da tarde/noite); (c) ORDENHAS no fim da tarde e ao longo do dia para estimular produção; (d) avaliar suporte no final da tarde quando a piora começa; (e) livre demanda quando houver sinais de fome; (f) posição vertical 30 a 40 min; (g) acompanhamento de amamentação. Baixa transferência pode ser citada como possibilidade SECUNDÁRIA a investigar, sem o mesmo peso da produção. Pergunta indispensável a ampliar: "Durante o dia, ela também apresenta sinais de buscar peito antes de 2h ou dificuldade de sustentar as mamadas? O complemento foi avaliado também para o período diurno?". CONSISTÊNCIA DE GÊNERO: a mãe usa "minha bb" — feminino; nunca escrever "se ele mama no peito".',
+  },
+  {
     id: 'wakes_short_after_crib_back_to_lap',
     label: 'Soneca curta no berço + acorda chorando após N minutos + melhora no colo (TESTE 004 RN 20d)',
     directive: true,
@@ -602,7 +619,7 @@ const SIGNAL_DEFS = [
       'baixa_producao_leite',
     ],
     priority:
-      'PADRÃO CRÍTICO TESTE 004 (RN 20d): bebê é colocado no berço, permanece poucos minutos (~20 min), acorda chorando e SÓ MELHORA quando volta ao colo, com NOITE PRESERVADA. NÃO normalize esse padrão como "esperado". Exige investigação obrigatória em CINCO eixos: (1) MAMADA EFETIVA / SACIEDADE / BUSCA PRECOCE — pergunte se o bebê fica saciado após a mamada, se dorme antes de mamar o suficiente, se volta a buscar o peito em pouco tempo; (2) PRODUÇÃO/TRANSFERÊNCIA DE LEITE NO DIA — a queixa é diurna, não vespertina; (3) DESCONFORTO PÓS-MAMADA / REFLUXO FISIOLÓGICO — verbalize EXPLICITAMENTE que acordar chorando ~20 min após o berço e melhorar no colo pode sugerir desconforto pós-mamada ao deitar ou refluxo fisiológico; (4) POSSIBILIDADE DE REFLUXO PATOLÓGICO — pergunte sobre vômitos intensos/em jato, engasgos frequentes, recusa alimentar, arqueamento corporal importante, irritabilidade persistente; (5) REFLEXO DE MORO / CHARUTINHO / CONTENÇÃO — investigue sobressaltos. INCLUA OBRIGATORIAMENTE NA RESPOSTA, COMO TEXTO EXPLÍCITO E NÃO RESUMÍVEL, OS QUATRO ITENS ABAIXO (sem omitir nenhum, mesmo se a resposta ficar mais longa): (A) POSIÇÃO VERTICAL POR 30 A 40 MIN após a mamada; (B) ELEVAÇÃO DO COLCHÃO EM 45° como medida postural complementar (aplicável tanto ao refluxo fisiológico quanto à suspeita de patológico, quando indicada pelo método); (C) condução ao MATERIAL DO PEDIATRA Roberto Franklin nas AULAS EXTRAS/BÔNUS quando a investigação levantar suspeita de refluxo patológico — cite o nome explicitamente; (D) ENCAMINHAMENTO ao SUPORTE HUMANO sempre que houver suspeita ou investigação de refluxo patológico — a própria suspeita já exige suporte humano, não depende da persistência. Travesseiro só como apoio posterior, com a etapa intermediária explicada (travesseiro sobre o colo + contenção das mãos). NÃO repita pergunta cuja resposta a mãe já forneceu (a mãe já disse "permanece cerca de 20 minutos" — aprofunde o que acontece nesses 20 min, não pergunte de novo o tempo). MODELO ACEITO PARA OS 4 ITENS NA RESPOSTA: "Mantenha em posição vertical por 30 a 40 minutos após a mamada. Considere também a elevação do colchão em 45° como medida postural complementar. Como há sinais que podem sugerir refluxo, recomendo que você consulte o material do Pediatra Roberto Franklin nas Aulas Extras/Bônus do curso e procure o suporte humano para acompanhamento — diante de suspeita de refluxo patológico, esse encaminhamento é parte do método, não depende da persistência do quadro."',
+      'PADRÃO CRÍTICO TESTE 004/005 (RN 20d): bebê é colocado no berço, permanece poucos minutos (~20 min), acorda chorando e SÓ MELHORA quando volta ao colo, com NOITE PRESERVADA. NÃO normalize esse padrão como "esperado". REGRA DE ESCOPO/AULAS: as aulas principais devem ser ESTIMULE O ARROTO, O QUE É O REFLUXO?, UTILIZE A ESTRATÉGIA DO TRAVESSEIRO (apenas como apoio secundário), CHARUTINHO E REFLEXOS DE MORO. NÃO indicar "EVITE QUE O BEBÊ TROQUE O DIA PELA NOITE" nem "ESTABELEÇA O HORÁRIO DO INÍCIO DO SONO NOTURNO" — a noite está preservada. Exige investigação obrigatória em CINCO eixos: (1) MAMADA EFETIVA / SACIEDADE / BUSCA PRECOCE — pergunte se o bebê fica saciado após a mamada, se dorme antes de mamar o suficiente, se volta a buscar o peito em pouco tempo; (2) PRODUÇÃO/TRANSFERÊNCIA DE LEITE NO DIA — a queixa é diurna, não vespertina; (3) DESCONFORTO PÓS-MAMADA / REFLUXO FISIOLÓGICO — verbalize EXPLICITAMENTE que acordar chorando ~20 min após o berço e melhorar no colo pode sugerir desconforto pós-mamada ao deitar ou refluxo fisiológico; (4) POSSIBILIDADE DE REFLUXO PATOLÓGICO — pergunte sobre vômitos intensos/em jato, engasgos frequentes, recusa alimentar persistente, arqueamento corporal importante, irritabilidade persistente; (5) REFLEXO DE MORO / CHARUTINHO / CONTENÇÃO — investigue sobressaltos, oriente charutinho/contenção quando aplicável (inclusive nas sonecas diurnas). INCLUA OBRIGATORIAMENTE NA RESPOSTA, COMO TEXTO EXPLÍCITO E NÃO RESUMÍVEL: (A) POSIÇÃO VERTICAL POR 30 A 40 MIN após a mamada — SEMPRE; (B) DIFERENCIAÇÃO entre refluxo FISIOLÓGICO e POSSIBILIDADE de refluxo PATOLÓGICO — usar literalmente as duas expressões e listar os sinais clínicos a investigar (item 4). Os ITENS A SEGUIR só são OBRIGATÓRIOS quando o relato da mãe apresenta PELO MENOS UM dos sinais clínicos concretos do item (4): (C) ELEVAÇÃO DO COLCHÃO — para REFLUXO FISIOLÓGICO, faixa preferencial 30 A 40 GRAUS; 45° aceitável quando indicado pelo material do Pediatra para refluxo patológico ou suspeita real; (D) MATERIAL DO PEDIATRA Roberto Franklin nas Aulas Extras/Bônus — cite explicitamente; (E) ENCAMINHAMENTO ao SUPORTE HUMANO. Sem nenhum desses sinais, NÃO inclua (C), (D) e (E) — basta (A) + (B) + investigação dos cinco eixos sem escalonar. Travesseiro só como apoio posterior. NÃO repita pergunta cuja resposta a mãe já forneceu — a mãe já disse "permanece cerca de 20 minutos", aprofunde o que acontece nesses 20 min. NÃO escreva "elevação do colchão em 45° aplicável tanto ao refluxo fisiológico quanto à suspeita de refluxo patológico" — essa formulação foi marcada como erro pelo dossiê. ARROTO: oriente DIRETAMENTE observar o arroto após a mamada (não apenas mencionar conforto pós-arroto). MODELO ACEITO COM ESCALONAMENTO (sinais clínicos presentes): "Mantenha em posição vertical por 30 a 40 minutos após a mamada. Como há sinais que podem sugerir refluxo patológico, considere a elevação do colchão em 45° conforme orientação do método/material do Pediatra, consulte o material do Pediatra Roberto Franklin nas Aulas Extras/Bônus e procure o suporte humano para acompanhamento — a própria suspeita justifica esse encaminhamento." MODELO ACEITO SEM ESCALONAMENTO (sem sinais clínicos): "Mantenha em posição vertical por 30 a 40 minutos após a mamada e observe o arroto. Acordar chorando ~20 min após o berço e melhorar no colo pode sugerir desconforto pós-mamada ou refluxo fisiológico. Se aparecerem vômitos intensos, engasgos frequentes, recusa alimentar, arqueamento ou irritabilidade persistente, busque avaliação pediátrica."',
   },
 ];
 
@@ -705,6 +722,8 @@ const SYNTHETIC_SIGNAL_IDS = new Set([
   'cautious_seios_flacidos_rn',
   'wakes_short_after_crib_back_to_lap',
   'charutinho_night_only_rn',
+  'pacifier_isolated_complaint',
+  'sonda_with_mama_bem_priority_production',
 ]);
 
 export function extractSignals({ message, conversation, ageBand, ageDays } = {}) {
@@ -833,6 +852,43 @@ export function extractSignals({ message, conversation, ageBand, ageDays } = {})
     const def = SIGNAL_DEFS.find((d) => d.id === 'charutinho_night_only_rn');
     if (def) {
       signals.push({ id: def.id, label: def.label, matched: ['composite-charutinho-night-only'] });
+      def.boostThemes.forEach((t) => boostThemes.add(t));
+      priorities.push(def.priority);
+      hasDirectiveSignal = true;
+    }
+  }
+
+  // Composite signal — TESTE 005 (RN 22d, regressão −3,0): queixa ISOLADA sobre
+  // chupeta caindo, sem que a mãe tenha relatado nenhum sinal clínico de
+  // refluxo, espasmos do Moro, charutinho noturno em uso ou Estratégia do
+  // Travesseiro tentada. Nesse cenário a resposta deve permanecer no escopo da
+  // chupeta — bloqueando explicitamente a importação de blocos sobre refluxo
+  // patológico, Pediatra Roberto Franklin, suporte humano, 45° e travesseiro.
+  const hasPacifierSignal = signals.some((s) => s.id === 'pacifier_in_rn');
+  const hasClinicalRefluxSignsInMessage =
+    /(vom[ií]to|engasgo|engasga|recus(a|ar)\s+aliment|arquei[ao]|arqueamento|irritabilidade\s+persistente|chora\s+persistentemente|reflexo\s+de\s+moro|moro|espasmo|sobressalto|susto|charutinho|charuto|enrolad|estrat[eé]gia\s+do\s+travesseiro|tecnica\s+do\s+travesseiro|t[eé]cnica\s+do\s+travesseiro|metodo\s+do\s+travesseiro|m[eé]todo\s+do\s+travesseiro|j[aá]\s+tentei\s+o\s+travesseiro|usei\s+o\s+travesseiro|tentei\s+a\s+estrat[eé]gia)/.test(norm);
+  if (hasPacifierSignal && !hasClinicalRefluxSignsInMessage) {
+    const def = SIGNAL_DEFS.find((d) => d.id === 'pacifier_isolated_complaint');
+    if (def) {
+      signals.push({ id: def.id, label: def.label, matched: ['composite-pacifier-isolated'] });
+      def.boostThemes.forEach((t) => boostThemes.add(t));
+      priorities.push(def.priority);
+      hasDirectiveSignal = true;
+    }
+  }
+
+  // Composite signal — TESTE 005 (RN 16d): mãe relata complemento com sonda
+  // E que a bebê AGORA mama bem. A hipótese central deve priorizar baixa
+  // produção materna (não baixa transferência), e a investigação deve incluir
+  // avaliação do complemento também durante o dia.
+  const sondaPattern =
+    /(complemento\s+com\s+sonda|sonda\s+(orogastrica|orogástrica|nasogastrica|nasogástrica|gastrica|gástrica|para\s+(mamada|aliment|complement))|com\s+sonda|com\s+a\s+sonda|complementando\s+(.{0,40})?(com\s+)?sonda|complement[oa]\s+com\s+sonda|usei\s+sonda|usa\s+sonda|usando\s+sonda)/;
+  const mamaBemNowPattern =
+    /(agora\s+(esta|est[aá])\s+mamando\s+bem|esta\s+mamando\s+bem|est[aá]\s+mamando\s+bem|mamando\s+bem|mamou\s+bem|mama\s+bem)/;
+  if (sondaPattern.test(norm) && mamaBemNowPattern.test(norm)) {
+    const def = SIGNAL_DEFS.find((d) => d.id === 'sonda_with_mama_bem_priority_production');
+    if (def) {
+      signals.push({ id: def.id, label: def.label, matched: ['composite-sonda-mama-bem'] });
       def.boostThemes.forEach((t) => boostThemes.add(t));
       priorities.push(def.priority);
       hasDirectiveSignal = true;

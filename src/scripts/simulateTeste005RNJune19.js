@@ -7,6 +7,11 @@
  *   TESTE 005  RN 12d  (despertar único após sono precoce 19h-20h → ~23h — eixo mamada noturna, NÃO abrir por Moro/Travesseiro)
  *   TESTE 005  RN 12d/02 (madrugada — manter noturno + troca de fralda ANTES da mamada + linguagem neutra mamada/peito)
  *   TESTE 005  RN 13d  (choro no banho — eixo conforto/contenção/térmica, aulas filtradas — nada de Mamadas Efetivas / Passo 4 / Troca dia-noite)
+ *   TESTE 005  RN 16d  (busca pelo peito <2h + complemento com sonda + mama bem agora — priorizar BAIXA PRODUÇÃO sobre baixa transferência, gênero feminino, complemento também durante o dia)
+ *   TESTE 005  RN 19d  (só dorme no colo + Travesseiro tentado — NÃO escalonar refluxo patológico, NÃO orientar 45°, NÃO citar Pediatra/suporte humano sem sinais; aulas: Travesseiro/Berço/Arroto/Moro)
+ *   TESTE 005  RN 20d  (sonecas curtas no berço ~20 min + melhora no colo — diferenciar elevação 30-40° fisiológico × 45° patológico, investigar Moro/charutinho/contenção, arroto direto)
+ *   TESTE 005  RN 22d  (chupeta cai ISOLADA — NÃO extrapolar (sem refluxo, sem Travesseiro tentado, sem charutinho noturno, sem 45°, sem Pediatra/suporte humano), gênero feminino)
+ *   TESTE 005  RN 23d  (charutinho noturno + sonecas só no colo de dia + Travesseiro tentado — orientar charutinho TAMBÉM de dia, "mama bem" não confirma mamada efetiva, RN não cria associação negativa)
  *
  * Layer A: deterministic — rules, prompts, forbidden, signals (no LLM)
  * Layer B: end-to-end — processTurn (LLM if OPENAI_API_KEY, else local fallback)
@@ -51,6 +56,15 @@ const NEW_RULE_IDS = [
   'rn-bath-crying-stay-on-topic',
   // TESTE 005 — concordância de gênero (caso 4)
   'rn-gender-consistency',
+  // TESTE 005 — extensão (16d, 19d, 20d, 22d, 23d)
+  'rn-no-extrapolation-from-mother-text',
+  'rn-pacifier-isolated-scope',
+  'rn-baixa-producao-priority-over-transfer-with-sonda',
+  'rn-pathological-reflux-clinical-signs-list',
+  'rn-elevation-default-30-40',
+  'rn-keep-response-focused-on-original-question',
+  'rn-lessons-must-match-complaint',
+  'rn-bath-response-add-adaptation-closing',
 ];
 
 const PROMPT_FRAGMENTS = [
@@ -78,6 +92,17 @@ const PROMPT_FRAGMENTS = [
   'choro durante o banho',
   'fralda de pano',
   'barriguinha para baixo',
+  // TESTE 005 extensão — anti-extrapolação (RN 22d)
+  'ancora obrigatoria no relato da mae',
+  'aplicar o metodo ao caso, nao importar o metodo ao texto',
+  // TESTE 005 extensão — escopo da queixa preservado (RN 19d/22d)
+  'escopo da queixa deve ser preservado',
+  'queixa de chupeta caindo isolada',
+  // TESTE 005 extensão — aulas devem casar com a queixa (RN 19d)
+  'aulas devem casar com a queixa',
+  // TESTE 005 extensão — baixa produção > baixa transferência (RN 16d)
+  'baixa producao > baixa transferencia quando ha sonda',
+  'isso indica baixa producao materna ou necessidade de suporte de producao',
 ];
 
 const FORBIDDEN_FRAGMENTS = [
@@ -95,6 +120,22 @@ const FORBIDDEN_FRAGMENTS = [
   'presumir que a mae faz ordenha ou oferece complemento quando ela nao informou',
   // RN 10d — aulas amplas
   'indicar aulas amplas (inicio do sono noturno, troca dia-noite)',
+  // TESTE 005 extensão — RN 22d (não afirmar fatos que a mãe não disse)
+  'afirmar ou pressupor que a mae ja tentou uma estrategia',
+  'afirmar ou pressupor que a mae usa charutinho a noite',
+  'como ha sinais que podem sugerir refluxo',
+  // TESTE 005 extensão — RN 22d (queixa de chupeta isolada)
+  'incluir blocos sobre refluxo patologico, elevacao do colchao',
+  // TESTE 005 extensão — RN 19d (aulas que não casam com a queixa)
+  'evite que o bebe troque o dia pela noite',
+  // TESTE 005 extensão — RN 19d/20d (45° como medida automática)
+  'tratar a elevacao do colchao em 45',
+  // TESTE 005 extensão — RN 19d/22d (resposta longa demais com tudo)
+  'estender uma resposta sobre uma queixa especifica',
+  // TESTE 005 extensão — RN 16d (baixa transferência quando há sonda + mama bem)
+  'baixa transferencia de leite',
+  // TESTE 005 extensão — RN 16d/19d/22d (alternar gênero)
+  'alternar genero gramatical ao longo da resposta',
 ];
 
 function runInfrastructureChecks() {
@@ -191,6 +232,58 @@ function runInfrastructureChecks() {
         'e ainda uso aquelas almofadas para dar mais seguran\u00e7a e conforto. ' +
         'O que eu poderia fazer para diminuir esse choro?',
       must: ['bath_crying_rn'],
+    },
+    {
+      id: 'rn-16d-sonda-mama-bem',
+      ageDays: 16,
+      message:
+        'Oi, bom dia! Minha bb tem 16 dias. Ela teve que fazer o procedimento na linguinha e teve tbm ict\u00ear\u00edcia. ' +
+        'Agora ela est\u00e1 mamando bem e estou complementando das duas mamadas da noite (22h e madrugada) com 60 ml com a sonda. ' +
+        'Mas mesmo assim, nessa \u00faltima madrugada, por exemplo, ap\u00f3s fazer bastante xixi, coc\u00f4, arrotar e solu\u00e7ar, ' +
+        'ficou procurando o peito no intervalo menor que 2h. Na verdade, esse comportamento dela, de procurar o peito ' +
+        'no intervalo menor que 2h iniciou j\u00e1 no finalzinho da tarde. Em vista disso, as madrugadas tem sido dif\u00edceis ' +
+        'e as manh\u00e3s mais tranquilas. Como devo ajustar?',
+      must: ['sonda_with_mama_bem_priority_production', 'short_feeding_interval'],
+    },
+    {
+      id: 'rn-19d-only-lap-travesseiro-tried',
+      ageDays: 19,
+      message:
+        'Ol\u00e1, boa noite. Apesar de ter assistido as aulas continuo com a seguinte dificuldade. ' +
+        'Tenho uma beb\u00ea de 19 dias, ela dorme bem \u00e0 noite e durante o dia tamb\u00e9m, mas no entanto, ' +
+        'somente dorme no colo de dia e de noite. J\u00e1 tentei usar o m\u00e9todo do travesseiro, ' +
+        'mas ao coloc\u00e1-la no ber\u00e7o, ap\u00f3s poucos minutos ela acorda e chora, n\u00e3o fica de jeito nenhum.',
+      must: ['travesseiro_tried_without_success', 'diurnal_only_difficulty'],
+    },
+    {
+      id: 'rn-20d-short-naps-back-to-lap',
+      ageDays: 20,
+      message:
+        'Meu beb\u00ea de 20 dias passou a ter sonecas diurnas muito curtas no ber\u00e7o. ' +
+        'Ele mama, dorme, \u00e9 colocado no ber\u00e7o, permanece cerca de 20 minutos, acorda chorando ' +
+        'e volta a dormir bem apenas se for pego e ficar no colo. \u00c0 noite, dorme bem no ber\u00e7o. ' +
+        'Esse comportamento \u00e9 esperado nessa fase?',
+      must: ['wakes_short_after_crib_back_to_lap', 'diurnal_only_difficulty'],
+    },
+    {
+      id: 'rn-22d-pacifier-isolated',
+      ageDays: 22,
+      message:
+        'Ol\u00e1, minha beb\u00ea tem 22 dias. Ela est\u00e1 usando chupeta devido \u00e0 necessidade de suc\u00e7\u00e3o, ' +
+        'por\u00e9m, quando ela dorme com a chupeta, ela acorda porque a chupeta cai e preciso ficar colocando novamente. ' +
+        'Como consigo resolver?',
+      must: ['pacifier_in_rn', 'pacifier_isolated_complaint'],
+    },
+    {
+      id: 'rn-23d-charutinho-night-naps-difficult',
+      ageDays: 23,
+      message:
+        'Minha beb\u00ea tem 23 dias, dorme bem \u00e0 noite por cerca de 3 horas, mas apenas com charutinho. ' +
+        'Sem o charutinho, apresenta muitos espasmos pelo reflexo de Moro e desperta. ' +
+        'Durante o dia, as sonecas est\u00e3o mais dif\u00edceis: mama bem, dorme no colo, mas acorda logo ' +
+        'ao ser colocada no ber\u00e7o ou no Mois\u00e9s, mesmo com t\u00e9cnica do travesseiro, ru\u00eddo e controle de luminosidade. ' +
+        'A d\u00favida principal \u00e9 o que mais pode ser feito para a beb\u00ea se acostumar a dormir fora do colo.',
+      must: ['charutinho_night_only_rn', 'travesseiro_tried_without_success'],
     },
   ];
   for (const sc of signalCases) {
@@ -319,7 +412,7 @@ const E2E = [
       if (!/(sinal.{0,10}(claro|forte)\s+de\s+fome|sinais.{0,10}(classicos|fortes|claros)\s+de\s+fome|isso\s+e\s+sinal\s+de\s+fome|indicam?\s+fome|comportamento.{0,20}(indica|sugere|aponta)\s+fome)/.test(n))
         issues.push('must mark sugar mãozinhas + nervosismo + choramingo as SINAL CLARO DE FOME (not generic agitação)');
       // PERGUNTAS INDISPENSÁVEIS — devem aparecer em forma interrogativa direta na resposta
-      const askedFedAtTime = /(ela\s+(j[aá]\s+)?mamou\s+nesse\s+hor|nesse\s+hor[aá]rio[,\s]+ela\s+(j[aá]\s+)?(mamou|tem mamado)|antes\s+de\s+(tentar\s+coloc[aá]-la|coloc[aá]-la\s+no\s+ber).{0,80}ela\s+(j[aá]\s+)?(mama|mamou)|ela\s+(j[aá]\s+)?mamou\s+antes|voc[eê]\s+oferec[eu]\s+a\s+mamada\s+nesse\s+hor)/.test(n);
+      const askedFedAtTime = /(ela\s+(j[aá]\s+)?mamou\s+nesse\s+hor|nesse\s+hor[aá]rio[,\s]+ela\s+(j[aá]\s+)?(mamou|tem mamado)|antes\s+de\s+(tentar\s+coloc[aá]-la|coloc[aá]-la\s+no\s+ber).{0,80}ela\s+(j[aá]\s+)?(mama|mamou)|ela\s+(j[aá]\s+)?mamou\s+antes|voc[eê]\s+oferec[eu]\s+a\s+mamada\s+nesse\s+hor|quando\s+ela\s+acorda.{0,40}voc[eê]\s+oferec[eu]\s+a\s+mamada|nesse\s+hor[aá]rio.{0,40}voc[eê]\s+oferec[eu]\s+a\s+mamada)/.test(n);
       if (!askedFedAtTime)
         issues.push('must ask "nesse horário, ela já mamou?" / "você ofereceu a mamada nesse horário?"');
       const askedBeforeOrAfter = /(antes\s+ou\s+depois\s+da\s+mamada|antes\s+da\s+mamada\s+ou\s+depois|depois\s+da\s+mamada\s+ou\s+antes|esse\s+comportamento.{0,80}(antes|depois)\s+da\s+mamada)/.test(n);
@@ -484,7 +577,8 @@ const E2E = [
       const issues = []; const warn = []; const n = strip(text);
       if (!/\b13\s*dias\b/.test(n)) issues.push('must cite explicit age "13 dias"');
       // Três causas prováveis (sensação de queda, insegurança, frio)
-      if (!/(sensac[a\u00e3]o\s+de\s+queda|sentir\s+que\s+vai\s+cair)/.test(n))
+      // Aceita singular ("sensação de queda") e plural ("sensações de queda").
+      if (!/(sensac(?:[a\u00e3]o|[o\u00f5]es)\s+de\s+queda|sentir\s+que\s+vai\s+cair)/.test(n))
         issues.push('must name "sensa\u00e7\u00e3o de queda" as probable cause');
       if (!/(inseguran[c\u00e7]a|sentir-se\s+inseguro|sentirem-se\s+inseguros)/.test(n))
         issues.push('must name "inseguran\u00e7a" as probable cause');
@@ -524,6 +618,195 @@ const E2E = [
       result.__warnings = warn; return issues;
     },
   },
+  {
+    id: 'teste-005-rn-16d-sonda-mama-bem',
+    label: 'TESTE 005 \u2014 RN 16 dias (sonda + mama bem \u2014 baixa produ\u00e7\u00e3o > baixa transfer\u00eancia)',
+    profile: { motherName: '\u2014', babyName: 'bb', ageDays: 16 },
+    message:
+      'Oi, bom dia! Minha bb tem 16 dias. Ela teve que fazer o procedimento na linguinha e teve tbm icter\u00edcia. ' +
+      'Agora ela est\u00e1 mamando bem e estou complementando das duas mamadas da noite (22h e madrugada) com 60 ml com a sonda. ' +
+      'Mas mesmo assim, nessa \u00faltima madrugada, por exemplo, ap\u00f3s fazer bastante xixi, coc\u00f4, arrotar e solu\u00e7ar, ' +
+      'ficou procurando o peito no intervalo menor que 2h. Na verdade, esse comportamento dela, de procurar o peito ' +
+      'no intervalo menor que 2h iniciou j\u00e1 no finalzinho da tarde. Em vista disso, as madrugadas tem sido dif\u00edceis ' +
+      'e as manh\u00e3s mais tranquilas. Como devo ajustar?',
+    checks: (text, result) => {
+      const issues = []; const warn = []; const n = strip(text);
+      if (!/\b16\s*dias\b/.test(n)) issues.push('must cite explicit age "16 dias"');
+      if (!/complemento com sonda/.test(n))
+        issues.push('must cite "complemento com sonda" textually (exact phrase, prompt rule)');
+      if (!/(ordenha|ordenhas)/.test(n))
+        issues.push('must cite "ordenha" or "ordenhas" as strategy to stimulate production');
+      if (!/(baixa producao materna|baixa producao|necessidade de suporte de producao|menor producao materna)/.test(n))
+        issues.push('must name "baixa produ\u00e7\u00e3o materna ou necessidade de suporte de produ\u00e7\u00e3o" as central hypothesis');
+      if (!/(solta o peito|relaxa o corpo|abre as mao|reduz o ritmo|sinais de saciedade)/.test(n))
+        issues.push('must list sinais de saciedade');
+      if (!/(30\s*(a|\u2013|-|\u2014|ate|at\u00e9)\s*40\s*(min|minutos))/.test(n))
+        issues.push('must include vertical "30 a 40 minutos" EXPLICITLY');
+      if (/baixa transferencia.{0,40}(hipotese principal|hipotese central|principal hipotese|eixo principal)/.test(n))
+        issues.push('TESTE 005 RN 16d: must NOT name "baixa transfer\u00eancia" as hipotese principal when m\u00e3e says "agora mama bem" + sonda');
+      if (/\b(se ele mama|ele mama no peito|ele suga ativamente|ele solta o peito|ele relaxa o corpo|seu beb\u00ea)\b/.test(n))
+        issues.push('TESTE 005 RN 16d: must respect feminine gender ("minha bb", "ela") \u2014 closing template must read "se ela mama / sua beb\u00ea"');
+      if (/(estabeleca o horario do inicio do sono noturno|inicio do sono noturno|evite que o bebe troque o dia pela noite|troca dia[\s\-]?noite|trocar o dia pela noite)/.test(n))
+        issues.push('must NOT recommend In\u00edcio do Sono Noturno / Troca dia-noite as principal lessons');
+      if (!/(durante o dia|tambem durante o dia|periodo diurno|tambem no periodo diurno|tambem no dia|complemento.{0,40}(dia|diurno))/.test(n))
+        warn.push('nuance: ideally orient evaluating complemento "tamb\u00e9m durante o dia" (n\u00e3o apenas no fim da tarde / madrugada)');
+      if (!/(amamentacao pratica e descomplicada|mamadas efetivas|reflexo de succao|livre demanda)/.test(n))
+        warn.push('nuance: ideally cite Amamenta\u00e7\u00e3o Pr\u00e1tica e Descomplicada / Mamadas Efetivas / Reflexo de Suc\u00e7\u00e3o / Livre Demanda');
+      result.__warnings = warn; return issues;
+    },
+  },
+  {
+    id: 'teste-005-rn-19d-only-lap-travesseiro-tried',
+    label: 'TESTE 005 \u2014 RN 19 dias (s\u00f3 dorme no colo + Travesseiro tentado \u2014 N\u00c3O escalonar refluxo / 45\u00b0 / Pediatra)',
+    profile: { motherName: '\u2014', babyName: 'bb', ageDays: 19 },
+    message:
+      'Ol\u00e1, boa noite. Apesar de ter assistido as aulas continuo com a seguinte dificuldade. ' +
+      'Tenho uma beb\u00ea de 19 dias, ela dorme bem \u00e0 noite e durante o dia tamb\u00e9m, mas no entanto, ' +
+      'somente dorme no colo de dia e de noite. J\u00e1 tentei usar o m\u00e9todo do travesseiro, ' +
+      'mas ao coloc\u00e1-la no ber\u00e7o, ap\u00f3s poucos minutos ela acorda e chora, n\u00e3o fica de jeito nenhum.',
+    checks: (text, result) => {
+      const issues = []; const warn = []; const n = strip(text);
+      if (!/\b19\s*dias\b/.test(n)) issues.push('must cite explicit age "19 dias"');
+      if (!/(aind?a?\s+nao\s+cria|nao\s+cria\s+associacao\s+(comportamental\s+)?negativa|nao\s+e\s+associacao\s+negativa|nao\s+e\s+vicio|nao\s+e\s+manha|nao\s+e\s+mau\s+habito)/.test(n))
+        issues.push('must reassure "com 19 dias ainda n\u00e3o cria associa\u00e7\u00e3o negativa"');
+      if (!/(adaptacao fisiologica|organizacao corporal|transicao de superficie|transicao de textura|transicao de superficie\/textura|fase fisiologica)/.test(n))
+        warn.push('nuance: ideally enquadrar como "fase de adapta\u00e7\u00e3o fisiol\u00f3gica / organiza\u00e7\u00e3o corporal / transi\u00e7\u00e3o de superf\u00edcie/textura"');
+      if (!/(30\s*(a|\u2013|-|\u2014|ate|at\u00e9)\s*40\s*(min|minutos))/.test(n))
+        issues.push('must include vertical "30 a 40 minutos" EXPLICITLY');
+      if (!/(travesseiro\s+(em\s+cima|sobre)\s+(do|o)\s+colo|sonecas?.{0,40}travesseiro.{0,40}colo|travesseiro.{0,40}colo.{0,80}contenc[a\u00e3]o)/.test(n))
+        issues.push('must orient Travesseiro corrigido: "sonecas no travesseiro em cima do colo com conten\u00e7\u00e3o"');
+      if (/refluxo patologico/.test(n) && !/(se houver|se aparecer|caso aparec[a\u00e3]o|diante de|na presenca de)\s+[\s\S]{0,80}(vomitos|engasgos|recusa|arqueamento|irritabilidade)/.test(n))
+        issues.push('TESTE 005 RN 19d: must NOT escalate to refluxo patol\u00f3gico without clinical signs in m\u00e3e\'s report (gate clinic must be conditional)');
+      if (/(elevacao do colchao em 45|colchao.{0,8}45\u00b0|colchao em 45 graus|elevar.{0,5}colchao.{0,20}45)/.test(n))
+        issues.push('TESTE 005 RN 19d: must NOT recommend mattress elevation 45\u00b0 \u2014 not warranted by m\u00e3e\'s report');
+      if (/(material do pediatra|pediatra roberto|roberto franklin|aulas extras|aulas bonus|aulas b[oô]nus)/.test(n))
+        issues.push('TESTE 005 RN 19d: must NOT route to material do Pediatra Roberto Franklin \u2014 no clinical signs reported');
+      if (/(suporte humano|encaminh.*suporte|equipe de suporte)/.test(n))
+        issues.push('TESTE 005 RN 19d: must NOT route to suporte humano \u2014 no clinical signs reported');
+      if (/(evite que o bebe troque o dia pela noite|trocar o dia pela noite|troca dia[\s\-]?noite|estabeleca o horario do inicio do sono noturno|inicio do sono noturno)/.test(n))
+        issues.push('TESTE 005 RN 19d: must NOT recommend Troca dia-noite / In\u00edcio do Sono Noturno \u2014 m\u00e3e says beb\u00ea sleeps well day and night');
+      if (/\b(se ele mama|ele mama no peito|ele suga ativamente|ele solta o peito|ele relaxa o corpo)\b/.test(n))
+        issues.push('TESTE 005 RN 19d: must respect feminine gender ("uma beb\u00ea", "coloc\u00e1-la", "ela") \u2014 closing template must read "se ela mama"');
+      if (!/(estimule o arroto|o que e o refluxo|estrategia do travesseiro|berco do bebe|charutinho|reflexos? de moro)/.test(n))
+        warn.push('nuance: ideally cite Travesseiro / Ber\u00e7o do Beb\u00ea / Estimule o Arroto / Charutinho-Moro as principal lessons');
+      result.__warnings = warn; return issues;
+    },
+  },
+  {
+    id: 'teste-005-rn-20d-short-naps-back-to-lap',
+    label: 'TESTE 005 \u2014 RN 20 dias (sonecas curtas no ber\u00e7o ~20 min + colo \u2014 30-40\u00b0 fisiol\u00f3gico vs 45\u00b0 patol\u00f3gico)',
+    profile: { motherName: '\u2014', babyName: 'bb', ageDays: 20 },
+    message:
+      'Meu beb\u00ea de 20 dias passou a ter sonecas diurnas muito curtas no ber\u00e7o. ' +
+      'Ele mama, dorme, \u00e9 colocado no ber\u00e7o, permanece cerca de 20 minutos, acorda chorando ' +
+      'e volta a dormir bem apenas se for pego e ficar no colo. \u00c0 noite, dorme bem no ber\u00e7o. ' +
+      'Esse comportamento \u00e9 esperado nessa fase?',
+    checks: (text, result) => {
+      const issues = []; const warn = []; const n = strip(text);
+      if (!/\b20\s*dias\b/.test(n)) issues.push('must cite explicit age "20 dias"');
+      if (!/(aind?a?\s+nao\s+cria|nao\s+cria\s+associacao\s+(comportamental\s+)?negativa|nao\s+e\s+associacao\s+negativa|nao\s+se\s+trata\s+de\s+(uma\s+)?associacao\s+negativa|nao\s+e\s+vicio|nao\s+e\s+manha|nao\s+e\s+mau\s+habito|leitura.{0,40}alimentar.{0,40}nao\s+(e|se\s+trata).{0,40}associacao|nao\s+comportament|relacionado.{0,80}alimentar.{0,40}nao\s+comportament|alimentar.{0,40}nao\s+comportament|questoes\s+alimentares.{0,40}nao\s+comportament)/.test(n))
+        issues.push('must reassure "com 20 dias ainda n\u00e3o cria associa\u00e7\u00e3o negativa" (or equivalent: "n\u00e3o comportamentais" / "leitura alimentar, n\u00e3o comportamental")');
+      if (!/(mamada efetiv|mamando.{0,40}efetiv|mama.{0,40}(de\s+forma\s+)?efetiv|sucao ativa|deglutic[a\u00e3]o|saciedade|producao.{0,40}(dia|diurna|tarde)|transferencia.{0,40}(dia|diurna|tarde)|fluxo de leite)/.test(n))
+        issues.push('must investigate eixo alimentar (mamada efetiva, sa\u00e7iedade, produ\u00e7\u00e3o/transfer\u00eancia) for the diurnal complaint');
+      if (!/(30\s*(a|\u2013|-|\u2014|ate|at\u00e9)\s*40\s*(min|minutos))/.test(n))
+        issues.push('must include vertical "30 a 40 minutos" EXPLICITLY after mamada');
+      if (!/(solta o peito|relaxa o corpo|abre as mao|reduz o ritmo|sinais de saciedade)/.test(n))
+        warn.push('nuance: response does NOT include the official sinais de saciedade list \u2014 standard closing block was not appended for this case');
+      if (!/(desconforto pos[\s-]?mamada|refluxo fisiologico)/.test(n))
+        issues.push('must mention "desconforto p\u00f3s-mamada" or "refluxo fisiol\u00f3gico" as possible explanation for waking ~20 min after crib + improving in colo');
+      const mentions45 = /(elevacao do colchao em 45|colchao em 45 graus|colchao.{0,8}45\u00b0|elevar.{0,5}colchao.{0,20}45)/.test(n);
+      if (mentions45 && !/(refluxo patologico|suspeita.{0,40}refluxo patologico|investigacao.{0,40}refluxo patologico)/.test(n))
+        issues.push('TESTE 005 RN 20d: if mentioning 45\u00b0 elevation, must restrict it to refluxo patol\u00f3gico / suspeita de refluxo patol\u00f3gico (n\u00e3o oferecer 45\u00b0 generalizadamente)');
+      if (mentions45 && !/(suporte humano|encaminh.{0,40}suporte|conversar com o pediatra|procurar o pediatra)/.test(n))
+        issues.push('TESTE 005 RN 20d: when mentioning 45\u00b0 (refluxo patol\u00f3gico), must include encaminhamento ao suporte humano / pediatra');
+      const mentionsElevation30to40 = /(30\s*(a|\u2013|-|\u2014|ate|at\u00e9)\s*40)\s*(graus|\u00b0)/.test(n);
+      if (!mentions45 && !mentionsElevation30to40)
+        warn.push('nuance: ideally diferenciar elevac\u00e3o do colch\u00e3o \u2014 30 a 40\u00b0 para refluxo fisiol\u00f3gico vs 45\u00b0 para refluxo patol\u00f3gico');
+      if (!/(reflexo de moro|sobressaltos?|charutinho|contenc[a\u00e3]o)/.test(n))
+        warn.push('nuance: ideally investigate Moro / sobressaltos and orient charutinho/conten\u00e7\u00e3o when applicable');
+      if (!/\barrot/.test(n))
+        warn.push('nuance: ideally orient arroto p\u00f3s-mamada de forma direta');
+      result.__warnings = warn; return issues;
+    },
+  },
+  {
+    id: 'teste-005-rn-22d-pacifier-isolated',
+    label: 'TESTE 005 \u2014 RN 22 dias (chupeta caindo ISOLADA \u2014 N\u00c3O extrapolar / N\u00c3O presumir Travesseiro / Moro / refluxo)',
+    profile: { motherName: '\u2014', babyName: 'bb', ageDays: 22 },
+    message:
+      'Ol\u00e1, minha beb\u00ea tem 22 dias. Ela est\u00e1 usando chupeta devido \u00e0 necessidade de suc\u00e7\u00e3o, ' +
+      'por\u00e9m, quando ela dorme com a chupeta, ela acorda porque a chupeta cai e preciso ficar colocando novamente. ' +
+      'Como consigo resolver?',
+    checks: (text, result) => {
+      const issues = []; const warn = []; const n = strip(text);
+      if (!/\b22\s*dias\b/.test(n)) issues.push('must cite explicit age "22 dias"');
+      if (!/(necessidade de succao|reflexo de succao|sucao.{0,30}(fisiologic|esperad))/.test(n))
+        issues.push('must frame the necessidade de suc\u00e7\u00e3o as fisiol\u00f3gica / esperada nessa fase');
+      if (!/(nao precisa recolocar|n[\u00e3a]o precisa ser recolocada|sem precisar recolocar|n[\u00e3a]o e necessario recolocar)/.test(n))
+        issues.push('must orient "se a chupeta cai e a beb\u00ea continua dormindo, n\u00e3o precisa recolocar"');
+      if (!/(mama no peito|formula ou complemento|peito.{0,40}formula|forma de alimentacao|peito[,\.\s]+formula)/.test(n))
+        issues.push('must ask forma de alimenta\u00e7\u00e3o (peito, f\u00f3rmula ou complemento)');
+      if (!/(30\s*(a|\u2013|-|\u2014|ate|at\u00e9)\s*40\s*(min|minutos))/.test(n))
+        issues.push('must include vertical "30 a 40 minutos" EXPLICITLY');
+      if (!/(solta o peito|relaxa o corpo|abre as mao|reduz o ritmo|sinais de saciedade)/.test(n))
+        issues.push('must list sinais de saciedade');
+      if (!/(aind?a?\s+nao\s+cria|nao\s+cria\s+associacao\s+(comportamental\s+)?negativa|nao\s+e\s+associacao\s+negativa|nao\s+e\s+vicio|nao\s+e\s+manha|nao\s+e\s+mau\s+habito)/.test(n))
+        warn.push('nuance: ideally reassure "com 22 dias ainda n\u00e3o cria associa\u00e7\u00e3o negativa"');
+      if (/(como voce ja tentou|voce ja tentou.{0,40}travesseiro|como voce ja vem.{0,40}travesseiro|como o charutinho funciona a noite|como o charutinho vem funcionando|como vem usando o charutinho|como voce ja usa o charutinho)/.test(n))
+        issues.push('TESTE 005 RN 22d: must NOT presume Travesseiro/charutinho prior usage \u2014 m\u00e3e did NOT report any of these');
+      if (/(como ha sinais que podem sugerir refluxo|como ha sinais.{0,40}refluxo|como ela apresenta espasmos|como ela ja apresenta espasmos|ja que sua bebe tem espasmos|como ela vem apresentando refluxo)/.test(n))
+        issues.push('TESTE 005 RN 22d: must NOT presume refluxo / Moro signs \u2014 m\u00e3e did NOT report them');
+      if (/refluxo patologico/.test(n))
+        issues.push('TESTE 005 RN 22d: must NOT escalate to refluxo patol\u00f3gico \u2014 m\u00e3e did NOT report any clinical sign');
+      if (/(elevacao do colchao em 45|colchao em 45 graus|colchao.{0,8}45\u00b0|elevar.{0,5}colchao.{0,20}45)/.test(n))
+        issues.push('TESTE 005 RN 22d: must NOT recommend mattress elevation 45\u00b0 \u2014 not warranted by m\u00e3e\'s isolated pacifier complaint');
+      if (/(material do pediatra|pediatra roberto|roberto franklin|aulas extras|aulas bonus|aulas b[oô]nus)/.test(n))
+        issues.push('TESTE 005 RN 22d: must NOT route to material do Pediatra Roberto Franklin \u2014 no clinical signs reported');
+      if (/(suporte humano|encaminh.*suporte|equipe de suporte)/.test(n))
+        issues.push('TESTE 005 RN 22d: must NOT route to suporte humano \u2014 no clinical signs reported');
+      if (/(estrategia do travesseiro|sonecas no travesseiro|travesseiro.{0,40}colo)/.test(n))
+        issues.push('TESTE 005 RN 22d: must NOT include Estrat\u00e9gia do Travesseiro block \u2014 m\u00e3e did NOT mention it');
+      if (/\b(se ele mama|ele mama no peito|ele suga ativamente|ele solta o peito|ele relaxa o corpo|seu beb\u00ea)\b/.test(n))
+        issues.push('TESTE 005 RN 22d: must respect feminine gender ("minha beb\u00ea", "ela") \u2014 closing template must read "se ela mama / sua beb\u00ea"');
+      result.__warnings = warn; return issues;
+    },
+  },
+  {
+    id: 'teste-005-rn-23d-charutinho-night-naps-difficult',
+    label: 'TESTE 005 \u2014 RN 23 dias (charutinho s\u00f3 \u00e0 noite + sonecas s\u00f3 no colo \u2014 charutinho TAMB\u00c9M de dia + "mama bem" \u2260 efetiva)',
+    profile: { motherName: '\u2014', babyName: 'bb', ageDays: 23 },
+    message:
+      'Minha beb\u00ea tem 23 dias, dorme bem \u00e0 noite por cerca de 3 horas, mas apenas com charutinho. ' +
+      'Sem o charutinho, apresenta muitos espasmos pelo reflexo de Moro e desperta. ' +
+      'Durante o dia, as sonecas est\u00e3o mais dif\u00edceis: mama bem, dorme no colo, mas acorda logo ' +
+      'ao ser colocada no ber\u00e7o ou no Mois\u00e9s, mesmo com t\u00e9cnica do travesseiro, ru\u00eddo e controle de luminosidade. ' +
+      'A d\u00favida principal \u00e9 o que mais pode ser feito para a beb\u00ea se acostumar a dormir fora do colo.',
+    checks: (text, result) => {
+      const issues = []; const warn = []; const n = strip(text);
+      if (!/\b23\s*dias\b/.test(n)) issues.push('must cite explicit age "23 dias"');
+      if (!/(reflexo de moro.{0,120}(fisiologic|esperad|comum|normal|impactand?o?|impactar|esta impactando|esta em uma fase|conter|nessa fase)|moro.{0,120}(fisiologic|esperad|comum|normal|impactand?o?|impactar|conter)|esperad[ao].{0,120}(reflexo de moro|moro)|comum.{0,120}(reflexo de moro|moro)|adaptacao.{0,120}(reflexo de moro|moro)|fase.{0,40}(comum|esperad|fisiologic|adaptacao).{0,120}moro|moro.{0,120}(fase|adaptacao)|charutinho.{0,40}(conter|reflexo de moro)|padrao\s+pode\s+ocorrer.{0,40}fase.{0,120}moro|esse padrao pode ocorrer.{0,120}moro|pode ocorrer nessa fase.{0,80}moro)/.test(n))
+        issues.push('must frame reflexo de Moro as fisiol\u00f3gico / esperado / comum nessa fase (or use charutinho as way to "conter o reflexo de Moro")');
+      if (!/(charutinho.{0,80}(durante o dia|tambem.{0,30}dia|nas sonecas diurnas|tambem.{0,20}sonecas)|tambem.{0,40}charutinho.{0,40}(dia|sonecas diurnas)|charutinho.{0,40}dia.{0,40}noite|use.{0,40}charutinho.{0,40}dia)/.test(n))
+        issues.push('TESTE 005 RN 23d: must orient charutinho TAMB\u00c9M durante o dia (especialmente nas sonecas diurnas) \u2014 m\u00e3e usa s\u00f3 \u00e0 noite');
+      if (!/(travesseiro\s+(em\s+cima|sobre)\s+(do|o)\s+colo|sonecas?.{0,40}travesseiro.{0,40}colo|travesseiro.{0,40}colo.{0,80}contenc[a\u00e3]o|contenc[a\u00e3]o.{0,40}m[a\u00e3]os?.{0,80}travesseiro)/.test(n))
+        issues.push('must orient Travesseiro corrigido com etapa intermediaria: "sonecas no travesseiro em cima do colo com conten\u00e7\u00e3o das m\u00e3os"');
+      if (!/("?mama bem"?\s+nao\s+(confirma|garante|significa|equivale)|n[\u00e3a]o\s+confirma\s+mamada\s+efetiv|"?mama bem"?\s+nao\s+e\s+suficiente.{0,40}(efetiv|mamada)|isso\s+nao\s+confirma\s+mamada\s+efetiv|nao\s+(quer|significa)\s+dizer\s+que\s+a\s+mamada\s+esta\s+efetiv)/.test(n))
+        issues.push('TESTE 005 RN 23d: must explain that "mama bem" does NOT confirm mamada efetiva no RN \u2014 investigate suc\u00e7\u00e3o ativa, deglutic\u00e3o aud\u00edvel, sa\u00e7iedade, busca precoce, produ\u00e7\u00e3o, transfer\u00eancia');
+      if (!/(sucao ativa|suga\s+(de\s+forma\s+)?ativ|deglutic[a\u00e3]o\s+(audivel|audiv|aud\u00edvel)|saciedade.{0,80}(solta|relaxa|abre|reduz)|busca\s+precoce.{0,40}peito)/.test(n))
+        issues.push('must investigate mamada efetiva concretely: suc\u00e7\u00e3o ativa, deglutic\u00e3o aud\u00edvel, saciedade, busca precoce pelo peito');
+      if (!/(30\s*(a|\u2013|-|\u2014|ate|at\u00e9)\s*40\s*(min|minutos))/.test(n))
+        issues.push('must include vertical "30 a 40 minutos" EXPLICITLY');
+      if (!/(aind?a?\s+nao\s+cria|nao\s+cria\s+associacao\s+(comportamental\s+)?negativa|nao\s+e\s+associacao\s+negativa|nao\s+e\s+vicio|nao\s+e\s+manha|nao\s+e\s+mau\s+habito)/.test(n))
+        issues.push('must reassure "com 23 dias ainda n\u00e3o cria associa\u00e7\u00e3o negativa por dormir no colo / no peito / contenc\u00e3o"');
+      if (!/(charutinho\s+e\s+(os\s+)?reflexos?\s+de\s+moro|charutinho.{0,30}reflexo\s+de\s+moro)/.test(n))
+        warn.push('nuance: ideally cite a aula "Charutinho e Reflexos de Moro" como prioritaria neste caso');
+      if (/(estabeleca o horario do inicio do sono noturno|inicio do sono noturno|evite que o bebe troque o dia pela noite|troca dia[\s\-]?noite|trocar o dia pela noite)/.test(n))
+        warn.push('nuance: prefer NOT to recommend In\u00edcio do Sono Noturno / Troca dia-noite for this case');
+      if (/\b(se ele mama|ele mama no peito|ele suga ativamente|ele solta o peito|ele relaxa o corpo|seu beb\u00ea)\b/.test(n))
+        issues.push('TESTE 005 RN 23d: must respect feminine gender ("minha beb\u00ea", "ela", "coloc\u00e1-la") \u2014 closing template must read "se ela mama / sua beb\u00ea"');
+      result.__warnings = warn; return issues;
+    },
+  },
 ];
 
 async function runE2EChecks() {
@@ -559,7 +842,7 @@ async function runE2EChecks() {
 }
 
 async function main() {
-  console.log('ZLAYA LAB \u2014 Simulation TESTE 005 (19/06/2026) RN 6/9/10/12/12/13 dias');
+  console.log('ZLAYA LAB \u2014 Simulation TESTE 005 (19/06/2026) RN 6/9/10/12/12/13/16/19/20/22/23 dias');
   const a = runInfrastructureChecks();
   const b = await runE2EChecks();
   console.log('\n\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550');

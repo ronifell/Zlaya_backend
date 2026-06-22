@@ -149,7 +149,7 @@ export function checkAgeConsistency({ text, ageDays }) {
  * what those signs are. For a RN mother the instruction is unusable.
  */
 export const SATIETY_SIGNS_OFFICIAL_TEXT =
-  'Sinais de saciedade no RN: o bebê solta o peito espontaneamente, relaxa o corpo, abre as mãozinhas, reduz o ritmo da sucção, fica tranquilo após a mamada e permanece mais confortável depois de arrotar e de ficar em posição vertical. Se ao contrário ele continua agitado, mantém as mãozinhas cerradas e busca o peito novamente em pouco tempo, isso pode indicar que a mamada não foi suficiente ou que houve dificuldade de transferência — se ele mama no peito, ofereça o peito de novo em livre demanda; se usa fórmula ou complemento, avalie volume, intervalo e sinais de saciedade conforme orientação individual. Em qualquer caso, reavalie a produção/transferência no período.';
+  'Sinais de saciedade no RN: o bebê solta o peito espontaneamente, relaxa o corpo, abre as mãozinhas, reduz o ritmo da sucção, fica tranquilo após a mamada e permanece mais confortável depois de arrotar e de ficar em posição vertical por 30 a 40 minutos. Se ao contrário ele continua agitado, mantém as mãozinhas cerradas e busca o peito novamente em pouco tempo, isso pode indicar que a mamada não foi suficiente ou que houve dificuldade de transferência — se ele mama no peito, ofereça o peito de novo em livre demanda; se usa fórmula ou complemento, avalie volume, intervalo e sinais de saciedade conforme orientação individual. Em qualquer caso, reavalie a produção/transferência no período.';
 
 /**
  * Words that, on their own or co-occurring with "saciedade", indicate the
@@ -242,7 +242,7 @@ export function ensureSatietySignsExplained({ text, forceTrigger = false }) {
   if (signsHit >= 3 && !operationalHit) {
     // Block A is there; we only need to append block B (operational tail).
     const trimmed = text.replace(/\s+$/, '');
-    const out = `${trimmed}\n\nSe ao contrário ele continua agitado, mantém as mãozinhas cerradas e busca o peito novamente em pouco tempo, isso pode indicar que a mamada não foi suficiente ou que houve dificuldade de transferência — se ele mama no peito, ofereça o peito de novo em livre demanda; se usa fórmula ou complemento, avalie volume, intervalo e sinais de saciedade conforme orientação individual. Em qualquer caso, reavalie a produção/transferência no período.`;
+    const out = `${trimmed}\n\nApós a mamada, mantenha em posição vertical por 30 a 40 minutos antes de transferir para o berço. Se ao contrário ele continua agitado, mantém as mãozinhas cerradas e busca o peito novamente em pouco tempo, isso pode indicar que a mamada não foi suficiente ou que houve dificuldade de transferência — se ele mama no peito, ofereça o peito de novo em livre demanda; se usa fórmula ou complemento, avalie volume, intervalo e sinais de saciedade conforme orientação individual. Em qualquer caso, reavalie a produção/transferência no período.`;
     return { text: out, expanded: 'operational' };
   }
 
@@ -485,18 +485,49 @@ const REFLUX_PHRASE_MATTRESS_45 = /(eleva[çc][aã]o\s+do\s+colch[aã]o\s+(?:em|
 const REFLUX_PHRASE_PEDIATRA_MATERIAL = /(material\s+do\s+pediatra|pediatra\s+roberto|roberto\s+franklin|aulas?\s+extras?|aulas?\s+b[oô]nus|aulas?\s+bonus)/;
 const REFLUX_PHRASE_HUMAN_SUPPORT = /(suporte\s+humano|equipe\s+de\s+suporte|suporte\s+do\s+curso|encaminh\w*\s+(?:para\s+)?(?:o\s+)?suporte)/;
 
-export function ensureRefluxRoutingComplete({ text, signalIds = [] } = {}) {
+export function ensureRefluxRoutingComplete({ text, userMessage = '', signalIds = [] } = {}) {
   if (!text) return { text: text || '', appended: false, missing: [] };
   const norm = normalize(text);
+  const userNorm = normalize(userMessage || '');
   const sigSet = new Set(signalIds || []);
 
+  // Scope guard (TESTE 005 RN 9d / 19d / 22d): the FULL reflux block
+  // (refluxo fisiológico + refluxo patológico + 45° + Pediatra Roberto
+  // Franklin + suporte humano) must ONLY be appended when there is upstream
+  // CLINICAL evidence in the mother's message — not when the LLM happens
+  // to mention "refluxo" tangentially as justification for vertical 30–40,
+  // and not when the mother's "acorda chorando ... berço" is just the
+  // routine described from a distance (without the short-after-crib /
+  // back-to-lap pattern that the dedicated signal captures).
+  //
+  // KEY DESIGN RULE: the dedicated upstream signals
+  //   - `wakes_short_after_crib_back_to_lap` (the canonical reflux pattern)
+  //   - `reflux_discomfort_suspicion`         (clinical signs in the relato)
+  // are the SOLE valid triggers. Loose REFLUX_TRIGGER_TOKENS scans on the
+  // user message are insufficient — they over-fire on tangential mentions
+  // of "berço" / "acorda chorando" inside long routine descriptions
+  // (TESTE 005 RN 9d regression). If a relato truly carries clinical
+  // suspicion the upstream signal extractor is responsible for raising it.
   const triggeredBySignal =
     sigSet.has('wakes_short_after_crib_back_to_lap') ||
     sigSet.has('reflux_discomfort_suspicion');
-  const triggeredByText = REFLUX_TRIGGER_TOKENS.some((re) => re.test(norm));
-  if (!triggeredBySignal && !triggeredByText) {
+  if (!triggeredBySignal) {
     return { text, appended: false, missing: [] };
   }
+  // Belt-and-suspenders: even if a clinical signal fired, an explicit
+  // isolated-scope signal vetoes the full block (the composite signals
+  // `pacifier_isolated_complaint` etc. encode the scope semantics).
+  const isolatedScopeSignals = [
+    'pacifier_isolated_complaint',
+    'bath_crying_isolated_rn',
+    'diaper_change_isolated_rn',
+  ];
+  if (isolatedScopeSignals.some((id) => sigSet.has(id))) {
+    return { text, appended: false, missing: [] };
+  }
+  // userMessage / userNorm intentionally unused below — kept in the
+  // signature for extensibility and so callers continue to wire it.
+  void userNorm;
 
   const missing = [];
   if (!REFLUX_PHRASE_PHYSIOLOGICAL.test(norm)) missing.push('refluxo_fisiologico');
@@ -715,6 +746,16 @@ const CHARUTINHO_DAY_PATTERN =
   /charutinho.{0,80}(durante o dia|nas sonecas diurnas|tambem.{0,10}dia|nas sonecas|durante as sonecas|de dia)|durante o dia.{0,80}charutinho|nas sonecas diurnas.{0,80}charutinho/;
 const EFFECTIVE_FEEDING_INVESTIGATION_PATTERN =
   /(succao\s+(com\s+ritmo|ativa|com\s+pausa|pausada|ritmica|ritmo\s+e\s+pausa)|pausa\s+entre\s+sucçoes|ouve\s+a\s+deglu|escut[ae].*degluti|degluticao\s+aud[ií]vel|ritmo\s+de\s+succao|ritmica\s+e\s+pausada|pausas\s+ritmicas)/;
+// Explicit "mama bem ≠ mamada efetiva" framing — TESTE 005 RN 23d, regra
+// vinculante. The methodology requires the answer to STATE that the
+// mother's "ela mama bem" perception does NOT confirm effective feeding
+// in the RN, and that effective feeding must be investigated with concrete
+// signs (sucção/deglutição/saciedade/busca precoce). It is not enough to
+// list the signs — the explicit re-framing must be present, otherwise the
+// mother keeps anchoring on her own perception and the investigation is
+// undercut at the framing level.
+const MAMA_BEM_NOT_EFFECTIVE_FRAMING =
+  /("?mama\s+bem"?|que\s+(ela|ele)\s+(esta\s+mamando\s+bem|mama\s+bem))[\s\S]{0,80}(nao\s+(confirma|garante|significa|equivale|comprov|assegur)|nao\s+e\s+suficiente|nao\s+e\s+sin[oô]nimo|nao\s+e\s+o\s+mesmo|nao\s+basta)/;
 const EARLY_BREAST_SEEK_PATTERN =
   /(busca.*peito.*pouco tempo|volta a buscar o peito|busca pelo peito em pouco tempo|busca precoce|continua procurando o peito|volta a buscar.*peito)/;
 const COLO_BEHAVIORAL_FRAMING_RISK =
@@ -731,6 +772,7 @@ export function ensureCharutinhoNightOnlyComplete({ text, userMessage, signalIds
   const missing = [];
   if (!CHARUTINHO_DAY_PATTERN.test(norm)) missing.push('charutinho_dia');
   if (!EFFECTIVE_FEEDING_INVESTIGATION_PATTERN.test(norm)) missing.push('effective_feeding');
+  if (!MAMA_BEM_NOT_EFFECTIVE_FRAMING.test(norm)) missing.push('mama_bem_framing');
   if (!EARLY_BREAST_SEEK_PATTERN.test(norm)) missing.push('early_breast_seek');
   if (COLO_BEHAVIORAL_FRAMING_RISK.test(norm) && !COLO_RN_REFRAMING_PHRASES.test(norm)) {
     missing.push('colo_rn_reframing');
@@ -740,14 +782,130 @@ export function ensureCharutinhoNightOnlyComplete({ text, userMessage, signalIds
   const fragmentByKey = {
     charutinho_dia:
       'Como o CHARUTINHO funciona à noite e os espasmos pelo reflexo de Moro voltam quando ele não está, oriente o uso do CHARUTINHO TAMBÉM DURANTE O DIA, especialmente nas SONECAS DIURNAS — não restrinja ao período noturno.',
+    mama_bem_framing:
+      'Importante: quando você diz que a sua bebê "mama bem", essa percepção NÃO confirma mamada efetiva no RN. Por isso é necessário investigar concretamente os sinais de mamada efetiva, em vez de apoiar a conduta apenas na sensação de que ela mama bem.',
     effective_feeding:
-      'Quando a mãe diz que a bebê "mama bem", isso NÃO confirma mamada efetiva no RN. Investigue concretamente: SUCÇÃO ATIVA com pausas rítmicas, DEGLUTIÇÃO AUDÍVEL durante a mamada e SACIEDADE após mamar (solta o peito espontaneamente, relaxa o corpo, abre as mãozinhas, reduz o ritmo da sucção, fica tranquila depois de arrotar e em posição vertical).',
+      'Investigue concretamente: SUCÇÃO ATIVA com pausas rítmicas, DEGLUTIÇÃO AUDÍVEL durante a mamada e SACIEDADE após mamar (solta o peito espontaneamente, relaxa o corpo, abre as mãozinhas, reduz o ritmo da sucção, fica tranquila depois de arrotar e em posição vertical).',
     early_breast_seek:
       'Observe também a BUSCA PRECOCE PELO PEITO — se ela volta a buscar o peito em pouco tempo após mamar, é sinal de que a mamada pode não ter sido suficiente ou houve dificuldade de transferência; avalie produção e transferência junto com os demais sinais.',
     colo_rn_reframing:
       'No RN, o COLO continua sendo RECURSO de organização, segurança e transição — não é associação negativa, vício nem mau hábito. A transição para o berço/Moisés é gradual: travesseiro sobre o colo com contenção das mãos, repetição e leveza, em paralelo às medidas de mamada efetiva, arroto, posição vertical 30 a 40 minutos e charutinho nas sonecas diurnas.',
   };
-  const order = ['colo_rn_reframing', 'charutinho_dia', 'effective_feeding', 'early_breast_seek'];
+  const order = [
+    'colo_rn_reframing',
+    'charutinho_dia',
+    'mama_bem_framing',
+    'effective_feeding',
+    'early_breast_seek',
+  ];
+  const sentences = order.filter((k) => missing.includes(k)).map((k) => fragmentByKey[k]);
+  const append = sentences.join(' ');
+  const trimmed = text.replace(/\s+$/, '');
+  return { text: `${trimmed}\n\n${append}`, appended: true, missing };
+}
+
+/**
+ * Janela crítica 23h–02h (RN) — pergunta indispensável "ANTES ou DEPOIS da
+ * mamada?" e ramo condicional. TESTE 005 RN 10d.
+ *
+ * Quando dispara `night_hunger_signs_rn` (mãe descreve que, na faixa
+ * 23h–02h, a bebê fica nervosa, suga as mãozinhas, choraminga — sinais
+ * fortes de fome no RN), o método obriga a fazer DUAS perguntas
+ * indispensáveis e oferecer um RAMO operacional condicional:
+ *   (1) "Nesse horário, ela já mamou? Você ofereceu a mamada?" — checa o
+ *       eixo alimentar primeiro, antes de qualquer manejo de berço.
+ *   (2) "Esse comportamento acontece ANTES ou DEPOIS da mamada?" — define
+ *       a árvore: se ANTES → alimentar em livre demanda; se DEPOIS →
+ *       investigar mamada efetiva, produção e saciedade.
+ *
+ * O LLM, mesmo com a regra no system prompt, varia entre runs e às vezes
+ * omite (1) ou (2). Esta função é a malha de proteção: anexa SOMENTE o(s)
+ * item(ns) faltante(s) com a árvore condicional explícita.
+ *
+ * Returns { text, appended: boolean, missing: string[] }.
+ */
+const NIGHT_HUNGER_FED_AT_TIME_PATTERN =
+  /(ela\s+(j[aá]\s+)?mamou\s+nesse\s+hor|nesse\s+hor[aá]rio[,\s]+ela\s+(j[aá]\s+)?(mamou|tem mamado)|antes\s+de\s+(tentar\s+coloc[aá]-la|coloc[aá]-la\s+no\s+ber).{0,80}ela\s+(j[aá]\s+)?(mama|mamou)|ela\s+(j[aá]\s+)?mamou\s+antes|voc[eê]\s+oferec[eu]\s+a\s+mamada\s+nesse\s+hor|quando\s+ela\s+acorda.{0,40}voc[eê]\s+oferec[eu]\s+a\s+mamada|nesse\s+hor[aá]rio.{0,40}voc[eê]\s+oferec[eu]\s+a\s+mamada)/;
+const NIGHT_HUNGER_BEFORE_OR_AFTER_PATTERN =
+  /(antes\s+ou\s+depois\s+da\s+mamada|antes\s+da\s+mamada\s+ou\s+depois|depois\s+da\s+mamada\s+ou\s+antes|esse\s+comportamento.{0,80}(antes|depois)\s+da\s+mamada)/;
+
+export function ensureNightHungerJanelaCriticaComplete({ text, signalIds = [] } = {}) {
+  if (!text) return { text: text || '', appended: false, missing: [] };
+  const sigSet = new Set(signalIds || []);
+  if (!sigSet.has('night_hunger_signs_rn')) return { text, appended: false, missing: [] };
+
+  const norm = normalize(text);
+  const missing = [];
+  if (!NIGHT_HUNGER_FED_AT_TIME_PATTERN.test(norm)) missing.push('fed_at_time_question');
+  if (!NIGHT_HUNGER_BEFORE_OR_AFTER_PATTERN.test(norm)) missing.push('before_or_after_question');
+
+  if (missing.length === 0) return { text, appended: false, missing: [] };
+
+  const fragmentByKey = {
+    fed_at_time_question:
+      'Antes de qualquer outra conduta, é fundamental confirmar o eixo alimentar nesse horário: ela já mamou nesse horário, ou você ofereceu a mamada nesse horário em que ela acorda nervosa e suga as mãozinhas?',
+    before_or_after_question:
+      'Esse comportamento — nervosismo, sugar as mãozinhas, choramingo — acontece ANTES ou DEPOIS da mamada? Se for ANTES, o caminho é alimentar em livre demanda. Se for DEPOIS, é necessário investigar mamada efetiva, produção materna e os sinais de saciedade descritos acima.',
+  };
+  const order = ['fed_at_time_question', 'before_or_after_question'];
+  const sentences = order.filter((k) => missing.includes(k)).map((k) => fragmentByKey[k]);
+  const append = sentences.join(' ');
+  const trimmed = text.replace(/\s+$/, '');
+  return { text: `${trimmed}\n\n${append}`, appended: true, missing };
+}
+
+/**
+ * Madrugada (night-feed routine) completeness — TESTE 005 RN 12d/02.
+ *
+ * Quando a mãe relata o cenário "acordou para mamar de madrugada, troquei a
+ * fralda, demorou para voltar a dormir" (sinais `night_diaper_change_routine`
+ * e/ou `start_day_or_keep_night_rn`), o método exige que a resposta carregue
+ * no corpo do texto:
+ *   (A) a sequência operacional "troca de fralda ANTES da mamada" para a
+ *       madrugada (a fralda já cheia desperta o RN logo após a mamada);
+ *   (B) "mínima luz" e (idealmente) "sem conversa" no manejo;
+ *   (C) "posição vertical por 30 a 40 minutos" após a mamada — eixo postural
+ *       do RN (independente de suspeita clínica de refluxo).
+ *
+ * O LLM, mesmo com a regra no system prompt, varia entre runs e às vezes
+ * omite (A) ou (C). Esta função é a malha de proteção: completa apenas os
+ * itens que faltam, em parágrafo curto, sem alterar o que o LLM já
+ * escreveu corretamente.
+ *
+ * Returns { text, appended: boolean, missing: string[] }.
+ */
+const NIGHT_DIAPER_BEFORE_FEED_PATTERN =
+  /((troca[r]?|troc[ae]|troque[i]?)\s+(a\s+|de\s+|da\s+)?fralda[\s\S]{0,140}antes\s+(da\s+mamada|de\s+mamar)|fralda[\s\S]{0,40}antes\s+(da\s+mamada|de\s+mamar)|antes\s+(da\s+mamada|de\s+mamar)[\s\S]{0,180}(troca|trocar|troc[ae]|troque[i]?)\s+(a\s+|de\s+|da\s+)?fralda)/;
+const NIGHT_MINIMAL_LIGHT_PATTERN =
+  /(minima\s+luz|pouca\s+luz|luz\s+m[ií]nima|luz\s+baix|sem\s+luz|no\s+escur)/;
+const VERTICAL_30_40_PATTERN =
+  /(30\s*(?:a|–|-|—|at[eé])\s*40\s*min|posi[çc][aã]o\s+vertical[\s\S]{0,40}30\s*(?:a|–|-|—|at[eé])\s*40)/;
+
+export function ensureNightDiaperRoutineComplete({ text, signalIds = [] } = {}) {
+  if (!text) return { text: text || '', appended: false, missing: [] };
+  const sigSet = new Set(signalIds || []);
+  const triggered =
+    sigSet.has('night_diaper_change_routine') ||
+    sigSet.has('start_day_or_keep_night_rn');
+  if (!triggered) return { text, appended: false, missing: [] };
+
+  const norm = normalize(text);
+  const missing = [];
+  if (!NIGHT_DIAPER_BEFORE_FEED_PATTERN.test(norm)) missing.push('diaper_before_feed');
+  if (!NIGHT_MINIMAL_LIGHT_PATTERN.test(norm)) missing.push('minimal_light');
+  if (!VERTICAL_30_40_PATTERN.test(norm)) missing.push('vertical_30_40');
+
+  if (missing.length === 0) return { text, appended: false, missing: [] };
+
+  const fragmentByKey = {
+    diaper_before_feed:
+      'Para os despertares de madrugada, oriente fazer a TROCA DE FRALDA ANTES DA MAMADA: assim a bebê não acorda logo em seguida por causa de uma fralda já cheia, e a mamada conduz mais diretamente ao retorno do sono.',
+    minimal_light:
+      'Mantenha o ambiente com MÍNIMA LUZ (apenas a luz necessária para enxergar) e o mínimo de conversa durante o manejo, para preservar o estado noturno e facilitar o retorno ao sono.',
+    vertical_30_40:
+      'Após a mamada, mantenha a bebê em POSIÇÃO VERTICAL POR 30 A 40 MINUTOS antes de transferir para o berço — eixo postural padrão do RN, que reduz desconforto gástrico e melhora a transição para o sono.',
+  };
+  const order = ['diaper_before_feed', 'minimal_light', 'vertical_30_40'];
   const sentences = order.filter((k) => missing.includes(k)).map((k) => fragmentByKey[k]);
   const append = sentences.join(' ');
   const trimmed = text.replace(/\s+$/, '');
@@ -880,11 +1038,28 @@ export function enforceGenderConsistency({ text, userMessage }) {
 
   const corrections = [];
   const rules = [
-    // satiety closing block
+    // satiety closing block — "se ao contrário ele continua agitado..."
     [/\bele\s+continua\s+agitado\b/gi, 'ela continua agitada'],
     [/\bele\s+permanece\s+agitado\b/gi, 'ela permanece agitada'],
     [/\bele\s+est[áa]\s+agitado\b/gi, 'ela está agitada'],
     [/\bele\s+continua\s+(tranquilo|sonolento|inquieto)\b/gi, (_, w) => `ela continua ${w === 'tranquilo' ? 'tranquila' : w === 'sonolento' ? 'sonolenta' : 'inquieta'}`],
+    // satiety closing block tail — "se ele mama no peito, ofereça..." (TESTE 005)
+    [/\bse\s+ele\s+mama\s+no\s+peito\b/gi, 'se ela mama no peito'],
+    [/\bse\s+ele\s+est[áa]\s+mamando\s+no\s+peito\b/gi, 'se ela está mamando no peito'],
+    // generic templated mentions of the baby — "seu bebê" → "sua bebê"
+    // when the mother used feminine cues. Conservative: only fixes the
+    // possessive+noun pair, never bare "seu/sua" elsewhere.
+    [/\bseu\s+beb[êe]\b/gi, 'sua bebê'],
+    [/\bdo\s+seu\s+beb[êe]\b/gi, 'da sua bebê'],
+    [/\bao\s+seu\s+beb[êe]\b/gi, 'à sua bebê'],
+    [/\bpara\s+o\s+seu\s+beb[êe]\b/gi, 'para a sua bebê'],
+    [/\bcom\s+o\s+seu\s+beb[êe]\b/gi, 'com a sua bebê'],
+    [/\bo\s+seu\s+beb[êe]\b/gi, 'a sua bebê'],
+    // verbs in masculine-oriented closing templates
+    [/\bele\s+suga\s+ativamente\b/gi, 'ela suga ativamente'],
+    [/\bele\s+solta\s+o\s+peito\b/gi, 'ela solta o peito'],
+    [/\bele\s+relaxa\s+o\s+corpo\b/gi, 'ela relaxa o corpo'],
+    [/\bse\s+ele\s+mama\b/gi, 'se ela mama'],
     // common templated openers/sequences
     [/\bcoloque-o\s+para\s+arrotar\b/gi, 'coloque-a para arrotar'],
     [/\bcoloc[áa]-lo\s+(no\s+ber[cç]o|para\s+arrotar)\b/gi, (m, w) => `colocá-la ${w}`],

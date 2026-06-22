@@ -15,6 +15,8 @@ import {
   ensureSondaOrdenhaComplete,
   ensureTravesseiroEixosComplete,
   ensureCharutinhoNightOnlyComplete,
+  ensureNightDiaperRoutineComplete,
+  ensureNightHungerJanelaCriticaComplete,
   softenMamadaInsufficientClaim,
   enforceGenderConsistency,
   detectClinicalRedFlags,
@@ -237,6 +239,7 @@ export async function processTurn({ message, babyProfile, conversation, conversa
     // um parágrafo metodológico SOMENTE com os itens faltantes.
     const refluxFix = ensureRefluxRoutingComplete({
       text: draft.text,
+      userMessage: message,
       signalIds: (signals?.signals || []).map((s) => s.id),
     });
     if (refluxFix.appended) {
@@ -307,6 +310,35 @@ export async function processTurn({ message, babyProfile, conversation, conversa
     if (charutinhoFix.appended) {
       draft.text = charutinhoFix.text;
       draft.charutinhoNightOnlyMissing = charutinhoFix.missing;
+    }
+
+    // Night-feed routine completeness (TESTE 005 RN 12d/02).
+    // Quando dispara `night_diaper_change_routine` (mãe trocou fralda na
+    // madrugada e bebê demorou para voltar a dormir) e/ou `start_day_or_
+    // keep_night_rn`, o método exige no corpo do texto: (a) "troca de
+    // fralda ANTES da mamada", (b) "mínima luz" no manejo e (c) "posição
+    // vertical por 30 a 40 minutos" após a mamada. Se algum eixo ficar de
+    // fora, o enricher anexa SOMENTE o(s) faltante(s).
+    const nightDiaperFix = ensureNightDiaperRoutineComplete({
+      text: draft.text,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+    });
+    if (nightDiaperFix.appended) {
+      draft.text = nightDiaperFix.text;
+      draft.nightDiaperRoutineMissing = nightDiaperFix.missing;
+    }
+
+    // Janela crítica 23h–02h (TESTE 005 RN 10d). Quando dispara
+    // `night_hunger_signs_rn`, anexa as DUAS perguntas indispensáveis
+    // ("nesse horário, ela já mamou?" e "esse comportamento é ANTES ou
+    // DEPOIS da mamada?") com a árvore condicional explícita.
+    const nightHungerFix = ensureNightHungerJanelaCriticaComplete({
+      text: draft.text,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+    });
+    if (nightHungerFix.appended) {
+      draft.text = nightHungerFix.text;
+      draft.nightHungerJanelaCriticaMissing = nightHungerFix.missing;
     }
 
     // Soften any residual hard claim "a mamada provavelmente não foi
