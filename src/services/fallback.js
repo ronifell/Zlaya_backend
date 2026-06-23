@@ -187,6 +187,59 @@ const LESSON_SCENARIO_RULES = [
       'lesson-evitar-troca-dia-noite',
     ],
   },
+  {
+    signalIds: ['night_hunger_signs_rn'],
+    whitelist: [
+      'lesson-mamadas-efetivas',
+      'lesson-passo-4-alimentacao-sono',
+      'lesson-estimule-arroto',
+    ],
+    blacklist: [
+      'lesson-inicio-sono-noturno',
+      'lesson-evitar-troca-dia-noite',
+      'lesson-travesseiro',
+      'lesson-hora-da-bruxa',
+      'lesson-passo-3-janela',
+    ],
+  },
+  {
+    signalIds: ['travesseiro_tried_without_success'],
+    whitelist: [
+      'lesson-travesseiro',
+      'lesson-berco-do-bebe',
+      'lesson-estimule-arroto',
+      'lesson-mamadas-efetivas',
+      'lesson-charutinho-moro',
+    ],
+    blacklist: [
+      'lesson-inicio-sono-noturno',
+      'lesson-evitar-troca-dia-noite',
+    ],
+  },
+  {
+    signalIds: ['wakes_short_after_crib_back_to_lap'],
+    whitelist: [
+      'lesson-estimule-arroto',
+      'lesson-refluxo',
+      'lesson-travesseiro',
+      'lesson-charutinho-moro',
+      'lesson-mamadas-efetivas',
+    ],
+    blacklist: [
+      'lesson-inicio-sono-noturno',
+      'lesson-evitar-troca-dia-noite',
+    ],
+  },
+  {
+    signalIds: ['sonda_with_mama_bem_priority_production'],
+    whitelist: ['lesson-mamadas-efetivas', 'lesson-alimentacao-livre-demanda'],
+    blacklist: [
+      'lesson-inicio-sono-noturno',
+      'lesson-evitar-troca-dia-noite',
+      'lesson-travesseiro',
+      'lesson-hora-da-bruxa',
+    ],
+  },
 ];
 
 function resolveSuggestedLessonIds(retrievalLessonIds, signalIds = []) {

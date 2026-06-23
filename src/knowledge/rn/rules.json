@@ -454,6 +454,41 @@
       "id": "rn-bath-pediatric-referral-specific",
       "rule": "Em queixas sobre choro no banho do RN, o encaminhamento ao pediatra NÃO deve ser genérico ('se o choro persistir, procure o pediatra'). O fechamento deve citar sinais CLÍNICOS ESPECÍFICOS para avaliação pediátrica: febre, prostração, recusa alimentar, vômitos importantes, choro inconsolável FORA do banho ou mudança importante de comportamento. Modelo aceito: 'Se o choro acontecer apenas durante o banho, sem outros sinais, mantenha as estratégias de contenção, ambiente aquecido e banho curto. Procure o pediatra se houver sinais associados, como febre, recusa alimentar, prostração, vômitos importantes, choro inconsolável fora do banho ou mudança importante no comportamento.'",
       "rationale": "TESTE 006 (RN 13d): encaminhamento ao pediatra precisa citar sinais claros, não apenas persistência do choro no banho."
+    },
+    {
+      "id": "rn-breastfeeding-only-seios-degluticao",
+      "rule": "A investigação sobre seios (enchimento/flacidez ao final da tarde) e deglutição audível após as 18h deve ser CONDICIONADA ao aleitamento materno. Modelo aceito: 'Se ela mama no peito, observe como os seios ficam ao final da tarde e se há deglutição audível na mamada.' Se o bebê usa fórmula ou mamadeira, investigar volume, intervalo e sinais de saciedade — NÃO mencionar seios nem deglutição como eixo principal. É PROIBIDO investigar seios/deglutição de forma genérica quando a forma de alimentação não foi confirmada ou quando o bebê não mama no peito.",
+      "rationale": "TESTE 007 (RN 10d): a Zlaya investigou seios e deglutição sem condicionar ao aleitamento materno."
+    },
+    {
+      "id": "rn-night-hunger-conduct-after-question",
+      "rule": "No cenário de sinais clássicos de fome no RN (sugar mãozinhas + nervosismo + choramingo, especialmente 23h–02h), após as perguntas indispensáveis 'Nesse horário, ela já mamou?' e 'Esse comportamento acontece ANTES ou DEPOIS da mamada?', a resposta DEVE oferecer IMEDIATAMENTE a árvore condicional: se ANTES → alimentar (livre demanda); se DEPOIS → investigar mamada efetiva, transferência de leite, sinais de saciedade, conforto após arroto e posição vertical por 30 a 40 minutos. A conduta NÃO pode ficar só implícita nem ser adiada para o final da resposta.",
+      "rationale": "TESTE 007 (RN 10d): faltou deixar explícita a conduta logo após a pergunta antes/depois da mamada."
+    },
+    {
+      "id": "rn-night-window-narrow-lessons-v2",
+      "rule": "Para o cenário JANELA CRÍTICA 23h–02h + sinais clássicos de fome, as aulas indicadas devem ser ESTRITAMENTE: MAMADAS EFETIVAS (principal), PASSO 4: ATENÇÃO À ALIMENTAÇÃO ASSOCIADA AO SONO, ESTIMULE O ARROTO (se houver desconforto após a mamada) e CHARUTINHO E REFLEXOS DE MORO (apenas se houver desorganização corporal). NÃO indicar Início do Sono Noturno, Troca dia/noite, Hora da Bruxa nem Travesseiro como principais.",
+      "rationale": "TESTE 007 (RN 10d): lista de aulas ainda ampla demais — reduzir foco a fome, mamada efetiva, saciedade e posição vertical."
+    },
+    {
+      "id": "rn-no-overnormalize-sonda-short-interval",
+      "rule": "Quando há complemento com sonda E busca pelo peito em intervalo menor que 2h, é PROIBIDO normalizar o padrão como 'bastante comum' ou 'esperado' sem antes nomear baixa produção materna ou necessidade de suporte de produção como hipótese principal. A leitura deve ser direta e investigativa, não tranquilizadora genérica.",
+      "rationale": "TESTE 007 (RN 16d): a Zlaya normalizou demais um quadro com sonda e busca precoce pelo peito."
+    },
+    {
+      "id": "rn-crib-transition-never-lose-feeding",
+      "rule": "Em RN com dificuldade de permanência no berço/colo (incluindo Travesseiro tentado), a Zlaya NUNCA pode perder o eixo alimentar. Sempre que o bebê acorda chorando poucos minutos após ser colocado no berço, DEVE investigar mamada efetiva, sinais de saciedade, queda de fluxo no fim da tarde, produção/transferência de leite, arroto e conforto pós-mamada ANTES de tratar apenas como transição para o berço. Incluir na sequência prática: ambiente escuro/calmo/baixa estimulação e charutinho se houver Moro/desorganização.",
+      "rationale": "TESTE 007 (RN 19d): a resposta regrediu ao perder o eixo alimentar obrigatório do RN."
+    },
+    {
+      "id": "rn-short-nap-cry-not-normalize-opening",
+      "rule": "Quando a mãe pergunta se acordar chorando ~20 min após o berço e melhorar só no colo é 'esperado', a abertura NÃO deve normalizar demais. Modelo aceito: 'Sonecas curtas podem acontecer no RN, mas acordar chorando após cerca de 20 minutos no berço e melhorar apenas no colo não deve ser tratado como simplesmente esperado — merece investigação.' Para refluxo patológico ou suspeita real, a elevação do colchão em 45° é obrigatória na orientação (distinta dos 30 a 40 graus do refluxo fisiológico), conforme método/material do Pediatra, com encaminhamento ao suporte humano.",
+      "rationale": "TESTE 007 (RN 20d): abertura normalizava demais; faltou completar regra da elevação em 45° para refluxo patológico."
+    },
+    {
+      "id": "rn-vertical-backreference-wording",
+      "rule": "Quando precisar voltar ao tema da posição vertical sem repetir a frase canônica completa, use 'mantê-lo em posição vertical' ou 'mantê-la em posição vertical' — NÃO use 'mantendo a posição vertical já mencionada', que ficou gramaticalmente incompleta.",
+      "rationale": "TESTE 007 (RN 16d/20d): ajuste de redação na referência leve à posição vertical."
     }
   ],
 

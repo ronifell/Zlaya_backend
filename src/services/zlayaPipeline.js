@@ -14,6 +14,8 @@ import {
   ensureRefluxRoutingComplete,
   ensureSondaOrdenhaComplete,
   ensureTravesseiroEixosComplete,
+  ensureTravesseiroFeedingAxisComplete,
+  ensureShortNapOpeningRefined,
   ensureCharutinhoNightOnlyComplete,
   ensureNightDiaperRoutineComplete,
   ensureNightHungerJanelaCriticaComplete,
@@ -298,6 +300,26 @@ export async function processTurn({ message, babyProfile, conversation, conversa
     if (travesseiroFix.appended) {
       draft.text = travesseiroFix.text;
       draft.travesseiroEixosMissing = travesseiroFix.missing;
+    }
+
+    // Travesseiro — nunca perder eixo alimentar (TESTE 007 RN 19d).
+    const travesseiroFeedingFix = ensureTravesseiroFeedingAxisComplete({
+      text: draft.text,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+    });
+    if (travesseiroFeedingFix.appended) {
+      draft.text = travesseiroFeedingFix.text;
+      draft.travesseiroFeedingAxisMissing = travesseiroFeedingFix.missing;
+    }
+
+    // Soneca curta no berço — abertura refinada (TESTE 007 RN 20d).
+    const shortNapOpeningFix = ensureShortNapOpeningRefined({
+      text: draft.text,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+    });
+    if (shortNapOpeningFix.appended) {
+      draft.text = shortNapOpeningFix.text;
+      draft.shortNapOpeningRefined = shortNapOpeningFix.missing;
     }
 
     // Charutinho noite + sonecas diurnas difíceis (TESTE 004 RN 23d).

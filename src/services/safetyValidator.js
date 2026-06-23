@@ -544,14 +544,21 @@ export function ensureRefluxRoutingComplete({ text, userMessage = '', signalIds 
   const hasPathologicalUserSigns = REFLUX_PATHOLOGICAL_USER_SIGNS.test(userNorm);
   const hasMattress30_40 = REFLUX_PHRASE_MATTRESS_30_40.test(norm);
   const hasMattress45 = REFLUX_PHRASE_MATTRESS_45.test(norm);
+  const has45RuleForPathological =
+    /(45[\s°º]*.{0,80}refluxo\s+patol|refluxo\s+patol.{0,80}45[\s°º]*|eleva[çc][aã]o.{0,60}45.{0,60}patol|patol.{0,60}eleva[çc][aã]o.{0,40}45)/.test(norm);
   if (!hasMattress30_40 && !hasMattress45) {
     missing.push('colchao_30_40');
+  }
+  if (!has45RuleForPathological && !hasMattress45) {
+    missing.push('colchao_45_rule');
   }
   if (hasPathologicalUserSigns && !hasMattress45) {
     missing.push('colchao_45');
   }
-  if (!REFLUX_PHRASE_PEDIATRA_MATERIAL.test(norm)) missing.push('material_pediatra');
-  if (!REFLUX_PHRASE_HUMAN_SUPPORT.test(norm)) missing.push('suporte_humano');
+  if (hasPathologicalUserSigns) {
+    if (!REFLUX_PHRASE_PEDIATRA_MATERIAL.test(norm)) missing.push('material_pediatra');
+    if (!REFLUX_PHRASE_HUMAN_SUPPORT.test(norm)) missing.push('suporte_humano');
+  }
 
   if (missing.length === 0) return { text, appended: false, missing: [] };
 
@@ -563,6 +570,7 @@ export function ensureRefluxRoutingComplete({ text, userMessage = '', signalIds 
     'refluxo_patologico',
     'vertical_30_40',
     'colchao_30_40',
+    'colchao_45_rule',
     'colchao_45',
     'material_pediatra',
     'suporte_humano',
@@ -576,6 +584,8 @@ export function ensureRefluxRoutingComplete({ text, userMessage = '', signalIds 
       'Mantenha em posição vertical por 30 a 40 minutos após a mamada antes de transferir para o berço.',
     colchao_30_40:
       'Para refluxo fisiológico, quando indicada pelo método, considere a elevação do colchão em 30 a 40 graus como medida postural complementar à posição vertical.',
+    colchao_45_rule:
+      'Quando houver suspeita ou investigação de refluxo patológico, a elevação do colchão em 45°, conforme método/material do Pediatra, é a medida postural indicada nesse contexto.',
     colchao_45:
       'Para refluxo patológico ou suspeita/investigação de refluxo patológico, a elevação do colchão em 45°, quando indicada pelo método/material do pediatra, complementa a posição vertical — não use 45° como orientação padrão para refluxo fisiológico.',
     material_pediatra:
@@ -658,7 +668,7 @@ export function ensureTravesseiroEixosComplete({ text, signalIds = [], ageDays }
   const fragmentByKey = {
     physiological_reframing: `Para o RN, prefira ler o caso como FASE DE ADAPTAÇÃO FISIOLÓGICA, ORGANIZAÇÃO CORPORAL e TRANSIÇÃO DE SUPERFÍCIE/TEXTURA — a "adaptação ao berço" é consequência desse processo, não a causa principal.`,
     vertical_30_40:
-      'Antes de tentar transferir para o berço, mantenha em posição vertical por 30 a 40 minutos após a mamada.',
+      'Após a mamada, mantenha o bebê em posição vertical por 30 a 40 minutos antes de tentar a transferência para o berço.',
     gastric_eixo:
       'Observe também o eixo de desconforto gástrico — se ela arrotou, se há sinais de refluxo fisiológico ou desconforto pós-mamada que possam estar sustentando o despertar quando deitada.',
     // TESTE 006 (RN 23d): a frase de não-associação foi ampliada para
@@ -676,6 +686,71 @@ export function ensureTravesseiroEixosComplete({ text, signalIds = [], ageDays }
   const append = sentences.join(' ');
   const trimmed = text.replace(/\s+$/, '');
   return { text: `${trimmed}\n\n${append}`, appended: true, missing };
+}
+
+/**
+ * Travesseiro tentado — nunca perder eixo alimentar (TESTE 007 RN 19d).
+ * Quando a mãe relata dificuldade colo→berço com Travesseiro tentado, a
+ * resposta DEVE manter mamada efetiva, saciedade, produção (especialmente
+ * fim da tarde), charutinho se Moro/desorganização e ambiente de sono.
+ */
+const TRAVESSEIRO_FEEDING_AXIS =
+  /(mamada\s+efetiv|sinais\s+de\s+saciedade|produc[aã]o\s+de\s+leite|transfer[eê]ncia\s+de\s+leite|fluxo\s+no\s+fim\s+da\s+tarde|queda\s+de\s+fluxo)/;
+const TRAVESSEIRO_CHARUTINHO_PRACTICAL =
+  /(charutinho|reflexo\s+de\s+moro|desorganiza[cç][aã]o\s+corporal)/;
+const TRAVESSEIRO_SLEEP_ENV =
+  /(ambiente\s+escuro|baixa\s+estimula[cç][aã]o|calmo\s+e\s+com\s+baixa|escuro.{0,40}calmo)/;
+
+export function ensureTravesseiroFeedingAxisComplete({ text, signalIds = [] } = {}) {
+  if (!text) return { text: text || '', appended: false, missing: [] };
+  const sigSet = new Set(signalIds || []);
+  if (!sigSet.has('travesseiro_tried_without_success')) {
+    return { text, appended: false, missing: [] };
+  }
+
+  const norm = normalize(text);
+  const missing = [];
+  if (!TRAVESSEIRO_FEEDING_AXIS.test(norm)) missing.push('feeding_axis');
+  if (!TRAVESSEIRO_CHARUTINHO_PRACTICAL.test(norm)) missing.push('charutinho_practical');
+  if (!TRAVESSEIRO_SLEEP_ENV.test(norm)) missing.push('sleep_environment');
+
+  if (missing.length === 0) return { text, appended: false, missing: [] };
+
+  const fragmentByKey = {
+    feeding_axis:
+      'Antes de focar só na transição para o berço, avalie mamada efetiva, sinais de saciedade e produção de leite — especialmente queda de fluxo no fim da tarde. Observe se ela mama e relaxa, solta o peito espontaneamente, abre as mãozinhas ou volta a buscar o peito pouco tempo depois.',
+    charutinho_practical:
+      'Se houver reflexo de Moro ou desorganização corporal, use charutinho antes da transferência para o berço — inclusive nas sonecas diurnas.',
+    sleep_environment:
+      'Mantenha ambiente escuro, calmo e com baixa estimulação durante a transição para o sono.',
+  };
+  const order = ['feeding_axis', 'charutinho_practical', 'sleep_environment'];
+  const sentences = order.filter((k) => missing.includes(k)).map((k) => fragmentByKey[k]);
+  const trimmed = text.replace(/\s+$/, '');
+  return { text: `${trimmed}\n\n${sentences.join(' ')}`, appended: true, missing };
+}
+
+/**
+ * Soneca curta no berço + choro — não normalizar demais na abertura (TESTE 007 RN 20d).
+ */
+const SHORT_NAP_OVER_NORMALIZED =
+  /(e\s+(comum|esperado|normal)\s+(nes)?sa\s+fase|podem?\s+ocorrer\s+no\s+rn.{0,80}(sem\s+investigar|sem\s+mercer|apenas\s+observar))/;
+
+export function ensureShortNapOpeningRefined({ text, signalIds = [] } = {}) {
+  if (!text) return { text: text || '', appended: false, missing: [] };
+  const sigSet = new Set(signalIds || []);
+  if (!sigSet.has('wakes_short_after_crib_back_to_lap')) {
+    return { text, appended: false, missing: [] };
+  }
+
+  const norm = normalize(text);
+  const hasRefinedOpening =
+    /(nao\s+deve\s+ser\s+tratad[ao]\s+como\s+simplesmente\s+esperad|merece\s+investigac[aã]o|dado\s+principal|acordar\s+chorando.{0,80}melhorar.{0,80}colo.{0,80}investig)/.test(norm);
+  if (hasRefinedOpening) return { text, appended: false, missing: [] };
+
+  const prepend =
+    'Sonecas curtas podem acontecer no RN, mas acordar chorando após cerca de 20 minutos no berço e melhorar apenas no colo não deve ser tratado como simplesmente esperado — merece investigação.';
+  return { text: `${prepend}\n\n${text.replace(/^\s+/, '')}`, appended: true, missing: ['refined_opening'] };
 }
 
 /**
@@ -905,14 +980,23 @@ export function ensureNightHungerJanelaCriticaComplete({ text, signalIds = [] } 
   // explicitamente marcou como ponto de ajuste a pergunta ter ficado no
   // último parágrafo. Mudamos a estratégia de APPEND → PREPEND para garantir
   // que a árvore condicional seja o eixo que abre o raciocínio do caso.
+  // TESTE 007 (RN 10d): perguntas + conduta imediata na mesma abertura; seios/
+  // deglutição só quando houver aleitamento materno.
   const fragmentByKey = {
     fed_at_time_question:
-      'Antes de qualquer outra conduta, é fundamental confirmar o eixo alimentar nesse horário: ela já mamou nesse horário, ou você ofereceu a mamada nesse horário em que ela acorda nervosa e suga as mãozinhas?',
+      'Nesse horário, ela já mamou?',
     before_or_after_question:
-      'Esse comportamento — nervosismo, sugar as mãozinhas, choramingo — acontece ANTES ou DEPOIS da mamada? Se for ANTES, o caminho é alimentar em livre demanda. Se for DEPOIS, é necessário investigar mamada efetiva, produção materna e os sinais de saciedade.',
+      'Esse comportamento de ficar nervosa, sugar as mãozinhas e choramingar acontece ANTES ou DEPOIS da mamada?',
+    conduct_tree:
+      'Se acontece ANTES da mamada, a conduta é alimentar em livre demanda. Se acontece DEPOIS da mamada, investigue se a mamada foi efetiva, se houve boa transferência de leite, se ela apresentou sinais de saciedade, se arrotou e se permaneceu em posição vertical por 30 a 40 minutos. Se ela mama no peito, observe também como os seios ficam ao final da tarde e se há deglutição audível; se usa fórmula ou mamadeira, observe volume, intervalo e sinais de saciedade conforme orientação individual.',
   };
-  const order = ['before_or_after_question', 'fed_at_time_question'];
-  const sentences = order.filter((k) => missing.includes(k)).map((k) => fragmentByKey[k]);
+  const order = ['fed_at_time_question', 'before_or_after_question', 'conduct_tree'];
+  const sentences = order.filter((k) => {
+    if (k === 'conduct_tree') {
+      return missing.includes('before_or_after_question') || missing.includes('fed_at_time_question');
+    }
+    return missing.includes(k);
+  }).map((k) => fragmentByKey[k]);
   const prepend = sentences.join(' ');
   return { text: `${prepend}\n\n${text.replace(/^\s+/, '')}`, appended: true, missing };
 }
@@ -1016,8 +1100,8 @@ export function dedupeVerticalThirtyForty({ text } = {}) {
       // with the original token (rough heuristic: if it started with capital).
       const startsCapital = /^[A-ZÀ-Ý]/.test(m[0]);
       const replacement = startsCapital
-        ? 'Mantenha a posição vertical já mencionada'
-        : 'mantendo a posição vertical já mencionada';
+        ? 'Mantenha o bebê em posição vertical'
+        : 'mantê-lo em posição vertical';
       parts.push(replacement);
       removed += 1;
     }
@@ -1253,7 +1337,7 @@ export function ensureBathClosingComplete({ text, signalIds = [] } = {}) {
  * (TESTE 006 RN 16d).
  */
 const ICTERICIA_CURRENT_IMPACT =
-  /(icter[ií]cia|linguinha|procedimento\s+na\s+linguinha|frenotomia|fr[eê]nulo|freio\s+lingual).{0,100}(podem\s+impactar|pode\s+impactar|impacta|afeta|dificulta|influencia|compromete|podem\s+dificultar|pode\s+dificultar)/;
+  /(especialmente\s+apos\s+(o\s+)?procedimento|especialmente\s+depois\s+(do\s+)?procedimento|apos\s+(o\s+)?procedimento\s+na\s+linguinha\s+e\s+a\s+icter[ií]cia|(icter[ií]cia|linguinha|procedimento\s+na\s+linguinha|frenotomia|fr[eê]nulo|freio\s+lingual).{0,100}(podem\s+impactar|pode\s+impactar|impacta|afeta|dificulta|influencia|compromete|podem\s+dificultar|pode\s+dificultar|explicar|explica|contribuir|contribui|influenciar|influencia))/i;
 
 export function ensureIctericiaHistoricalOnly({ text, signalIds = [] } = {}) {
   if (!text) return { text: text || '', appended: false, missing: [] };
