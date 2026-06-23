@@ -444,6 +444,16 @@
       "id": "rn-feeding-form-question-at-opening-rn-6d",
       "rule": "Para o cenário BERÇO OK DE DIA + PROBLEMA SÓ À NOITE (RN 6d), a pergunta 'Ele/ela mama no peito, fórmula ou os dois?' deve aparecer LOGO NO INÍCIO da resposta, NÃO no final. Essa pergunta define toda a árvore de orientação prática (peito → livre demanda; fórmula/complemento → avaliar volume/intervalo) e precisa ser respondida antes da sequência prática.",
       "rationale": "TESTE 006 (RN 6d): faltou perguntar explicitamente no início 'Ele mama no peito, fórmula ou os dois?'."
+    },
+    {
+      "id": "rn-bath-lessons-filter",
+      "rule": "Para queixa EXCLUSIVA sobre choro no banho no RN, os cards de materiais indicados devem corresponder ao eixo banho/contenção/ambiente — NÃO indicar Mamadas Efetivas, Hora da Bruxa, Cólicas, Passo 4 (Alimentação Associada ao Sono), Início do Sono Noturno ou Troca dia-noite. A aula mais próxima disponível é PASSO 1: PREPARE O AMBIENTE (ambiente aquecido). Se não houver aula específica de banho, preferir lista enxuta ou vazia em vez de aulas alimentares/sono comportamental.",
+      "rationale": "TESTE 006 (RN 13d): materiais indicados continuavam desalinhados com a queixa de choro no banho."
+    },
+    {
+      "id": "rn-bath-pediatric-referral-specific",
+      "rule": "Em queixas sobre choro no banho do RN, o encaminhamento ao pediatra NÃO deve ser genérico ('se o choro persistir, procure o pediatra'). O fechamento deve citar sinais CLÍNICOS ESPECÍFICOS para avaliação pediátrica: febre, prostração, recusa alimentar, vômitos importantes, choro inconsolável FORA do banho ou mudança importante de comportamento. Modelo aceito: 'Se o choro acontecer apenas durante o banho, sem outros sinais, mantenha as estratégias de contenção, ambiente aquecido e banho curto. Procure o pediatra se houver sinais associados, como febre, recusa alimentar, prostração, vômitos importantes, choro inconsolável fora do banho ou mudança importante no comportamento.'",
+      "rationale": "TESTE 006 (RN 13d): encaminhamento ao pediatra precisa citar sinais claros, não apenas persistência do choro no banho."
     }
   ],
 

@@ -136,10 +136,98 @@ export function renderRoute({ route, namespace, retrieval, motherName }) {
   }
 }
 
-export function suggestedLessonsFromRetrieval(retrieval, namespace) {
+/**
+ * Scenario-aware lesson whitelist/blacklist keyed by upstream signal ids.
+ * When a whitelist is active for the turn, ONLY those lessons are returned
+ * (retrieval chunk relatedLessons are ignored). Blacklists remove lessons
+ * even when no whitelist applies.
+ */
+const LESSON_SCENARIO_RULES = [
+  {
+    signalIds: ['bath_crying_rn', 'bath_crying_isolated_rn'],
+    whitelist: ['lesson-passo-1-ambiente'],
+    blacklist: [
+      'lesson-mamadas-efetivas',
+      'lesson-hora-da-bruxa',
+      'lesson-colicas',
+      'lesson-passo-4-alimentacao-sono',
+      'lesson-inicio-sono-noturno',
+      'lesson-evitar-troca-dia-noite',
+      'lesson-alimentacao-livre-demanda',
+      'lesson-reflexo-succao',
+      'lesson-estimule-arroto',
+      'lesson-refluxo',
+      'lesson-travesseiro',
+      'lesson-charutinho-moro',
+      'lesson-berco-do-bebe',
+    ],
+  },
+  {
+    signalIds: ['crib_ok_day_problem_night'],
+    whitelist: ['lesson-mamadas-efetivas', 'lesson-estimule-arroto', 'lesson-refluxo'],
+    blacklist: [
+      'lesson-travesseiro',
+      'lesson-charutinho-moro',
+      'lesson-passo-4-alimentacao-sono',
+      'lesson-inicio-sono-noturno',
+      'lesson-evitar-troca-dia-noite',
+      'lesson-alimentacao-livre-demanda',
+    ],
+  },
+  {
+    signalIds: ['pacifier_isolated_complaint'],
+    whitelist: ['lesson-reflexo-succao', 'lesson-mamadas-efetivas', 'lesson-estimule-arroto'],
+    blacklist: [
+      'lesson-refluxo',
+      'lesson-travesseiro',
+      'lesson-berco-do-bebe',
+      'lesson-charutinho-moro',
+      'lesson-passo-4-alimentacao-sono',
+      'lesson-inicio-sono-noturno',
+      'lesson-evitar-troca-dia-noite',
+    ],
+  },
+];
+
+function resolveSuggestedLessonIds(retrievalLessonIds, signalIds = []) {
+  const sigSet = new Set(signalIds || []);
+  let ids = [...retrievalLessonIds];
+
+  for (const rule of LESSON_SCENARIO_RULES) {
+    if (!rule.signalIds.some((id) => sigSet.has(id))) continue;
+    if (rule.whitelist?.length) {
+      ids = [...rule.whitelist];
+      break;
+    }
+  }
+
+  const blacklists = LESSON_SCENARIO_RULES
+    .filter((rule) => rule.signalIds.some((id) => sigSet.has(id)))
+    .flatMap((rule) => rule.blacklist || []);
+  if (blacklists.length) {
+    const blSet = new Set(blacklists);
+    ids = ids.filter((id) => !blSet.has(id));
+  }
+
+  const seen = new Set();
+  return ids.filter((id) => {
+    if (seen.has(id)) return false;
+    seen.add(id);
+    return true;
+  });
+}
+
+export function filterSuggestedLessons(lessons, signalIds = []) {
+  const ids = resolveSuggestedLessonIds((lessons || []).map((l) => l.id), signalIds);
+  const byId = new Map((lessons || []).map((l) => [l.id, l]));
+  return ids.map((id) => byId.get(id)).filter(Boolean);
+}
+
+export function suggestedLessonsFromRetrieval(retrieval, namespace, signalIds = []) {
   const ids = new Set();
   for (const c of retrieval?.chunks?.slice(0, 3) || []) {
     for (const lid of c.chunk.relatedLessons || []) ids.add(lid);
   }
-  return getLessonsByIds(namespace, [...ids]);
+  const resolvedIds = resolveSuggestedLessonIds([...ids], signalIds);
+  return getLessonsByIds(namespace, resolvedIds);
 }

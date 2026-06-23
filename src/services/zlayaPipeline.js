@@ -20,6 +20,9 @@ import {
   softenMamadaInsufficientClaim,
   enforceGenderConsistency,
   dedupeVerticalThirtyForty,
+  ensureBathClosingComplete,
+  ensureIctericiaHistoricalOnly,
+  ensureShortNapDiurnalBodyComplete,
   detectClinicalRedFlags,
 } from './safetyValidator.js';
 import {
@@ -342,6 +345,36 @@ export async function processTurn({ message, babyProfile, conversation, conversa
       draft.nightHungerJanelaCriticaMissing = nightHungerFix.missing;
     }
 
+    // Bath closing + pediatric signs (TESTE 006 RN 13d).
+    const bathFix = ensureBathClosingComplete({
+      text: draft.text,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+    });
+    if (bathFix.appended) {
+      draft.text = bathFix.text;
+      draft.bathClosingMissing = bathFix.missing;
+    }
+
+    // Icterícia/linguinha só como histórico quando mama bem + sonda (TESTE 006 RN 16d).
+    const ictericiaFix = ensureIctericiaHistoricalOnly({
+      text: draft.text,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+    });
+    if (ictericiaFix.appended) {
+      draft.text = ictericiaFix.text;
+      draft.ictericiaHistoricalCorrection = ictericiaFix.missing;
+    }
+
+    // Moro/charutinho + sequência Travesseiro no corpo (TESTE 006 RN 20d).
+    const shortNapFix = ensureShortNapDiurnalBodyComplete({
+      text: draft.text,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+    });
+    if (shortNapFix.appended) {
+      draft.text = shortNapFix.text;
+      draft.shortNapDiurnalBodyMissing = shortNapFix.missing;
+    }
+
     // Soften any residual hard claim "a mamada provavelmente não foi
     // suficiente" into the cautious form (TESTE 004 RN 22d). The canonical
     // satiety closing is already cautious; this is defense-in-depth for any
@@ -408,7 +441,8 @@ export async function processTurn({ message, babyProfile, conversation, conversa
       });
     }
 
-    const suggestedLessons = suggestedLessonsFromRetrieval(retrieval, namespace);
+    const signalIds = (signals?.signals || []).map((s) => s.id);
+    const suggestedLessons = suggestedLessonsFromRetrieval(retrieval, namespace, signalIds);
     return finalize({
       turnId,
       conversationId,

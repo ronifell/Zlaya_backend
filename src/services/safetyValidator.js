@@ -426,10 +426,8 @@ export function ensureSondaOrdenhaComplete({ text, userMessage, signalIds = [] }
   if (!text) return { text: text || '', appended: false, missing: [] };
   const userNorm = normalize(userMessage || '');
   const sigSet = new Set(signalIds || []);
-  const triggered =
-    sigSet.has('feeding_clinical_context') &&
-    SONDA_TRIGGER_TOKENS.some((re) => re.test(userNorm));
-  if (!triggered) return { text, appended: false, missing: [] };
+  const sondaInMessage = SONDA_TRIGGER_TOKENS.some((re) => re.test(userNorm));
+  if (!sondaInMessage) return { text, appended: false, missing: [] };
 
   const norm = normalize(text);
   const missing = [];
@@ -440,7 +438,7 @@ export function ensureSondaOrdenhaComplete({ text, userMessage, signalIds = [] }
 
   const fragmentByKey = {
     complemento_com_sonda:
-      'Como o seu bebê já recebe complemento com sonda, isso indica baixa produção materna ou necessidade de suporte de produção — o déficit pode ocorrer também durante o dia e não apenas à noite. Avalie o complemento também no fim da tarde, quando o comportamento de busca pelo peito começa.',
+      'Como a sua bebê já recebe complemento com sonda, isso indica baixa produção materna ou necessidade de suporte de produção — o déficit pode ocorrer também durante o dia e não apenas à noite. Avalie o complemento também no fim da tarde, quando o comportamento de busca pelo peito começa.',
     ordenha:
       'Considere fazer ordenhas no fim da tarde e ao longo do dia para estimular a produção materna, como ferramenta de avaliação e organização (sempre como apoio à mamada efetiva, não como solução isolada).',
   };
@@ -487,7 +485,10 @@ const REFLUX_TRIGGER_TOKENS = [
 const REFLUX_PHRASE_PHYSIOLOGICAL = /refluxo\s+fisiol[oó]gico/;
 const REFLUX_PHRASE_PATHOLOGICAL = /refluxo\s+patol[oó]gico/;
 const REFLUX_PHRASE_VERTICAL_30_40 = /(30\s*(?:a|–|-|—|at[eé])\s*40\s*min|posi[çc][aã]o\s+vertical[\s\S]{0,40}30\s*(?:a|–|-|—|at[eé])\s*40)/;
+const REFLUX_PHRASE_MATTRESS_30_40 = /(eleva[çc][aã]o\s+do\s+colch[aã]o\s+(?:em|a|de)?\s*30\s*(?:a|–|-|—|at[eé])\s*40|colch[aã]o\s+(?:em|a|de)?\s*30\s*(?:a|–|-|—|at[eé])\s*40)/;
 const REFLUX_PHRASE_MATTRESS_45 = /(eleva[çc][aã]o\s+do\s+colch[aã]o\s+(?:em|a|de)?\s*45|colch[aã]o\s+(?:em|a|de)?\s*45[\s°º]*|inclinar\s+(?:o\s+)?colch[aã]o.*45|45[\s°º]+(?:no|do)?\s*colch)/;
+const REFLUX_PATHOLOGICAL_USER_SIGNS =
+  /(vom[ií]to|em\s+jato|engasgo|engasga|recus(a|ar)\s+aliment|arquei[ao]|irritabilidade\s+persistente)/;
 const REFLUX_PHRASE_PEDIATRA_MATERIAL = /(material\s+do\s+pediatra|pediatra\s+roberto|roberto\s+franklin|aulas?\s+extras?|aulas?\s+b[oô]nus|aulas?\s+bonus)/;
 const REFLUX_PHRASE_HUMAN_SUPPORT = /(suporte\s+humano|equipe\s+de\s+suporte|suporte\s+do\s+curso|encaminh\w*\s+(?:para\s+)?(?:o\s+)?suporte)/;
 
@@ -539,7 +540,16 @@ export function ensureRefluxRoutingComplete({ text, userMessage = '', signalIds 
   if (!REFLUX_PHRASE_PHYSIOLOGICAL.test(norm)) missing.push('refluxo_fisiologico');
   if (!REFLUX_PHRASE_PATHOLOGICAL.test(norm)) missing.push('refluxo_patologico');
   if (!REFLUX_PHRASE_VERTICAL_30_40.test(norm)) missing.push('vertical_30_40');
-  if (!REFLUX_PHRASE_MATTRESS_45.test(norm)) missing.push('colchao_45');
+
+  const hasPathologicalUserSigns = REFLUX_PATHOLOGICAL_USER_SIGNS.test(userNorm);
+  const hasMattress30_40 = REFLUX_PHRASE_MATTRESS_30_40.test(norm);
+  const hasMattress45 = REFLUX_PHRASE_MATTRESS_45.test(norm);
+  if (!hasMattress30_40 && !hasMattress45) {
+    missing.push('colchao_30_40');
+  }
+  if (hasPathologicalUserSigns && !hasMattress45) {
+    missing.push('colchao_45');
+  }
   if (!REFLUX_PHRASE_PEDIATRA_MATERIAL.test(norm)) missing.push('material_pediatra');
   if (!REFLUX_PHRASE_HUMAN_SUPPORT.test(norm)) missing.push('suporte_humano');
 
@@ -552,6 +562,7 @@ export function ensureRefluxRoutingComplete({ text, userMessage = '', signalIds 
     'refluxo_fisiologico',
     'refluxo_patologico',
     'vertical_30_40',
+    'colchao_30_40',
     'colchao_45',
     'material_pediatra',
     'suporte_humano',
@@ -560,15 +571,17 @@ export function ensureRefluxRoutingComplete({ text, userMessage = '', signalIds 
     refluxo_fisiologico:
       'Acordar chorando logo após o berço e melhorar no colo pode sugerir desconforto pós-mamada ou REFLUXO FISIOLÓGICO.',
     refluxo_patologico:
-      'Sinais como vômitos intensos ou em jato, engasgos frequentes, recusa alimentar, arqueamento corporal importante ou irritabilidade persistente são sugestivos de POSSIBILIDADE DE REFLUXO PATOLÓGICO — sem que isso signifique diagnóstico.',
+      'Sinais como vômitos intensos ou em jato, engasgos frequentes, recusa alimentar, prostração, arqueamento corporal importante ou irritabilidade persistente são sugestivos de POSSIBILIDADE DE REFLUXO PATOLÓGICO — sem que isso signifique diagnóstico.',
     vertical_30_40:
       'Mantenha em posição vertical por 30 a 40 minutos após a mamada antes de transferir para o berço.',
+    colchao_30_40:
+      'Para refluxo fisiológico, quando indicada pelo método, considere a elevação do colchão em 30 a 40 graus como medida postural complementar à posição vertical.',
     colchao_45:
-      'Considere também a elevação do colchão em 45° como medida postural complementar (aplicável tanto ao refluxo fisiológico quanto à suspeita de refluxo patológico, quando indicada pelo método/material do pediatra).',
+      'Para refluxo patológico ou suspeita/investigação de refluxo patológico, a elevação do colchão em 45°, quando indicada pelo método/material do pediatra, complementa a posição vertical — não use 45° como orientação padrão para refluxo fisiológico.',
     material_pediatra:
-      'Como há sinais que podem sugerir refluxo, recomendo consultar o material do Pediatra Roberto Franklin nas Aulas Extras/Bônus do curso.',
+      'Recomendo consultar o material do Pediatra Roberto Franklin nas Aulas Extras/Bônus do curso para orientação sobre refluxo fisiológico e patológico.',
     suporte_humano:
-      'Diante dessa possibilidade, procure também o suporte humano para acompanhamento — a própria suspeita já justifica esse encaminhamento, não depende da persistência do quadro.',
+      'Diante da possibilidade de refluxo patológico, procure também o suporte humano para acompanhamento — a investigação já justifica esse encaminhamento.',
   };
   const sentences = order
     .filter((k) => missing.includes(k))
@@ -769,8 +782,11 @@ export function softenMamadaInsufficientClaim({ text } = {}) {
  *
  * Returns { text, appended: boolean, missing: string[] }.
  */
+// Aligned with TESTE 006 RN 23d rubric — loose phrasing like "durante as
+// sonecas" without "diurnas", or "oriente que ele use" without tying
+// charutinho to the day, does NOT count as explicit day guidance.
 const CHARUTINHO_DAY_PATTERN =
-  /charutinho.{0,80}(durante o dia|nas sonecas diurnas|tambem.{0,10}dia|nas sonecas|durante as sonecas|de dia)|durante o dia.{0,80}charutinho|nas sonecas diurnas.{0,80}charutinho/;
+  /(charutinho\s+tambem\s+durante\s+o\s+dia|charutinho.{0,80}(durante o dia|tambem.{0,30}dia|nas sonecas diurnas|durante as sonecas diurnas|tambem.{0,20}sonecas)|tambem.{0,40}charutinho.{0,40}(dia|sonecas diurnas)|use.{0,40}charutinho.{0,40}dia)/;
 const EFFECTIVE_FEEDING_INVESTIGATION_PATTERN =
   /(succao\s+(com\s+ritmo|ativa|com\s+pausa|pausada|ritmica|ritmo\s+e\s+pausa)|pausa\s+entre\s+sucçoes|ouve\s+a\s+deglu|escut[ae].*degluti|degluticao\s+aud[ií]vel|ritmo\s+de\s+succao|ritmica\s+e\s+pausada|pausas\s+ritmicas)/;
 // Explicit "mama bem ≠ mamada efetiva" framing — TESTE 005 RN 23d, regra
@@ -791,9 +807,10 @@ const COLO_RN_REFRAMING_PHRASES =
   /(adaptacao fisiologica|organizacao corporal|recurso\s+de\s+(?:organizacao|seguranca)|colo\s+(?:e|continua\s+sendo)\s+recurso)/;
 
 export function ensureCharutinhoNightOnlyComplete({ text, userMessage, signalIds = [] } = {}) {
-  if (!text || !userMessage) return { text: text || '', appended: false, missing: [] };
+  if (!text) return { text: text || '', appended: false, missing: [] };
   const sigSet = new Set(signalIds || []);
   if (!sigSet.has('charutinho_night_only_rn')) return { text, appended: false, missing: [] };
+  void userMessage;
 
   // Moro fisiológico framing — required for the charutinho-night-only case.
   // When the mother explicitly mentions Moro/espasmos and our enricher fires,
@@ -818,7 +835,7 @@ export function ensureCharutinhoNightOnlyComplete({ text, userMessage, signalIds
     moro_physiological:
       'O REFLEXO DE MORO é FISIOLÓGICO e ESPERADO no RN — nessa fase é comum que ele esteja impactando a manutenção do sono e a permanência no berço, especialmente nas sonecas diurnas. O charutinho é o recurso para CONTER o reflexo de Moro enquanto a bebê se organiza.',
     charutinho_dia:
-      'Como o CHARUTINHO funciona à noite e os espasmos pelo reflexo de Moro voltam quando ele não está, oriente o uso do CHARUTINHO TAMBÉM DURANTE O DIA, especialmente nas SONECAS DIURNAS — não restrinja ao período noturno.',
+      'Como o charutinho funciona à noite e os espasmos pelo reflexo de Moro voltam sem ele, use o CHARUTINHO TAMBÉM DURANTE O DIA, especialmente nas SONECAS DIURNAS — não restrinja o charutinho só à noite.',
     mama_bem_framing:
       'Importante: quando você diz que a sua bebê "mama bem", essa percepção NÃO confirma mamada efetiva no RN. Por isso é necessário investigar concretamente os sinais de mamada efetiva, em vez de apoiar a conduta apenas na sensação de que ela mama bem.',
     effective_feeding:
@@ -1188,6 +1205,105 @@ export function enforceGenderConsistency({ text, userMessage }) {
     });
   }
   return { text: out, corrections };
+}
+
+/**
+ * Bath crying closing + pediatric referral (TESTE 006 RN 13d).
+ * When the complaint is isolated choro no banho, the response must close with
+ * adaptation/repetition/previsibilidade AND cite specific clinical signs for
+ * pediatric evaluation — not a generic "se o choro persistir, procure o pediatra".
+ */
+const BATH_ADAPTATION_CLOSING =
+  /(repetic[aã]o|previsibilidade).{0,80}(adapta|se\s+acostuma|melhora|banho)|vai\s+se\s+adaptando\s+melhor\s+ao\s+banho|tend[ea]\s+a\s+se\s+adaptar\s+ao\s+banho/;
+const BATH_PEDIATRIC_SIGNS =
+  /(febre|prostrac[aã]o|recusa\s+alimentar|vom[ií]tos?\s+importantes|choro\s+inconsol[aá]vel\s+fora\s+do\s+banho|mudan[cç]a\s+importante.{0,30}comportamento)/;
+const BATH_BAD_PEDIATRIC_REFERRAL =
+  /(se\s+(o\s+)?choro\s+(persistir|persiste|continua)|caso\s+(o\s+)?choro\s+persista)[^.]{0,80}pediatra/;
+
+export function ensureBathClosingComplete({ text, signalIds = [] } = {}) {
+  if (!text) return { text: text || '', appended: false, missing: [] };
+  const sigSet = new Set(signalIds || []);
+  if (!sigSet.has('bath_crying_rn') && !sigSet.has('bath_crying_isolated_rn')) {
+    return { text, appended: false, missing: [] };
+  }
+
+  const norm = normalize(text);
+  const missing = [];
+  if (!BATH_ADAPTATION_CLOSING.test(norm)) missing.push('adaptation_closing');
+  if (!BATH_PEDIATRIC_SIGNS.test(norm) || BATH_BAD_PEDIATRIC_REFERRAL.test(norm)) {
+    missing.push('pediatric_signs');
+  }
+
+  if (missing.length === 0) return { text, appended: false, missing: [] };
+
+  const fragmentByKey = {
+    adaptation_closing:
+      'Com repetição e previsibilidade, muitos bebês vão se adaptando melhor ao banho.',
+    pediatric_signs:
+      'Se o choro acontecer apenas durante o banho, sem outros sinais, mantenha as estratégias de contenção, ambiente aquecido e banho curto. Procure o pediatra se houver sinais associados, como febre, recusa alimentar, prostração, vômitos importantes, choro inconsolável fora do banho ou mudança importante no comportamento.',
+  };
+  const order = ['adaptation_closing', 'pediatric_signs'];
+  const sentences = order.filter((k) => missing.includes(k)).map((k) => fragmentByKey[k]);
+  const trimmed = text.replace(/\s+$/, '');
+  return { text: `${trimmed}\n\n${sentences.join(' ')}`, appended: true, missing };
+}
+
+/**
+ * Icterícia/linguinha as historical only when mãe diz que agora mama bem
+ * (TESTE 006 RN 16d).
+ */
+const ICTERICIA_CURRENT_IMPACT =
+  /(icter[ií]cia|linguinha|procedimento\s+na\s+linguinha|frenotomia|fr[eê]nulo|freio\s+lingual).{0,100}(podem\s+impactar|pode\s+impactar|impacta|afeta|dificulta|influencia|compromete|podem\s+dificultar|pode\s+dificultar)/;
+
+export function ensureIctericiaHistoricalOnly({ text, signalIds = [] } = {}) {
+  if (!text) return { text: text || '', appended: false, missing: [] };
+  const sigSet = new Set(signalIds || []);
+  if (!sigSet.has('sonda_with_mama_bem_priority_production')) {
+    return { text, appended: false, missing: [] };
+  }
+  const norm = normalize(text);
+  if (!ICTERICIA_CURRENT_IMPACT.test(norm)) {
+    return { text, appended: false, missing: [] };
+  }
+  const append =
+    'Como você informou que a bebê agora está mamando bem, icterícia e o procedimento na linguinha devem ser tratados apenas como histórico do início da amamentação — o foco atual é baixa produção materna ou necessidade de suporte de produção, complemento com sonda e instabilidade no final da tarde e na madrugada.';
+  const trimmed = text.replace(/\s+$/, '');
+  return { text: `${trimmed}\n\n${append}`, appended: true, missing: ['ictericia_historical'] };
+}
+
+/**
+ * Short diurnal naps + Moro/charutinho + Travesseiro in body (TESTE 006 RN 20d).
+ */
+const SHORT_NAP_MORO_BODY =
+  /(reflexo\s+de\s+moro|sobressalto|desorganiza[cç][aã]o\s+corporal|charutinho|conten[cç][aã]o\s+corporal)/;
+const SHORT_NAP_TRAVESSEIRO_SEQUENCE =
+  /(mamada\s+efetiva.{0,120}arroto|arroto.{0,120}posi[cç][aã]o\s+vertical|transfer[eê]ncia\s+gradual|transi[cç][aã]o\s+gradual|estrategia\s+do\s+travesseiro|estrat[eé]gia\s+do\s+travesseiro)/;
+
+export function ensureShortNapDiurnalBodyComplete({ text, signalIds = [] } = {}) {
+  if (!text) return { text: text || '', appended: false, missing: [] };
+  const sigSet = new Set(signalIds || []);
+  const triggered =
+    sigSet.has('wakes_short_after_crib_back_to_lap') &&
+    sigSet.has('diurnal_only_difficulty');
+  if (!triggered) return { text, appended: false, missing: [] };
+
+  const norm = normalize(text);
+  const missing = [];
+  if (!SHORT_NAP_MORO_BODY.test(norm)) missing.push('moro_charutinho');
+  if (!SHORT_NAP_TRAVESSEIRO_SEQUENCE.test(norm)) missing.push('travesseiro_sequence');
+
+  if (missing.length === 0) return { text, appended: false, missing: [] };
+
+  const fragmentByKey = {
+    moro_charutinho:
+      'Investigue também sobressaltos, reflexo de Moro, desorganização corporal e necessidade de contenção — o charutinho pode ajudar quando há espasmos ou desorganização ao deitar.',
+    travesseiro_sequence:
+      'Organize a sequência prática: mamada efetiva → arroto → posição vertical por 30 a 40 minutos → observe desconforto pós-mamada → contenção/charutinho quando necessário → Estratégia do Travesseiro com transferência gradual para o berço.',
+  };
+  const order = ['moro_charutinho', 'travesseiro_sequence'];
+  const sentences = order.filter((k) => missing.includes(k)).map((k) => fragmentByKey[k]);
+  const trimmed = text.replace(/\s+$/, '');
+  return { text: `${trimmed}\n\n${sentences.join(' ')}`, appended: true, missing };
 }
 
 /**

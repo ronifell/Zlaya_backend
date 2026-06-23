@@ -367,7 +367,7 @@ const E2E = [
       if (!/(reflexo de moro.{0,200}(fisiologic|esperad|comum|normal|impactand?o?|impactar|conter|fase)|moro.{0,200}(fisiologic|esperad|comum|normal|impactand?o?|impactar|conter|fase|adaptacao)|esperad[ao].{0,200}(reflexo de moro|moro)|comum.{0,200}(reflexo de moro|moro)|charutinho.{0,40}(conter|reflexo de moro)|padrao\s+pode\s+ocorrer.{0,40}fase.{0,200}moro)/.test(n))
         issues.push('must frame reflexo de Moro as fisiol\u00f3gico / esperado / comum nessa fase');
       // Charutinho TAMB\u00c9M de dia
-      if (!/(charutinho.{0,80}(durante o dia|tambem.{0,30}dia|nas sonecas diurnas|tambem.{0,20}sonecas)|tambem.{0,40}charutinho.{0,40}(dia|sonecas diurnas)|charutinho.{0,40}dia.{0,40}noite|use.{0,40}charutinho.{0,40}dia)/.test(n))
+      if (!/(charutinho\s+tambem\s+durante\s+o\s+dia|charutinho.{0,80}(durante o dia|tambem.{0,30}dia|nas sonecas diurnas|durante as sonecas diurnas|tambem.{0,20}sonecas)|tambem.{0,40}charutinho.{0,40}(dia|sonecas diurnas)|use.{0,40}charutinho.{0,40}dia)/.test(n))
         issues.push('must orient charutinho TAMB\u00c9M durante o dia');
       // "mama bem" \u2260 mamada efetiva
       if (!/("?mama bem"?\s+nao\s+(confirma|garante|significa|equivale)|n[\u00e3a]o\s+confirma\s+mamada\s+efetiv|"?mama bem"?\s+nao\s+e\s+suficiente.{0,40}(efetiv|mamada)|isso\s+nao\s+confirma\s+mamada\s+efetiv|nao\s+(quer|significa)\s+dizer\s+que\s+a\s+mamada\s+esta\s+efetiv)/.test(n))

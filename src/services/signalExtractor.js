@@ -493,7 +493,7 @@ const SIGNAL_DEFS = [
     ],
     boostThemes: ['choro_banho_rn'],
     priority:
-      'QUEIXA SOBRE CHORO NO BANHO no RN: NÃO desvie para investigação alimentar (mamada efetiva, saciedade, produção/transferência) — a queixa é específica sobre BANHO. NÃO indique aulas de cólicas / Hora da Bruxa / Mamadas efetivas como prioritárias para essa queixa. CONDUTA PRÁTICA para o banho do RN: (1) explicar que o choro no banho costuma vir de SENSAÇÃO DE QUEDA, INSEGURANÇA ou FRIO; (2) ENROLAR o bebê em uma FRALDA DE PANO durante o banho para aumentar a sensação de CONTENÇÃO, molhando o corpinho aos poucos; (3) observar se ele melhora quando fica com o CORPINHO MAIS SUBMERSO na água, sempre com apoio firme e supervisão total; (4) experimentar a posição DE BARRIGUINHA PARA BAIXO apoiado com segurança no braço do adulto (apoio firme, controle do corpo); (5) manter AMBIENTE AQUECIDO, sem correntes de ar; (6) deixar TUDO PREPARADO antes de começar; (7) escolher um momento em que ele NÃO esteja com muita fome nem muito irritado — banho logo após uma mamada cheia pode aumentar desconforto/regurgitação; (8) banho CURTO. NÃO faça perguntas sobre saciedade, mamada efetiva ou produção de leite a menos que a mãe traga essa pista — a queixa do banho deve permanecer no eixo do banho.',
+      'QUEIXA SOBRE CHORO NO BANHO no RN: NÃO desvie para investigação alimentar (mamada efetiva, saciedade, produção/transferência) — a queixa é específica sobre BANHO. NÃO indique aulas de cólicas / Hora da Bruxa / Mamadas efetivas / Passo 4 / Início do Sono Noturno / Troca dia-noite como prioritárias para essa queixa. CONDUTA PRÁTICA para o banho do RN: (1) explicar que o choro no banho costuma vir de SENSAÇÃO DE QUEDA, INSEGURANÇA ou FRIO; (2) ENROLAR o bebê em uma FRALDA DE PANO durante o banho para aumentar a sensação de CONTENÇÃO, molhando o corpinho aos poucos; (3) observar se ele melhora quando fica com o CORPINHO MAIS SUBMERSO na água, sempre com apoio firme e supervisão total; (4) experimentar a posição DE BARRIGUINHA PARA BAIXO apoiado com segurança no braço do adulto (apoio firme, controle do corpo); (5) manter AMBIENTE AQUECIDO, sem correntes de ar; (6) deixar TUDO PREPARADO antes de começar; (7) escolher um momento em que ele NÃO esteja com muita fome nem muito irritado — banho logo após uma mamada cheia pode aumentar desconforto/regurgitação; (8) banho CURTO. FECHAMENTO OBRIGATÓRIO: "Com repetição e previsibilidade, muitos bebês vão se adaptando melhor ao banho." Encaminhamento ao pediatra APENAS com sinais associados — febre, recusa alimentar, prostração, vômitos importantes, choro inconsolável fora do banho ou mudança importante no comportamento — NÃO usar "se o choro persistir" como critério isolado.',
   },
   {
     id: 'cautious_seios_flacidos_rn',
@@ -724,6 +724,7 @@ const SYNTHETIC_SIGNAL_IDS = new Set([
   'charutinho_night_only_rn',
   'pacifier_isolated_complaint',
   'sonda_with_mama_bem_priority_production',
+  'bath_crying_isolated_rn',
 ]);
 
 export function extractSignals({ message, conversation, ageBand, ageDays } = {}) {
@@ -891,6 +892,30 @@ export function extractSignals({ message, conversation, ageBand, ageDays } = {})
       signals.push({ id: def.id, label: def.label, matched: ['composite-sonda-mama-bem'] });
       def.boostThemes.forEach((t) => boostThemes.add(t));
       priorities.push(def.priority);
+      hasDirectiveSignal = true;
+    }
+  }
+
+  // Composite signal — choro no banho ISOLADO (TESTE 006 RN 13d): a queixa é
+  // exclusivamente sobre banho, sem pistas alimentares/sono que desviem o eixo.
+  // Bloqueia recuperação de aulas de mamadas efetivas, Hora da Bruxa, cólicas,
+  // Passo 4, início do sono noturno e troca dia-noite nos cards sugeridos.
+  const hasBathSignal = signals.some((s) => s.id === 'bath_crying_rn');
+  const bathConcurrentSignalIds = new Set([
+    'evening_pattern', 'night_production_drop', 'short_feeding_interval',
+    'feeding_clinical_context', 'wakes_short_after_crib_back_to_lap',
+    'diurnal_only_difficulty', 'crib_ok_day_problem_night', 'pacifier_in_rn',
+    'reflux_discomfort_suspicion', 'travesseiro_tried_without_success',
+    'night_hunger_signs_rn', 'prolonged_awake_after_feed', 'breast_soothing',
+  ]);
+  if (hasBathSignal && !signals.some((s) => bathConcurrentSignalIds.has(s.id))) {
+    const def = SIGNAL_DEFS.find((d) => d.id === 'bath_crying_rn');
+    if (def) {
+      signals.push({
+        id: 'bath_crying_isolated_rn',
+        label: 'Choro no banho isolado — manter eixo banho e filtrar aulas',
+        matched: ['composite-bath-isolated'],
+      });
       hasDirectiveSignal = true;
     }
   }
