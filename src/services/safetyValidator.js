@@ -421,33 +421,61 @@ const SONDA_TRIGGER_TOKENS = [
 ];
 const SONDA_PHRASE_LITERAL = /complemento\s+com\s+sonda/;
 const ORDENHA_PHRASE = /\bordenh(a|as|ar|ando)\b/;
+const SONDA_BAIXA_PRODUCAO = /baixa\s+produc[aã]o\s+materna|necessidade\s+de\s+suporte\s+de\s+produc[aã]o/;
+const SONDA_COMPLEMENT_DAY_Q =
+  /complemento.{0,120}(so\s+(?:para\s+)?(?:a\s+)?noite|durante\s+o\s+dia|final\s+da\s+tarde|fim\s+da\s+tarde)|orientad[oa]\s+apenas\s+para\s+a\s+noite/;
+const SONDA_AMAMENTACAO_PRATICA = /amamentac[aã]o\s+pr[aá]tica/;
+const SONDA_SEGUNDO_PEITO = /segundo\s+peito/;
+const SONDA_TRANSFERENCIA_AS_MAIN =
+  /hip[oó]tese\s+principal.{0,80}baixa\s+transfer[eê]ncia|principal\s+hip[oó]tese.{0,40}baixa\s+transfer[eê]ncia/i;
 
 export function ensureSondaOrdenhaComplete({ text, userMessage, signalIds = [] } = {}) {
   if (!text) return { text: text || '', appended: false, missing: [] };
   const userNorm = normalize(userMessage || '');
   const sigSet = new Set(signalIds || []);
   const sondaInMessage = SONDA_TRIGGER_TOKENS.some((re) => re.test(userNorm));
-  if (!sondaInMessage) return { text, appended: false, missing: [] };
+  const sondaSignal = sigSet.has('sonda_with_mama_bem_priority_production');
+  if (!sondaInMessage && !sondaSignal) return { text, appended: false, missing: [] };
 
-  const norm = normalize(text);
+  let out = text;
+  if (SONDA_TRANSFERENCIA_AS_MAIN.test(normalize(out))) {
+    out = out.replace(
+      /(?:a\s+)?(?:principal\s+)?hip[oó]tese\s+(?:principal\s+)?(?:[ée]\s+)?baixa\s+transfer[eê]ncia(?:\s+de\s+leite)?/gi,
+      'a principal hipótese é baixa produção materna ou necessidade de suporte de produção',
+    );
+  }
+
+  const norm = normalize(out);
   const missing = [];
   if (!SONDA_PHRASE_LITERAL.test(norm)) missing.push('complemento_com_sonda');
   if (!ORDENHA_PHRASE.test(norm)) missing.push('ordenha');
+  if (!SONDA_BAIXA_PRODUCAO.test(norm)) missing.push('baixa_producao');
+  if (!SONDA_COMPLEMENT_DAY_Q.test(norm)) missing.push('complement_day_question');
+  if (!SONDA_AMAMENTACAO_PRATICA.test(norm)) missing.push('amamentacao_pratica');
+  if (!SONDA_SEGUNDO_PEITO.test(norm)) missing.push('segundo_peito');
 
-  if (missing.length === 0) return { text, appended: false, missing: [] };
+  if (missing.length === 0) return { text: out, appended: false, missing: [] };
 
   const fragmentByKey = {
     complemento_com_sonda:
       'Como a sua bebê já recebe complemento com sonda, isso indica baixa produção materna ou necessidade de suporte de produção — o déficit pode ocorrer também durante o dia e não apenas à noite. Avalie o complemento também no fim da tarde, quando o comportamento de busca pelo peito começa.',
     ordenha:
       'Considere fazer ordenhas no fim da tarde e ao longo do dia para estimular a produção materna, como ferramenta de avaliação e organização (sempre como apoio à mamada efetiva, não como solução isolada).',
+    baixa_producao:
+      'Pelo padrão que você descreve — busca pelo peito em intervalo menor que 2h começando no final da tarde e piorando na madrugada — a principal hipótese é baixa produção materna ou necessidade de suporte de produção nesse período, especialmente porque sua bebê já recebe complemento com sonda.',
+    complement_day_question:
+      'O complemento com sonda foi orientado apenas para a noite (22h e madrugada), ou já foi avaliado também para o final da tarde e durante o dia?',
+    amamentacao_pratica:
+      'Assista também à aula Amamentação Prática e Descomplicada para ajustar a amamentação nesse contexto de complemento com sonda, produção materna e ordenhas.',
+    segundo_peito:
+      'Na sequência prática, garanta uma mamada o mais efetiva possível — ofereça o segundo peito quando necessário —, observe sinais de saciedade, coloque para arrotar e mantenha em posição vertical por 30 a 40 minutos.',
   };
-  const order = ['complemento_com_sonda', 'ordenha'];
+  const order = ['baixa_producao', 'complemento_com_sonda', 'complement_day_question', 'ordenha', 'segundo_peito', 'amamentacao_pratica'];
   const sentences = order
     .filter((k) => missing.includes(k))
     .map((k) => fragmentByKey[k]);
   const append = sentences.join(' ');
-  const trimmed = text.replace(/\s+$/, '');
+  const trimmed = out.replace(/\s+$/, '');
   return { text: `${trimmed}\n\n${append}`, appended: true, missing };
 }
 
@@ -555,7 +583,14 @@ export function ensureRefluxRoutingComplete({ text, userMessage = '', signalIds 
   if (hasPathologicalUserSigns && !hasMattress45) {
     missing.push('colchao_45');
   }
-  if (hasPathologicalUserSigns) {
+  // TESTE 008 RN 20d: quando o padrão canonical (soneca curta + choro no
+  // berço + melhora no colo) dispara investigação de refluxo patológico, o
+  // encaminhamento ao Pediatra + suporte humano é OBRIGATÓRIO — a própria
+  // investigação já justifica o routing, independentemente de sinais
+  // clínicos já confirmados no relato da mãe.
+  const requiresPathologicalRouting =
+    hasPathologicalUserSigns || sigSet.has('wakes_short_after_crib_back_to_lap');
+  if (requiresPathologicalRouting) {
     if (!REFLUX_PHRASE_PEDIATRA_MATERIAL.test(norm)) missing.push('material_pediatra');
     if (!REFLUX_PHRASE_HUMAN_SUPPORT.test(norm)) missing.push('suporte_humano');
   }
@@ -696,6 +731,8 @@ export function ensureTravesseiroEixosComplete({ text, signalIds = [], ageDays }
  */
 const TRAVESSEIRO_FEEDING_AXIS =
   /(mamada\s+efetiv|sinais\s+de\s+saciedade|produc[aã]o\s+de\s+leite|transfer[eê]ncia\s+de\s+leite|fluxo\s+no\s+fim\s+da\s+tarde|queda\s+de\s+fluxo)/;
+const TRAVESSEIRO_QUEDA_FLUXO_QUESTION =
+  /queda\s+(?:no\s+)?fluxo.{0,60}(fim\s+da\s+tarde|come[cç]o\s+da\s+noite)|percebe\s+queda.{0,40}fluxo/;
 const TRAVESSEIRO_CHARUTINHO_PRACTICAL =
   /(charutinho|reflexo\s+de\s+moro|desorganiza[cç][aã]o\s+corporal)/;
 const TRAVESSEIRO_SLEEP_ENV =
@@ -711,6 +748,7 @@ export function ensureTravesseiroFeedingAxisComplete({ text, signalIds = [] } = 
   const norm = normalize(text);
   const missing = [];
   if (!TRAVESSEIRO_FEEDING_AXIS.test(norm)) missing.push('feeding_axis');
+  if (!TRAVESSEIRO_QUEDA_FLUXO_QUESTION.test(norm)) missing.push('queda_fluxo_question');
   if (!TRAVESSEIRO_CHARUTINHO_PRACTICAL.test(norm)) missing.push('charutinho_practical');
   if (!TRAVESSEIRO_SLEEP_ENV.test(norm)) missing.push('sleep_environment');
 
@@ -718,13 +756,15 @@ export function ensureTravesseiroFeedingAxisComplete({ text, signalIds = [] } = 
 
   const fragmentByKey = {
     feeding_axis:
-      'Antes de focar só na transição para o berço, avalie mamada efetiva, sinais de saciedade e produção de leite — especialmente queda de fluxo no fim da tarde. Observe se ela mama e relaxa, solta o peito espontaneamente, abre as mãozinhas ou volta a buscar o peito pouco tempo depois.',
+      'Antes de focar só na transição do colo para a superfície do berço, avalie mamada efetiva, sinais de saciedade e produção de leite. Observe se ela mama e relaxa, solta o peito espontaneamente, abre as mãozinhas ou volta a buscar o peito pouco tempo depois.',
+    queda_fluxo_question:
+      'Você percebe queda no fluxo de leite no fim da tarde ou no começo da noite? Depois de mamar, ela solta o peito relaxada e permanece tranquila, ou volta a buscar o peito em pouco tempo?',
     charutinho_practical:
       'Se houver reflexo de Moro ou desorganização corporal, use charutinho antes da transferência para o berço — inclusive nas sonecas diurnas.',
     sleep_environment:
       'Mantenha ambiente escuro, calmo e com baixa estimulação durante a transição para o sono.',
   };
-  const order = ['feeding_axis', 'charutinho_practical', 'sleep_environment'];
+  const order = ['feeding_axis', 'queda_fluxo_question', 'charutinho_practical', 'sleep_environment'];
   const sentences = order.filter((k) => missing.includes(k)).map((k) => fragmentByKey[k]);
   const trimmed = text.replace(/\s+$/, '');
   return { text: `${trimmed}\n\n${sentences.join(' ')}`, appended: true, missing };
@@ -1077,14 +1117,12 @@ export function ensureNightDiaperRoutineComplete({ text, signalIds = [] } = {}) 
 const VERTICAL_30_40_MENTION_RE =
   /(?:manten?h?[ae]?[\-\s]?(?:a|o|[oa]\s+beb[êe])?\s*)?(?:em\s+)?posi[çc][aã]o\s+vertical(?:\s+(?:por|durante))?\s+(?:de\s+)?30\s*(?:a|–|-|—|at[eé])\s*40\s*(?:min(?:utos)?|m)\b/gi;
 
-export function dedupeVerticalThirtyForty({ text } = {}) {
+export function dedupeVerticalThirtyForty({ text, userMessage } = {}) {
   if (!text) return { text: text || '', deduplicated: false, removedCount: 0 };
   const matches = [...text.matchAll(VERTICAL_30_40_MENTION_RE)];
   if (matches.length < 2) return { text, deduplicated: false, removedCount: 0 };
 
-  // Keep the first occurrence intact. From the second onwards, replace the
-  // whole canonical mention by a lightweight back-reference. We preserve the
-  // sentence boundaries by NOT removing leading/trailing punctuation.
+  const gender = detectMotherGenderCue(userMessage || '');
   let removed = 0;
   let lastIndex = 0;
   const parts = [];
@@ -1096,12 +1134,21 @@ export function dedupeVerticalThirtyForty({ text } = {}) {
     if (i === 0) {
       parts.push(m[0]);
     } else {
-      // Replace by a back-reference. We try to keep capitalization consistent
-      // with the original token (rough heuristic: if it started with capital).
       const startsCapital = /^[A-ZÀ-Ý]/.test(m[0]);
-      const replacement = startsCapital
-        ? 'Mantenha o bebê em posição vertical'
-        : 'mantê-lo em posição vertical';
+      let replacement;
+      if (gender === 'feminine') {
+        replacement = startsCapital
+          ? 'Depois de arrotar, mantenha-a em posição vertical'
+          : 'depois de arrotar e de ser mantida em posição vertical';
+      } else if (gender === 'masculine') {
+        replacement = startsCapital
+          ? 'Depois de arrotar, mantenha-o em posição vertical'
+          : 'depois de arrotar e de ser mantido em posição vertical';
+      } else {
+        replacement = startsCapital
+          ? 'Respeite o tempo em posição vertical já orientado'
+          : 'respeitando o tempo em posição vertical já orientado';
+      }
       parts.push(replacement);
       removed += 1;
     }
@@ -1279,6 +1326,11 @@ export function enforceGenderConsistency({ text, userMessage }) {
     [/\bo\s+beb[êe]\s+continuar\s+(tranquilo|sonolento|sossegado)\b/gi, (_, w) => `a bebê continuar ${w === 'tranquilo' ? 'tranquila' : w === 'sonolento' ? 'sonolenta' : 'sossegada'}`],
     [/\bse\s+ele\s+acordar\s+logo\s+que\s+(a\s+)?(chupeta\s+)?cai\b/gi, 'se ela acordar logo que a chupeta cai'],
     [/\bse\s+ele\s+acordar\s+logo\b/gi, 'se ela acordar logo'],
+    // vertical back-reference — TESTE 008 RN 19d
+    [/\bdepois\s+de\s+arrotar\s+e\s+de\s+ficar\s+mant[eê]-lo\s+em\s+posi[cç][aã]o\s+vertical\b/gi, 'depois de arrotar e de ser mantida em posição vertical'],
+    [/\bmant[eê]-lo\s+em\s+posi[cç][aã]o\s+vertical\b/gi, 'mantê-la em posição vertical'],
+    [/\bele\s+continua\s+procurando\s+o\s+peito\b/gi, 'ela continua procurando o peito'],
+    [/\bele\s+mama\b/gi, 'ela mama'],
   ];
   let out = text;
   for (const [re, replacement] of rules) {
@@ -1345,13 +1397,26 @@ export function ensureIctericiaHistoricalOnly({ text, signalIds = [] } = {}) {
   if (!sigSet.has('sonda_with_mama_bem_priority_production')) {
     return { text, appended: false, missing: [] };
   }
-  const norm = normalize(text);
-  if (!ICTERICIA_CURRENT_IMPACT.test(norm)) {
-    return { text, appended: false, missing: [] };
+  let out = text;
+  const norm = normalize(out);
+  const hadCurrentImpact = ICTERICIA_CURRENT_IMPACT.test(norm);
+  if (hadCurrentImpact) {
+    out = out.replace(
+      /[^.!?]*(?:especialmente\s+(?:com\s+o\s+hist[oó]rico\s+de\s+)?(?:a\s+)?icter[ií]cia|(?:icter[ií]cia|linguinha|procedimento\s+na\s+linguinha)[^.!?]{0,120}(?:podem\s+impactar|pode\s+impactar|impacta|afeta|dificulta|influencia|compromete|explicar|explica|contribuir|contribui))[^.!?]*[.!?]\s*/gi,
+      '',
+    );
+    out = out.replace(
+      /especialmente\s+(?:com\s+o\s+hist[oó]rico\s+de\s+)?(?:a\s+)?icter[ií]cia\s+e\s+o\s+procedimento\s+na\s+linguinha[^.!?]*/gi,
+      '',
+    );
+  }
+  const normAfter = normalize(out);
+  if (!hadCurrentImpact && !ICTERICIA_CURRENT_IMPACT.test(normAfter)) {
+    return { text: out, appended: false, missing: [] };
   }
   const append =
     'Como você informou que a bebê agora está mamando bem, icterícia e o procedimento na linguinha devem ser tratados apenas como histórico do início da amamentação — o foco atual é baixa produção materna ou necessidade de suporte de produção, complemento com sonda e instabilidade no final da tarde e na madrugada.';
-  const trimmed = text.replace(/\s+$/, '');
+  const trimmed = out.replace(/\s+$/, '');
   return { text: `${trimmed}\n\n${append}`, appended: true, missing: ['ictericia_historical'] };
 }
 
@@ -1362,6 +1427,8 @@ const SHORT_NAP_MORO_BODY =
   /(reflexo\s+de\s+moro|sobressalto|desorganiza[cç][aã]o\s+corporal|charutinho|conten[cç][aã]o\s+corporal)/;
 const SHORT_NAP_TRAVESSEIRO_SEQUENCE =
   /(mamada\s+efetiva.{0,120}arroto|arroto.{0,120}posi[cç][aã]o\s+vertical|transfer[eê]ncia\s+gradual|transi[cç][aã]o\s+gradual|estrategia\s+do\s+travesseiro|estrat[eé]gia\s+do\s+travesseiro)/;
+const SHORT_NAP_FEEDING_AXIS =
+  /(mamada\s+efetiv|sinais\s+de\s+saciedade|busca.{0,40}peito.{0,40}pouco\s+tempo|produc[aã]o.{0,40}(?:durante\s+o\s+dia|diurn)|fica\s+saciad|solta\s+o\s+peito\s+relaxad)/;
 
 export function ensureShortNapDiurnalBodyComplete({ text, signalIds = [] } = {}) {
   if (!text) return { text: text || '', appended: false, missing: [] };
@@ -1373,21 +1440,48 @@ export function ensureShortNapDiurnalBodyComplete({ text, signalIds = [] } = {})
 
   const norm = normalize(text);
   const missing = [];
+  if (!SHORT_NAP_FEEDING_AXIS.test(norm)) missing.push('feeding_axis');
   if (!SHORT_NAP_MORO_BODY.test(norm)) missing.push('moro_charutinho');
   if (!SHORT_NAP_TRAVESSEIRO_SEQUENCE.test(norm)) missing.push('travesseiro_sequence');
 
   if (missing.length === 0) return { text, appended: false, missing: [] };
 
   const fragmentByKey = {
+    feeding_axis:
+      'Investigue o eixo alimentar de forma objetiva: ela fica saciada após mamar? Volta a buscar o peito ou oferta novamente em pouco tempo? Há sinais de dificuldade de transferência ou de produção insuficiente durante o dia? Ela mama no peito, fórmula ou ambos?',
     moro_charutinho:
       'Investigue também sobressaltos, reflexo de Moro, desorganização corporal e necessidade de contenção — o charutinho pode ajudar quando há espasmos ou desorganização ao deitar.',
     travesseiro_sequence:
       'Organize a sequência prática: mamada efetiva → arroto → posição vertical por 30 a 40 minutos → observe desconforto pós-mamada → contenção/charutinho quando necessário → Estratégia do Travesseiro com transferência gradual para o berço.',
   };
-  const order = ['moro_charutinho', 'travesseiro_sequence'];
+  const order = ['feeding_axis', 'moro_charutinho', 'travesseiro_sequence'];
   const sentences = order.filter((k) => missing.includes(k)).map((k) => fragmentByKey[k]);
   const trimmed = text.replace(/\s+$/, '');
   return { text: `${trimmed}\n\n${sentences.join(' ')}`, appended: true, missing };
+}
+
+/**
+ * Replace behavioral "adaptar/acostumar ao berço" framing with physiological
+ * transition language when Travesseiro signal fires (TESTE 008 RN 19d).
+ */
+const BERCO_BEHAVIORAL_FRAMING =
+  /\b(adaptar(?:-se)?\s+(?:ao|para\s+o)\s+ber[cç]o|acostumar(?:-se)?\s+ao\s+ber[cç]o|adapta[cç][aã]o\s+ao\s+ber[cç]o|criou\s+h[aá]bito\s+de\s+colo)\b/gi;
+
+export function ensureBehavioralBerçoReframing({ text, signalIds = [] } = {}) {
+  if (!text) return { text: text || '', rewritten: false };
+  const sigSet = new Set(signalIds || []);
+  if (!sigSet.has('travesseiro_tried_without_success')) {
+    return { text, rewritten: false };
+  }
+  if (!BERCO_BEHAVIORAL_FRAMING.test(text)) {
+    return { text, rewritten: false };
+  }
+  BERCO_BEHAVIORAL_FRAMING.lastIndex = 0;
+  const out = text.replace(
+    BERCO_BEHAVIORAL_FRAMING,
+    'transição do colo para a superfície do berço',
+  );
+  return { text: out, rewritten: out !== text };
 }
 
 /**

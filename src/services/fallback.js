@@ -232,7 +232,7 @@ const LESSON_SCENARIO_RULES = [
   },
   {
     signalIds: ['sonda_with_mama_bem_priority_production'],
-    whitelist: ['lesson-mamadas-efetivas', 'lesson-alimentacao-livre-demanda'],
+    whitelist: ['lesson-amamentacao-pratica', 'lesson-mamadas-efetivas', 'lesson-alimentacao-livre-demanda'],
     blacklist: [
       'lesson-inicio-sono-noturno',
       'lesson-evitar-troca-dia-noite',

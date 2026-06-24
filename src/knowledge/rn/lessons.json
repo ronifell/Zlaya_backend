@@ -4,6 +4,7 @@
   "lessons": [
     { "id": "lesson-alimentacao-livre-demanda", "title": "ALIMENTAÇÃO E SONO: LIVRE DEMANDA E INTERVALOS DE MAMADA", "track": "amamentacao", "appPath": "/aulas/rn/alimentacao-livre-demanda" },
     { "id": "lesson-mamadas-efetivas", "title": "O QUE SÃO MAMADAS EFETIVAS", "track": "amamentacao", "appPath": "/aulas/rn/mamadas-efetivas" },
+    { "id": "lesson-amamentacao-pratica", "title": "AMAMENTAÇÃO PRÁTICA E DESCOMPLICADA", "track": "amamentacao", "appPath": "/aulas/rn/amamentacao-pratica-descomplicada" },
     { "id": "lesson-reflexo-succao", "title": "REFLEXO DE SUCÇÃO", "track": "fisiologia", "appPath": "/aulas/rn/reflexo-succao" },
     { "id": "lesson-estimule-arroto", "title": "ESTIMULE O ARROTO", "track": "cuidados", "appPath": "/aulas/rn/estimule-arroto" },
     { "id": "lesson-refluxo", "title": "O QUE É O REFLUXO?", "track": "fisiologia", "appPath": "/aulas/rn/refluxo" },
@@ -29,6 +30,7 @@
   ],
   "situationToLessons": [
     { "situation": "Busca excessiva pelo peito",                   "lessons": ["lesson-alimentacao-livre-demanda", "lesson-mamadas-efetivas"] },
+    { "situation": "Complemento com sonda e baixa produção",        "lessons": ["lesson-amamentacao-pratica", "lesson-mamadas-efetivas", "lesson-alimentacao-livre-demanda"] },
     { "situation": "Reflexo de sucção aumentado",                   "lessons": ["lesson-reflexo-succao"] },
     { "situation": "Despertar ao deitar",                           "lessons": ["lesson-estimule-arroto", "lesson-refluxo"] },
     { "situation": "Dificuldade no berço",                          "lessons": ["lesson-travesseiro"] },

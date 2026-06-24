@@ -487,8 +487,28 @@
     },
     {
       "id": "rn-vertical-backreference-wording",
-      "rule": "Quando precisar voltar ao tema da posição vertical sem repetir a frase canônica completa, use 'mantê-lo em posição vertical' ou 'mantê-la em posição vertical' — NÃO use 'mantendo a posição vertical já mencionada', que ficou gramaticalmente incompleta.",
-      "rationale": "TESTE 007 (RN 16d/20d): ajuste de redação na referência leve à posição vertical."
+      "rule": "Quando precisar voltar ao tema da posição vertical sem repetir a frase canônica completa, use 'depois de arrotar e de ser mantida em posição vertical' (feminino) ou 'depois de arrotar e de ser mantido em posição vertical' (masculino) — NÃO use 'mantê-lo' quando a mãe se refere à bebê no feminino, nem 'mantendo a posição vertical já mencionada'.",
+      "rationale": "TESTE 008 (RN 19d): 'depois de arrotar e de ficar mantê-lo em posição vertical' foi marcado como erro gramatical; a forma segura é 'ser mantida em posição vertical'."
+    },
+    {
+      "id": "rn-teste008-reflux-pathological-routing-on-investigation",
+      "rule": "Quando a resposta investigar possibilidade de refluxo patológico (mesmo sem sinais confirmados no relato), a Zlaya DEVE OBRIGATORIAMENTE encaminhar para o material do Pediatra Roberto Franklin nas Aulas Extras/Bônus e para o SUPORTE HUMANO. A investigação já justifica o encaminhamento — não depende de persistência do padrão.",
+      "rationale": "TESTE 008 (RN 20d): a Zlaya investigou refluxo patológico mas não encaminhou para suporte humano nem conduziu ao material do Pediatra."
+    },
+    {
+      "id": "rn-teste008-sonda-amamentacao-pratica-lesson",
+      "rule": "Em casos com complemento com sonda, produção materna e ordenhas, a indicação principal de aula DEVE incluir 'Amamentação Prática e Descomplicada', além de 'Mamadas Efetivas'.",
+      "rationale": "TESTE 008 (RN 16d): a Zlaya indicou apenas Mamadas Efetivas quando o caso exigia Amamentação Prática e Descomplicada."
+    },
+    {
+      "id": "rn-teste008-travesseiro-queda-fluxo-question",
+      "rule": "Em RN com dificuldade colo→berço (incluindo Travesseiro tentado), a investigação alimentar no corpo principal DEVE incluir a pergunta explícita: 'Você percebe queda no fluxo de leite no fim da tarde ou no começo da noite?' — não basta mencionar produção/transferência de passagem.",
+      "rationale": "TESTE 008 (RN 19d): faltou perguntar diretamente sobre queda de fluxo no fim da tarde ou começo da noite."
+    },
+    {
+      "id": "rn-teste008-short-nap-feeding-axis-body",
+      "rule": "No padrão soneca curta no berço + choro após ~N minutos + melhora no colo (noite preservada), o eixo alimentar DEVE aparecer no corpo da resposta — não apenas nos cards. Investigar: saciedade, busca precoce pelo peito, transferência, produção durante o dia, peito/fórmula/ambos. Manter equilíbrio entre alimentação, refluxo/desconforto, arroto/vertical e Moro/contenção.",
+      "rationale": "TESTE 008 (RN 20d): o eixo alimentar ficou enfraquecido e a hipótese principal ficou centrada demais em Moro/contenção."
     }
   ],
 

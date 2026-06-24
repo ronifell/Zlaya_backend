@@ -10,7 +10,9 @@
     "dev": "node --watch src/server.js",
     "ingest": "node src/scripts/ingest.js",
     "db:setup": "node src/scripts/setupDb.js",
-    "test:scenarios": "node src/scripts/runCriticalScenarios.js"
+    "test:scenarios": "node src/scripts/runCriticalScenarios.js",
+    "test:teste007": "node src/scripts/simulateTeste007Features.js",
+    "test:teste008": "node src/scripts/simulateTeste008Features.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

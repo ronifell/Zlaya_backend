@@ -138,8 +138,8 @@ async function main() {
   const dedup = dedupeVerticalThirtyForty({
     text: 'Mantenha em posição vertical por 30 a 40 minutos após a mamada. Depois, mantenha em posição vertical por 30 a 40 minutos antes do berço.',
   });
-  bad += /mant[eê]-lo em posicao vertical|mantenha o bebe em posicao vertical/.test(strip(dedup.text))
-    ? pass('dedup uses "mantê-lo/mantenha o bebê" not "já mencionada"')
+  bad += /ser mantid[ao] em posicao vertical|mantenha-[ao] em posicao vertical|respeit/.test(strip(dedup.text))
+    ? pass('dedup uses gender-safe back-reference not "já mencionada"')
     : fail('dedup wording', dedup.text);
 
   console.log('\n--- Infrastructure rules ---');

@@ -25,6 +25,7 @@ import {
   ensureBathClosingComplete,
   ensureIctericiaHistoricalOnly,
   ensureShortNapDiurnalBodyComplete,
+  ensureBehavioralBerçoReframing,
   detectClinicalRedFlags,
 } from './safetyValidator.js';
 import {
@@ -397,6 +398,15 @@ export async function processTurn({ message, babyProfile, conversation, conversa
       draft.shortNapDiurnalBodyMissing = shortNapFix.missing;
     }
 
+    const berçoReframingFix = ensureBehavioralBerçoReframing({
+      text: draft.text,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+    });
+    if (berçoReframingFix.rewritten) {
+      draft.text = berçoReframingFix.text;
+      draft.behavioralBerçoReframed = true;
+    }
+
     // Soften any residual hard claim "a mamada provavelmente não foi
     // suficiente" into the cautious form (TESTE 004 RN 22d). The canonical
     // satiety closing is already cautious; this is defense-in-depth for any
@@ -424,7 +434,7 @@ export async function processTurn({ message, babyProfile, conversation, conversa
     // of which may have appended their own "posição vertical 30 a 40 minutos"
     // orientation), remove redundant repetitions so the response keeps the
     // orientation prominent without sounding repetitive.
-    const verticalDedup = dedupeVerticalThirtyForty({ text: draft.text });
+    const verticalDedup = dedupeVerticalThirtyForty({ text: draft.text, userMessage: message });
     if (verticalDedup.deduplicated) {
       draft.text = verticalDedup.text;
       draft.verticalDedupRemoved = verticalDedup.removedCount;
