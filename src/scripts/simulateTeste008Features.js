@@ -70,7 +70,7 @@ const CASES = [
       let text =
         'Especialmente com o histórico de icterícia e o procedimento na linguinha, pode haver dificuldade. ' +
         'A principal hipótese é baixa transferência de leite.';
-      text = ensureIctericiaHistoricalOnly({ text, signalIds: ids }).text;
+      text = ensureIctericiaHistoricalOnly({ text, signalIds: ids, userMessage: MSG_16D }).text;
       text = ensureSondaOrdenhaComplete({ text, userMessage: MSG_16D, signalIds: ids }).text;
       return { text };
     },
@@ -107,7 +107,7 @@ const CASES = [
       /charutinho|reflexo de moro/,
       /ambiente escuro|baixa estimulacao/,
     ],
-    enricherMustNot: [/adaptar.{0,20}ber[cç]o|acostumar.{0,20}ber[cç]o|mant[eê]-lo em posicao vertical/],
+    enricherMustNot: [/adaptar.{0,20}ber[cç]o|acostumar.{0,20}ber[cç]o|mant[eê]-lo em posicao vertical|\bse\s+transi[cç][aã]o\b/],
   },
   {
     id: 'RN-20d-short-naps',

@@ -24,8 +24,11 @@ import {
   dedupeVerticalThirtyForty,
   ensureBathClosingComplete,
   ensureIctericiaHistoricalOnly,
+  ensureSondaNoOverNormalization,
+  fixVerticalBackReferenceFragment,
   ensureShortNapDiurnalBodyComplete,
   ensureBehavioralBerçoReframing,
+  ensureNoGenericSupportInTravesseiroCase,
   detectClinicalRedFlags,
 } from './safetyValidator.js';
 import {
@@ -183,9 +186,12 @@ export async function processTurn({ message, babyProfile, conversation, conversa
     const eveningTriggered = (signals?.signals || []).some(
       (s) => s.id === 'evening_pattern' || s.id === 'night_production_drop',
     );
+    const travesseiroTriggered = (signals?.signals || []).some(
+      (s) => s.id === 'travesseiro_tried_without_success',
+    );
     const satietyFix = ensureSatietySignsExplained({
       text: draft.text,
-      forceTrigger: eveningTriggered,
+      forceTrigger: eveningTriggered || travesseiroTriggered,
     });
     if (satietyFix.expanded) {
       draft.text = satietyFix.text;
@@ -378,14 +384,24 @@ export async function processTurn({ message, babyProfile, conversation, conversa
       draft.bathClosingMissing = bathFix.missing;
     }
 
-    // Icterícia/linguinha só como histórico quando mama bem + sonda (TESTE 006 RN 16d).
+    // Icterícia/linguinha só como histórico quando mama bem + sonda (TESTE 006/009 RN 16d).
     const ictericiaFix = ensureIctericiaHistoricalOnly({
       text: draft.text,
       signalIds: (signals?.signals || []).map((s) => s.id),
+      userMessage: message,
     });
     if (ictericiaFix.appended) {
       draft.text = ictericiaFix.text;
       draft.ictericiaHistoricalCorrection = ictericiaFix.missing;
+    }
+
+    const sondaNormalizeFix = ensureSondaNoOverNormalization({
+      text: draft.text,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+    });
+    if (sondaNormalizeFix.rewritten) {
+      draft.text = sondaNormalizeFix.text;
+      draft.sondaOverNormalizationRemoved = sondaNormalizeFix.missing;
     }
 
     // Moro/charutinho + sequência Travesseiro no corpo (TESTE 006 RN 20d).
@@ -405,6 +421,15 @@ export async function processTurn({ message, babyProfile, conversation, conversa
     if (berçoReframingFix.rewritten) {
       draft.text = berçoReframingFix.text;
       draft.behavioralBerçoReframed = true;
+    }
+
+    const genericSupportFix = ensureNoGenericSupportInTravesseiroCase({
+      text: draft.text,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+    });
+    if (genericSupportFix.rewritten) {
+      draft.text = genericSupportFix.text;
+      draft.genericSupportRemoved = true;
     }
 
     // Soften any residual hard claim "a mamada provavelmente não foi
@@ -438,6 +463,15 @@ export async function processTurn({ message, babyProfile, conversation, conversa
     if (verticalDedup.deduplicated) {
       draft.text = verticalDedup.text;
       draft.verticalDedupRemoved = verticalDedup.removedCount;
+    }
+
+    const verticalFragmentFix = fixVerticalBackReferenceFragment({
+      text: draft.text,
+      userMessage: message,
+    });
+    if (verticalFragmentFix.rewritten) {
+      draft.text = verticalFragmentFix.text;
+      draft.verticalFragmentFixed = true;
     }
 
     safety = checkForbiddenContent({

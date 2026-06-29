@@ -202,8 +202,8 @@
     },
     {
       "id": "rn-clinical-history-not-current",
-      "rule": "Quando a mãe informa que o bebê AGORA mama bem, icterícia e procedimento de linguinha/frênulo devem ser tratados APENAS como histórico do início da amamentação — a IA NÃO deve citá-los como fatores que impactam a transferência ou a mamada no contexto ATUAL. O foco deve ser produção, transferência e suficiência alimentar no período em que o comportamento piora.",
-      "rationale": "TESTE 001/16 (RN 16d, 17/06/2026): a Zlaya citou icterícia e linguinha como possíveis fatores atuais quando a mãe disse que a bebê agora mama bem."
+      "rule": "Quando a mãe informa que o bebê AGORA mama bem, icterícia e procedimento de linguinha/frênulo devem ser tratados APENAS como histórico do início da amamentação — a IA NÃO deve citá-los como fatores que impactam a transferência ou a mamada no contexto ATUAL, nem como contexto explicativo do comportamento atual (ex.: 'especialmente com o histórico de icterícia e o procedimento na linguinha'). O foco deve ser produção, transferência e suficiência alimentar no período em que o comportamento piora.",
+      "rationale": "TESTE 001/16 (RN 16d, 17/06/2026) e TESTE 009 (RN 16d, 27/06/2026): a Zlaya citou icterícia e linguinha como possíveis fatores ou contexto explicativo atuais quando a mãe disse que a bebê agora mama bem."
     },
     {
       "id": "rn-complement-sonda-guidance",
@@ -509,6 +509,51 @@
       "id": "rn-teste008-short-nap-feeding-axis-body",
       "rule": "No padrão soneca curta no berço + choro após ~N minutos + melhora no colo (noite preservada), o eixo alimentar DEVE aparecer no corpo da resposta — não apenas nos cards. Investigar: saciedade, busca precoce pelo peito, transferência, produção durante o dia, peito/fórmula/ambos. Manter equilíbrio entre alimentação, refluxo/desconforto, arroto/vertical e Moro/contenção.",
       "rationale": "TESTE 008 (RN 20d): o eixo alimentar ficou enfraquecido e a hipótese principal ficou centrada demais em Moro/contenção."
+    },
+    {
+      "id": "rn-teste009-ictericia-linguinha-historical-only",
+      "rule": "Se a mãe informa que o bebê AGORA mama bem, icterícia e procedimento na linguinha/frênulo devem ser tratados APENAS como histórico do início da amamentação. É PROIBIDO citá-los como contexto explicativo do comportamento atual — inclusive frases como 'especialmente com o histórico de icterícia e o procedimento na linguinha'. O foco atual é baixa produção materna ou necessidade de suporte de produção, complemento com sonda e suficiência alimentar no período em que o comportamento piora.",
+      "rationale": "TESTE 009 (RN 16d, 27/06/2026): a Zlaya ainda usou icterícia/linguinha como contexto explicativo atual quando a mãe disse que a bebê agora mama bem."
+    },
+    {
+      "id": "rn-teste009-sonda-busca-investigate-production",
+      "rule": "RN + complemento com sonda + busca pelo peito em intervalo menor que 2h = investigar baixa produção materna, necessidade de suporte de produção e suficiência alimentar como eixo principal. NÃO normalize como 'fisiológico e esperado' ou 'bastante comum' nesse conjunto.",
+      "rationale": "TESTE 009 (RN 16d): a resposta normalizou demais comportamentos fisiológicos apesar de haver complemento com sonda e busca <2h."
+    },
+    {
+      "id": "rn-teste009-production-over-transfer-sonda",
+      "rule": "Quando há complemento com sonda e a mãe informa que a bebê agora mama bem, baixa produção materna/necessidade de suporte de produção deve ter MAIS PESO do que baixa transferência. Baixa transferência só como possibilidade secundária.",
+      "rationale": "TESTE 009 (RN 16d): reforço da hierarquia já iniciada no TESTE 008 — produção central quando há sonda + mama bem."
+    },
+    {
+      "id": "rn-teste009-deficit-also-during-day",
+      "rule": "O déficit de produção/suporte alimentar pode ocorrer DURANTE O DIA e aparecer com mais força no final da tarde e na madrugada — não limitar a análise ao período noturno.",
+      "rationale": "TESTE 009 (RN 16d): a resposta melhorou ao citar déficit diurno, mas ainda ficou mais focada no fim da tarde."
+    },
+    {
+      "id": "rn-teste009-complement-evaluate-day-and-afternoon",
+      "rule": "Quando há complemento com sonda e busca <2h no fim da tarde/madrugada, a resposta DEVE investigar E orientar explicitamente a avaliação do complemento no final da tarde E durante o dia — não apenas perguntar sobre a noite. Perguntas modelo: 'O complemento foi orientado apenas para a noite ou também para o final da tarde e durante o dia?', 'Durante o dia ela também busca o peito em menos de 2h?'. Orientação modelo: 'É importante avaliar se o complemento também precisa ser ajustado no final da tarde e durante o dia.'",
+      "rationale": "TESTE 009 (RN 16d): faltou orientar de forma suficientemente clara a avaliação do complemento também durante o dia."
+    },
+    {
+      "id": "rn-teste009-ordenhas-day-and-afternoon",
+      "rule": "Nos casos RN + complemento com sonda + busca <2h, orientar ORDENHAS no fim da tarde e ao longo do dia como apoio à mamada efetiva e estímulo/avaliação de produção — nunca como solução isolada.",
+      "rationale": "TESTE 009 (RN 16d): ordenhas já estavam presentes; regra consolida como obrigatória no padrão RN 16d com sonda."
+    },
+    {
+      "id": "rn-teste009-travesseiro-reframing-contextual",
+      "rule": "Ao substituir enquadramento comportamental ('adaptar/acostumar ao berço') por linguagem fisiológica no RN 19d com Travesseiro tentado, a substituição DEVE ser CONTEXTUAL — NÃO automática. É PROIBIDO gerar frases como 'dificuldades para se transição' ou 'Para ajudar sua bebê a se transição'. Modelos corretos: 'dificuldade na transição do colo para a superfície do berço', 'Para ajudar sua bebê nessa transição do colo para a superfície do berço'. Formulação segura: 'Para RN, a leitura principal deve ser fase de adaptação fisiológica, organização corporal, alimentação, conforto gástrico e transição de superfície/textura. A permanência no berço é consequência dessa organização, não o ponto inicial da condução.'",
+      "rationale": "TESTE 009 (RN 19d, 27/06/2026): regressão −0,5 — substituição automática gerou 'se transição' e frases sem sentido."
+    },
+    {
+      "id": "rn-teste009-travesseiro-satiety-and-insufficient-conduct",
+      "rule": "No caso RN 19d com Travesseiro tentado + colo, a resposta DEVE listar os sinais de saciedade de forma completa (soltar peito, relaxar corpo, abrir mãozinhas, reduzir sucção, tranquila após mamada, confortável após arroto/vertical) E orientar conduta se houver sinais de mamada insuficiente: peito → livre demanda; fórmula/complemento → volume/intervalo/saciedade; reavaliar produção/transferência no período.",
+      "rationale": "TESTE 009 (RN 19d): perdeu clareza na explicação dos sinais de saciedade e na conduta diante de mamada insuficiente em relação ao TESTE 008."
+    },
+    {
+      "id": "rn-teste009-no-generic-human-support-travesseiro",
+      "rule": "Em casos RN 19d com Travesseiro tentado e colo, sem sinais clínicos que exijam escalonamento (refluxo patológico, vômitos, engasgos, etc.), é PROIBIDO encerrar com suporte humano genérico ('Se precisar de mais ajuda, não hesite em buscar suporte'). Indique suporte humano apenas se a mãe continuar com dificuldade na execução da estratégia ou se surgirem sinais importantes.",
+      "rationale": "TESTE 009 (RN 19d): frase genérica de suporte sem indicador clínico obrigatório."
     }
   ],
 
