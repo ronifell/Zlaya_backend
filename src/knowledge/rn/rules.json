@@ -554,6 +554,61 @@
       "id": "rn-teste009-no-generic-human-support-travesseiro",
       "rule": "Em casos RN 19d com Travesseiro tentado e colo, sem sinais clínicos que exijam escalonamento (refluxo patológico, vômitos, engasgos, etc.), é PROIBIDO encerrar com suporte humano genérico ('Se precisar de mais ajuda, não hesite em buscar suporte'). Indique suporte humano apenas se a mãe continuar com dificuldade na execução da estratégia ou se surgirem sinais importantes.",
       "rationale": "TESTE 009 (RN 19d): frase genérica de suporte sem indicador clínico obrigatório."
+    },
+    {
+      "id": "rn-teste010-banho-barriguinha-como-acao-central",
+      "rule": "Em queixa de choro no banho no RN, a posição de nariz/barriguinha para baixo apoiada com segurança no braço do adulto DEVE ser apresentada como AÇÃO INICIAL e resolutiva do banho — não como 'experimente' ou tentativa secundária. Formulação canônica: 'inicie o banho com o bebê de nariz/barriguinha para baixo, apoiado com segurança no braço, com as vias aéreas livres e apoio firme'. É PROIBIDO usar 'experimente a posição' como redação primária quando o sinal bath_crying_rn dispara.",
+      "rationale": "TESTE 010 (RN 13d, 03/07/2026): a Zlaya ainda hierarquiza a posição como tentativa secundária. O suporte humano trata a posição barriguinha para baixo como uma das duas medidas mais resolutivas na prática — deve entrar como eixo central."
+    },
+    {
+      "id": "rn-teste010-banho-nao-iniciar-no-inicio-da-fome",
+      "rule": "Em queixa de choro no banho no RN, a orientação sobre fome DEVE ser 'não iniciar o banho nem no INÍCIO da fome' — no RN a fome evolui rapidamente para choro e desorganização. É PROIBIDO usar 'não esteja com muita fome' isoladamente, pois a formulação canônica é mais restritiva. Formulação de referência: 'evite iniciar o banho no início da fome; escolha um momento em que ele não esteja com fome ativa nem muito irritado, mas também não logo após uma mamada cheia'.",
+      "rationale": "TESTE 010 (RN 13d): 'não esteja com muita fome' é permissivo demais para RN. No RN a fome ativa evolui rapidamente para desorganização e o método pede corte no início da fome."
+    },
+    {
+      "id": "rn-teste010-banho-nao-indicar-pediatra",
+      "rule": "Quando a queixa é ISOLADA sobre choro no banho (sem sinais clínicos associados como febre, prostração, recusa alimentar, vômitos importantes, choro inconsolável fora do banho ou mudança importante no comportamento), é PROIBIDO indicar avaliação pediátrica na resposta principal. Sinal composto: bath_crying_isolated_rn (banho sem sinais concorrentes) + ausência de sinais clínicos no texto. A menção ao pediatra fica reservada apenas ao fechamento condicional ('procure o pediatra APENAS se houver sinais associados como...').",
+      "rationale": "TESTE 010 (RN 13d): a queixa é restrita ao banho e não há sinais clínicos associados; qualquer indicação genérica ao pediatra na resposta principal é desnecessária e destoa do método."
+    },
+    {
+      "id": "rn-teste010-sonda-no-over-normalization-abertura",
+      "rule": "Quando dispara sonda_with_mama_bem_priority_production (RN + complemento com sonda + busca <2h), a ABERTURA da resposta NÃO deve normalizar com frases como 'é esperado que o bebê busque o peito frequentemente', 'é bastante comum' ou 'faz parte dessa fase'. A abertura deve conduzir imediatamente para produção, suporte alimentar e suficiência. Formulação canônica de abertura: 'Pelo padrão que você descreve, com busca pelo peito em intervalo menor que 2h e complemento com sonda, a principal hipótese é baixa produção materna ou necessidade de suporte de produção nesse período.'",
+      "rationale": "TESTE 010 (RN 16d): a abertura ainda normalizou a busca frequente pelo peito. Como há sonda + mama bem + busca <2h, a hipótese central deve aparecer imediatamente."
+    },
+    {
+      "id": "rn-teste010-producao-fraseologia-canonica",
+      "rule": "A hipótese principal deve ser nomeada APENAS como 'baixa produção materna ou necessidade de suporte de produção'. É PROIBIDO acrescentar em cascata 'ou menor produção materna', 'ou queda de produção materna' logo em seguida, gerando redundância dentro da mesma frase.",
+      "rationale": "TESTE 010 (RN 16d): a formulação 'baixa produção materna ou necessidade de suporte de produção ou menor produção materna' ficou redundante."
+    },
+    {
+      "id": "rn-teste010-dedupe-blocos-orientacao",
+      "rule": "A resposta NÃO deve repetir blocos inteiros de orientação prática (posição vertical 30 a 40 minutos, arroto, ambiente escuro/calmo, charutinho, sinais de saciedade) mais de uma vez. Cada eixo aparece uma única vez, na sequência canônica: mamada efetiva → sinais de saciedade → arroto → posição vertical 30 a 40 min → ambiente escuro/calmo → charutinho se Moro/desorganização → travesseiro no colo com contenção → transferência gradual ao berço.",
+      "rationale": "TESTE 010 (RN 16d e RN 19d): algumas orientações apareceram duas vezes, o que polui a resposta."
+    },
+    {
+      "id": "rn-teste010-travesseiro-lista-fecha-com-frase-completa",
+      "rule": "Após listar as aulas ('Estratégia do Travesseiro', 'Berço do Bebê', 'Estimule o Arroto', 'Mamadas Efetivas' [+ 'Charutinho e os Reflexos de Moro' quando aplicável]), a frase seguinte DEVE começar com espaço + letra maiúscula e formar uma orientação prática completa. É PROIBIDO produzir a construção quebrada 'Mamadas Efetivas.Após a mamada, depois de arrotar e de ser mantida em posição vertical antes de transferir para o berço.' Formulação canônica de fechamento: 'Após a mamada, mantenha a bebê em posição vertical por 30 a 40 minutos, observe se ela arrotou e só então tente a transferência para o berço.'",
+      "rationale": "TESTE 010 (RN 19d): frase truncada e colada logo após a lista de aulas."
+    },
+    {
+      "id": "rn-teste010-travesseiro-satiety-back-reference-fix",
+      "rule": "É PROIBIDO produzir a construção 'permanece mais confortável depois do arroto e da depois de arrotar e de ser mantida em posição vertical'. Formulação canônica: 'permanece mais confortável depois do arroto e após ser mantida em posição vertical por 30 a 40 minutos'.",
+      "rationale": "TESTE 010 (RN 19d): back-reference duplicada e agramatical no fim do bloco de saciedade."
+    },
+    {
+      "id": "rn-teste010-travesseiro-sonecas-no-colo-nos-primeiros-dias",
+      "rule": "Em RN com Travesseiro tentado, a resposta DEVE conter a formulação forte: 'Nos primeiros dias, muitas sonecas podem acontecer com a bebê no travesseiro em cima do colo, com contenção das mãos enquanto necessário.' Não basta orientar 'use o travesseiro sobre o colo' — a frase de referência tem peso reasseguratório essencial para a fase de adaptação.",
+      "rationale": "TESTE 010 (RN 19d): a resposta perdeu a formulação forte sobre sonecas no colo nos primeiros dias."
+    },
+    {
+      "id": "rn-teste010-travesseiro-arroto-orientacao-direta",
+      "rule": "Em respostas para Travesseiro tentado, substituir 'observe se há necessidade de arroto' pela orientação direta 'Após a mamada, coloque para arrotar e observe se ela fica mais confortável depois do arroto.'",
+      "rationale": "TESTE 010 (RN 19d): a orientação de arroto ficou tímida; o método pede orientação direta."
+    },
+    {
+      "id": "rn-teste010-travesseiro-charutinho-lista-textual",
+      "rule": "Sempre que a resposta orientar charutinho para RN com Travesseiro tentado, a lista TEXTUAL de aulas DEVE incluir 'Charutinho e os Reflexos de Moro' — não basta que a aula apareça como card. Se a lista textual mencionar apenas Travesseiro/Berço/Arroto/Mamadas Efetivas mas o corpo orientar charutinho, adicionar Charutinho à lista textual.",
+      "rationale": "TESTE 010 (RN 19d): a resposta orientou charutinho mas omitiu Charutinho na lista textual de aulas."
     }
   ],
 

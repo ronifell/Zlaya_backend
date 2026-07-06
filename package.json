@@ -12,7 +12,9 @@
     "db:setup": "node src/scripts/setupDb.js",
     "test:scenarios": "node src/scripts/runCriticalScenarios.js",
     "test:teste007": "node src/scripts/simulateTeste007Features.js",
-    "test:teste008": "node src/scripts/simulateTeste008Features.js"
+    "test:teste008": "node src/scripts/simulateTeste008Features.js",
+    "test:teste009": "node src/scripts/simulateTeste009Features.js",
+    "test:teste010": "node src/scripts/simulateTeste010Features.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

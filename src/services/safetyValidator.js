@@ -1668,6 +1668,322 @@ export function ensureNoGenericSupportInTravesseiroCase({ text, signalIds = [] }
 }
 
 /**
+ * TESTE 010 (RN 13d) — banho: barriguinha para baixo como AÇÃO CENTRAL.
+ * A queixa é sobre choro no banho e o método considera a posição de
+ * nariz/barriguinha para baixo (apoiada no braço) uma das duas medidas mais
+ * resolutivas — deve entrar como início do banho, não como tentativa
+ * secundária ("experimente a posição").
+ */
+const BANHO_BARRIGUINHA_SECONDARY_TRY =
+  /(experimente|tente|voc[eê]\s+pode\s+tentar|tamb[eé]m\s+pode\s+tentar)\s+(a\s+)?posi[cç][aã]o\s+(de\s+)?(nariz|barriguinha)\s+para\s+baixo/gi;
+const BANHO_BARRIGUINHA_CENTRAL_PRESENT =
+  /(inicie\s+o\s+banho|come[cç]ando\s+o\s+banho|comece\s+o\s+banho)\s+com\s+(o\s+beb[êe]\s+)?(de\s+)?(nariz|barriguinha)\s+para\s+baixo/i;
+
+export function ensureBanhoBarriguinhaCentralAction({ text, signalIds = [] } = {}) {
+  if (!text) return { text: text || '', rewritten: false, appended: false };
+  const sigSet = new Set(signalIds || []);
+  if (!sigSet.has('bath_crying_rn') && !sigSet.has('bath_crying_isolated_rn')) {
+    return { text, rewritten: false, appended: false };
+  }
+  let out = text;
+  let rewritten = false;
+
+  if (BANHO_BARRIGUINHA_SECONDARY_TRY.test(out)) {
+    BANHO_BARRIGUINHA_SECONDARY_TRY.lastIndex = 0;
+    out = out.replace(
+      BANHO_BARRIGUINHA_SECONDARY_TRY,
+      'inicie o banho com o bebê de barriguinha para baixo',
+    );
+    rewritten = true;
+  }
+
+  let appended = false;
+  if (!BANHO_BARRIGUINHA_CENTRAL_PRESENT.test(normalize(out).replace(/\s+/g, ' '))
+      && !/inicie\s+o\s+banho\s+com\s+o\s+beb[eê]\s+de\s+barriguinha\s+para\s+baixo/i.test(out)) {
+    const trimmed = out.replace(/\s+$/, '');
+    out = `${trimmed}\n\nNa prática, uma das medidas mais resolutivas é iniciar o banho com o bebê de nariz/barriguinha para baixo, apoiado com segurança no braço, com as vias aéreas livres, apoio firme e controle total do corpo.`;
+    appended = true;
+  }
+
+  return { text: out, rewritten, appended };
+}
+
+/**
+ * TESTE 010 (RN 13d) — banho: não iniciar no início da fome.
+ * "não esteja com muita fome" é permissivo demais no RN — a fome ativa
+ * evolui rapidamente para choro/desorganização. A formulação canônica é
+ * "não iniciar o banho no início da fome".
+ */
+const BANHO_HUNGER_PERMISSIVE =
+  /n[aã]o\s+esteja\s+com\s+muita\s+fome|n[aã]o\s+esteja\s+muito\s+com\s+fome/gi;
+const BANHO_HUNGER_CANONICAL_PRESENT =
+  /n[aã]o\s+inici(?:e|ar|iar)\s+o\s+banho\s+(?:nem\s+)?no\s+in[ií]cio\s+da\s+fome|evite\s+inici(?:ar|e)\s+o\s+banho\s+(?:nem\s+)?no\s+in[ií]cio\s+da\s+fome/i;
+
+export function ensureBanhoNoStartAtHungerOnset({ text, signalIds = [] } = {}) {
+  if (!text) return { text: text || '', rewritten: false, appended: false };
+  const sigSet = new Set(signalIds || []);
+  if (!sigSet.has('bath_crying_rn') && !sigSet.has('bath_crying_isolated_rn')) {
+    return { text, rewritten: false, appended: false };
+  }
+  let out = text;
+  let rewritten = false;
+
+  if (BANHO_HUNGER_PERMISSIVE.test(out)) {
+    BANHO_HUNGER_PERMISSIVE.lastIndex = 0;
+    out = out.replace(
+      BANHO_HUNGER_PERMISSIVE,
+      'não esteja no início da fome',
+    );
+    rewritten = true;
+  }
+
+  let appended = false;
+  if (!BANHO_HUNGER_CANONICAL_PRESENT.test(normalize(out))) {
+    const trimmed = out.replace(/\s+$/, '');
+    out = `${trimmed}\n\nEvite iniciar o banho no início da fome — no RN a fome pode evoluir rapidamente para choro e desorganização; escolha um momento em que ele não esteja com fome ativa nem logo após uma mamada cheia.`;
+    appended = true;
+  }
+
+  return { text: out, rewritten, appended };
+}
+
+/**
+ * TESTE 010 (RN 13d) — banho isolado: não indicar pediatra na resposta principal.
+ * Quando a queixa é ISOLADA sobre banho (bath_crying_isolated_rn) e a mensagem
+ * da mãe não traz nenhum sinal clínico associado (febre, prostração, recusa
+ * alimentar, vômitos, choro inconsolável fora do banho, mudança importante no
+ * comportamento), qualquer menção genérica ao pediatra deve ser removida do
+ * corpo da resposta. Preservamos apenas o fechamento condicional
+ * "procure o pediatra apenas se..." emitido pelo ensureBathClosingComplete.
+ */
+const BANHO_PEDIATRA_GENERIC =
+  /(?:^|\.\s|[!?]\s|\n)[^.!?\n]*(?:consulte|procure|converse\s+com|leve\s+ao|agende\s+(?:uma\s+)?(?:avalia[cç][aã]o|consulta)\s+com)\s+(?:o\s+)?pediatra[^.!?\n]*[.!?]/gi;
+const BANHO_PEDIATRA_CONDITIONAL_OK =
+  /pediatra\s+(?:apenas\s+)?se\s+houver\s+sinais\s+associados|se\s+houver\s+sinais\s+associados[^.!?]*pediatra/i;
+const BANHO_CLINICAL_SIGNS_IN_MESSAGE =
+  /(febre|prostra[cç][aã]o|recusa\s+aliment|v[oô]mit[oa]s?\s+importante|choro\s+inconsol[aá]vel\s+fora\s+do\s+banho|mudan[cç]a\s+importante|arqueamento|engasgo|apneia|apn[eé]ia|desidrata|coloracao\s+arroxeada|colora[cç][aã]o\s+arroxeada)/i;
+
+export function ensureNoPediatraOnPureBathCase({ text, signalIds = [], userMessage = '' } = {}) {
+  if (!text) return { text: text || '', rewritten: false };
+  const sigSet = new Set(signalIds || []);
+  if (!sigSet.has('bath_crying_isolated_rn')) {
+    return { text, rewritten: false };
+  }
+  if (BANHO_CLINICAL_SIGNS_IN_MESSAGE.test(normalize(userMessage || ''))) {
+    return { text, rewritten: false };
+  }
+  let out = text;
+  BANHO_PEDIATRA_GENERIC.lastIndex = 0;
+  out = out.replace(BANHO_PEDIATRA_GENERIC, (match) => {
+    if (BANHO_PEDIATRA_CONDITIONAL_OK.test(match)) return match;
+    if (/apenas\s+se|somente\s+se|caso\s+haja\s+sinais|se\s+houver\s+sinais/i.test(match)) return match;
+    return match.startsWith('\n') ? '\n' : ' ';
+  });
+  out = out.replace(/[ \t]{2,}/g, ' ').replace(/\n{3,}/g, '\n\n');
+  return { text: out, rewritten: out !== text };
+}
+
+/**
+ * TESTE 010 (RN 16d) — sonda + mama bem: sem normalização na abertura.
+ * Complementa `ensureSondaNoOverNormalization` (que já cobre "fisiológicos
+ * e esperados" / "bastante comum"): aqui removemos normalizações típicas de
+ * abertura ("é esperado que o bebê busque o peito frequentemente", "faz
+ * parte dessa fase", "isso é comum no RN") quando o sinal composto de
+ * sonda + mama bem está ativo, para o texto entrar direto na hipótese
+ * central de produção/suporte.
+ */
+const SONDA_OPENING_NORMALIZATION =
+  /[^.!?]*(?:[eéÉ]\s+esperad[oa]|[eéÉ]\s+normal|[eéÉ]\s+comum|faz\s+parte\s+(?:dessa\s+fase|do\s+desenvolvimento)|nessa\s+fase\s+[eéÉ]\s+esperad|[eéÉ]\s+bastante\s+comum)[^.!?]*(?:bus(?:ca|car|cando|cas|que|quem|ques)|procur(?:a|ar|ando|as|e|em|es))\s+(?:o\s+peito|frequentemente)[^.!?]*[.!?]\s*/gi;
+const SONDA_OPENING_NORMALIZATION_ALT =
+  /[^.!?]*(?:bus(?:ca|car|cando|cas|que|quem|ques)|procur(?:a|ar|ando|as|e|em|es))\s+(?:o\s+peito\s+)?frequentemente[^.!?]{0,120}(?:[eéÉ]\s+esperad[oa]|[eéÉ]\s+normal|[eéÉ]\s+comum|faz\s+parte)[^.!?]*[.!?]\s*/gi;
+
+export function ensureSondaNoOpeningNormalization({ text, signalIds = [] } = {}) {
+  if (!text) return { text: text || '', rewritten: false };
+  const sigSet = new Set(signalIds || []);
+  if (!sigSet.has('sonda_with_mama_bem_priority_production')) {
+    return { text, rewritten: false };
+  }
+  let out = text;
+  let rewritten = false;
+  const beforeA = out;
+  out = out.replace(SONDA_OPENING_NORMALIZATION, '');
+  if (out !== beforeA) rewritten = true;
+  const beforeB = out;
+  out = out.replace(SONDA_OPENING_NORMALIZATION_ALT, '');
+  if (out !== beforeB) rewritten = true;
+  if (rewritten) {
+    out = out.replace(/^\s+/, '');
+    const trimmed = out.replace(/\s+$/, '');
+    const already =
+      /baixa\s+produ[cç][aã]o\s+materna\s+ou\s+necessidade\s+de\s+suporte\s+de\s+produ[cç][aã]o/i.test(
+        normalize(trimmed),
+      );
+    if (!already) {
+      out = `Pelo padrão que você descreve, com busca pelo peito em intervalo menor que 2h e complemento com sonda, a principal hipótese é baixa produção materna ou necessidade de suporte de produção nesse período.\n\n${trimmed}`;
+    } else {
+      out = trimmed;
+    }
+  }
+  return { text: out, rewritten };
+}
+
+/**
+ * TESTE 010 (RN 16d) — fraseologia canônica da hipótese de produção.
+ * Remove a cauda redundante "ou menor produção materna" / "ou queda de
+ * produção materna" quando aparece imediatamente após a formulação
+ * canônica "baixa produção materna ou necessidade de suporte de produção".
+ */
+const PRODUCAO_CANONICAL_REDUNDANT_TAIL =
+  /(baixa\s+produ[cç][aã]o\s+materna\s+ou\s+necessidade\s+de\s+suporte\s+de\s+produ[cç][aã]o)(\s+ou\s+(?:menor|queda\s+da?)\s+produ[cç][aã]o\s+materna)+/gi;
+
+export function ensureProducaoCanonicalPhrasing({ text } = {}) {
+  if (!text) return { text: text || '', rewritten: false };
+  const out = text.replace(PRODUCAO_CANONICAL_REDUNDANT_TAIL, '$1');
+  return { text: out, rewritten: out !== text };
+}
+
+/**
+ * TESTE 010 (RN 19d) — fechamento da lista de aulas com frase completa.
+ * Fixa a construção quebrada em que a listagem termina com "Mamadas
+ * Efetivas." grudada em "Após a mamada, depois de arrotar e de ser mantida
+ * em posição vertical antes de transferir para o berço." — resultado do
+ * template quebrado apontado no dossiê.
+ */
+const TRAVESSEIRO_LIST_BROKEN_TAIL =
+  /(mamadas\s+efetivas['"\s]*)\.\s*(?:ap[óo]s\s+a\s+mamada[,\s]+depois\s+de\s+arrotar\s+e\s+de\s+ser\s+mantid[ao]\s+em\s+posi[cç][aã]o\s+vertical(?:\s+antes\s+de\s+transferir(?:\s+para\s+o\s+ber[cç]o)?)?[.\s]*)/gi;
+
+export function ensureTravesseiroListClosingSentence({ text, signalIds = [], userMessage = '' } = {}) {
+  if (!text) return { text: text || '', rewritten: false };
+  const sigSet = new Set(signalIds || []);
+  if (!sigSet.has('travesseiro_tried_without_success')) {
+    return { text, rewritten: false };
+  }
+  if (!TRAVESSEIRO_LIST_BROKEN_TAIL.test(text)) {
+    return { text, rewritten: false };
+  }
+  TRAVESSEIRO_LIST_BROKEN_TAIL.lastIndex = 0;
+  const gender = detectMotherGenderCue(userMessage || '');
+  const babyPronoun = gender === 'feminine' ? 'a bebê' : gender === 'masculine' ? 'o bebê' : 'o bebê';
+  const arrotouVerb = gender === 'feminine' ? 'ela arrotou' : gender === 'masculine' ? 'ele arrotou' : 'ele/ela arrotou';
+  const replacement =
+    `$1. Após a mamada, mantenha ${babyPronoun} em posição vertical por 30 a 40 minutos, observe se ${arrotouVerb} e só então tente a transferência para o berço. `;
+  const out = text.replace(TRAVESSEIRO_LIST_BROKEN_TAIL, replacement);
+  return { text: out, rewritten: out !== text };
+}
+
+/**
+ * TESTE 010 (RN 19d) — dupla back-reference nos sinais de saciedade.
+ * Reescreve "permanece mais confortável depois do arroto e da depois de
+ * arrotar e de ser mantida em posição vertical" para a formulação canônica.
+ */
+const SATIETY_DOUBLE_BACK_REFERENCE =
+  /permanece\s+mais\s+confort[aá]vel\s+depois\s+do\s+arroto\s+e\s+da\s+depois\s+de\s+arrotar\s+e\s+de\s+ser\s+mantid[oa]\s+em\s+posi[cç][aã]o\s+vertical(\s+por\s+30\s*a\s*40\s+minutos)?/gi;
+
+export function fixTravesseiroSatietyDoubleBackReference({ text, userMessage } = {}) {
+  if (!text) return { text: text || '', rewritten: false };
+  if (!SATIETY_DOUBLE_BACK_REFERENCE.test(text)) {
+    return { text, rewritten: false };
+  }
+  SATIETY_DOUBLE_BACK_REFERENCE.lastIndex = 0;
+  const gender = detectMotherGenderCue(userMessage || '');
+  const mantida = gender === 'feminine' ? 'mantida' : gender === 'masculine' ? 'mantido' : 'mantida';
+  const out = text.replace(
+    SATIETY_DOUBLE_BACK_REFERENCE,
+    `permanece mais confortável depois do arroto e após ser ${mantida} em posição vertical por 30 a 40 minutos`,
+  );
+  return { text: out, rewritten: out !== text };
+}
+
+/**
+ * TESTE 010 (RN 19d) — presença obrigatória da frase forte sobre sonecas
+ * no colo nos primeiros dias. A formulação "muitas sonecas podem
+ * acontecer com a bebê no travesseiro em cima do colo" tem peso
+ * reasseguratório e não pode ser substituída por "use o travesseiro sobre
+ * o colo" isolado.
+ */
+const SONECAS_NO_COLO_STRONG_PRESENT =
+  /muitas\s+sonecas\s+podem\s+acontecer\s+(?:com\s+(?:a|o|sua|seu)\s+beb[eê]\s+)?no\s+travesseiro\s+em\s+cima\s+do\s+colo/i;
+
+export function ensureTravesseiroSonecasNoColoPhrase({ text, signalIds = [], userMessage = '' } = {}) {
+  if (!text) return { text: text || '', appended: false };
+  const sigSet = new Set(signalIds || []);
+  if (!sigSet.has('travesseiro_tried_without_success')) {
+    return { text, appended: false };
+  }
+  if (SONECAS_NO_COLO_STRONG_PRESENT.test(normalize(text))) {
+    return { text, appended: false };
+  }
+  const gender = detectMotherGenderCue(userMessage || '');
+  const babyPronoun = gender === 'feminine' ? 'a bebê' : gender === 'masculine' ? 'o bebê' : 'o bebê';
+  const trimmed = text.replace(/\s+$/, '');
+  const out = `${trimmed}\n\nNos primeiros dias, muitas sonecas podem acontecer com ${babyPronoun} no travesseiro em cima do colo, com a contenção das mãos enquanto necessário — essa etapa faz parte do processo, não é uma falha.`;
+  return { text: out, appended: true };
+}
+
+/**
+ * TESTE 010 (RN 19d) — orientação direta de arroto.
+ * Substitui "observe se há necessidade de arroto" (tímido) pela orientação
+ * canônica "coloque para arrotar e observe se ela fica mais confortável
+ * depois do arroto".
+ */
+const ARROTO_TIMID_INSTRUCTION =
+  /observ(?:e|ar|ando)\s+se\s+h[aá]\s+necessidade\s+de\s+arroto/gi;
+
+export function ensureTravesseiroDirectArrotoInstruction({ text, signalIds = [], userMessage = '' } = {}) {
+  if (!text) return { text: text || '', rewritten: false };
+  const sigSet = new Set(signalIds || []);
+  if (!sigSet.has('travesseiro_tried_without_success')) {
+    return { text, rewritten: false };
+  }
+  if (!ARROTO_TIMID_INSTRUCTION.test(text)) {
+    return { text, rewritten: false };
+  }
+  ARROTO_TIMID_INSTRUCTION.lastIndex = 0;
+  const gender = detectMotherGenderCue(userMessage || '');
+  const pronoun = gender === 'feminine' ? 'ela' : gender === 'masculine' ? 'ele' : 'ela';
+  const out = text.replace(
+    ARROTO_TIMID_INSTRUCTION,
+    `coloque para arrotar e observe se ${pronoun} fica mais confortável depois do arroto`,
+  );
+  return { text: out, rewritten: out !== text };
+}
+
+/**
+ * TESTE 010 (RN 19d) — se o corpo orienta charutinho, incluir
+ * "Charutinho e os Reflexos de Moro" na lista TEXTUAL de aulas (não apenas
+ * como card). Se a lista textual mencionar Travesseiro + Berço + Arroto +
+ * Mamadas Efetivas mas omitir Charutinho, adicionamos.
+ */
+const CHARUTINHO_BODY_ORIENTATION =
+  /(?:use\s+o\s+)?charutinho|reflexo\s+de\s+moro/i;
+const CHARUTINHO_IN_TEXTUAL_LIST =
+  /charutinho\s+e\s+os\s+reflexos\s+de\s+moro|charutinho\s+(?:e|com|para)\s+moro/i;
+const TRAVESSEIRO_TEXTUAL_LIST_TAIL =
+  /(['"]?mamadas\s+efetivas['"]?)(\s*[.\s])/i;
+
+export function ensureCharutinhoInTextualLessonList({ text, signalIds = [] } = {}) {
+  if (!text) return { text: text || '', rewritten: false };
+  const sigSet = new Set(signalIds || []);
+  if (!sigSet.has('travesseiro_tried_without_success')) {
+    return { text, rewritten: false };
+  }
+  if (!CHARUTINHO_BODY_ORIENTATION.test(normalize(text))) {
+    return { text, rewritten: false };
+  }
+  if (CHARUTINHO_IN_TEXTUAL_LIST.test(normalize(text))) {
+    return { text, rewritten: false };
+  }
+  if (!TRAVESSEIRO_TEXTUAL_LIST_TAIL.test(text)) {
+    return { text, rewritten: false };
+  }
+  const out = text.replace(
+    TRAVESSEIRO_TEXTUAL_LIST_TAIL,
+    (_m, mamadas, tail) => `${mamadas} e Charutinho e os Reflexos de Moro${tail}`,
+  );
+  return { text: out, rewritten: out !== text };
+}
+
+/**
  * Checks if the user's input contains explicit clinical red flags that should
  * short-circuit the pipeline into the "professional evaluation" path.
  */

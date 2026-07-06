@@ -29,6 +29,16 @@ import {
   ensureShortNapDiurnalBodyComplete,
   ensureBehavioralBerçoReframing,
   ensureNoGenericSupportInTravesseiroCase,
+  ensureBanhoBarriguinhaCentralAction,
+  ensureBanhoNoStartAtHungerOnset,
+  ensureNoPediatraOnPureBathCase,
+  ensureSondaNoOpeningNormalization,
+  ensureProducaoCanonicalPhrasing,
+  ensureTravesseiroListClosingSentence,
+  fixTravesseiroSatietyDoubleBackReference,
+  ensureTravesseiroSonecasNoColoPhrase,
+  ensureTravesseiroDirectArrotoInstruction,
+  ensureCharutinhoInTextualLessonList,
   detectClinicalRedFlags,
 } from './safetyValidator.js';
 import {
@@ -430,6 +440,128 @@ export async function processTurn({ message, babyProfile, conversation, conversa
     if (genericSupportFix.rewritten) {
       draft.text = genericSupportFix.text;
       draft.genericSupportRemoved = true;
+    }
+
+    // TESTE 010 (RN 13d) — banho: barriguinha/nariz para baixo como ação
+    // central (não como tentativa secundária).
+    const banhoBarriguinhaFix = ensureBanhoBarriguinhaCentralAction({
+      text: draft.text,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+    });
+    if (banhoBarriguinhaFix.rewritten || banhoBarriguinhaFix.appended) {
+      draft.text = banhoBarriguinhaFix.text;
+      draft.banhoBarriguinhaCentral = {
+        rewritten: banhoBarriguinhaFix.rewritten,
+        appended: banhoBarriguinhaFix.appended,
+      };
+    }
+
+    // TESTE 010 (RN 13d) — banho: não iniciar no início da fome (não apenas
+    // "não esteja com muita fome").
+    const banhoHungerFix = ensureBanhoNoStartAtHungerOnset({
+      text: draft.text,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+    });
+    if (banhoHungerFix.rewritten || banhoHungerFix.appended) {
+      draft.text = banhoHungerFix.text;
+      draft.banhoHungerOnset = {
+        rewritten: banhoHungerFix.rewritten,
+        appended: banhoHungerFix.appended,
+      };
+    }
+
+    // TESTE 010 (RN 13d) — banho isolado: sem pediatra na resposta principal
+    // quando não há sinais clínicos associados (mantém apenas o fechamento
+    // condicional do ensureBathClosingComplete).
+    const banhoNoPediatraFix = ensureNoPediatraOnPureBathCase({
+      text: draft.text,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+      userMessage: message,
+    });
+    if (banhoNoPediatraFix.rewritten) {
+      draft.text = banhoNoPediatraFix.text;
+      draft.banhoPediatraRemoved = true;
+    }
+
+    // TESTE 010 (RN 16d) — sonda + mama bem: sem normalização na abertura.
+    // Complementa ensureSondaNoOverNormalization (que já cobre "fisiológicos
+    // e esperados" / "bastante comum") removendo normalizações típicas de
+    // abertura ("é esperado que o bebê busque o peito frequentemente").
+    const sondaOpeningFix = ensureSondaNoOpeningNormalization({
+      text: draft.text,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+    });
+    if (sondaOpeningFix.rewritten) {
+      draft.text = sondaOpeningFix.text;
+      draft.sondaOpeningNormalizationRemoved = true;
+    }
+
+    // TESTE 010 (RN 16d) — fraseologia canônica da hipótese de produção
+    // (remove "ou menor produção materna" redundante).
+    const producaoCanonicalFix = ensureProducaoCanonicalPhrasing({ text: draft.text });
+    if (producaoCanonicalFix.rewritten) {
+      draft.text = producaoCanonicalFix.text;
+      draft.producaoCanonicalPhrasing = true;
+    }
+
+    // TESTE 010 (RN 19d) — fechamento da lista de aulas com frase completa
+    // (fixa "Mamadas Efetivas.Após a mamada, depois de arrotar e de ser
+    // mantida em posição vertical antes de transferir para o berço.").
+    const travesseiroListFix = ensureTravesseiroListClosingSentence({
+      text: draft.text,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+      userMessage: message,
+    });
+    if (travesseiroListFix.rewritten) {
+      draft.text = travesseiroListFix.text;
+      draft.travesseiroListClosingFixed = true;
+    }
+
+    // TESTE 010 (RN 19d) — dupla back-reference nos sinais de saciedade
+    // ("depois do arroto e da depois de arrotar e de ser mantida em posição
+    // vertical").
+    const satietyBackRefFix = fixTravesseiroSatietyDoubleBackReference({
+      text: draft.text,
+      userMessage: message,
+    });
+    if (satietyBackRefFix.rewritten) {
+      draft.text = satietyBackRefFix.text;
+      draft.satietyDoubleBackReferenceFixed = true;
+    }
+
+    // TESTE 010 (RN 19d) — frase forte sobre sonecas no colo nos primeiros
+    // dias (reasseguratória).
+    const sonecasNoColoFix = ensureTravesseiroSonecasNoColoPhrase({
+      text: draft.text,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+      userMessage: message,
+    });
+    if (sonecasNoColoFix.appended) {
+      draft.text = sonecasNoColoFix.text;
+      draft.sonecasNoColoAppended = true;
+    }
+
+    // TESTE 010 (RN 19d) — orientação direta de arroto (não "observe se há
+    // necessidade de arroto").
+    const arrotoDirectFix = ensureTravesseiroDirectArrotoInstruction({
+      text: draft.text,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+      userMessage: message,
+    });
+    if (arrotoDirectFix.rewritten) {
+      draft.text = arrotoDirectFix.text;
+      draft.arrotoInstructionDirect = true;
+    }
+
+    // TESTE 010 (RN 19d) — quando o corpo orienta charutinho, incluir
+    // "Charutinho e os Reflexos de Moro" também na lista textual de aulas.
+    const charutinhoListFix = ensureCharutinhoInTextualLessonList({
+      text: draft.text,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+    });
+    if (charutinhoListFix.rewritten) {
+      draft.text = charutinhoListFix.text;
+      draft.charutinhoAddedToTextualList = true;
     }
 
     // Soften any residual hard claim "a mamada provavelmente não foi
