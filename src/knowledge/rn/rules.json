@@ -609,6 +609,51 @@
       "id": "rn-teste010-travesseiro-charutinho-lista-textual",
       "rule": "Sempre que a resposta orientar charutinho para RN com Travesseiro tentado, a lista TEXTUAL de aulas DEVE incluir 'Charutinho e os Reflexos de Moro' — não basta que a aula apareça como card. Se a lista textual mencionar apenas Travesseiro/Berço/Arroto/Mamadas Efetivas mas o corpo orientar charutinho, adicionar Charutinho à lista textual.",
       "rationale": "TESTE 010 (RN 19d): a resposta orientou charutinho mas omitiu Charutinho na lista textual de aulas."
+    },
+    {
+      "id": "rn-teste011-sonda-no-normalize-padroes-busca",
+      "rule": "Quando dispara sonda_with_mama_bem_priority_production, a ABERTURA NÃO deve normalizar com frases como 'é comum os bebês nessa fase apresentarem padrões de busca pelo peito', 'comum nessa fase buscar o peito' ou equivalentes. Conduza imediatamente para baixa produção materna/necessidade de suporte de produção, complemento e suficiência alimentar.",
+      "rationale": "TESTE 011 (RN 16d): a abertura ainda normalizou a busca pelo peito apesar de sonda + intervalo <2h."
+    },
+    {
+      "id": "rn-teste011-ictericia-linguinha-trava-explicita",
+      "rule": "Quando a mãe informa que agora a bebê mama bem E há histórico de icterícia e/ou procedimento na linguinha no relato, a resposta DEVE explicitar a trava metodológica: 'Como você informou que agora ela mama bem, icterícia e procedimento na linguinha ficam apenas como histórico, não como causa atual.' Não basta omitir a causa atual — a trava precisa aparecer no texto.",
+      "rationale": "TESTE 011 (RN 16d): a resposta não voltou a usar icterícia/linguinha como causa ativa (positivo), mas faltou explicitar a trava."
+    },
+    {
+      "id": "rn-teste011-complemento-pergunta-inclui-dia",
+      "rule": "Na pergunta investigativa sobre complemento com sonda, incluir EXPLICITAMENTE 'durante o dia' (além do final da tarde). É insuficiente perguntar só sobre o final da tarde e corrigir depois na orientação. Formulação de referência: 'O complemento com sonda foi orientado apenas para a noite, ou já foi avaliado também para o final da tarde e durante o dia?'",
+      "rationale": "TESTE 011 (RN 16d): a pergunta investigativa cobriu o final da tarde mas omitiu 'durante o dia'."
+    },
+    {
+      "id": "rn-teste011-gender-ela-bebe",
+      "rule": "Com cues femininos da mãe ('minha bebê', 'ela', 'Lara'), manter 'ela continua', 'se ela mama', 'a bebê' — nunca 'ele continua' / 'se ele mama'.",
+      "rationale": "TESTE 011 (RN 16d): persistiram falhas de linguagem/gênero."
+    },
+    {
+      "id": "rn-teste011-chupeta-nunca-prender-obrigatorio",
+      "rule": "Em queixa de chupeta caindo / recolocar repetidamente (sinal pacifier_in_rn), a resposta DEVE incluir explicitamente: 'nunca prender ou fixar a chupeta'. Como a queixa da mãe é justamente a chupeta cair, esse ponto de segurança é obrigatório — não basta estar só na lista de proibições internas.",
+      "rationale": "TESTE 011 (RN 22d): faltou novamente a orientação de segurança sobre não prender/fixar a chupeta."
+    },
+    {
+      "id": "rn-teste011-chupeta-hierarquia-direta",
+      "rule": "Para queixa 'como resolver quando a chupeta cai?', a hierarquia ideal é: (1) chupeta como apoio fisiológico de sucção/regulação, sem associação negativa; (2) resposta direta — se cair e continuar dormindo, não recolocar; se acordar, investigar a causa; (3) segurança — nunca prender ou fixar; (4) confirmar forma de alimentação; (5) sequência prática (saciedade, arroto, vertical, ambiente, charutinho, berço). A resposta direta sobre a chupeta NÃO deve aparecer só depois de uma sequência longa.",
+      "rationale": "TESTE 011 (RN 22d): a pergunta principal era sobre a chupeta cair, mas a resposta direta veio tarde."
+    },
+    {
+      "id": "rn-teste011-chupeta-saciedade-adaptada",
+      "rule": "Em respostas de chupeta no RN, os sinais de saciedade DEVEM ser adaptados à forma de alimentação: peito → soltar o peito espontaneamente; fórmula/complemento → reduzir o ritmo da sucção e demonstrar saciedade após a oferta. Não listar apenas sinais centrados no peito quando a forma ainda não foi confirmada.",
+      "rationale": "TESTE 011 (RN 22d): sinais de saciedade continuaram mais centrados no peito."
+    },
+    {
+      "id": "rn-teste011-chupeta-nao-prometer-evitar-refluxo",
+      "rule": "É PROIBIDO escrever que a posição vertical serve 'para evitar refluxo'. Formulação preferida: a posição vertical ajuda a reduzir desconfortos pós-mamada e favorece a transição para o berço — sem prometer evitar refluxo.",
+      "rationale": "TESTE 011 (RN 22d): a expressão 'para evitar refluxo' foi marcada como pouco cuidadosa."
+    },
+    {
+      "id": "rn-teste011-vertical-frase-completa",
+      "rule": "É PROIBIDO produzir a frase truncada 'Após a mamada, depois de arrotar e de ser mantida em posição vertical antes de transferir para o berço.' Formulação canônica: 'Após a mamada, coloque para arrotar, mantenha em posição vertical por 30 a 40 minutos e só então transfira para o berço.'",
+      "rationale": "TESTE 011 (RN 22d): permaneceu trecho gramatical incompleto na sequência pós-mamada."
     }
   ],
 

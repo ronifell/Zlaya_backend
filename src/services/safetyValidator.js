@@ -422,8 +422,10 @@ const SONDA_TRIGGER_TOKENS = [
 const SONDA_PHRASE_LITERAL = /complemento\s+com\s+sonda/;
 const ORDENHA_PHRASE = /\bordenh(a|as|ar|ando)\b/;
 const SONDA_BAIXA_PRODUCAO = /baixa\s+produc[aã]o\s+materna|necessidade\s+de\s+suporte\s+de\s+produc[aã]o/;
+// TESTE 011 (RN 16d): a pergunta investigativa DEVE incluir "durante o dia"
+// (não basta "final da tarde"). Aceita também "ao longo do dia" / "período diurno".
 const SONDA_COMPLEMENT_DAY_Q =
-  /complemento.{0,120}(so\s+(?:para\s+)?(?:a\s+)?noite|durante\s+o\s+dia|final\s+da\s+tarde|fim\s+da\s+tarde|tamb[eé]m\s+durante\s+o\s+dia|ao\s+longo\s+do\s+dia)|orientad[oa]\s+apenas\s+para\s+a\s+noite|avali(ar|e).{0,80}complemento.{0,80}(durante\s+o\s+dia|tamb[eé]m\s+durante\s+o\s+dia|ao\s+longo\s+do\s+dia|periodo\s+diurno)/;
+  /(complemento|orientad[oa]|avaliad[oa]|avali(ar|e)|ajustad).{0,160}(durante\s+o\s+dia|tamb[eé]m\s+durante\s+o\s+dia|ao\s+longo\s+do\s+dia|periodo\s+diurno)|(durante\s+o\s+dia|ao\s+longo\s+do\s+dia|periodo\s+diurno).{0,100}(complemento|busca\s+o\s+peito)/;
 const SONDA_COMPLEMENT_DAY_ORIENTATION =
   /avali(ar|e).{0,80}complemento.{0,80}(durante\s+o\s+dia|tamb[eé]m\s+durante\s+o\s+dia|ao\s+longo\s+do\s+dia|periodo\s+diurno)|complemento.{0,80}(precisa\s+ser\s+ajustad|ajustad).{0,80}(durante\s+o\s+dia|tamb[eé]m\s+durante\s+o\s+dia|ao\s+longo\s+do\s+dia)/;
 const SONDA_AMAMENTACAO_PRATICA = /amamentac[aã]o\s+pr[aá]tica/;
@@ -838,6 +840,9 @@ const PACIFIER_PHRASE_PRACTICAL_MGMT = /(se\s+a\s+chupeta\s+cair[\s\S]{0,80}(?:n
 // TESTE 006 (RN 22d): exigência explícita de afirmar que nessa fase
 // a chupeta não representa associação comportamental negativa.
 const PACIFIER_PHRASE_EXPLICIT_NOT_NEG_ASSOC = /(n[aã]o\s+(deve\s+ser\s+|representa\s+|configura\s+|caracteriza\s+)?(interpretad[ao]\s+como\s+)?associa[çc][aã]o\s+(comportamental\s+)?negativa\s+nessa\s+fase|nessa\s+fase\s+(a\s+)?chupeta\s+n[aã]o\s+(deve\s+ser\s+|representa\s+|configura\s+|caracteriza\s+)?(interpretad[ao]\s+como\s+)?associa[çc][aã]o|nessa\s+fase\s+(isso|essa\s+(necessidade|leitura))\s+n[aã]o\s+(e|configura|representa)\s+associa[çc][aã]o\s+(comportamental\s+)?negativa)/;
+// TESTE 011 (RN 22d): segurança obrigatória — nunca prender/fixar.
+const PACIFIER_PHRASE_NEVER_SECURE =
+  /nunca\s+(prend(?:a|er)|fix(?:e|ar))(?:\s+ou\s+(?:prend(?:a|er)|fix(?:e|ar)))?(?:\s+a\s+chupeta)?|n[aã]o\s+(?:deve|pode|precisa)\s+(?:prender|fixar)\s+(?:a\s+)?chupeta|n[aã]o\s+prenda\s+(?:nem\s+fixe\s+)?(?:a\s+)?chupeta/;
 
 export function ensurePacifierPracticalComplete({ text, userMessage, signalIds = [] } = {}) {
   if (!text || !userMessage) return { text: text || '', appended: false, missing: [] };
@@ -851,6 +856,8 @@ export function ensurePacifierPracticalComplete({ text, userMessage, signalIds =
   if (!PACIFIER_PHRASE_REFLEX_REGULATION.test(norm)) missing.push('reflexo_regulacao');
   if (!PACIFIER_PHRASE_PRACTICAL_MGMT.test(norm)) missing.push('practical_mgmt');
   if (!PACIFIER_PHRASE_EXPLICIT_NOT_NEG_ASSOC.test(norm)) missing.push('explicit_not_neg_assoc');
+  // TESTE 011: even if practical_mgmt is present, the safety line may be missing.
+  if (!PACIFIER_PHRASE_NEVER_SECURE.test(norm)) missing.push('never_secure');
 
   if (missing.length === 0) return { text, appended: false, missing: [] };
 
@@ -868,10 +875,13 @@ export function ensurePacifierPracticalComplete({ text, userMessage, signalIds =
       ? 'Nessa fase, a chupeta NÃO representa associação comportamental negativa para a bebê — é apoio fisiológico de regulação, não vício, manha nem mau hábito.'
       : 'Nessa fase, a chupeta NÃO representa associação comportamental negativa para o bebê — é apoio fisiológico de regulação, não vício, manha nem mau hábito.',
     practical_mgmt: isFem
-      ? 'Sobre a chupeta cair: se ela cair e a bebê continuar dormindo, NÃO PRECISA RECOLOCAR; se ela acordar logo que cai, diferencie entre fome, desconforto pós-mamada, necessidade de sucção e transição para o berço — investigue o eixo correspondente em vez de reposicionar a chupeta repetidas vezes. NUNCA prenda ou fixe a chupeta.'
-      : 'Sobre a chupeta cair: se ela cair e o bebê continuar dormindo, NÃO PRECISA RECOLOCAR; se ele acordar logo que cai, diferencie entre fome, desconforto pós-mamada, necessidade de sucção e transição para o berço — investigue o eixo correspondente em vez de reposicionar a chupeta repetidas vezes. NUNCA prenda ou fixe a chupeta.',
+      ? 'Sobre a chupeta cair: se ela cair e a bebê continuar dormindo, NÃO PRECISA RECOLOCAR; se ela acordar logo que cai, diferencie entre fome, desconforto pós-mamada, necessidade de sucção e transição para o berço — investigue o eixo correspondente em vez de reposicionar a chupeta repetidas vezes.'
+      : 'Sobre a chupeta cair: se ela cair e o bebê continuar dormindo, NÃO PRECISA RECOLOCAR; se ele acordar logo que cai, diferencie entre fome, desconforto pós-mamada, necessidade de sucção e transição para o berço — investigue o eixo correspondente em vez de reposicionar a chupeta repetidas vezes.',
+    never_secure:
+      'Nunca prenda ou fixe a chupeta — isso é inseguro e não resolve a causa do despertar.',
   };
-  const order = ['explicit_not_neg_assoc', 'reflexo_regulacao', 'practical_mgmt'];
+  // TESTE 011 hierarchy: physiological framing → direct answer → safety → rest.
+  const order = ['explicit_not_neg_assoc', 'reflexo_regulacao', 'practical_mgmt', 'never_secure'];
   const sentences = order.filter((k) => missing.includes(k)).map((k) => fragmentByKey[k]);
   const append = sentences.join(' ');
   const trimmed = text.replace(/\s+$/, '');
@@ -1410,7 +1420,7 @@ export function ensureBathClosingComplete({ text, signalIds = [] } = {}) {
 
 /**
  * Icterícia/linguinha as historical only when mãe diz que agora mama bem
- * (TESTE 006 RN 16d, refinado TESTE 009 RN 16d).
+ * (TESTE 006 RN 16d, refinado TESTE 009 RN 16d, trava explícita TESTE 011).
  */
 const ICTERICIA_CURRENT_IMPACT =
   /(especialmente\s+apos\s+(o\s+)?procedimento|especialmente\s+depois\s+(do\s+)?procedimento|apos\s+(o\s+)?procedimento\s+na\s+linguinha\s+e\s+a\s+icter[ií]cia|(icter[ií]cia|linguinha|procedimento\s+na\s+linguinha|frenotomia|fr[eê]nulo|freio\s+lingual).{0,100}(podem\s+impactar|pode\s+impactar|impacta|afeta|dificulta|influencia|compromete|podem\s+dificultar|pode\s+dificultar|explicar|explica|contribuir|contribui|influenciar|influencia))/i;
@@ -1418,6 +1428,11 @@ const ICTERICIA_HISTORICAL_FRAMING =
   /especialmente\s+(?:com\s+o\s+hist[oó]rico\s+de\s+)?(?:a\s+)?icter[ií]cia|(?:icter[ií]cia|linguinha|procedimento\s+na\s+linguinha).{0,80}(?:hist[oó]rico|in[ií]cio\s+da\s+amamenta)/i;
 const MAMA_BEM_NOW_IN_MESSAGE =
   /(agora\s+(esta|est[aá])\s+mamando\s+bem|esta\s+mamando\s+bem|est[aá]\s+mamando\s+bem|mamando\s+bem|mama\s+bem)/i;
+const ICTERICIA_OR_LINGUINHA_IN_MESSAGE =
+  /(icter[ií]cia|linguinha|procedimento\s+na\s+linguinha|frenotomia|fr[eê]nulo|freio\s+lingual)/i;
+// TESTE 011: trava explícita aceita (não basta omitir a causa atual).
+const ICTERICIA_EXPLICIT_HISTORICAL_LOCK =
+  /(ficam\s+apenas\s+como\s+hist[oó]rico|apenas\s+como\s+hist[oó]rico(?:\s+do\s+in[ií]cio)?|n[aã]o\s+como\s+causa\s+atual|devem\s+ser\s+tratad[oa]s?\s+apenas\s+como\s+hist[oó]rico)/i;
 
 function shouldApplyIctericiaHistoricalGuard({ signalIds = [], userMessage = '' } = {}) {
   const sigSet = new Set(signalIds || []);
@@ -1454,11 +1469,21 @@ export function ensureIctericiaHistoricalOnly({ text, signalIds = [], userMessag
   const normAfter = normalize(out);
   const stillProblematic =
     ICTERICIA_CURRENT_IMPACT.test(normAfter) || ICTERICIA_HISTORICAL_FRAMING.test(normAfter);
-  if (!hadCurrentImpact && !stillProblematic) {
+  const alreadyExplicit = ICTERICIA_EXPLICIT_HISTORICAL_LOCK.test(normAfter);
+  const userHasHistory = ICTERICIA_OR_LINGUINHA_IN_MESSAGE.test(normalize(userMessage || ''));
+  // TESTE 011: se o relato traz icterícia/linguinha + mama bem, a trava
+  // explícita é obrigatória mesmo quando o draft já omitiu a causa atual.
+  if (!stillProblematic && alreadyExplicit) {
+    return { text: out, appended: false, missing: [] };
+  }
+  if (!stillProblematic && !hadCurrentImpact && !userHasHistory) {
+    return { text: out, appended: false, missing: [] };
+  }
+  if (!stillProblematic && !hadCurrentImpact && userHasHistory && alreadyExplicit) {
     return { text: out, appended: false, missing: [] };
   }
   const append =
-    'Como você informou que a bebê agora está mamando bem, icterícia e o procedimento na linguinha devem ser tratados apenas como histórico do início da amamentação — o foco atual é baixa produção materna ou necessidade de suporte de produção, complemento com sonda e instabilidade no final da tarde e na madrugada.';
+    'Como você informou que agora ela mama bem, icterícia e procedimento na linguinha ficam apenas como histórico, não como causa atual.';
   const trimmed = out.replace(/\s+$/, '');
   return { text: `${trimmed}\n\n${append}`, appended: true, missing: ['ictericia_historical'] };
 }
@@ -1796,6 +1821,11 @@ const SONDA_OPENING_NORMALIZATION =
   /[^.!?]*(?:[eéÉ]\s+esperad[oa]|[eéÉ]\s+normal|[eéÉ]\s+comum|faz\s+parte\s+(?:dessa\s+fase|do\s+desenvolvimento)|nessa\s+fase\s+[eéÉ]\s+esperad|[eéÉ]\s+bastante\s+comum)[^.!?]*(?:bus(?:ca|car|cando|cas|que|quem|ques)|procur(?:a|ar|ando|as|e|em|es))\s+(?:o\s+peito|frequentemente)[^.!?]*[.!?]\s*/gi;
 const SONDA_OPENING_NORMALIZATION_ALT =
   /[^.!?]*(?:bus(?:ca|car|cando|cas|que|quem|ques)|procur(?:a|ar|ando|as|e|em|es))\s+(?:o\s+peito\s+)?frequentemente[^.!?]{0,120}(?:[eéÉ]\s+esperad[oa]|[eéÉ]\s+normal|[eéÉ]\s+comum|faz\s+parte)[^.!?]*[.!?]\s*/gi;
+// TESTE 011 (RN 16d): "é comum os bebês nessa fase apresentarem padrões de busca pelo peito"
+const SONDA_OPENING_NORMALIZATION_PADROES =
+  /[^.!?]*(?:[eéÉ]\s+comum|comum(?:mente)?|normal)[^.!?]{0,80}(?:nessa\s+fase|nesta\s+fase|no\s+rn)?[^.!?]{0,80}padr[oõ]es?\s+de\s+busca\s+pelo\s+peito[^.!?]*[.!?]\s*/gi;
+const SONDA_OPENING_NORMALIZATION_PADROES_ALT =
+  /[^.!?]*(?:apresent(?:am|ar|ando)\s+padr[oõ]es?\s+de\s+busca\s+pelo\s+peito|padr[oõ]es?\s+de\s+busca\s+pelo\s+peito)[^.!?]{0,80}(?:comum|esperad|normal|nessa\s+fase)[^.!?]*[.!?]\s*/gi;
 
 export function ensureSondaNoOpeningNormalization({ text, signalIds = [] } = {}) {
   if (!text) return { text: text || '', rewritten: false };
@@ -1805,12 +1835,16 @@ export function ensureSondaNoOpeningNormalization({ text, signalIds = [] } = {})
   }
   let out = text;
   let rewritten = false;
-  const beforeA = out;
-  out = out.replace(SONDA_OPENING_NORMALIZATION, '');
-  if (out !== beforeA) rewritten = true;
-  const beforeB = out;
-  out = out.replace(SONDA_OPENING_NORMALIZATION_ALT, '');
-  if (out !== beforeB) rewritten = true;
+  for (const re of [
+    SONDA_OPENING_NORMALIZATION,
+    SONDA_OPENING_NORMALIZATION_ALT,
+    SONDA_OPENING_NORMALIZATION_PADROES,
+    SONDA_OPENING_NORMALIZATION_PADROES_ALT,
+  ]) {
+    const before = out;
+    out = out.replace(re, '');
+    if (out !== before) rewritten = true;
+  }
   if (rewritten) {
     out = out.replace(/^\s+/, '');
     const trimmed = out.replace(/\s+$/, '');
@@ -2025,4 +2059,71 @@ export function getForbiddenSummary(namespace) {
     interpretations: f.forbiddenInterpretations?.length || 0,
     languageRules: f.languageRules || {},
   };
+}
+
+/**
+ * TESTE 011 (RN 22d) — não prometer "evitar refluxo".
+ * Reescreve formulações que prometem prevenção de refluxo via posição
+ * vertical para a redação cuidadosa: reduzir desconfortos pós-mamada e
+ * favorecer a transição.
+ */
+const EVITAR_REFLUXO_CLAIM =
+  /(?:para\s+)?evitar\s+(?:o\s+)?refluxo|evitar\s+volta\s+do\s+leite\/?refluxo|para\s+evitar\s+volta\s+do\s+leite/gi;
+
+export function softenEvitarRefluxoClaim({ text } = {}) {
+  if (!text) return { text: text || '', rewritten: false };
+  if (!EVITAR_REFLUXO_CLAIM.test(text)) return { text, rewritten: false };
+  EVITAR_REFLUXO_CLAIM.lastIndex = 0;
+  const out = text.replace(
+    EVITAR_REFLUXO_CLAIM,
+    'ajudar a reduzir desconfortos pós-mamada e favorecer a transição',
+  );
+  return { text: out, rewritten: out !== text };
+}
+
+/**
+ * TESTE 011 (RN 22d / redação geral) — frase truncada de vertical.
+ * Corrige: "Após a mamada, depois de arrotar e de ser mantida em posição
+ * vertical antes de transferir para o berço."
+ */
+const TRUNCATED_VERTICAL_BEFORE_CRIB =
+  /ap[óo]s\s+a\s+mamada,?\s*depois\s+de\s+arrotar\s+e\s+de\s+ser\s+mantid[ao]\s+em\s+posi[cç][aã]o\s+vertical(?:\s+antes\s+de\s+transferir(?:\s+para\s+o\s+ber[cç]o)?)?/gi;
+
+export function fixTruncatedVerticalBeforeCrib({ text, userMessage = '' } = {}) {
+  if (!text) return { text: text || '', rewritten: false };
+  if (!TRUNCATED_VERTICAL_BEFORE_CRIB.test(text)) return { text, rewritten: false };
+  TRUNCATED_VERTICAL_BEFORE_CRIB.lastIndex = 0;
+  const gender = detectMotherGenderCue(userMessage || '');
+  const replacement =
+    gender === 'feminine'
+      ? 'Após a mamada, coloque-a para arrotar, mantenha-a em posição vertical por 30 a 40 minutos e só então transfira para o berço'
+      : gender === 'masculine'
+        ? 'Após a mamada, coloque-o para arrotar, mantenha-o em posição vertical por 30 a 40 minutos e só então transfira para o berço'
+        : 'Após a mamada, coloque para arrotar, mantenha em posição vertical por 30 a 40 minutos e só então transfira para o berço';
+  const out = text.replace(TRUNCATED_VERTICAL_BEFORE_CRIB, replacement);
+  return { text: out, rewritten: out !== text };
+}
+
+/**
+ * TESTE 011 (RN 22d) — saciedade adaptada a fórmula/complemento em queixa
+ * de chupeta. Se a resposta lista sinais só centrados no peito ("solta o
+ * peito espontaneamente") sem mencionar a leitura para fórmula/oferta,
+ * anexa a formulação adaptativa.
+ */
+const PACIFIER_PEITO_ONLY_SATIETY =
+  /solt[ae]\s+o\s+peito\s+espontaneamente/;
+const PACIFIER_ADAPTIVE_SATIETY =
+  /(se\s+usa\s+f[oó]rmula|f[oó]rmula\s+ou\s+(?:mamadeira|complemento)|reduz\s+o\s+ritmo\s+da\s+suc[cç][aã]o\s+e\s+demonstra\s+saciedade\s+ap[óo]s\s+a\s+oferta)/;
+
+export function ensurePacifierSatietyAdapted({ text, signalIds = [] } = {}) {
+  if (!text) return { text: text || '', appended: false };
+  const sigSet = new Set(signalIds || []);
+  if (!sigSet.has('pacifier_in_rn')) return { text, appended: false };
+  const norm = normalize(text);
+  if (!PACIFIER_PEITO_ONLY_SATIETY.test(norm)) return { text, appended: false };
+  if (PACIFIER_ADAPTIVE_SATIETY.test(norm)) return { text, appended: false };
+  const append =
+    'Adapte os sinais de saciedade à forma de alimentação: se mama no peito, observe se solta o peito espontaneamente; se usa fórmula ou complemento, observe se reduz o ritmo da sucção e demonstra saciedade após a oferta.';
+  const trimmed = text.replace(/\s+$/, '');
+  return { text: `${trimmed}\n\n${append}`, appended: true };
 }

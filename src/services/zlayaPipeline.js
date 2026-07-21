@@ -39,6 +39,9 @@ import {
   ensureTravesseiroSonecasNoColoPhrase,
   ensureTravesseiroDirectArrotoInstruction,
   ensureCharutinhoInTextualLessonList,
+  softenEvitarRefluxoClaim,
+  fixTruncatedVerticalBeforeCrib,
+  ensurePacifierSatietyAdapted,
   detectClinicalRedFlags,
 } from './safetyValidator.js';
 import {
@@ -562,6 +565,33 @@ export async function processTurn({ message, babyProfile, conversation, conversa
     if (charutinhoListFix.rewritten) {
       draft.text = charutinhoListFix.text;
       draft.charutinhoAddedToTextualList = true;
+    }
+
+    // TESTE 011 (RN 22d) — não prometer "evitar refluxo".
+    const evitarRefluxoFix = softenEvitarRefluxoClaim({ text: draft.text });
+    if (evitarRefluxoFix.rewritten) {
+      draft.text = evitarRefluxoFix.text;
+      draft.evitarRefluxoSoftened = true;
+    }
+
+    // TESTE 011 — frase truncada de vertical antes de transferir ao berço.
+    const truncatedVerticalFix = fixTruncatedVerticalBeforeCrib({
+      text: draft.text,
+      userMessage: message,
+    });
+    if (truncatedVerticalFix.rewritten) {
+      draft.text = truncatedVerticalFix.text;
+      draft.truncatedVerticalFixed = true;
+    }
+
+    // TESTE 011 (RN 22d) — saciedade adaptada a fórmula/complemento em chupeta.
+    const pacifierSatietyFix = ensurePacifierSatietyAdapted({
+      text: draft.text,
+      signalIds: (signals?.signals || []).map((s) => s.id),
+    });
+    if (pacifierSatietyFix.appended) {
+      draft.text = pacifierSatietyFix.text;
+      draft.pacifierSatietyAdapted = true;
     }
 
     // Soften any residual hard claim "a mamada provavelmente não foi
