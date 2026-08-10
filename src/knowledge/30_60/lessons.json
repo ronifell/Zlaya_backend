@@ -1,0 +1,189 @@
+{
+  "namespace": "30_60",
+  "description": "Mapeamento operacional 30–60 dias — situações → aulas internas do app Zleep Baby (Módulo 5).",
+  "lessons": [
+    {
+      "id": "lesson-30-60-passo-1-comportamento",
+      "title": "PASSO 1: PERCEBA O COMPORTAMENTO QUE AFETA O SONO DO BEBÊ",
+      "track": "passos",
+      "appPath": "/aulas/30_60/passo-1-comportamento"
+    },
+    {
+      "id": "lesson-30-60-passo-2-estimulos",
+      "title": "PASSO 2: AVALIE E REDUZA O EXCESSO DE ESTÍMULOS",
+      "track": "passos",
+      "appPath": "/aulas/30_60/passo-2-estimulos"
+    },
+    {
+      "id": "lesson-30-60-passo-3-janela",
+      "title": "PASSO 3: REGULE A JANELA DE SONO E AS SONECAS (30-60 DIAS)",
+      "track": "passos",
+      "appPath": "/aulas/30_60/passo-3-janela"
+    },
+    {
+      "id": "lesson-30-60-passo-4-rotina",
+      "title": "PASSO 4: COMECE A ESTRUTURAR A ROTINA",
+      "track": "passos",
+      "appPath": "/aulas/30_60/passo-4-rotina"
+    },
+    {
+      "id": "lesson-30-60-sono-noturno",
+      "title": "ESTRATÉGIAS PARA O SONO NOTURNO",
+      "track": "sono",
+      "appPath": "/aulas/30_60/sono-noturno"
+    },
+    {
+      "id": "lesson-30-60-sinais-sono",
+      "title": "OBSERVE E RESPEITE OS SINAIS DE SONO",
+      "track": "sono",
+      "appPath": "/aulas/30_60/sinais-de-sono"
+    },
+    {
+      "id": "lesson-30-60-espremedeira",
+      "title": "IDENTIFIQUE A ESPREMEDEIRA E LIDE COM ELA",
+      "track": "comportamento",
+      "appPath": "/aulas/30_60/espremedeira"
+    },
+    {
+      "id": "lesson-30-60-volta-trabalho",
+      "title": "SE PREPARE PARA VOLTA AO TRABALHO (DESDE JÁ!)",
+      "track": "amamentacao",
+      "appPath": "/aulas/30_60/volta-ao-trabalho"
+    },
+    {
+      "id": "lesson-30-60-maus-habitos",
+      "title": "ENSINANDO A DORMIR E TIRANDO OS MAUS HÁBITOS",
+      "track": "comportamento",
+      "appPath": "/aulas/30_60/maus-habitos"
+    },
+    {
+      "id": "lesson-30-60-caso-cecilia",
+      "title": "CASO CECÍLIA",
+      "track": "casos",
+      "appPath": "/aulas/30_60/caso-cecilia"
+    },
+    {
+      "id": "lesson-refluxo",
+      "title": "O QUE É O REFLUXO?",
+      "track": "fisiologia",
+      "appPath": "/aulas/rn/refluxo"
+    },
+    {
+      "id": "lesson-aplv",
+      "title": "O QUE É APLV E COMO IDENTIFICAR?",
+      "track": "medico",
+      "appPath": "/aulas/rn/aplv"
+    },
+    {
+      "id": "lesson-travesseiro",
+      "title": "UTILIZE A ESTRATÉGIA DO TRAVESSEIRO",
+      "track": "berco",
+      "appPath": "/aulas/rn/estrategia-travesseiro"
+    },
+    {
+      "id": "lesson-ruido-branco",
+      "title": "RUÍDO BRANCO",
+      "track": "ambiente",
+      "appPath": "/aulas/rn/ruido-branco"
+    },
+    {
+      "id": "lesson-hora-da-bruxa",
+      "title": "HORA DA BRUXA",
+      "track": "comportamento",
+      "appPath": "/aulas/rn/hora-da-bruxa"
+    }
+  ],
+  "situationToLessons": [
+    {
+      "situation": "Comportamento que afeta o sono / início dos 30-60 dias",
+      "lessons": ["lesson-30-60-passo-1-comportamento"]
+    },
+    {
+      "situation": "Excesso de estímulos / choro por irritação",
+      "lessons": ["lesson-30-60-passo-2-estimulos", "lesson-ruido-branco"]
+    },
+    {
+      "situation": "Crise de choro confundida com cólica",
+      "lessons": ["lesson-30-60-passo-2-estimulos"],
+      "doNotInclude": []
+    },
+    {
+      "situation": "Dificuldade com janelas de sono / sonecas",
+      "lessons": ["lesson-30-60-passo-3-janela", "lesson-30-60-sinais-sono"]
+    },
+    {
+      "situation": "Sonecas curtas ou em excesso",
+      "lessons": ["lesson-30-60-passo-3-janela", "lesson-30-60-passo-4-rotina"]
+    },
+    {
+      "situation": "Falta de rotina / dia desorganizado",
+      "lessons": ["lesson-30-60-passo-4-rotina", "lesson-30-60-passo-3-janela"]
+    },
+    {
+      "situation": "Despertares noturnos / primeiro intervalo da noite",
+      "lessons": ["lesson-30-60-sono-noturno"]
+    },
+    {
+      "situation": "Oferecer peito em todo despertar noturno",
+      "lessons": ["lesson-30-60-sono-noturno", "lesson-30-60-maus-habitos"]
+    },
+    {
+      "situation": "Dificuldade para identificar sinais de sono",
+      "lessons": ["lesson-30-60-sinais-sono"]
+    },
+    {
+      "situation": "Espremedeira / grunhidos durante o sono",
+      "lessons": ["lesson-30-60-espremedeira"]
+    },
+    {
+      "situation": "Preparação para volta ao trabalho / mamadeira",
+      "lessons": ["lesson-30-60-volta-trabalho", "lesson-hora-da-bruxa"]
+    },
+    {
+      "situation": "Mau hábito de balanço / só dorme embalado",
+      "lessons": ["lesson-30-60-maus-habitos", "lesson-travesseiro", "lesson-30-60-caso-cecilia"]
+    },
+    {
+      "situation": "Só dorme no peito / sucção prolongada sem retirar leite",
+      "lessons": ["lesson-30-60-maus-habitos"]
+    },
+    {
+      "situation": "Bola de pilates / dormir só em pé",
+      "lessons": ["lesson-30-60-maus-habitos", "lesson-30-60-caso-cecilia"]
+    },
+    {
+      "situation": "Dificuldade na transição para o berço nesta faixa",
+      "lessons": ["lesson-30-60-maus-habitos", "lesson-travesseiro"]
+    },
+    {
+      "situation": "Suspeita de refluxo oculto perto dos 60 dias",
+      "lessons": ["lesson-refluxo", "lesson-aplv"],
+      "escalateTo": ["pediatricianBonus", "humanSupport", "familyPediatrician"]
+    },
+    {
+      "situation": "Suspeita de APLV perto dos 60 dias",
+      "lessons": ["lesson-aplv", "lesson-refluxo"],
+      "escalateTo": ["pediatricianBonus", "humanSupport", "familyPediatrician"]
+    },
+    {
+      "situation": "Comportamento extremo de hábito (caso tipo Cecília)",
+      "lessons": ["lesson-30-60-caso-cecilia", "lesson-30-60-maus-habitos"]
+    }
+  ],
+  "supportChannels": {
+    "humanSupport": {
+      "label": "Suporte humano da equipe Eliana Dias",
+      "description": "Atendimento humano para casos sem regra metodológica validada, conflitos relevantes de interpretação ou necessidade de análise individual.",
+      "appPath": "/suporte/humano"
+    },
+    "pediatricianBonus": {
+      "label": "Material do pediatra Roberto Franklin nas aulas extras/bônus",
+      "description": "Conteúdos médicos complementares nas aulas extras/bônus do curso (refluxo fisiológico x patológico, APLV, sinais de alerta clínico). Conduzir a mãe para esse material quando houver suspeita/investigação de refluxo oculto/patológico ou APLV perto dos 60 dias.",
+      "appPath": "/aulas/bonus/pediatra-roberto-franklin"
+    },
+    "familyPediatrician": {
+      "label": "Pediatra da família",
+      "description": "A Zlaya recomenda avaliação com o pediatra da família diante de sinais clínicos persistentes."
+    }
+  }
+}

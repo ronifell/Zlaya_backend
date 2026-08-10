@@ -45,8 +45,8 @@ export const config = {
     data: path.join(ROOT, 'data'),
   },
 
-  // Pilot scope: only RN (0–28 days) is allowed for the MVP.
-  activeNamespaces: (process.env.ACTIVE_NAMESPACES || 'RN')
+  // Pilot scope: RN (0–28) and 30_60 (29–60) are active by default.
+  activeNamespaces: (process.env.ACTIVE_NAMESPACES || 'RN,30_60')
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean),
