@@ -53,6 +53,7 @@ import {
 import { generateAnswer } from './responseGenerator.js';
 import { renderRoute, suggestedLessonsFromRetrieval } from './fallback.js';
 import { recordTurn } from './auditLogger.js';
+import { enrichThirtySixtyOfficialAnswer } from './thirtySixtyOfficialEnricher.js';
 
 /**
  * Full Zlaya turn pipeline.
@@ -189,26 +190,37 @@ export async function processTurn({ message, babyProfile, conversation, conversa
       draft.ageCorrections = ageFix.corrections;
     }
 
-    // Saciedade auto-explanation (CLAREZA OBRIGATÓRIA).
-    // Test feedback 16d: pedir "observe sinais de saciedade" sem listar
-    // é incompleto. Test feedback 001 (RN 9d): listar os 6 sinais sem
-    // ensinar o que fazer quando NÃO aparecem também é incompleto.
-    // Em padrão vespertino o framework de 6 pontos exige a lista, então
-    // forçamos o gatilho para garantir que o ponto 2 do framework esteja
-    // visível mesmo se a LLM não usou a expressão "sinais de saciedade".
+    // 30_60: early scrub of "mau hábito" wording (full dossier enricher runs later).
+    if (String(namespace).toUpperCase() === '30_60' && draft?.text) {
+      const before = draft.text;
+      draft.text = draft.text
+        .replace(/\bmaus?\s+h[aá]bitos?\b/gi, 'padrão de condução do sono')
+        .replace(/Ensinando a dormir e tirando os padrão de condução do sono/gi, 'organização da vigília e da condução do sono')
+        .replace(/aula sobre padrão de condução do sono/gi, 'aula sobre janela de vigília e condução do sono');
+      if (draft.text !== before) {
+        draft.mauHabitoScrub = true;
+      }
+    }
+
+    // Saciedade auto-explanation (CLAREZA OBRIGATÓRIA) — RN only.
+    // Official 30–60 dossiers forbid "sinais de saciedade no RN" and default
+    // vertical 30–40; appending the RN block contaminates 30_60 scores.
     const eveningTriggered = (signals?.signals || []).some(
       (s) => s.id === 'evening_pattern' || s.id === 'night_production_drop',
     );
     const travesseiroTriggered = (signals?.signals || []).some(
       (s) => s.id === 'travesseiro_tried_without_success',
     );
-    const satietyFix = ensureSatietySignsExplained({
-      text: draft.text,
-      forceTrigger: eveningTriggered || travesseiroTriggered,
-    });
-    if (satietyFix.expanded) {
-      draft.text = satietyFix.text;
-      draft.satietyAutoExpanded = satietyFix.expanded; // 'list' | 'operational'
+    const is3060Ns = String(namespace).toUpperCase() === '30_60';
+    if (!is3060Ns) {
+      const satietyFix = ensureSatietySignsExplained({
+        text: draft.text,
+        forceTrigger: eveningTriggered || travesseiroTriggered,
+      });
+      if (satietyFix.expanded) {
+        draft.text = satietyFix.text;
+        draft.satietyAutoExpanded = satietyFix.expanded; // 'list' | 'operational'
+      }
     }
 
     // Direct normality answer (CLAREZA OBRIGATÓRIA — teste 001).
@@ -634,6 +646,20 @@ export async function processTurn({ message, babyProfile, conversation, conversa
     if (verticalFragmentFix.rewritten) {
       draft.text = verticalFragmentFix.text;
       draft.verticalFragmentFixed = true;
+    }
+
+    // 30_60 official TESTES completer (after RN enrichers so we can scrub them).
+    if (String(namespace).toUpperCase() === '30_60' && draft?.text) {
+      const enriched = enrichThirtySixtyOfficialAnswer({
+        text: draft.text,
+        message,
+        signals,
+        babyProfile,
+      });
+      if (enriched.text !== draft.text) {
+        draft.text = enriched.text;
+        draft.thirtySixtyOfficialEnrichment = enriched.notes;
+      }
     }
 
     safety = checkForbiddenContent({

@@ -1,0 +1,400 @@
+{
+  "via": "frontend",
+  "chatUrl": "http://127.0.0.1:3000/api/zlaya/chat",
+  "results": [
+    {
+      "id": "30d",
+      "finalScore": 95,
+      "det": {
+        "score": 100,
+        "earned": 100,
+        "total": 100,
+        "detail": [
+          {
+            "id": "no_short_nap_label",
+            "w": 15,
+            "pass": true
+          },
+          {
+            "id": "no_stimuli_as_main",
+            "w": 10,
+            "pass": true
+          },
+          {
+            "id": "feeding_priority",
+            "w": 20,
+            "pass": true
+          },
+          {
+            "id": "postural_ask",
+            "w": 20,
+            "pass": true
+          },
+          {
+            "id": "no_night_sequence",
+            "w": 15,
+            "pass": true
+          },
+          {
+            "id": "no_rn_satiety_block",
+            "w": 10,
+            "pass": true
+          },
+          {
+            "id": "problem_is_wake",
+            "w": 10,
+            "pass": true
+          }
+        ],
+        "meta": {
+          "lessonsText": "lesson-30-60-sinais-sono OBSERVE E RESPEITE OS SINAIS DE SONO  | lesson-refluxo O QUE É O REFLUXO? "
+        }
+      },
+      "judge": {
+        "score": 95,
+        "fails": [],
+        "strengths": [
+          "Abordagem correta sobre alimentação/saciedade e pós-mamada/postural",
+          "Perguntas relevantes sobre arroto e posição vertical",
+          "Não violou proibições"
+        ],
+        "verdict": "A resposta atende aos critérios do dossiê."
+      },
+      "text": "É normal que a Lara, com 30 dias, acorde irritada após sonecas, especialmente se ela está se adaptando ao sono. O despertar bravo pode estar relacionado a questões de alimentação ou desconforto após a mamada.\n\nA principal hipótese é que a alimentação/saciedade e o que ocorre após a mamada estejam influenciando esses despertares. Após a mamada, é importante garantir que ela tenha um arroto adequado e permaneça em posição vertical por cerca de 20 a 30 minutos. Isso pode ajudar a evitar desconfortos que a façam acordar chorando.\n\nPara melhorar essa situação, observe o que acontece entre o fim da mamada e o momento de deitar. Pergunto: houve arroto? Ela permaneceu em posição vertical? A mamada parece efetiva, com sucção ativa e deglutição? \n\nPara mais orientações sobre a janela de vigília e como conduzir as sonecas, recomendo que você assista à aula \"Passo 3: Janela\" no aplicativo.",
+      "lessons": "OBSERVE E RESPEITE OS SINAIS DE SONO | O QUE É O REFLUXO?",
+      "failedCrit": []
+    },
+    {
+      "id": "31d",
+      "finalScore": 95,
+      "det": {
+        "score": 100,
+        "earned": 100,
+        "total": 100,
+        "detail": [
+          {
+            "id": "excess_wake_central",
+            "w": 25,
+            "pass": true
+          },
+          {
+            "id": "wake_ref_45_60",
+            "w": 20,
+            "pass": true
+          },
+          {
+            "id": "no_invented_night_supply",
+            "w": 25,
+            "pass": true
+          },
+          {
+            "id": "vertical_20_30",
+            "w": 15,
+            "pass": true
+          },
+          {
+            "id": "day_naps_focus",
+            "w": 15,
+            "pass": true
+          }
+        ],
+        "meta": {
+          "lessonsText": "lesson-30-60-passo-3-janela PASSO 3: REGULE A JANELA DE SONO E AS SONECAS (30-60 DIAS)  | lesson-30-60-passo-4-rotina PASSO 4: COMECE A ESTRUTURAR A ROTINA  | lesson-30-60-sinais-sono OBSERVE E RESPEITE OS SINAIS DE SONO "
+        }
+      },
+      "judge": {
+        "score": 95,
+        "fails": [],
+        "strengths": [
+          "O texto aborda a vigília excessiva e sugere fracionar a soneca da manhã, alinhando-se às recomendações do dossiê.",
+          "Não há menção a mamadas noturnas insuficientes ou baixa produção à noite, respeitando as proibições."
+        ],
+        "verdict": "O texto cumpre os requisitos do dossiê de forma adequada."
+      },
+      "text": "Olá, Maria. É compreensível que você esteja enfrentando dificuldades com o sono do João, especialmente com as mudanças nas sonecas. É comum que bebês de 31 dias apresentem variações no padrão de sono, e isso pode ser desafiador.\n\nA principal hipótese aqui é a vigília excessiva. Quando o João faz uma soneca longa pela manhã (cerca de 2h a 2h30) e depois as sonecas da tarde ficam curtas, isso pode indicar que ele está acordando muito tempo antes de ser conduzido para a próxima soneca. O tempo total acordado de 1h40 a 2h é superior à janela de vigília recomendada de 45 minutos a 1 hora. \n\nPara ajudar, sugiro fracionar a soneca da manhã para cerca de 1h30 a 2h e observar se isso melhora as sonecas da tarde. Além disso, caprichar nas mamadas pode ajudar a relaxar o João antes de dormir. Se ele já estiver no limite do intervalo para mamar e demorar a dormir, oferecer o peito pode ser uma boa estratégia.\n\nAgora, gostaria de saber: qual é a duração típica das sonecas da tarde? E quanto tempo ele permanece acordado antes de você iniciar a condução para a próxima soneca? \n\nPara mais orientações sobre como estruturar a rotina por janelas, recomendo a aula \"Rotina por Janelas\" no aplicativo.",
+      "lessons": "PASSO 3: REGULE A JANELA DE SONO E AS SONECAS (30-60 DIAS) | PASSO 4: COMECE A ESTRUTURAR A ROTINA | OBSERVE E RESPEITE OS SINAIS DE SONO",
+      "failedCrit": []
+    },
+    {
+      "id": "40d-bottle",
+      "finalScore": 100,
+      "det": {
+        "score": 100,
+        "earned": 100,
+        "total": 100,
+        "detail": [
+          {
+            "id": "breast_20min",
+            "w": 20,
+            "pass": true
+          },
+          {
+            "id": "no_habit_label",
+            "w": 20,
+            "pass": true
+          },
+          {
+            "id": "volume_90_120",
+            "w": 35,
+            "pass": true
+          },
+          {
+            "id": "no_60_90",
+            "w": 15,
+            "pass": true
+          },
+          {
+            "id": "no_wrong_lessons",
+            "w": 10,
+            "pass": true
+          }
+        ],
+        "meta": {
+          "lessonsText": "lesson-30-60-volta-trabalho SE PREPARE PARA VOLTA AO TRABALHO (DESDE JÁ!) "
+        }
+      },
+      "judge": {
+        "score": 100,
+        "fails": [],
+        "strengths": [
+          "Cumpre todos os pontos obrigatórios do dossiê",
+          "Fornece informações corretas sobre a duração da amamentação e o volume da mamadeira"
+        ],
+        "verdict": "Texto atende completamente aos requisitos do dossiê."
+      },
+      "text": "É normal que a amamentação da Lara, de 40 dias dure cerca de 20 minutos, desde que haja uma retirada efetiva de leite. É importante observar os sinais de saciedade dela antes de interpretar qualquer comportamento após a mamada.\n\nPara a mamadeira de aprendizado, a referência do método é de 90 a 120 ml por mamadeira. Isso ajudará a bebê a se acostumar com a mamadeira sem causar desmame ou confusão de bico.\n\nGostaria de saber se a sua bebê já aceitou a mamadeira e se você tem observado sinais de saciedade após as mamadas. Para mais informações sobre a introdução da mamadeira e a volta ao trabalho, você pode conferir a aula relacionada no aplicativo.",
+      "lessons": "SE PREPARE PARA VOLTA AO TRABALHO (DESDE JÁ!)",
+      "failedCrit": []
+    },
+    {
+      "id": "40d-pacifier",
+      "finalScore": 100,
+      "det": {
+        "score": 100,
+        "earned": 100,
+        "total": 100,
+        "detail": [
+          {
+            "id": "no_mau_habito",
+            "w": 25,
+            "pass": true
+          },
+          {
+            "id": "recent_change",
+            "w": 20,
+            "pass": true
+          },
+          {
+            "id": "respect_keep_pacifier",
+            "w": 15,
+            "pass": true
+          },
+          {
+            "id": "investigate_not_blame",
+            "w": 20,
+            "pass": true
+          },
+          {
+            "id": "no_contradict_solo_sleep",
+            "w": 10,
+            "pass": true
+          },
+          {
+            "id": "no_colo_as_main_fix",
+            "w": 10,
+            "pass": true
+          }
+        ],
+        "meta": {
+          "lessonsText": "lesson-30-60-passo-3-janela PASSO 3: REGULE A JANELA DE SONO E AS SONECAS (30-60 DIAS)  | lesson-30-60-sinais-sono OBSERVE E RESPEITE OS SINAIS DE SONO  | lesson-refluxo O QUE É O REFLUXO?  | lesson-travesseiro UTILIZE A ESTRATÉGIA DO TRAVESSEIRO  | lesson-ruido-branco RUÍDO BRANCO "
+        }
+      },
+      "judge": {
+        "score": 100,
+        "fails": [],
+        "strengths": [
+          "Cumpre todos os pontos obrigatórios do dossiê",
+          "Respeita a escolha de manter a chupeta",
+          "Investiga alimentação, vigília e desconforto",
+          "Não contradiz o relato sobre o sono solo",
+          "Não sugere colo como solução principal"
+        ],
+        "verdict": "O texto atende a todos os critérios do dossiê."
+      },
+      "text": "Olá, Ana! É normal que, aos 40 dias, o Pedro esteja passando por mudanças no padrão de sono. O uso da chupeta pode ser uma forma de conforto para ele, mas é compreensível que você queira ajudá-lo a retomar o sono sem depender dela.\n\nA principal hipótese é que a necessidade de sucção e a mudança recente no padrão de sono estejam influenciando os despertares dele. Para conduzir o sono do Pedro sem a chupeta, você pode tentar as seguintes orientações: \n\n1. **Observe a janela de vigília**: Mantenha o tempo acordado dele entre 45 minutos e 1 hora. Se ele estiver acordado por mais tempo, pode ficar hiperestimulado, dificultando o retorno ao sono.\n   \n2. **Condução do sono**: Após a mamada, mantenha-o em posição vertical por cerca de 20 a 30 minutos. Isso pode ajudar a evitar desconfortos. Quando perceber sinais de sono, coloque-o no berço acordado, mas relaxado, e evite a chupeta nesse momento.\n\n3. **Apoio ao retorno ao sono**: Se ele acordar chorando, tente acalmá-lo com a sua presença, fazendo contato físico ou usando ruído branco, sem necessariamente oferecer a chupeta. Isso pode ajudá-lo a se sentir seguro e a voltar a dormir.\n\nAgora, gostaria de saber: como está a alimentação dele? As mamadas parecem efetivas? E quanto tempo ele permanece acordado antes das sonecas? Essas informações podem ajudar a refinar a orientação.\n\nPara mais detalhes sobre como estruturar a rotina e a condução do sono, recomendo que você confira a aula sobre \"Rotina por Janelas\" no aplicativo.\n\nVocê pode manter a chupeta: vamos respeitar essa escolha e investigar alimentação, vigília, desconforto e o papel da sucção nos despertares.",
+      "lessons": "PASSO 3: REGULE A JANELA DE SONO E AS SONECAS (30-60 DIAS) | OBSERVE E RESPEITE OS SINAIS DE SONO | O QUE É O REFLUXO? | UTILIZE A ESTRATÉGIA DO TRAVESSEIRO | RUÍDO BRANCO",
+      "failedCrit": []
+    },
+    {
+      "id": "45d",
+      "finalScore": 100,
+      "det": {
+        "score": 100,
+        "earned": 100,
+        "total": 100,
+        "detail": [
+          {
+            "id": "night_19_20",
+            "w": 25,
+            "pass": true
+          },
+          {
+            "id": "not_recommend_2130_22",
+            "w": 20,
+            "pass": true
+          },
+          {
+            "id": "bath_postpones",
+            "w": 15,
+            "pass": true
+          },
+          {
+            "id": "wake_45_to_115",
+            "w": 15,
+            "pass": true
+          },
+          {
+            "id": "female_gender",
+            "w": 15,
+            "pass": true
+          },
+          {
+            "id": "no_passo1",
+            "w": 10,
+            "pass": true
+          }
+        ],
+        "meta": {
+          "lessonsText": "lesson-30-60-passo-3-janela PASSO 3: REGULE A JANELA DE SONO E AS SONECAS (30-60 DIAS)  | lesson-30-60-passo-4-rotina PASSO 4: COMECE A ESTRUTURAR A ROTINA  | lesson-30-60-sono-noturno ESTRATÉGIAS PARA O SONO NOTURNO "
+        }
+      },
+      "judge": {
+        "score": 100,
+        "fails": [],
+        "strengths": [
+          "Cumpre todos os pontos obrigatórios do dossiê",
+          "Respostas diretas e claras",
+          "Orientações adequadas sobre o ritual do sono"
+        ],
+        "verdict": "A resposta está completa e atende a todos os requisitos do dossiê."
+      },
+      "text": "É compreensível que você esteja buscando organizar o ritual do sono da Lara, de 45 dias. O horário recomendado para o início do sono noturno é entre 19h e 20h. Iniciar o sono noturno às 21h ou 21h30 não é o ideal, pois isso pode atrasar o momento em que ela realmente consegue relaxar e adormecer. O banho às 21h30 pode, de fato, postergar ainda mais o início do sono, não apenas por ser uma atividade estimulante, mas também pelo horário tardio.\n\nPara ajudar o seu bebê a adormecer mais facilmente, observe a última soneca dela e quanto tempo ele está acordado antes de tentar iniciar o sono noturno. É importante respeitar a janela de vigília, que varia de 45 minutos a 1 hora e 15 minutos.\n\nVocê poderia me informar a que horas termina a última soneca dela e há quanto tempo ele está acordado quando você tenta iniciar o sono noturno? Isso pode ajudar a ajustar melhor a rotina. \n\nPara mais orientações sobre a rotina e o sono noturno, você pode revisar a aula sobre a rotina no módulo 3.\n\nA família pode organizar conforme sua dinâmica, mas iniciar o sono noturno por volta de 21h30 ou 22h não é o recomendado.",
+      "lessons": "PASSO 3: REGULE A JANELA DE SONO E AS SONECAS (30-60 DIAS) | PASSO 4: COMECE A ESTRUTURAR A ROTINA | ESTRATÉGIAS PARA O SONO NOTURNO",
+      "failedCrit": []
+    },
+    {
+      "id": "49d",
+      "finalScore": 100,
+      "det": {
+        "score": 100,
+        "earned": 100,
+        "total": 100,
+        "detail": [
+          {
+            "id": "how_wakes",
+            "w": 20,
+            "pass": true
+          },
+          {
+            "id": "wake_45_60",
+            "w": 25,
+            "pass": true
+          },
+          {
+            "id": "no_min_naps",
+            "w": 20,
+            "pass": true
+          },
+          {
+            "id": "vertical_20_30",
+            "w": 15,
+            "pass": true
+          },
+          {
+            "id": "pacifier_not_first",
+            "w": 20,
+            "pass": true
+          }
+        ],
+        "meta": {
+          "lessonsText": "lesson-30-60-passo-3-janela PASSO 3: REGULE A JANELA DE SONO E AS SONECAS (30-60 DIAS)  | lesson-30-60-sinais-sono OBSERVE E RESPEITE OS SINAIS DE SONO  | lesson-refluxo O QUE É O REFLUXO? "
+        }
+      },
+      "judge": {
+        "score": 100,
+        "fails": [],
+        "strengths": [
+          "Cumpre todos os pontos obrigatórios do dossiê",
+          "Não violou nenhuma proibição",
+          "Aborda alimentação/saciedade e condução do sono de forma adequada"
+        ],
+        "verdict": "O texto atende completamente aos requisitos do dossiê."
+      },
+      "text": "É normal que bebês de 49 dias tenham sonecas que variam em duração, e é esperado que eles ainda estejam se adaptando a padrões de sono. O uso da chupeta pode ser uma forma de conforto, mas também pode influenciar os despertares.\n\nA principal hipótese aqui é que a duração das sonecas e os despertares podem estar relacionados à alimentação e à condução do sono. É importante observar se ele está se alimentando de forma efetiva e se há desconfortos após as mamadas. \n\nSugiro que você observe o que acontece entre o fim da mamada e o momento de deitar. Pergunte-se: houve arroto? Ele permaneceu em posição vertical por 20 a 30 minutos? A mamada pareceu efetiva, com sinais de sucção ativa e deglutição? \n\nAlém disso, considere o tempo de vigília antes das sonecas. O ideal é que ele esteja acordado por cerca de 45 minutos a 1 hora antes de iniciar a próxima soneca. Se ele estiver acordado por mais tempo, isso pode levar a uma vigília excessiva, dificultando o relaxamento.\n\nPara aprofundar mais sobre como ajustar a rotina e a condução do sono, recomendo que você assista à aula sobre \"Janela de Sono e Sonecas\" no aplicativo.\n\nAntes de atribuir os despertares à chupeta, observe como o bebê acorda da soneca: tranquilo, chorando, buscando peito ou com desconforto. Avalie alimentação/saciedade e só então, se a queda da chupeta coincidir com o despertar, ajuste a condução da sucção.",
+      "lessons": "PASSO 3: REGULE A JANELA DE SONO E AS SONECAS (30-60 DIAS) | OBSERVE E RESPEITE OS SINAIS DE SONO | O QUE É O REFLUXO?",
+      "failedCrit": []
+    },
+    {
+      "id": "51d",
+      "finalScore": 100,
+      "det": {
+        "score": 100,
+        "earned": 100,
+        "total": 100,
+        "detail": [
+          {
+            "id": "no_mau_habito",
+            "w": 15,
+            "pass": true
+          },
+          {
+            "id": "wake_first",
+            "w": 15,
+            "pass": true
+          },
+          {
+            "id": "feeding_before_behavior",
+            "w": 15,
+            "pass": true
+          },
+          {
+            "id": "no_fixed_timeline",
+            "w": 20,
+            "pass": true
+          },
+          {
+            "id": "no_10min_cry",
+            "w": 15,
+            "pass": true
+          },
+          {
+            "id": "travesseiro_execution",
+            "w": 10,
+            "pass": true
+          },
+          {
+            "id": "hierarchy_questions",
+            "w": 10,
+            "pass": true
+          }
+        ],
+        "meta": {
+          "lessonsText": "lesson-30-60-passo-2-estimulos PASSO 2: AVALIE E REDUZA O EXCESSO DE ESTÍMULOS  | lesson-30-60-passo-3-janela PASSO 3: REGULE A JANELA DE SONO E AS SONECAS (30-60 DIAS)  | lesson-30-60-passo-4-rotina PASSO 4: COMECE A ESTRUTURAR A ROTINA  | lesson-travesseiro UTILIZE A ESTRATÉGIA DO TRAVESSEIRO  | lesson-ruido-branco RUÍDO BRANCO "
+        }
+      },
+      "judge": {
+        "score": 100,
+        "fails": [],
+        "strengths": [
+          "Cumpre todos os pontos obrigatórios do dossiê",
+          "Fornece orientações claras sobre a hierarquia e a técnica do travesseiro",
+          "Inclui perguntas de refinamento na hierarquia correta"
+        ],
+        "verdict": "O texto atende a todos os critérios do Método Eliana Dias."
+      },
+      "text": "É normal que a Lara, com 51 dias, tenha dificuldades para dormir durante o dia e prefira o colo ou o peito. Isso é comum nessa faixa etária, e a técnica do travesseiro pode levar um tempo para se consolidar.\n\nPara ajudar a Lara a se adaptar ao berço, siga esta hierarquia: primeiro, observe a janela de vigília dela, que deve ser de 45 minutos a 1 hora. Em seguida, assegure-se de que ela esteja bem alimentada e com sinais de saciedade antes de iniciar a condução para o sono. Quando ela estiver calma, você pode usar a estratégia do travesseiro, garantindo que a condução comece nesse momento de tranquilidade. Lembre-se de que não existe um prazo fixo para ela aprender; a evolução depende da repetição e consistência.\n\nPara entender melhor, gostaria de saber: quanto tempo a Lara permanece acordada antes das sonecas? Quando você inicia a condução para o sono? E como você está executando a estratégia do travesseiro?\n\nVocê pode conferir mais sobre a técnica do travesseiro na aula específica do método.\n\nNa condução, use contenção e presença observando a resposta da bebê — sem tempo predeterminado de choro (não use “o tempo que a bebê precisar, observando a resposta dela” como regra).",
+      "lessons": "PASSO 2: AVALIE E REDUZA O EXCESSO DE ESTÍMULOS | PASSO 3: REGULE A JANELA DE SONO E AS SONECAS (30-60 DIAS) | PASSO 4: COMECE A ESTRUTURAR A ROTINA | UTILIZE A ESTRATÉGIA DO TRAVESSEIRO | RUÍDO BRANCO",
+      "failedCrit": []
+    }
+  ]
+}

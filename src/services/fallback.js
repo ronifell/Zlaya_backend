@@ -144,6 +144,54 @@ export function renderRoute({ route, namespace, retrieval, motherName }) {
  */
 const LESSON_SCENARIO_RULES = [
   {
+    signalIds: ['nap_angry_wake_30_60'],
+    whitelist: [
+      'lesson-refluxo',
+      'lesson-30-60-sinais-sono',
+    ],
+    blacklist: [
+      'lesson-30-60-maus-habitos',
+      'lesson-30-60-passo-1-comportamento',
+      'lesson-30-60-passo-3-janela',
+      'lesson-30-60-passo-4-rotina',
+      'lesson-30-60-caso-cecilia',
+    ],
+  },
+  {
+    signalIds: [
+      'no_mau_habito_30_60',
+      'wake_window_30_60',
+      'nap_angry_wake_30_60',
+      'bottle_volume_30_60',
+      'night_start_19_20_30_60',
+      'vertical_20_30_30_60',
+    ],
+    blacklist: [
+      'lesson-30-60-maus-habitos',
+      'lesson-30-60-caso-cecilia',
+    ],
+  },
+  {
+    signalIds: ['bottle_volume_30_60'],
+    whitelist: ['lesson-30-60-volta-trabalho'],
+    blacklist: [
+      'lesson-30-60-maus-habitos',
+      'lesson-30-60-sono-noturno',
+      'lesson-hora-da-bruxa',
+      'lesson-30-60-passo-1-comportamento',
+      'lesson-30-60-caso-cecilia',
+    ],
+  },
+  {
+    signalIds: ['night_start_19_20_30_60'],
+    whitelist: [
+      'lesson-30-60-passo-4-rotina',
+      'lesson-30-60-passo-3-janela',
+      'lesson-30-60-sono-noturno',
+    ],
+    blacklist: ['lesson-30-60-passo-1-comportamento', 'lesson-30-60-maus-habitos'],
+  },
+  {
     signalIds: ['bath_crying_rn', 'bath_crying_isolated_rn'],
     whitelist: ['lesson-passo-1-ambiente'],
     blacklist: [

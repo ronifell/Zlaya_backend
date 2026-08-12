@@ -1,0 +1,28 @@
+﻿BEBÊ 31 DIAS– TESTE 001
+IDENTIFICAÇÃO
+Número do teste: 30 A 60 DIAS – TESTE 001Data da avaliação oficial: 10/08/2026Faixa etária: 30 a 60 diasIdade informada pela mãe: 31 diasNota anterior: Não se aplicaNota atual: 5,8/10Evolução da nota: Não se aplica
+PERGUNTA DA MÃE – INTEGRAL
+“Ola tudo bem? Meu filho tem 31 dias, sempre fez as sonecas no berço, que duravam cerca de 2 hrs/ 2 hrs e 30. Mas faz 02 dias que ele tem feito uma soneca grande pela manhã e, durante a tarde, as sonecas estão bem curtas. Um ciclo de sono. Ele desperta e eu ate tendo nina-lo no berço, mas ele nao retorna. Depois de 30 minutos ja esta com sono novamente. Outra questao eh que ele demora femais para iniciar a soneca. O ambiente esta ajustado, ele esta alimentado, tudo tranquilo, janela de sono del eh de 1 hr/1 hr 15, quando vai dando este horário, vou para o quarto; coloco ruido, quarto escuro, nino ele no colo e ainda acordado transfiro pro berço. Quando no berço, ele demora muuuito prw relaxar, quase 40/45 minutos. Nao sei como conduzir nesta situação. Faz uns 4,5 dias que esta assim.”
+RESPOSTA DA ZLAYA – INTEGRAL
+“Olá, mãe. É compreensível que você esteja preocupada com as mudanças no padrão de sono do seu filho de 31 dias. É normal que os bebês passem por variações nas sonecas, especialmente nesta faixa etária.
+A principal hipótese aqui é que a mamada noturna pode não estar sendo suficiente ou a produção de leite durante a noite pode estar baixa. Como ele aceita o berço durante o dia, o problema não parece ser a adaptação ao berço. Antes de tentar colocá-lo no berço à noite, pergunte-se: ele mama? Como é essa mamada? Ele parece ficar satisfeito ou continua procurando o peito?
+Além disso, observe se ele está apresentando sinais de saciedade após a mamada e se você está conseguindo mantê-lo em posição vertical por cerca de 30 a 40 minutos após mamar. Isso pode ajudar a evitar desconfortos que atrapalham o sono.
+Para ajudá-lo a relaxar mais rapidamente ao ser colocado no berço, continue utilizando o ruído branco e o ambiente escuro, mas tenha paciência durante a transferência. Se ele demorar a relaxar, isso pode ser um sinal de que ele ainda está se ajustando a essa nova rotina.
+Recomendo que você revise as aulas "Mamadas Efetivas" e "Estimule o Arroto" para garantir que a alimentação está adequada e que ele está confortável após as mamadas.
+Se precisar de mais orientações, estou aqui para ajudar!
+Sinais de saciedade no RN: se mama no peito, observe se solta o peito espontaneamente; se usa fórmula ou mamadeira, observe se reduz o ritmo da sucção e demonstra saciedade após a oferta. Em qualquer forma de alimentação, o bebê relaxa o corpo, abre as mãozinhas, fica tranquilo após a mamada e permanece mais confortável depois de arrotar e de ficar em posição vertical por 30 a 40 minutos. Se ao contrário ele continua agitado, mantém as mãozinhas cerradas e busca o peito ou a oferta novamente em pouco tempo, isso pode indicar que a mamada não foi suficiente ou que houve dificuldade de transferência — se ele mama no peito, ofereça o peito de novo em livre demanda; se usa fórmula ou complemento, avalie volume, intervalo e sinais de saciedade conforme orientação individual. Em qualquer caso, reavalie a produção/transferência no período.”
+AJUSTES NECESSÁRIOS
+A resposta apresenta erro importante de hierarquia.
+A mãe informa que inicia a condução da soneca após 1h–1h15 de vigília e o bebê ainda demora 40–45 minutos para adormecer. Ele pode, portanto, permanecer acordado por aproximadamente 1h40–2h, quando a referência para 30–60 dias é de 45 minutos a 1 hora. Esse deveria ser o principal dado identificado.
+A Zlaya, porém, cria como hipótese principal mamada noturna insuficiente ou baixa produção de leite à noite, embora a queixa seja sobre sonecas diurnas e não exista relato de problema noturno.
+Correções necessárias:
+priorizar os dados objetivos apresentados pela mãe antes de criar hipóteses;
+reconhecer o tempo excessivo de vigília como dado central deste caso;
+não criar hipótese de problema noturno sem elemento que a sustente;
+corrigir a orientação geral de posição vertical para 20–30 minutos; utilizar 30–40 minutos quando houver refluxo ou desconforto claro.
+Hayato- esta foi a resposta humana 
+
+Oi Maria, fraciona a soneca da manhã para um tempo em torno de 1h30-2h, e observa se vai melhorar o padrão de sonecas da tarde. Capricha nas mamadas, caso esteja demorando para dormir e já está no limite do intervalo para mamar, deve amamentar, vai ajudar a relaxar para dormir e manutenção do sono. 
+
+
+

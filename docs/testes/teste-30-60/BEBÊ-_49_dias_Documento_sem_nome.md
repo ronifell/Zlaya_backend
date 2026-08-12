@@ -1,0 +1,25 @@
+﻿30 A 60 DIAS – TESTE 001
+Data da avaliação oficial: 10/08/2026Faixa etária: 30 a 60 diasIdade informada pela mãe: 49 diasNota anterior: Não se aplicaNota atual: 7,8/10Evolução da nota: Não se aplica
+PERGUNTA DA MÃE
+“Meu bebê tem 1 mês e 19 dias, as sonecas duram uma média de 30 min, no máximo, em exceção, chega a durar 1h. No entanto, por vezes ele tem despertares durante as sonecas. Ele usa chupeta. Preciso ajustar algo?”
+RESPOSTA DA ZLAYA
+“É comum que, aos 49 dias, o bebê tenha sonecas curtas, com duração média de 30 minutos. Isso pode ser reflexo de sucção e necessidade de regulação, especialmente considerando que ele usa chupeta.
+Para ajustar isso, observe a rotina dele. As sonecas devem ocorrer em intervalos de aproximadamente 1 hora a 1 hora e 15 minutos. Busque garantir um mínimo de 4 a 5 sonecas por dia, sem deixar que uma soneca ultrapasse 2 horas e 30 minutos. Se ele acordar logo após a chupeta cair, diferencie se é fome real, necessidade de sucção ou desconforto. Se ele continuar dormindo, não é necessário recolocar a chupeta.
+Além disso, mantenha-o em posição vertical por 30 a 40 minutos após as mamadas, o que ajuda a reduzir desconfortos pós-mamada e favorece a transição para o berço.
+Para entender melhor a rotina dele, poderia me informar qual é o intervalo típico entre as sonecas e quantas sonecas ele costuma ter ao longo do dia?
+Recomendo também revisar a aula sobre ‘Sinais de Sono’ para identificar melhor os momentos de conduzir para a soneca.”
+AJUSTES NECESSÁRIOS
+1. Hierarquia incorreta
+A Zlaya relacionou precocemente as sonecas curtas ao uso da chupeta sem evidência de que ela esteja causando os despertares.
+Corrigir para: primeiro investigar como o bebê acorda da soneca — tranquilo, chorando, procurando mamar ou apresentando desconforto. Avaliar alimentação/saciedade e tempo de vigília. Investigar a chupeta somente se houver relação entre sua queda e o despertar.
+2. Tempo de vigília incorreto
+A resposta orientou 1h a 1h15.
+Corrigir para: na faixa de 30 a 60 dias, utilizar como referência 45 minutos a 1 hora.
+3. Número de sonecas
+Retirar a orientação de garantir “mínimo de 4 a 5 sonecas por dia”. O número de sonecas pode variar conforme a duração delas e a organização do dia.
+4. Posição vertical
+A resposta orientou 30 a 40 minutos após todas as mamadas.
+Corrigir para: utilizar como referência geral 20 a 30 minutos. Orientar 30 a 40 minutos quando houver refluxo ou desconforto claro.
+HIERARQUIA ESPERADA
+Soneca curta pode ocorrer nessa idade → observar como o bebê desperta → investigar alimentação/saciedade quando pertinente → investigar desconforto → verificar vigília de 45 minutos a 1 hora → avaliar a participação da chupeta somente se houver relação com o despertar.
+

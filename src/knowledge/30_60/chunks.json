@@ -6,91 +6,174 @@
       "id": "30-60-chunk-comportamento-sono",
       "namespace": "30_60",
       "theme": "comportamento_sono_30_60",
-      "intent": ["comportamento_esperado", "rotina", "dificuldade_para_dormir"],
+      "intent": [
+        "comportamento_esperado",
+        "rotina",
+        "dificuldade_para_dormir"
+      ],
       "ageBand": "30_60",
-      "ageRangeDays": [29, 60],
+      "ageRangeDays": [
+        29,
+        60
+      ],
       "safetyLevel": "verde",
       "contentType": "orientacao_inicial",
       "allowedAction": "explicar a transição desta faixa: mais objetividade nos ensinamentos, rotina mais estruturada, e que nem todo padrão de despertar no berço é mau hábito ainda",
       "blockedAction": "aplicar condutas avançadas de RN (livre demanda sem estrutura) como se ainda fossem a prioridade única; concluir mau hábito sem investigar situações adversas",
-      "relatedLessons": ["lesson-30-60-passo-1-comportamento"],
-      "contraindications": ["pular a investigação de estímulos, janela e alimentação e ir direto para 'mau hábito'"],
-      "askIfMissing": ["idade exata em dias", "como é o padrão mama–dorme–berço", "se módulos 3 e 4 já foram assistidos"],
+      "relatedLessons": [
+        "lesson-30-60-passo-1-comportamento"
+      ],
+      "contraindications": [
+        "pular a investigação de estímulos, janela e alimentação e ir direto para 'mau hábito'"
+      ],
+      "askIfMissing": [
+        "idade exata em dias",
+        "como é o padrão mama–dorme–berço",
+        "se módulos 3 e 4 já foram assistidos"
+      ],
       "text": "Entre 30 e 60 dias, o bebê já demonstra mais ritmo, interage mais, olha e até sorri. Nos primeiros 30 dias a prioridade era livre demanda e aproveitar o bebê; a partir desta faixa já é possível ser mais objetiva nos ensinamentos e na condução, respeitando as dificuldades da idade. Mama com mais efetividade e a rotina pode ficar mais estruturada. Importante: um bebê que mama, dorme, é colocado no berço e desperta — exigindo repetir isso várias vezes — PODE ainda NÃO ser mau hábito. Podem ser situações adversas afetando o sono (excesso de estímulos, janela perdida, rotina desorganizada, alimentação do dia, refluxo oculto/APLV perto dos 60 dias). Esta faixa pressupõe os módulos 3 e 4; se a mãe pulou, oriente a revisá-los."
     },
     {
       "id": "30-60-chunk-excesso-estimulos",
       "namespace": "30_60",
       "theme": "excesso_estimulos",
-      "intent": ["choro_excessivo", "sonecas_curtas", "ambiente", "desconforto_fisiologico"],
+      "intent": [
+        "choro_excessivo",
+        "sonecas_curtas",
+        "ambiente",
+        "desconforto_fisiologico"
+      ],
       "ageBand": "30_60",
-      "ageRangeDays": [29, 60],
+      "ageRangeDays": [
+        29,
+        60
+      ],
       "safetyLevel": "verde",
       "contentType": "hierarquia_investigacao",
       "allowedAction": "conduzir redução de estímulos e contenção em uma posição; diferenciar crise de choro de cólica",
       "blockedAction": "atribuir automaticamente a cólica; orientar vários colos e mudanças constantes de posição",
-      "relatedLessons": ["lesson-30-60-passo-2-estimulos", "lesson-ruido-branco"],
-      "contraindications": ["usar cólica como explicação automática"],
-      "askIfMissing": ["o que a família fez para acalmar", "quantos adultos pegaram o bebê", "exposição a TV/celular/saídas", "tempo acordado antes do choro", "ambiente (luz, movimento)"],
+      "relatedLessons": [
+        "lesson-30-60-passo-2-estimulos",
+        "lesson-ruido-branco"
+      ],
+      "contraindications": [
+        "usar cólica como explicação automática"
+      ],
+      "askIfMissing": [
+        "o que a família fez para acalmar",
+        "quantos adultos pegaram o bebê",
+        "exposição a TV/celular/saídas",
+        "tempo acordado antes do choro",
+        "ambiente (luz, movimento)"
+      ],
       "text": "Excesso de estímulos é causa frequente de muito choro e influência negativa nas sonecas entre 30 e 60 dias. Antes de qualquer conclusão: revisar fralda, temperatura (calor/frio), cansaço/estresse, luz, se é hora de ir ao quarto e afastar do movimento. Como o bebê já interage, olha e sorri, NÃO exagerar na interação — excesso cansa e irrita. Se está calmo e quieto, evitar colo/fala o tempo todo: é nesse momento de calmaria que ele aprende a ficar no carrinho, cadeirinha ou berço. Principais estressores: televisão, celular, muito movimento e vários colos com mudanças constantes de posição (mãe → pai → avó). Isso aumenta irritabilidade e muitas vezes é confundido com cólica — cólicas reais são cerca de 1 a 3%. Saídas (consulta, casa da vovó) também irritam: ao chegar, banho relaxante + mamá/mamadeira quietinha no quarto reduz estímulos e cessa a crise."
     },
     {
       "id": "30-60-chunk-acalmar-uma-posicao",
       "namespace": "30_60",
       "theme": "acalmar_uma_posicao",
-      "intent": ["choro_excessivo", "dificuldade_para_dormir"],
+      "intent": [
+        "choro_excessivo",
+        "dificuldade_para_dormir"
+      ],
       "ageBand": "30_60",
-      "ageRangeDays": [29, 60],
+      "ageRangeDays": [
+        29,
+        60
+      ],
       "safetyLevel": "verde",
       "contentType": "conduta_pratica_oficial",
-      "allowedAction": "orientar contenção em uma posição por 5–10 minutos, ruído branco, banho morno e passagem a cuidador mais calmo se necessário",
-      "blockedAction": "mudar o bebê de posição a cada poucos segundos; deixar chorar sozinho",
-      "relatedLessons": ["lesson-30-60-passo-2-estimulos", "lesson-ruido-branco"],
-      "askIfMissing": ["há quanto tempo a crise dura", "quantas vezes mudou de posição/colo", "a mãe está exausta/impaciente"],
-      "text": "Quando o bebê de 30–60 dias está muito irritado: (1) evite vários colos; (2) NÃO mude de posição a cada 30 segundos; (3) segure em UMA posição firme, passando controle e segurança; (4) aguarde 5 a 10 minutos para ele se acalmar — quanto mais mexer, mais dificuldade de concentrar e relaxar; (5) use ruído branco; (6) se a mãe estiver cansada e impaciente, passe o bebê para alguém mais calmo; (7) banho morno e relaxante. Crises de choro são normais e nem sempre são cólicas. Manter-se calma e paciente: o choro passa. Esta conduta NÃO é deixar chorar sozinho — é presença com contenção estável."
+      "allowedAction": "orientar uma posicao firme, ruido branco, banho morno; sem cronometrar choro",
+      "blockedAction": "mudar de posicao a cada poucos segundos; deixar chorar sozinho; fixar 5-10 min como regra",
+      "relatedLessons": [
+        "lesson-30-60-passo-2-estimulos",
+        "lesson-ruido-branco"
+      ],
+      "askIfMissing": [
+        "o que a familia fez para acalmar",
+        "quantos colos/mudancas de posicao"
+      ],
+      "text": "Quando o bebe de 30-60 dias esta muito irritado: evite varios colos; NAO mude de posicao a cada poucos segundos; segure em UMA posicao firme, passando controle e seguranca; observe a resposta do bebe sem cronometrar o choro; use ruido branco; se a mae estiver impaciente, passe para alguem mais calmo; banho morno pode ajudar apos saidas/estimulacao. Crises de choro sao comuns e nem sempre sao colicas (colicas reais ~1 a 3%). Isso NAO e deixar chorar sozinho."
     },
     {
       "id": "30-60-chunk-janela-sono-sonecas",
       "namespace": "30_60",
       "theme": "janela_sono_sonecas",
-      "intent": ["sonecas_curtas", "rotina", "dificuldade_manutencao_sono"],
+      "intent": [
+        "sonecas_curtas",
+        "rotina",
+        "dificuldade_manutencao_sono"
+      ],
       "ageBand": "30_60",
-      "ageRangeDays": [29, 60],
+      "ageRangeDays": [
+        29,
+        60
+      ],
       "safetyLevel": "verde",
       "contentType": "regra_fixa",
-      "allowedAction": "orientar janela de ~1h a 1h15, mínimo de 4–5 sonecas, teto de 2h–2h30 por soneca",
-      "blockedAction": "impor duração fixa de soneca; deixar soneca passar regularmente de 2h30",
-      "relatedLessons": ["lesson-30-60-passo-3-janela", "lesson-30-60-sinais-sono"],
-      "askIfMissing": ["intervalo típico entre sonecas", "quantidade de sonecas no dia", "duração de cada soneca", "qualidade do sono noturno"],
-      "text": "Entre 30 e 60 dias (padrão que se mantém até cerca do início do terceiro mês / 90 dias), as sonecas acontecem com intervalo de cerca de 1 hora a 1 hora e 15 minutos. Não tente determinar o tempo exato de cada soneca — cada bebê tem seu padrão. Busque um mínimo de 4 a 5 sonecas, que é o padrão nesta idade. Se as sonecas estiverem muito curtas (~até 20 minutos), observe a rotina (aula seguinte do módulo). Equilíbrio dia/noite: se dorme muito bem à noite, sonecas diurnas podem ser em menor quantidade ou mais curtas; se dorme muito de dia, pode faltar sono à noite. NUNCA deixe uma soneca passar de 2 horas a no máximo 2 horas e 30 minutos nesta idade."
+      "allowedAction": "orientar janela de vigilia 45min a 1h (ate 1h15); nao impor numero minimo de sonecas; teto 2h-2h30 por soneca",
+      "blockedAction": "impor minimo de 4-5 sonecas; dizer que a janela e apenas 1h-1h15; classificar soneca de 1h como curta",
+      "relatedLessons": [
+        "lesson-30-60-passo-3-janela",
+        "lesson-30-60-sinais-sono"
+      ],
+      "askIfMissing": [
+        "intervalo tipico entre sonecas / tempo acordado",
+        "duracao tipica de cada soneca",
+        "qualidade do sono noturno"
+      ],
+      "text": "Entre 30 e 60 dias, a janela de vigilia / tempo acordado de referencia e de 45 minutos a 1 hora, podendo chegar a 1 hora e 15 minutos. Nao tente determinar o tempo exato de cada soneca — cada bebe tem seu padrao. O NUMERO de sonecas varia conforme a duracao delas e a organizacao do dia; NAO imponha um minimo de 4 a 5 sonecas. Equilibrio dia/noite: se dorme muito bem a noite, sonecas diurnas podem ser em menor quantidade ou mais curtas; se dorme muito de dia, pode faltar sono a noite. NUNCA deixe uma soneca passar de 2 horas a no maximo 2 horas e 30 minutos nesta idade. Soneca de cerca de 1 hora (ou mais) NAO deve ser chamada de soneca curta."
     },
     {
       "id": "30-60-chunk-rotina-janelas",
       "namespace": "30_60",
       "theme": "rotina_estruturada",
-      "intent": ["rotina", "sonecas_curtas", "dificuldade_para_dormir"],
+      "intent": [
+        "rotina",
+        "sonecas_curtas",
+        "dificuldade_para_dormir"
+      ],
       "ageBand": "30_60",
-      "ageRangeDays": [29, 60],
+      "ageRangeDays": [
+        29,
+        60
+      ],
       "safetyLevel": "verde",
       "contentType": "orientacao_pratica",
-      "allowedAction": "ensinar rotina por janelas (não horários fixos de relógio) a partir do despertar matinal",
-      "blockedAction": "impor horários de relógio rígidos; manter acordado muito além de ~1h sem tentar soneca",
-      "relatedLessons": ["lesson-30-60-passo-4-rotina", "lesson-30-60-passo-3-janela"],
-      "askIfMissing": ["que horas o dia começa (primeiro despertar)", "intervalo aproximado entre mamadas", "se tenta conduzir para soneca na janela"],
-      "text": "De 30 a 60 dias já é possível identificar o ritmo e ter rotina mais estruturada. Rotina NÃO são horários fixos de relógio — são INTERVALOS/JANELAS. A rotina começa quando o bebê acorda pela manhã e segue as janelas. Exemplo: acorda → mama; sabendo que a janela de mamada é ~2h, sabe quando mamar de novo; sabendo que a janela de sono é ~1h a 1h15, observa sinais de sono e tempo acordado e conduz para a soneca; ao acordar, nova janela acordado → mama → ao fim da janela de sono, dorme de novo — até o período noturno. Se com 30–60 dias mantém acordado por mais de ~1h sem levar para dormir, entra em hiperestimulação e perda da janela (excesso de estímulos) — aí 'não tem milagre'. Sempre tente as sonecas, mesmo que em alguns dias/horários não aconteçam; quando o sono voltar, coloque para dormir."
+      "allowedAction": "ensinar rotina por janelas com vigilia 45min-1h (ate 1h15)",
+      "blockedAction": "impor horarios de relogio rigidos; manter acordado muito alem da janela",
+      "relatedLessons": [
+        "lesson-30-60-passo-4-rotina",
+        "lesson-30-60-passo-3-janela"
+      ],
+      "askIfMissing": [
+        "que horas o dia comeca",
+        "intervalo aproximado entre mamadas",
+        "tempo acordado antes das sonecas"
+      ],
+      "text": "De 30 a 60 dias ja e possivel identificar o ritmo e ter rotina mais estruturada. Rotina NAO sao horarios fixos de relogio — sao INTERVALOS/JANELAS. A rotina comeca quando o bebe acorda pela manha. Sabendo que a janela de mamada e ~2h e a janela de vigilia e 45 minutos a 1 hora (podendo chegar a 1h15), observe sinais de sono e conduza para a soneca. Se o bebe permanece acordado muito alem dessa faixa sem conducao para dormir, entra em hiperestimulacao e perda da janela."
     },
     {
       "id": "30-60-chunk-sono-noturno",
       "namespace": "30_60",
       "theme": "sono_noturno_30_60",
-      "intent": ["despertares_noturnos", "mamadas", "comportamento_esperado"],
+      "intent": [
+        "despertares_noturnos",
+        "mamadas",
+        "comportamento_esperado"
+      ],
       "ageBand": "30_60",
-      "ageRangeDays": [29, 60],
+      "ageRangeDays": [
+        29,
+        60
+      ],
       "safetyLevel": "verde",
       "contentType": "regra_fixa",
       "allowedAction": "orientar primeiro intervalo de 3–4h, não acordar se saudável/ganhando peso, e tentar reassentar sem mamar se acordar antes de 3h",
       "blockedAction": "acordar bebê saudável só para mamar; oferecer peito automaticamente em todo microdespertar; afirmar que todo despertar é fome",
-      "relatedLessons": ["lesson-30-60-sono-noturno"],
+      "relatedLessons": [
+        "lesson-30-60-sono-noturno"
+      ],
       "askIfMissing": [
         "quanto tempo durou o primeiro sono da noite",
         "quando acorda antes de 3h, você oferece peito/mamadeira automaticamente?",
@@ -103,155 +186,502 @@
       "id": "30-60-chunk-refluxo-oculto-aplv-60d",
       "namespace": "30_60",
       "theme": "refluxo_oculto_aplv_60d",
-      "intent": ["refluxo", "risco_clinico", "desconforto_fisiologico"],
+      "intent": [
+        "refluxo",
+        "risco_clinico",
+        "desconforto_fisiologico"
+      ],
       "ageBand": "30_60",
-      "ageRangeDays": [29, 60],
+      "ageRangeDays": [
+        29,
+        60
+      ],
       "safetyLevel": "amarelo",
       "contentType": "regra_de_seguranca",
       "allowedAction": "alertar para observar refluxo oculto e APLV perto dos 60 dias; encaminhar aulas do módulo 3 e suporte/pediatra sem diagnosticar",
       "blockedAction": "diagnosticar refluxo patológico ou APLV",
-      "relatedLessons": ["lesson-refluxo", "lesson-aplv"],
-      "escalateTo": ["pediatricianBonus", "humanSupport", "familyPediatrician"],
-      "askIfMissing": ["idade aproximada (perto dos 60 dias?)", "sinais de desconforto sem vômito", "ganho de peso", "irritabilidade persistente", "padrão de fezes/sangue"],
+      "relatedLessons": [
+        "lesson-refluxo",
+        "lesson-aplv"
+      ],
+      "escalateTo": [
+        "pediatricianBonus",
+        "humanSupport",
+        "familyPediatrician"
+      ],
+      "askIfMissing": [
+        "idade aproximada (perto dos 60 dias?)",
+        "sinais de desconforto sem vômito",
+        "ganho de peso",
+        "irritabilidade persistente",
+        "padrão de fezes/sangue"
+      ],
       "text": "Dica do Módulo 5: ao completar cerca de 60 dias, observar se aparecem sintomas de REFLUXO OCULTO (aquele que aparece sem vômito) e de APLV. A Zlaya NÃO diagnostica. Oriente a mãe a rever a aula de refluxo e APLV do módulo 3. Diante de sinais persistentes (sofrimento, baixo ganho, irritabilidade importante, sangue nas fezes, etc.), encaminhar para o material do pediatra Roberto Franklin nas aulas extras/bônus, suporte humano e/ou pediatra da família."
     },
     {
       "id": "30-60-chunk-sinais-de-sono",
       "namespace": "30_60",
       "theme": "sinais_de_sono_30_60",
-      "intent": ["dificuldade_para_dormir", "rotina", "comportamento_esperado"],
+      "intent": [
+        "dificuldade_para_dormir",
+        "rotina",
+        "comportamento_esperado"
+      ],
       "ageBand": "30_60",
-      "ageRangeDays": [29, 60],
+      "ageRangeDays": [
+        29,
+        60
+      ],
       "safetyLevel": "verde",
       "contentType": "explicacao_fisiologica",
       "allowedAction": "ensinar a reconhecer sinais de sono, incluindo agitação/riso como possível sinal",
       "blockedAction": "esperar só 'cara de sono clássica' e manter acordado quando já há sinais",
-      "relatedLessons": ["lesson-30-60-sinais-sono", "lesson-30-60-passo-3-janela"],
-      "askIfMissing": ["quais sinais a mãe já identifica", "o que faz quando o bebê fica agitado/risonho no fim da janela"],
+      "relatedLessons": [
+        "lesson-30-60-sinais-sono",
+        "lesson-30-60-passo-3-janela"
+      ],
+      "askIfMissing": [
+        "quais sinais a mãe já identifica",
+        "o que faz quando o bebê fica agitado/risonho no fim da janela"
+      ],
       "text": "Cada bebê tem sinais de sono próprios, juntos ou separados: olharzinho parado, olhinho vidrado/muito brilhante, mais agitado ou mais frustrado, esfregar os olhos com as mãozinhas, chorar ou resmungar. ATENÇÃO: muitas vezes o bebê está agitado, risonho, muito desperto e a mãe acredita que por isso ele NÃO vai dormir — e é exatamente aí que precisa ir para o berço, porque isso TAMBÉM é sinal de sono. Ao perceber esses sinais nesta idade (já deve identificá-los melhor), prepare-se para colocar o bebê para dormir."
     },
     {
       "id": "30-60-chunk-espremedeira",
       "namespace": "30_60",
       "theme": "espremedeira",
-      "intent": ["despertares_noturnos", "comportamento_esperado", "desconforto_fisiologico"],
+      "intent": [
+        "despertares_noturnos",
+        "comportamento_esperado",
+        "desconforto_fisiologico"
+      ],
       "ageBand": "30_60",
-      "ageRangeDays": [29, 60],
+      "ageRangeDays": [
+        29,
+        60
+      ],
       "safetyLevel": "amarelo",
       "contentType": "explicacao_fisiologica",
       "allowedAction": "diferenciar espremedeira de comportamento vs possível disquesia; orientar distanciamento noturno sem diagnosticar",
       "blockedAction": "tratar grunhidos sem choro como cólica/dor; diagnosticar disquesia ou problema neurológico",
-      "relatedLessons": ["lesson-30-60-espremedeira"],
-      "askIfMissing": ["há choro ou dor aparente?", "ocorre sobretudo à noite?", "olhos abertos ou fechados?", "piora ao longo dos dias?"],
+      "relatedLessons": [
+        "lesson-30-60-espremedeira"
+      ],
+      "askIfMissing": [
+        "há choro ou dor aparente?",
+        "ocorre sobretudo à noite?",
+        "olhos abertos ou fechados?",
+        "piora ao longo dos dias?"
+      ],
       "text": "Espremedeira aparece por volta dos 40 dias até cerca dos 90 dias. O bebê dorme bem, mas faz grunhidos como se estivesse se espremendo: não chora, não apresenta dor aparente, mantém os olhinhos fechados, se espreme, resmunga e geme enquanto dorme. Não há explicação única. Mantenha-o um pouco afastado da cama dos pais para a mãe conseguir dormir e não interagir o tempo todo. Dois tipos: (1) ESPREMEDEIRA DE COMPORTAMENTO — sem choro/sofrimento, em geral à noite, tende a desaparecer entre 30 e 60 dias no curso desse quadro; (2) ESPREMEDEIRA POR DISQUESIA (imaturidade intestinal) — pode ocorrer em qualquer período e pode piorar; a diferença é o choro/desconforto — nesse caso procurar o pediatra. A IA não diagnostica."
     },
     {
       "id": "30-60-chunk-volta-trabalho-mamadeira",
       "namespace": "30_60",
       "theme": "volta_trabalho_mamadeira",
-      "intent": ["mamadas", "rotina", "fora_da_base"],
+      "intent": [
+        "mamadas",
+        "rotina",
+        "fora_da_base"
+      ],
       "ageBand": "30_60",
-      "ageRangeDays": [29, 60],
+      "ageRangeDays": [
+        29,
+        60
+      ],
       "safetyLevel": "verde",
       "contentType": "orientacao_pratica",
       "allowedAction": "orientar introdução de uma mamadeira de aprendizado até ~2,5 meses conforme regime de trabalho",
       "blockedAction": "afirmar que uma mamadeira de aprendizado causa desmame/confusão de bico; indicar copinho/colher dosadora como via principal para cuidador leigo",
-      "relatedLessons": ["lesson-30-60-volta-trabalho", "lesson-hora-da-bruxa"],
-      "askIfMissing": ["previsão de retorno ao trabalho", "regime (integral/meio período)", "possibilidade de ordenha no trabalho", "bebê já aceita mamadeira?", "alimentação atual"],
-      "text": "Se a mãe voltará ao trabalho, pense JÁ aos ~2 meses como o bebê se alimentaria. Informação de ouro: introduza UMA mamadeira e adapte peito + mamadeira. É mais fácil até cerca de 2 meses e meio; depois fica bem mais difícil. Uma mamadeira só de aprendizado NÃO causa desmame nem confusão de bico. Preferência: oferecer na primeira mamada da noite e manter peito na mamada da madrugada (pico de prolactina até ~3 meses); ou no final da tarde, quando a produção costuma cair (ver Hora da Bruxa, módulo 3). Trabalho integral COM ordenha: ordenhar no trabalho, guardar em geladeira, manter estoque e estímulo de produção. SEM poder ordenhar: uma mamadeira de fórmula por dia para aprender a sugar e acostumar ao sabor; peito de manhã e ao voltar. Meio período: peito antes de sair + leite materno suficiente até voltar. Desmame em geral quando >60% das mamadas são na mamadeira. Copinho é para primeiros dias / profissional treinado (máx. ~1,5–2 meses); colher dosadora não atende sucção e derrama leite. Quando não for possível leite materno, o substituto ideal é fórmula — e a melhor via é a mamadeira (sucção, aconchego, contato visual)."
+      "relatedLessons": [
+        "lesson-30-60-volta-trabalho"
+      ],
+      "askIfMissing": [
+        "previsão de retorno ao trabalho",
+        "regime (integral/meio período)",
+        "possibilidade de ordenha no trabalho",
+        "bebê já aceita mamadeira?",
+        "alimentação atual"
+      ],
+      "text": "Se a mãe voltará ao trabalho, pense JÁ aos ~2 meses como o bebê se alimentaria. Informação de ouro: introduza UMA mamadeira e adapte peito + mamadeira. É mais fácil até cerca de 2 meses e meio; depois fica bem mais difícil. Uma mamadeira só de aprendizado NÃO causa desmame nem confusão de bico. Preferência: oferecer na primeira mamada da noite e manter peito na mamada da madrugada (pico de prolactina até ~3 meses); ou no final da tarde, quando a produção costuma cair (ver Hora da Bruxa, módulo 3). Trabalho integral COM ordenha: ordenhar no trabalho, guardar em geladeira, manter estoque e estímulo de produção. SEM poder ordenhar: uma mamadeira de fórmula por dia para aprender a sugar e acostumar ao sabor; peito de manhã e ao voltar. Meio período: peito antes de sair + leite materno suficiente até voltar. Desmame em geral quando >60% das mamadas são na mamadeira. Copinho é para primeiros dias / profissional treinado (máx. ~1,5–2 meses); colher dosadora não atende sucção e derrama leite. Quando não for possível leite materno, o substituto ideal é fórmula — e a melhor via é a mamadeira (sucção, aconchego, contato visual). Volume de referencia da mamadeira de aprendizado por volta dos 40 dias: 90 a 120 ml, observando alimentacao e resposta do bebe."
     },
     {
       "id": "30-60-chunk-maus-habitos-geral",
       "namespace": "30_60",
-      "theme": "maus_habitos_sono",
-      "intent": ["associacao_comportamental", "dificuldade_para_dormir", "adaptacao_ao_berco"],
+      "theme": "conducao_sem_rotulo_habito",
+      "intent": [
+        "dificuldade_para_dormir",
+        "adaptacao_ao_berco"
+      ],
       "ageBand": "30_60",
-      "ageRangeDays": [29, 60],
-      "safetyLevel": "verde",
+      "ageRangeDays": [
+        29,
+        60
+      ],
+      "safetyLevel": "amarelo",
       "contentType": "orientacao_inicial",
-      "allowedAction": "reconhecer que nesta faixa já podem existir maus hábitos e que a correção é não repetir o comportamento indesejado, com paciência/persistência/consistência",
-      "blockedAction": "deixar chorar sozinho; rotular como manha/manipulação; aplicar extinção",
-      "relatedLessons": ["lesson-30-60-maus-habitos", "lesson-30-60-caso-cecilia"],
-      "contraindications": ["concluir mau hábito sem excluir estímulos/janela/alimentação quando o quadro for recente e inespecífico"],
-      "askIfMissing": ["como o bebê adormece hoje", "há quanto tempo esse padrão existe", "o que acontece sem o recurso habitual"],
-      "text": "Pode acontecer de um bebê perto dos 60 dias já demonstrar maus hábitos para dormir: ser balançado, só dormir se a mãe estiver em pé, dormir embalado na bola de pilates, entre outros. Nesta idade a memória é curta — é relativamente fácil mudar. Corrigir maus hábitos = não repetir aquilo que você não quer que continue. A única forma de mudar um comportamento aprendido é não fazer mais aquele comportamento. Vai chorar? Pode chorar — com a mãe presente, em contenção. Pacência, persistência e consistência: a paciência NÃO é para suportar o que está errado; é a paciência para MUDAR o que está errado, suportando o choro até o bebê aprender o que você está ensinando. Todos mudam de comportamento com essa tríade. Isto NÃO é treinamento de sono por extinção nem deixar chorar sozinho."
+      "allowedAction": "explicar que de 0 a 3 meses nao se classifica mau habito; conduzir investigacao",
+      "blockedAction": "usar o termo mau habito como diagnostico do caso",
+      "relatedLessons": [
+        "lesson-30-60-passo-3-janela",
+        "lesson-travesseiro"
+      ],
+      "contraindications": [
+        "rotular colo/peito/chupeta/balanco como mau habito nesta faixa"
+      ],
+      "askIfMissing": [
+        "tempo de vigilia",
+        "padrao alimentar",
+        "como adormece hoje"
+      ],
+      "text": "Na faixa de 0 a 3 meses (incluindo 30-60 dias), o Metodo Eliana Dias NAO classifica o comportamento do bebe como mau habito. Dificuldade para dormir no berco, dormir no colo/peito ou usar chupeta devem ser lidas primeiro por vigilia, alimentacao/saciedade, desconforto e conducao — nunca como rotulo de mau habito. Reserve leituras comportamentais avancadas para fora desta faixa etaria e somente apos esgotar a hierarquia fisiologica/metodologica."
     },
     {
       "id": "30-60-chunk-corrigir-balanco",
       "namespace": "30_60",
-      "theme": "habito_balanco",
-      "intent": ["associacao_comportamental", "dificuldade_para_dormir", "adaptacao_ao_berco"],
+      "theme": "conducao_com_contencao",
+      "intent": [
+        "dificuldade_para_dormir",
+        "adaptacao_ao_berco"
+      ],
       "ageBand": "30_60",
-      "ageRangeDays": [29, 60],
+      "ageRangeDays": [
+        29,
+        60
+      ],
       "safetyLevel": "verde",
       "contentType": "conduta_pratica_oficial",
-      "allowedAction": "orientar contenção sentada, uma posição ~10 min, ruído branco, espera 5–10 min dormindo e transferência travesseiro/berço",
-      "blockedAction": "continuar balançando/andando como solução; deixar chorar sozinho no berço",
-      "relatedLessons": ["lesson-30-60-maus-habitos", "lesson-travesseiro", "lesson-ruido-branco"],
-      "askIfMissing": ["o bebê só dorme balançando/andando/em pé/bola?", "já tentou sentar com contenção?", "como é a transferência para o berço"],
-      "text": "Tirar hábito de dormir balançando: escolha onde vai SENTAR com o bebê; mantenha no colo com CONTENÇÃO (segurar de maneira firme, aconchegado pertinho). Tenha paciência com o choro; NÃO fique mudando de posição; espere acalmar. Em geral o tempo de choro é cerca de 10 minutos para depois começar a se acalmar. Pode usar ruído branco e tapinha no bumbum. Quando dormir: (opção A) aguardar 5 a 10 minutos e transferir para o travesseiro como ensinado no módulo 6; com mais ~10 minutos, levar ao berço. (opção B) após ~10 minutos dormindo, transferir diretamente para o berço. No berço: se dorme bem de barriga para cima, coloque de barriga para cima; se de ladinho, pode de ladinho — alternar posições nas sonecas ajuda a evitar assimetria craniana. Paninho entre as pernas pode alinhar a coluna e dar sensação de segurança, se o bebê se adaptar."
+      "allowedAction": "orientar contencao e transferencia sem cronometrar choro e sem rotulo de mau habito",
+      "blockedAction": "dizer que o choro dura cerca de 10 minutos; chamar de mau habito",
+      "relatedLessons": [
+        "lesson-travesseiro",
+        "lesson-ruido-branco"
+      ],
+      "askIfMissing": [
+        "como o bebe adormece hoje",
+        "tempo de vigilia",
+        "ja usa Travesseiro?"
+      ],
+      "text": "Quando o bebe de 30-60 dias precisa de balanco ou muita movimentacao para dormir, a conducao metodologica usa contencao firme, uma posicao estavel, ruido branco se util, e paciencia com a resposta do bebe — SEM estabelecer tempo fixo de choro. Quando adormecer, aguarde consolidar o sono antes de transferir (travesseiro conforme modulo 6, se aplicavel, ou berco). Alternar posicoes no berco ajuda a evitar assimetria. Isso NAO e classificacao de mau habito; e conducao respeitando a faixa etaria."
     },
     {
       "id": "30-60-chunk-corrigir-dormir-peito",
       "namespace": "30_60",
-      "theme": "habito_dormir_peito",
-      "intent": ["associacao_comportamental", "mamadas", "dificuldade_para_dormir"],
+      "theme": "peito_e_adormecer",
+      "intent": [
+        "mamadas",
+        "dificuldade_para_dormir"
+      ],
       "ageBand": "30_60",
-      "ageRangeDays": [29, 60],
+      "ageRangeDays": [
+        29,
+        60
+      ],
       "safetyLevel": "verde",
       "contentType": "conduta_pratica_oficial",
-      "allowedAction": "orientar retirar do peito após alimentação efetiva (~20 min com boa produção), manter contenção e não reforçar sucção indefinida para dormir",
-      "blockedAction": "interpretar como carência afetiva; deixar chorar sozinho; cortar mamadas necessárias",
-      "relatedLessons": ["lesson-30-60-maus-habitos"],
-      "askIfMissing": ["quanto tempo mama até dormir", "após ~20 min ainda está retirando leite ou só conforto?", "produção materna percebida"],
-      "text": "Bebê que só dorme se ficar no peito: costuma ser hábito ligado ao reflexo de sucção (mamar sem retirar leite), NÃO a carência afetiva ou necessidade emocional. Em geral o reflexo de sucção se satisfaz no peito, na mamadeira ou no dedo. Com boa produção, em cerca de 20 minutos o bebê estará alimentado. Tire-o do peito, mantenha a contenção no colo, tenha paciência para que volte a dormir e interrompa o hábito de dormir sugando o peito indefinidamente. É pouco provável um bebê manter o hábito de sugar mamadeira vazia depois de dormir — porque a mãe retira a mamadeira ao terminar. O que cria o comportamento do bebê é o comportamento da mãe. Ao interromper deixar o filho dormindo no peito, ele pode chorar algumas vezes; com paciência, persistência e consistência, em 2 a 3 dias costuma esquecer o hábito."
+      "allowedAction": "verificar mamada efetiva e saciedade antes de qualquer leitura de adormecer no peito",
+      "blockedAction": "chamar de mau habito; ignorar fome/saciedade",
+      "relatedLessons": [
+        "lesson-30-60-passo-3-janela"
+      ],
+      "askIfMissing": [
+        "ha mamada efetiva (retirada de leite) ou so succao de conforto?",
+        "sinais de saciedade?",
+        "tempo de vigilia?"
+      ],
+      "text": "Se o bebe parece so dormir no peito: ANTES de qualquer leitura comportamental, verifique se ha mamada efetiva e sinais de saciedade. Com boa producao, cerca de 20 minutos costumam alimentar quando ha retirada efetiva. Se apos alimentar ainda permanece sugando apenas por conforto, pode-se interromper com contencao e conduzir o sono — sem rotular como mau habito nesta faixa (0 a 3 meses)."
     },
     {
       "id": "30-60-chunk-caso-cecilia",
       "namespace": "30_60",
-      "theme": "caso_cecilia_maus_habitos_extremos",
-      "intent": ["associacao_comportamental", "dificuldade_para_dormir", "adaptacao_ao_berco"],
+      "theme": "caso_extremo_conducao",
+      "intent": [
+        "dificuldade_para_dormir",
+        "adaptacao_ao_berco"
+      ],
       "ageBand": "30_60",
-      "ageRangeDays": [29, 60],
+      "ageRangeDays": [
+        29,
+        60
+      ],
       "safetyLevel": "amarelo",
       "contentType": "orientacao_pratica",
-      "allowedAction": "usar o caso como ilustração de que hábitos extremos aos ~2 meses são aprendidos e reversíveis com contenção/consistência — sem sugerir problema neurológico",
-      "blockedAction": "sugerir problema neurológico; assustar a mãe; deixar chorar sozinho",
-      "relatedLessons": ["lesson-30-60-caso-cecilia", "lesson-30-60-maus-habitos"],
-      "escalateTo": ["humanSupport"],
-      "askIfMissing": ["o hábito exige balanço forte / rede / andar / posição específica?", "há quanto tempo?", "a família já tentou contenção sentada?"],
-      "text": "O Caso Cecília (Módulo 5) ilustra um extremo aos ~2 meses: só dormia balançando forte na rede em pé nos braços do pai, e depois no ombro andando pela casa. Pais médicos temiam problema neurológico; a mãe estava exausta. Não havia refluxo nem doença — eram maus hábitos + temperamento irritável. A correção: sentar com contenção, ruído branco, paciência com o choro/esperneio, fazer dormir no colo e depois no berço; em poucos dias de consultoria as sonecas voltaram (~40 min) e o intervalo de jejum noturno normalizou para a idade. Lição: mesmo em comportamento extremo, a mudança vem de NÃO repetir o hábito aprendido, com paciência, persistência e consistência. O mesmo vale para bola de pilates desde o nascimento. Em casos extremos ou família muito abalada, encaminhar suporte humano."
+      "allowedAction": "ilustrar que padroes extremos sao aprendidos e reversiveis com conducao consistente, sem rotulo mau habito",
+      "blockedAction": "sugerir problema neurologico; deixar chorar sozinho; usar mau habito como rotulo automatico",
+      "relatedLessons": [
+        "lesson-30-60-passo-3-janela",
+        "lesson-travesseiro"
+      ],
+      "escalateTo": [
+        "humanSupport"
+      ],
+      "askIfMissing": [
+        "o padrao exige balanco forte/rede/andar?",
+        "ha quanto tempo?",
+        "vigilia e alimentacao estao organizadas?"
+      ],
+      "text": "O Caso Cecilia ilustra um extremo por volta de 2 meses: so dormia com balanco forte na rede. Nao havia doenca — era padrao de conducao aprendido + temperamento. A mudanca veio de nao repetir o padrao, com contencao, paciencia e consistencia, ate dormir no berco. Em casos extremos ou familia muito abalada, encaminhar suporte humano. Mesmo em extremos, na faixa 0-3 meses evite o rotulo mau habito; foque na conducao e na organizacao de vigilia/alimentacao/sono."
     },
     {
       "id": "30-60-chunk-adaptar-fora-colo",
       "namespace": "30_60",
       "theme": "adaptar_fora_do_colo",
-      "intent": ["adaptacao_ao_berco", "rotina", "ambiente"],
+      "intent": [
+        "adaptacao_ao_berco",
+        "rotina",
+        "ambiente"
+      ],
       "ageBand": "30_60",
-      "ageRangeDays": [29, 60],
+      "ageRangeDays": [
+        29,
+        60
+      ],
       "safetyLevel": "verde",
       "contentType": "orientacao_pratica",
       "allowedAction": "orientar adaptação a carrinho/cadeirinha/berço nos momentos de calma, não na crise",
       "blockedAction": "forçar adaptação durante irritação máxima; exagerar interação quando o bebê já está calmo",
-      "relatedLessons": ["lesson-30-60-passo-2-estimulos", "lesson-30-60-passo-4-rotina"],
-      "askIfMissing": ["o bebê só fica no colo?", "já tentou colocar no carrinho/berço quando está calmo?"],
+      "relatedLessons": [
+        "lesson-30-60-passo-2-estimulos",
+        "lesson-30-60-passo-4-rotina"
+      ],
+      "askIfMissing": [
+        "o bebê só fica no colo?",
+        "já tentou colocar no carrinho/berço quando está calmo?"
+      ],
       "text": "Entre 30 e 60 dias, a hora de adaptar o bebê fora do colo (carrinho, cadeirinha ou berço) é quando ele está CALMO e quieto — não durante a crise de choro. Se está calmo, evite ficar com ele no colo ou falando o tempo todo: é nesse momento de calmaria que ele aprende a permanecer em outras superfícies. Exagerar a interação (porque ele já olha e sorri) pode hiperestimular, cansar e gerar irritabilidade que depois prejudica as sonecas."
     },
     {
       "id": "30-60-chunk-suporte-humano",
       "namespace": "30_60",
       "theme": "suporte_humano",
-      "intent": ["risco_clinico", "fora_da_base", "ambiguo"],
+      "intent": [
+        "risco_clinico",
+        "fora_da_base",
+        "ambiguo"
+      ],
       "ageBand": "30_60",
-      "ageRangeDays": [29, 60],
+      "ageRangeDays": [
+        29,
+        60
+      ],
       "safetyLevel": "amarelo",
       "contentType": "regra_de_seguranca",
       "allowedAction": "encaminhar para suporte humano / pediatra / material bônus quando houver limite metodológico ou sinais clínicos",
       "blockedAction": "inventar conduta fora da base autorizada desta faixa",
       "relatedLessons": [],
-      "escalateTo": ["humanSupport", "familyPediatrician", "pediatricianBonus"],
+      "escalateTo": [
+        "humanSupport",
+        "familyPediatrician",
+        "pediatricianBonus"
+      ],
       "askIfMissing": [],
       "text": "Quando a dúvida de 30–60 dias não estiver coberta com segurança pelos chunks do Módulo 5, houver conflito relevante de interpretação, hábito extremo com família muito abalada, ou sinais clínicos (refluxo oculto/APLV com sofrimento, disquesia com piora, red flags), a Zlaya deve reconhecer o limite e encaminhar para suporte humano da equipe Eliana Dias, material do pediatra Roberto Franklin nas aulas extras/bônus e/ou pediatra da família — sem diagnosticar e sem inventar conduta."
+    },
+    {
+      "namespace": "30_60",
+      "ageBand": "30_60",
+      "ageRangeDays": [
+        29,
+        60
+      ],
+      "id": "30-60-chunk-vertical-20-30",
+      "theme": "posicao_vertical_30_60",
+      "intent": [
+        "refluxo",
+        "desconforto_fisiologico",
+        "dificuldade_manutencao_sono",
+        "sonecas_curtas"
+      ],
+      "safetyLevel": "verde",
+      "contentType": "regra_fixa",
+      "allowedAction": "orientar vertical 20-30 min em geral; 30-40 so com refluxo/desconforto claro",
+      "blockedAction": "aplicar 30-40 minutos apos todas as mamadas sem sinal de refluxo/desconforto",
+      "relatedLessons": [
+        "lesson-refluxo"
+      ],
+      "askIfMissing": [
+        "ha regurgitacao, arqueamento ou desconforto ao deitar?",
+        "o bebe arrota apos mamar?",
+        "quanto tempo fica vertical apos a mamada?"
+      ],
+      "text": "Entre 30 e 60 dias, a referencia GERAL de posicao vertical apos a mamada e de 20 a 30 minutos. Oriente 30 a 40 minutos SOMENTE quando houver refluxo ou desconforto claro pos-mamada. Nao use 30 a 40 minutos como conduta automatica em toda mamada ou em queixas sem sinal de desconforto/refluxo."
+    },
+    {
+      "namespace": "30_60",
+      "ageBand": "30_60",
+      "ageRangeDays": [
+        29,
+        60
+      ],
+      "id": "30-60-chunk-despertar-irritado-pos-soneca",
+      "theme": "despertar_irritado_pos_soneca",
+      "intent": [
+        "sonecas_curtas",
+        "mamadas",
+        "choro_excessivo",
+        "dificuldade_manutencao_sono"
+      ],
+      "safetyLevel": "verde",
+      "contentType": "hierarquia_investigacao",
+      "allowedAction": "ler o problema como despertar irritado + retorno ao peito; investigar alimentacao/saciedade e medidas posturais",
+      "blockedAction": "chamar soneca de 1h de curta; abrir por excesso de estimulos/janela perdida sem evidencia; aplicar sequencia noturna a soneca diurna",
+      "relatedLessons": [
+        "lesson-30-60-passo-3-janela",
+        "lesson-refluxo"
+      ],
+      "askIfMissing": [
+        "depois da mamada, antes de deitar: houve arroto?",
+        "permaneceu em posicao vertical? por quanto tempo?",
+        "a mamada parece efetiva (succao ativa, degluticao, sinais de saciedade)?",
+        "como esta o sono noturno?"
+      ],
+      "text": "Quando a mae relata bebe de 30-60 dias com soneca de cerca de 1 hora (as vezes mais), que acorda muito bravo/chorando e so acalma no peito, mamando pouco e relaxando: o problema central NAO e a duracao da soneca (1h nao e soneca curta). Hipotese prioritaria: alimentacao/saciedade e/ou desconforto pos-mamada. Investigue producao/transferencia quando pertinente. PERGUNTE obrigatoriamente o que acontece entre o fim da mamada e o deitar (arroto, posicao vertical 20-30 min — ou 30-40 se refluxo/desconforto). So depois, se houver elementos no relato, avance para vigilia ou estimulos. NAO use a expressao sequencia noturna para sonecas diurnas. NAO diga sinais de saciedade no RN."
+    },
+    {
+      "namespace": "30_60",
+      "ageBand": "30_60",
+      "ageRangeDays": [
+        29,
+        60
+      ],
+      "id": "30-60-chunk-vigilia-excessiva-diurna",
+      "theme": "vigilia_excessiva_diurna",
+      "intent": [
+        "sonecas_curtas",
+        "rotina",
+        "dificuldade_para_dormir"
+      ],
+      "safetyLevel": "verde",
+      "contentType": "hierarquia_investigacao",
+      "allowedAction": "nomear vigilia excessiva como eixo; fracionar soneca da manha longa; reforcar mamadas",
+      "blockedAction": "criar hipotese de mamada noturna insuficiente sem queixa noturna",
+      "relatedLessons": [
+        "lesson-30-60-passo-3-janela",
+        "lesson-30-60-passo-4-rotina"
+      ],
+      "askIfMissing": [
+        "duracao da soneca da manha",
+        "tempo acordado ate iniciar a conducao",
+        "quanto tempo demora para adormecer depois de deitar"
+      ],
+      "text": "Se o bebe de 30-60 dias tem soneca da manha longa (cerca de 2h-2h30) e a tarde as sonecas ficam curtas (um ciclo), e a mae inicia a conducao apos 1h-1h15 mas ele ainda demora cerca de 40-45 minutos para relaxar no berco, o tempo total acordado (~1h40-2h) EXCEDE a referencia de 45 minutos a 1 hora. Esse e o dado central — nao invente problema noturno se a queixa e diurna. Conduta: fracionar a soneca da manha para cerca de 1h30-2h e observar se a tarde melhora; caprichar nas mamadas; se ja esta no limite do intervalo para mamar e demora a dormir, amamentar pode ajudar a relaxar e a manter o sono. Ambiente ajustado e berco ok nao excluem a necessidade de respeitar a janela de vigilia."
+    },
+    {
+      "namespace": "30_60",
+      "ageBand": "30_60",
+      "ageRangeDays": [
+        29,
+        60
+      ],
+      "id": "30-60-chunk-inicio-sono-noturno",
+      "theme": "inicio_sono_noturno_30_60",
+      "intent": [
+        "rotina",
+        "dificuldade_para_dormir",
+        "comportamento_esperado"
+      ],
+      "safetyLevel": "verde",
+      "contentType": "regra_fixa",
+      "allowedAction": "responder diretamente: inicio recomendado 19h-20h; 21h30/22h nao recomendado",
+      "blockedAction": "evitar responder o horario; culpar apenas o banho por estimulacao; indicar Passo 1 sem necessidade",
+      "relatedLessons": [
+        "lesson-30-60-passo-4-rotina",
+        "lesson-30-60-passo-3-janela",
+        "lesson-30-60-sono-noturno"
+      ],
+      "askIfMissing": [
+        "a que horas termina a ultima soneca",
+        "ha quanto tempo o bebe esta acordado quando tenta iniciar a noite"
+      ],
+      "text": "Entre 30 e 60 dias, o horario saudavel e recomendado para o INICIO do sono noturno e entre 19h e 20h. A familia pode decidir organizar o sono em outro horario conforme sua dinamica, mas iniciar o sono noturno as 21h30 ou 22h NAO e o recomendado. Se o banho for as 21h30, isso pode postergar ainda mais o inicio do sono noturno — a questao nao e apenas o banho estimular o bebe, e sim o horario tardio. A janela de vigilia pode variar entre 45 minutos e 1 hora e 15 minutos; se o bebe demora a adormecer a noite, observe a que horas termina a ultima soneca e como esta a ultima janela de vigilia do dia."
+    },
+    {
+      "namespace": "30_60",
+      "ageBand": "30_60",
+      "ageRangeDays": [
+        29,
+        60
+      ],
+      "id": "30-60-chunk-mamadeira-aprendizado",
+      "theme": "mamadeira_aprendizado_volume",
+      "intent": [
+        "mamadas",
+        "rotina"
+      ],
+      "safetyLevel": "verde",
+      "contentType": "orientacao_pratica",
+      "allowedAction": "orientar ~20 min com retirada efetiva; mamadeira 90-120 ml; sem rotulo de habito precoce",
+      "blockedAction": "orientar 60-90 ml; chamar succao pos-20min de habito sem checar saciedade; indicar aulas de sono/maus habitos",
+      "relatedLessons": [
+        "lesson-30-60-volta-trabalho"
+      ],
+      "askIfMissing": [
+        "a bebe ja aceitou a mamadeira?",
+        "apos ~20 min no peito, ainda ha retirada de leite ou so conforto?",
+        "sinais de saciedade apos a mamada?"
+      ],
+      "text": "Por volta dos 40 dias, a amamentacao costuma durar cerca de 20 minutos QUANDO ha retirada efetiva de leite. Observe sinais de saciedade antes de qualquer leitura comportamental — NAO interprete succao apos esse tempo automaticamente como habito a corrigir. Para mamadeira de aprendizado nesta idade, a referencia do Metodo e 90 a 120 ml por mamadeira, observando alimentacao e resposta do bebe. Uma mamadeira de aprendizado nao causa desmame nem confusao de bico. Indique apenas o conteudo de preparacao/volta ao trabalho e mamadeira — nao desvie para sono noturno ou maus habitos."
+    },
+    {
+      "namespace": "30_60",
+      "ageBand": "30_60",
+      "ageRangeDays": [
+        29,
+        60
+      ],
+      "id": "30-60-chunk-chupeta-despertares-soneca",
+      "theme": "chupeta_despertares_soneca",
+      "intent": [
+        "sonecas_curtas",
+        "dificuldade_manutencao_sono",
+        "associacao_comportamental"
+      ],
+      "safetyLevel": "verde",
+      "contentType": "hierarquia_investigacao",
+      "allowedAction": "investigar mudanca recente + alimentacao + vigilia + succao; respeitar escolha de manter chupeta; nao rotular mau habito",
+      "blockedAction": "classificar como mau habito; perguntar mama ate dormir se ja dorme sozinho no berco; mandar para aula de maus habitos; colocar no colo com contencao se ja inicia sozinho",
+      "relatedLessons": [
+        "lesson-30-60-passo-3-janela",
+        "lesson-30-60-sinais-sono"
+      ],
+      "askIfMissing": [
+        "como esta a alimentacao e os intervalos entre mamadas",
+        "sinais de saciedade",
+        "tempo de vigilia antes das sonecas",
+        "o despertar coincide com a queda da chupeta?"
+      ],
+      "text": "Entre 30 e 60 dias, se o bebe ja dormia 2-3h no berco e ha poucos dias passou a acordar apos um ciclo, chorando, e muitas vezes so retoma com a chupeta: NAO classifique como mau habito (o Metodo nao usa essa classificacao de 0 a 3 meses). Trate como mudanca recente de padrao. Investigue alimentacao/eficiencia das mamadas, intervalos, saciedade, desconfortos, tempo de vigilia e o papel da necessidade de succao. Se a mae coloca o bebe acordado no berco e ele adormece sozinho, preserve essa habilidade — nao introduza contencao no colo como solucao. Se a mae nao quer retirar a chupeta, respeite e oriente a conducao dos despertares sem rotulo de mau habito. Em sonecas curtas com chupeta, investigue primeiro COMO o bebe desperta; so foque na chupeta se houver relacao queda-despertar."
+    },
+    {
+      "namespace": "30_60",
+      "ageBand": "30_60",
+      "ageRangeDays": [
+        29,
+        60
+      ],
+      "id": "30-60-chunk-conducao-sono-diurno",
+      "theme": "conducao_sono_diurno",
+      "intent": [
+        "dificuldade_para_dormir",
+        "adaptacao_ao_berco",
+        "associacao_comportamental"
+      ],
+      "safetyLevel": "verde",
+      "contentType": "hierarquia_investigacao",
+      "allowedAction": "hierarquia vigilia->alimentacao->travesseiro/execucao->transferencia; responder que nao ha prazo fixo",
+      "blockedAction": "classificar como mau habito; indicar aula de maus habitos; fixar ~10 min de choro; pular alimentacao/vigilia",
+      "relatedLessons": [
+        "lesson-travesseiro",
+        "lesson-30-60-passo-3-janela",
+        "lesson-ruido-branco"
+      ],
+      "askIfMissing": [
+        "quanto tempo a bebe permanece acordada antes das sonecas",
+        "quando a conducao para o sono comeca",
+        "quando vai ao peito, realiza mamada efetiva e tem sinais de saciedade?",
+        "como a Estrategia do Travesseiro esta sendo realizada?"
+      ],
+      "text": "Dificuldade para dormir durante o dia aos 30-60 dias (so dorme no colo e no peito; Travesseiro as vezes funciona): NAO classifique como mau habito. Hierarquia: (1) vigilia de 45 minutos a 1 hora; (2) alimentacao, mamada efetiva e saciedade; (3) diferenciar fome de forma de adormecer; (4) momento de inicio da conducao; (5) se a mae JA usa a Estrategia do Travesseiro, investigar COMO executa e em que momento da vigilia inicia — nao oriente transferir para o travesseiro como se fosse novidade; (6) transferencia para o berco. Contencao e ruido branco podem apoiar a conducao. Sobre quanto tempo para aprender: NAO existe prazo fixo de dias; a evolucao depende de repeticao e consistencia, respeitando maturidade e organizacao de alimentacao, vigilia e sono. NAO estabeleca que o bebe precisa chorar cerca de 10 minutos."
     }
   ]
 }

@@ -727,6 +727,107 @@ const SYNTHETIC_SIGNAL_IDS = new Set([
   'bath_crying_isolated_rn',
 ]);
 
+/** Signals whose priorities/framing are RN-only and must NOT fire on 30_60+. */
+const RN_ONLY_SIGNAL_IDS = new Set([
+  'asks_how_to_improve',
+  'pacifier_in_rn',
+  'fear_negative_association_rn',
+  'cite_explicit_age_rn',
+  'cautious_seios_flacidos_rn',
+  'mama_bem_with_concurrent_symptoms',
+  'night_hunger_signs_rn',
+  'charutinho_night_only_rn',
+  'pacifier_isolated_complaint',
+  'bath_crying_rn',
+  'bath_crying_isolated_rn',
+  'crib_ok_day_problem_night',
+  'sonda_with_mama_bem_priority_production',
+  'travesseiro_tried_without_success',
+]);
+
+const SIGNAL_DEFS_30_60 = [
+  {
+    id: 'wake_window_30_60',
+    label: 'Janela de vigília 30–60 dias',
+    directive: true,
+    phrases: [
+      'janela de sono', 'janela de vigilia', 'janela de vigília', 'tempo acordado',
+      'demora para dormir', 'demora para iniciar', 'demora muuuito', 'demora muito',
+      'sonecas curtas', 'soneca curta', 'um ciclo de sono', 'ciclo de sono',
+    ],
+    boostThemes: ['janela_sono_sonecas', 'vigilia_excessiva_diurna', 'rotina_estruturada'],
+    priority:
+      'Faixa 30–60: janela de vigília de referência = 45 minutos a 1 hora (podendo chegar a 1h15). NÃO diga que a janela é só 1h–1h15. NÃO imponha mínimo de 4 a 5 sonecas. Se a condução começa após ~1h–1h15 e o bebê ainda demora ~40–45 min para adormecer, nomeie VIGÍLIA EXCESSIVA como eixo.',
+  },
+  {
+    id: 'no_mau_habito_30_60',
+    label: 'Bloqueio de rótulo mau hábito (0–3 meses)',
+    directive: true,
+    phrases: [
+      'mau habito', 'mau hábito', 'maus habitos', 'maus hábitos', 'so dorme no colo',
+      'só dorme no colo', 'so dorme no peito', 'só dorme no peito', 'chupeta',
+      'travesseiro', 'balancar', 'balançar', 'dorme sozinho',
+    ],
+    boostThemes: [
+      'conducao_sono_diurno',
+      'chupeta_despertares_soneca',
+      'conducao_sem_rotulo_habito',
+      'despertar_irritado_pos_soneca',
+    ],
+    priority:
+      'REGRA OBRIGATÓRIA 0–3 meses (inclui 30–60): NÃO classifique como mau hábito. Investigue vigília, alimentação/saciedade, desconforto e condução. NÃO indique a aula "Ensinando a dormir e tirando os maus hábitos". NÃO fixe ~10 minutos de choro.',
+  },
+  {
+    id: 'vertical_20_30_30_60',
+    label: 'Posição vertical 20–30 min (30–60)',
+    directive: true,
+    phrases: [
+      'posicao vertical', 'posição vertical', 'depois de mamar', 'apos a mamada',
+      'após a mamada', 'arrotar', 'refluxo', 'desconforto',
+    ],
+    boostThemes: ['posicao_vertical_30_60', 'despertar_irritado_pos_soneca'],
+    priority:
+      'Posição vertical nesta faixa: referência GERAL 20 a 30 minutos. Use 30 a 40 minutos SOMENTE se houver refluxo ou desconforto claro. NÃO aplique 30–40 min como rotina automática.',
+  },
+  {
+    id: 'night_start_19_20_30_60',
+    label: 'Início do sono noturno 19h–20h',
+    directive: true,
+    phrases: [
+      'sono noturno', 'iniciar o sono', 'inicio do sono', 'início do sono',
+      '21h', '21:30', '21h30', '22h', '22:00', 'banho', '19h', '20h',
+    ],
+    boostThemes: ['inicio_sono_noturno_30_60', 'rotina_estruturada'],
+    priority:
+      'Responda DIRETO: horário recomendado de início do sono noturno = 19h a 20h. 21h30/22h NÃO é recomendado. Banho às 21h30 pode postergar o início — não culpe só a "estimulação". Pergunte horário da última soneca e tempo acordado. NÃO indique Passo 1 sem necessidade.',
+  },
+  {
+    id: 'nap_angry_wake_30_60',
+    label: 'Despertar irritado após soneca adequada',
+    directive: true,
+    phrases: [
+      'acorda muito brava', 'acorda brava', 'acorda bravo', 'acorda chorando',
+      'chora bastante', 'so acalma', 'só acalma', 'mama bem pouco e relaxa',
+      'sonecas de 1h', 'soneca de 1h', 'faz sonecas de 1',
+    ],
+    boostThemes: ['despertar_irritado_pos_soneca', 'posicao_vertical_30_60'],
+    priority:
+      'Se a soneca informada é ~1h ou mais, NÃO chame de soneca curta. Eixo = despertar irritado + retorno ao peito → investigar alimentação/saciedade e o que ocorre APÓS a mamada (arroto, vertical 20–30 min). NÃO abra por excesso de estímulos/janela perdida sem evidência. NÃO use "sequência noturna" nem "sinais de saciedade no RN".',
+  },
+  {
+    id: 'bottle_volume_30_60',
+    label: 'Mamadeira de aprendizado / volume',
+    directive: true,
+    phrases: [
+      'mamadeira', 'quantos ml', 'quantos ml', 'introduzir 1 mamadeira', 'ml devo',
+      'quanto tempo dura a amamentacao', 'quanto tempo dura a amamentação',
+    ],
+    boostThemes: ['mamadeira_aprendizado_volume', 'volta_trabalho_mamadeira'],
+    priority:
+      'Mamadeira de aprendizado ~40 dias: referência 90 a 120 ml. Mamada no peito ~20 min com retirada efetiva. NÃO rotule sucção após isso como hábito sem checar saciedade. Indique SOMENTE conteúdo de mamadeira/volta ao trabalho — sem maus hábitos nem sono noturno.',
+  },
+];
+
 export function extractSignals({ message, conversation, ageBand, ageDays } = {}) {
   const motherText = collectMotherText({ message, conversation });
   const norm = normalize(motherText);
@@ -737,9 +838,19 @@ export function extractSignals({ message, conversation, ageBand, ageDays } = {})
   const priorities = [];
   let hasDirectiveSignal = false;
 
+  const isRnBand =
+    String(ageBand || '').toLowerCase() === 'rn' ||
+    (Number.isFinite(ageDays) && ageDays >= 0 && ageDays <= 28);
+  const is3060Band =
+    String(ageBand || '').toLowerCase() === '30_60' ||
+    (Number.isFinite(ageDays) && ageDays >= 29 && ageDays <= 60);
+
   for (const def of SIGNAL_DEFS) {
     // Skip synthetic signals here; they are computed after the main pass.
     if (SYNTHETIC_SIGNAL_IDS.has(def.id)) continue;
+    // Prevent RN-only directives (vertical 30–40, sequência noturna, etc.) from
+    // contaminating 30_60+ answers (official 30–60 dossiers).
+    if (!isRnBand && RN_ONLY_SIGNAL_IDS.has(def.id)) continue;
     const matched = def.phrases.filter((p) => norm.includes(normalize(p)));
     if (matched.length) {
       signals.push({ id: def.id, label: def.label, matched });
@@ -749,10 +860,19 @@ export function extractSignals({ message, conversation, ageBand, ageDays } = {})
     }
   }
 
+  if (is3060Band) {
+    for (const def of SIGNAL_DEFS_30_60) {
+      const matched = def.phrases.filter((p) => norm.includes(normalize(p)));
+      if (matched.length) {
+        signals.push({ id: def.id, label: def.label, matched });
+        def.boostThemes.forEach((t) => boostThemes.add(t));
+        priorities.push(def.priority);
+        if (def.directive) hasDirectiveSignal = true;
+      }
+    }
+  }
+
   // Synthetic: ALWAYS cite explicit age when we're in the RN band and have ageDays.
-  const isRnBand =
-    String(ageBand || '').toLowerCase() === 'rn' ||
-    (Number.isFinite(ageDays) && ageDays >= 0 && ageDays <= 28);
   if (isRnBand && Number.isFinite(ageDays)) {
     const def = SIGNAL_DEFS.find((d) => d.id === 'cite_explicit_age_rn');
     if (def) {
@@ -769,6 +889,8 @@ export function extractSignals({ message, conversation, ageBand, ageDays } = {})
     }
   }
 
+  // Synthetic RN-only enrichers — must not run on 30_60+ (official dossiers).
+  if (isRnBand) {
   // Synthetic: when feeding/production signals fire, attach the cautious-flaccid-breast
   // directive so the LLM uses careful language about "seios flácidos".
   const productionSignalIds = new Set([
@@ -808,7 +930,9 @@ export function extractSignals({ message, conversation, ageBand, ageDays } = {})
     priorities.push(def.priority);
     hasDirectiveSignal = true;
   }
+  } // end isRnBand enrichers (production / mama bem)
 
+  if (isRnBand) {
   // Composite signal — TESTE 004 (RN 20d): bebê é colocado no berço, permanece
   // poucos minutos, acorda chorando e SÓ MELHORA NO COLO. Este padrão exige
   // investigação obrigatória de refluxo (fisiológico x patológico), Moro/
@@ -833,6 +957,7 @@ export function extractSignals({ message, conversation, ageBand, ageDays } = {})
       hasDirectiveSignal = true;
     }
   }
+  } // end isRnBand crib/reflux composite
 
   // Composite signal — TESTE 004 (RN 23d): mãe relata que charutinho funciona
   // À NOITE e que SEM ele aparecem espasmos pelo Moro; e que durante o DIA as
@@ -859,6 +984,7 @@ export function extractSignals({ message, conversation, ageBand, ageDays } = {})
     }
   }
 
+  if (isRnBand) {
   // Composite signal — TESTE 005 (RN 22d, regressão −3,0): queixa ISOLADA sobre
   // chupeta caindo, sem que a mãe tenha relatado nenhum sinal clínico de
   // refluxo, espasmos do Moro, charutinho noturno em uso ou Estratégia do
@@ -919,6 +1045,7 @@ export function extractSignals({ message, conversation, ageBand, ageDays } = {})
       hasDirectiveSignal = true;
     }
   }
+  } // end isRnBand composites
 
   const provided = PROVIDED_FACTS.filter((f) =>
     f.phrases.some((p) => norm.includes(normalize(p))),

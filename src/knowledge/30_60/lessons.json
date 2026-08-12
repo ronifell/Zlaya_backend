@@ -96,78 +96,217 @@
   "situationToLessons": [
     {
       "situation": "Comportamento que afeta o sono / início dos 30-60 dias",
-      "lessons": ["lesson-30-60-passo-1-comportamento"]
+      "lessons": [
+        "lesson-30-60-passo-1-comportamento"
+      ]
     },
     {
       "situation": "Excesso de estímulos / choro por irritação",
-      "lessons": ["lesson-30-60-passo-2-estimulos", "lesson-ruido-branco"]
+      "lessons": [
+        "lesson-30-60-passo-2-estimulos",
+        "lesson-ruido-branco"
+      ]
     },
     {
       "situation": "Crise de choro confundida com cólica",
-      "lessons": ["lesson-30-60-passo-2-estimulos"],
+      "lessons": [
+        "lesson-30-60-passo-2-estimulos"
+      ],
       "doNotInclude": []
     },
     {
       "situation": "Dificuldade com janelas de sono / sonecas",
-      "lessons": ["lesson-30-60-passo-3-janela", "lesson-30-60-sinais-sono"]
+      "lessons": [
+        "lesson-30-60-passo-3-janela",
+        "lesson-30-60-sinais-sono"
+      ]
     },
     {
       "situation": "Sonecas curtas ou em excesso",
-      "lessons": ["lesson-30-60-passo-3-janela", "lesson-30-60-passo-4-rotina"]
+      "lessons": [
+        "lesson-30-60-passo-3-janela",
+        "lesson-30-60-passo-4-rotina"
+      ]
     },
     {
       "situation": "Falta de rotina / dia desorganizado",
-      "lessons": ["lesson-30-60-passo-4-rotina", "lesson-30-60-passo-3-janela"]
+      "lessons": [
+        "lesson-30-60-passo-4-rotina",
+        "lesson-30-60-passo-3-janela"
+      ]
     },
     {
       "situation": "Despertares noturnos / primeiro intervalo da noite",
-      "lessons": ["lesson-30-60-sono-noturno"]
+      "lessons": [
+        "lesson-30-60-sono-noturno"
+      ]
     },
     {
       "situation": "Oferecer peito em todo despertar noturno",
-      "lessons": ["lesson-30-60-sono-noturno", "lesson-30-60-maus-habitos"]
+      "lessons": [
+        "lesson-30-60-sono-noturno"
+      ],
+      "doNotInclude": [
+        "lesson-30-60-maus-habitos",
+        "lesson-30-60-caso-cecilia"
+      ]
     },
     {
       "situation": "Dificuldade para identificar sinais de sono",
-      "lessons": ["lesson-30-60-sinais-sono"]
+      "lessons": [
+        "lesson-30-60-sinais-sono"
+      ]
     },
     {
       "situation": "Espremedeira / grunhidos durante o sono",
-      "lessons": ["lesson-30-60-espremedeira"]
+      "lessons": [
+        "lesson-30-60-espremedeira"
+      ]
     },
     {
       "situation": "Preparação para volta ao trabalho / mamadeira",
-      "lessons": ["lesson-30-60-volta-trabalho", "lesson-hora-da-bruxa"]
+      "lessons": [
+        "lesson-30-60-volta-trabalho",
+        "lesson-hora-da-bruxa"
+      ]
     },
     {
       "situation": "Mau hábito de balanço / só dorme embalado",
-      "lessons": ["lesson-30-60-maus-habitos", "lesson-travesseiro", "lesson-30-60-caso-cecilia"]
+      "lessons": [
+        "lesson-travesseiro"
+      ],
+      "doNotInclude": [
+        "lesson-30-60-maus-habitos",
+        "lesson-30-60-caso-cecilia"
+      ]
     },
     {
       "situation": "Só dorme no peito / sucção prolongada sem retirar leite",
-      "lessons": ["lesson-30-60-maus-habitos"]
+      "lessons": [],
+      "doNotInclude": [
+        "lesson-30-60-maus-habitos",
+        "lesson-30-60-caso-cecilia"
+      ]
     },
     {
       "situation": "Bola de pilates / dormir só em pé",
-      "lessons": ["lesson-30-60-maus-habitos", "lesson-30-60-caso-cecilia"]
+      "lessons": [],
+      "doNotInclude": [
+        "lesson-30-60-maus-habitos",
+        "lesson-30-60-caso-cecilia"
+      ]
     },
     {
       "situation": "Dificuldade na transição para o berço nesta faixa",
-      "lessons": ["lesson-30-60-maus-habitos", "lesson-travesseiro"]
+      "lessons": [
+        "lesson-travesseiro"
+      ],
+      "doNotInclude": [
+        "lesson-30-60-maus-habitos",
+        "lesson-30-60-caso-cecilia"
+      ]
     },
     {
       "situation": "Suspeita de refluxo oculto perto dos 60 dias",
-      "lessons": ["lesson-refluxo", "lesson-aplv"],
-      "escalateTo": ["pediatricianBonus", "humanSupport", "familyPediatrician"]
+      "lessons": [
+        "lesson-refluxo",
+        "lesson-aplv"
+      ],
+      "escalateTo": [
+        "pediatricianBonus",
+        "humanSupport",
+        "familyPediatrician"
+      ]
     },
     {
       "situation": "Suspeita de APLV perto dos 60 dias",
-      "lessons": ["lesson-aplv", "lesson-refluxo"],
-      "escalateTo": ["pediatricianBonus", "humanSupport", "familyPediatrician"]
+      "lessons": [
+        "lesson-aplv",
+        "lesson-refluxo"
+      ],
+      "escalateTo": [
+        "pediatricianBonus",
+        "humanSupport",
+        "familyPediatrician"
+      ]
     },
     {
       "situation": "Comportamento extremo de hábito (caso tipo Cecília)",
-      "lessons": ["lesson-30-60-caso-cecilia", "lesson-30-60-maus-habitos"]
+      "lessons": [],
+      "doNotInclude": [
+        "lesson-30-60-maus-habitos",
+        "lesson-30-60-caso-cecilia"
+      ]
+    },
+    {
+      "situation": "Despertar irritado apos soneca de 1h ou mais",
+      "lessons": [
+        "lesson-30-60-passo-3-janela",
+        "lesson-refluxo"
+      ],
+      "doNotInclude": [
+        "lesson-30-60-maus-habitos",
+        "lesson-30-60-passo-1-comportamento"
+      ]
+    },
+    {
+      "situation": "Vigilia excessiva / demora para iniciar soneca diurna",
+      "lessons": [
+        "lesson-30-60-passo-3-janela",
+        "lesson-30-60-passo-4-rotina"
+      ],
+      "doNotInclude": [
+        "lesson-30-60-maus-habitos",
+        "lesson-30-60-sono-noturno"
+      ]
+    },
+    {
+      "situation": "Inicio do sono noturno / banho tarde",
+      "lessons": [
+        "lesson-30-60-passo-4-rotina",
+        "lesson-30-60-passo-3-janela",
+        "lesson-30-60-sono-noturno"
+      ],
+      "doNotInclude": [
+        "lesson-30-60-passo-1-comportamento",
+        "lesson-30-60-maus-habitos"
+      ]
+    },
+    {
+      "situation": "Volume mamadeira / duracao mamada ~40 dias",
+      "lessons": [
+        "lesson-30-60-volta-trabalho"
+      ],
+      "doNotInclude": [
+        "lesson-30-60-maus-habitos",
+        "lesson-30-60-sono-noturno",
+        "lesson-hora-da-bruxa",
+        "lesson-30-60-passo-1-comportamento"
+      ]
+    },
+    {
+      "situation": "Chupeta e despertar de soneca / mudanca recente",
+      "lessons": [
+        "lesson-30-60-passo-3-janela",
+        "lesson-30-60-sinais-sono"
+      ],
+      "doNotInclude": [
+        "lesson-30-60-maus-habitos",
+        "lesson-30-60-sono-noturno",
+        "lesson-30-60-passo-1-comportamento"
+      ]
+    },
+    {
+      "situation": "Dificuldade para dormir de dia / travesseiro",
+      "lessons": [
+        "lesson-travesseiro",
+        "lesson-30-60-passo-3-janela",
+        "lesson-ruido-branco"
+      ],
+      "doNotInclude": [
+        "lesson-30-60-maus-habitos",
+        "lesson-30-60-caso-cecilia"
+      ]
     }
   ],
   "supportChannels": {
