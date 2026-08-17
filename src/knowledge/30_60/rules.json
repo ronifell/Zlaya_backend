@@ -8,7 +8,7 @@
   "fixedRules": [
     {
       "id": "30-60-pre-requisito-modulos",
-      "rule": "Esta faixa (30–60 dias) pressupõe que a mãe já assistiu aos módulos 3 e 4. Se a dúvida depender desses fundamentos e a mãe indicar que pulou, oriente a voltar a eles antes de aprofundar condutas desta fase.",
+      "rule": "Esta faixa (30–60 dias) pressupõe os módulos 3 e 4. Só oriente a revisá-los se a mãe indicar que pulou esses fundamentos. NÃO pergunte genericamente “Você já assistiu aos módulos 3 e 4?” quando a resposta já encaminha aulas específicas do caso.",
       "rationale": "O próprio Módulo 5 abre pedindo revisão dos módulos anteriores."
     },
     {
@@ -33,7 +33,7 @@
     },
     {
       "id": "30-60-janela-sono",
-      "rule": "Entre 30 e 60 dias, a janela de vigilia / tempo acordado de referencia e de 45 minutos a 1 hora, podendo chegar a 1 hora e 15 minutos. Nao tente determinar a duracao fixa da soneca — cada bebe tem seu padrao. O numero de sonecas varia conforme a duracao delas e a organizacao do dia (NAO imponha minimo de 4 a 5 sonecas). Soneca NAO deve passar de 2 horas a no maximo 2 horas e 30 minutos nesta idade.",
+      "rule": "Entre 30 e 60 dias, a janela de vigilia / tempo acordado de referencia e de 45 minutos a 1 hora e 15 minutos. Nao tente determinar a duracao fixa da soneca — cada bebe tem seu padrao. O numero de sonecas varia conforme a duracao delas e a organizacao do dia (NAO imponha minimo de 4 a 5 sonecas). Soneca NAO deve passar de 2 horas a no maximo 2 horas e 30 minutos nesta idade.",
       "rationale": "TESTES 30-60 oficiais: corrigir 1h-1h15 para 45min-1h (ate 1h15); retirar minimo 4-5 sonecas."
     },
     {
@@ -43,7 +43,7 @@
     },
     {
       "id": "30-60-rotina-por-janelas",
-      "rule": "Rotina nesta faixa NAO usa horarios fixos de relogio: usa INTERVALOS/JANELAS. A rotina comeca quando o bebe acorda pela manha. Janela de mamada ~2h; janela de vigilia 45 minutos a 1 hora (podendo chegar a 1h15). Manter o bebe acordado muito alem dessa faixa sem conduzir para a soneca leva a hiperestimulacao e perda da janela.",
+      "rule": "Rotina nesta faixa NAO usa horarios fixos de relogio: usa INTERVALOS/JANELAS. A rotina comeca quando o bebe acorda pela manha. Janela de mamada ~2h; janela de vigilia 45 minutos a 1 hora e 15 minutos. Manter o bebe acordado muito alem dessa faixa sem conduzir para a soneca leva a hiperestimulacao e perda da janela.",
       "rationale": "TESTE 45d / 31d."
     },
     {
@@ -115,12 +115,12 @@
     },
     {
       "id": "30-60-inicio-sono-noturno",
-      "rule": "Horario saudavel e recomendado para INICIO do sono noturno: entre 19h e 20h. A familia pode organizar conforme sua dinamica, mas iniciar por volta de 21h30 ou 22h NAO e recomendado. Banho as 21h30 pode postergar ainda mais o inicio do sono noturno — nao atribuir o problema apenas a estimulacao do banho. Se o bebe demora a adormecer a noite, investigar tambem o horario da ultima soneca e ha quanto tempo esta acordado.",
+      "rule": "Horario saudavel e recomendado para INICIO do sono noturno: entre 19h e 20h. A familia pode organizar conforme sua dinamica, mas iniciar por volta de 21h30 ou 22h NAO e recomendado. Banho as 21h30 pode postergar ainda mais o inicio do sono noturno — nao atribuir o problema apenas a estimulacao do banho. Se o bebe demora a adormecer a noite, investigar tambem o horario da ultima soneca e a janela de vigilia — NAO apresentar o horario das 21h isoladamente como causa da demora. NAO perguntar se a mae ja assistiu aos modulos 3 e 4 quando a resposta ja indica aulas especificas. NAO repetir a pergunta da ultima soneca. Manter o genero gramatical consistente com o perfil.",
       "rationale": "TESTE 45d."
     },
     {
       "id": "30-60-mamadeira-volume",
-      "rule": "Quando a mae pergunta volume da mamadeira de aprendizado por volta dos 40 dias, a referencia do metodo e 90 a 120 ml por mamadeira, observando alimentacao e resposta do bebe. Tempo de mamada no peito: cerca de 20 minutos quando ha retirada efetiva de leite; NAO rotular succao apos esse tempo como habito sem verificar retirada efetiva e sinais de saciedade.",
+      "rule": "Quando a mae pergunta volume da mamadeira de aprendizado por volta dos 40 dias, a referencia do metodo e ~90 ml no primeiro mes e ~120 ml no segundo mes. Aos 40 dias (segundo mes) oriente aproximadamente 120 ml, observando alimentacao e resposta do bebe. Tempo de mamada no peito: cerca de 20 minutos, podendo ser mais curta ou chegar a aproximadamente 30 minutos, desde que haja retirada efetiva de leite e sinais de saciedade. NAO usar 'habito a corrigir' (nem em frases negativas). NAO garantir ausencia de desmame ou confusao de bico.",
       "rationale": "TESTE 40d."
     },
     {
@@ -130,22 +130,22 @@
     },
     {
       "id": "30-60-despertar-irritado-pos-soneca",
-      "rule": "Quando a mae relata soneca de ~1h ou mais + despertar muito bravo/chorando + acalma no peito mamando pouco e relaxa: o problema NAO e duracao da soneca. Hipotese prioritaria: alimentacao/saciedade + producao/transferencia quando pertinente + medidas posturais pos-mamada (arroto, vertical 20-30 min, ou 30-40 se refluxo/desconforto). PERGUNTAR o que acontece entre o fim da mamada e deitar. So depois considerar vigilia/estimulos se houver elementos.",
+      "rule": "Quando a mae relata soneca de ~1h ou mais + despertar muito bravo/chorando + acalma no peito mamando pouco e relaxa: o problema NAO e duracao da soneca. Hipotese prioritaria: alimentacao/saciedade + producao/transferencia quando pertinente + medidas posturais pos-mamada (arroto, vertical 20-30 min, ou 30-40 se refluxo/desconforto). Considere desconforto digestivo/refluxo como hipotese, sem diagnostico. Encaminhe para conteudo de refluxo/alimentacao, NAO para aula de Janela de Vigilia como solucao principal. PERGUNTAR o que acontece entre o fim da mamada e deitar. So depois considerar vigilia/estimulos se houver elementos.",
       "rationale": "TESTE 30d."
     },
     {
       "id": "30-60-vigilia-excessiva-diurna",
-      "rule": "Se a mae inicia conducao apos 1h-1h15 e o bebe ainda demora ~40-45 min para adormecer, o tempo total acordado (~1h40-2h) EXCEDE a referencia de 45 min-1h. Esse e o dado central. Em soneca manha muito longa (2h-2h30) com tarde curta: orientar fracionar a soneca da manha para cerca de 1h30-2h e caprichar nas mamadas; se ja esta no limite do intervalo para mamar e demora a dormir, amamentar pode ajudar a relaxar. NAO criar hipotese de mamada noturna insuficiente sem relato noturno.",
+      "rule": "Se a mae inicia conducao apos 1h-1h15 e o bebe ainda demora ~40-45 min para adormecer, o tempo total acordado (~1h40-2h) EXCEDE a referencia de 45 minutos a 1 hora e 15 minutos. O dado central e o horario em que o bebe EFETIVAMENTE adormece, nao so o inicio da conducao. Em soneca manha muito longa (2h-2h30) com tarde curta: orientar fracionar a soneca da manha para cerca de 1h30-2h e caprichar nas mamadas; se ja esta no limite do intervalo para mamar e demora a dormir, amamentar pode ajudar a relaxar. NAO criar hipotese de mamada noturna insuficiente sem relato noturno.",
       "rationale": "TESTE 31d."
     },
     {
       "id": "30-60-chupeta-manutencao-sono",
-      "rule": "Mudanca recente nas sonecas (antes longas, agora acorda em 1 ciclo e precisa de chupeta): NAO classificar como mau habito. Investigar alimentacao, intervalos, saciedade, desconforto, vigilia e papel da succao. Se o bebe ja inicia o sono sozinho no berco, preservar essa habilidade. Se a mae NAO quer retirar a chupeta, respeitar e orientar conducao dos despertares sem rotulo de mau habito. Chupeta so entra como eixo se houver relacao clara queda-despertar.",
+      "rule": "Mudanca recente nas sonecas (antes longas, agora acorda em 1 ciclo e precisa de chupeta): NAO classificar como mau habito. Investigar alimentacao, intervalos, saciedade, desconforto, vigilia e papel da succao. Se o bebe ja inicia o sono sozinho no berco, preservar essa habilidade. Se a mae NAO quer retirar a chupeta, respeitar e orientar conducao dos despertares sem rotulo de mau habito. Chupeta so entra como eixo se houver relacao clara queda-despertar. Se a mae apenas informa que o bebe USA chupeta, isso NAO autoriza coloca-la como hipotese principal dos despertares. Hierarquia: como o bebe acorda -> alimentacao/saciedade -> desconforto -> vigilia 45min a 1h15 -> chupeta SOMENTE se a queda coincidir com o despertar.",
       "rationale": "TESTE 40d-2 e 49d."
     },
     {
       "id": "30-60-dificuldade-dormir-dia",
-      "rule": "Dificuldade para dormir de dia (so no colo/peito, travesseiro as vezes funciona): hierarquia = vigilia 45min-1h -> alimentacao/mamada efetiva/saciedade -> diferenciar fome vs forma de adormecer -> momento de inicio da conducao -> execucao do Travesseiro (se a mae ja usa) -> transferencia. Responder quanto tempo para aprender?: NAO existe prazo fixo de dias; depende de repeticao/consistencia e organizacao de alimentacao/vigilia/sono. NAO indicar aula de maus habitos.",
+      "rule": "Dificuldade para dormir de dia (so no colo/peito, travesseiro as vezes funciona): o eixo e a dificuldade para dormir, NAO 'adaptacao ao berco' nem 'acostumada ao colo/peito'. Hierarquia = vigilia 45min a 1h15 -> alimentacao/mamada efetiva/saciedade -> diferenciar fome vs succao durante o adormecer -> momento de inicio da conducao -> execucao do Travesseiro (se a mae ja usa) -> transferencia. Responder quanto tempo para aprender?: NAO existe prazo fixo de dias; depende de repeticao/consistencia e organizacao de alimentacao/vigilia/sono. NAO indicar aula de maus habitos.",
       "rationale": "TESTE 51d."
     }
   ],

@@ -82,6 +82,20 @@ const unitCases = [
     keepPhrases: ['16 dias'],
     expectNoCorrections: true,
   },
+  {
+    name: '40d profile, band "Entre 30 e 60 dias" must NOT be rewritten or flagged',
+    ageDays: 40,
+    input: 'Entre 30 e 60 dias, investigue a mudança recente.',
+    keepPhrases: ['30 e 60 dias'],
+    expectNoCorrections: true,
+  },
+  {
+    name: '40d profile, "até 5 dias atrás" is elapsed time, not an age claim',
+    ageDays: 40,
+    input: 'Até 5 dias atrás as sonecas eram longas.',
+    keepPhrases: ['5 dias'],
+    expectNoCorrections: true,
+  },
 ];
 
 let pass = 0;

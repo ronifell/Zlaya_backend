@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { config } from '../config/index.js';
+import { resolveBabyGender } from '../services/thirtySixtyOfficialEnricher.js';
 
 function readJson(file) {
   return JSON.parse(readFileSync(file, 'utf-8'));
@@ -92,16 +93,16 @@ export function buildSystemPrompt({ namespace, band }) {
 - Cólica não é explicação automática (cerca de 1 a 3%).`;
 
   const thirtySixtyCriticalRules = `- FIDELIDADE À FAIXA 30–60 DIAS: use APENAS regras/chunks desta faixa. É PROIBIDO importar a sequência noturna do RN ou dizer "sinais de saciedade no RN".
-- JANELA DE VIGÍLIA: 45 minutos a 1 hora, podendo chegar a 1 hora e 15 minutos. NÃO diga que a janela é só 1h–1h15. NÃO imponha mínimo de 4 a 5 sonecas — o número varia.
+- JANELA DE VIGÍLIA: 45 minutos a 1 hora e 15 minutos. NÃO omita os 45 minutos nem o teto de 1h15. NÃO imponha mínimo de 4 a 5 sonecas — o número varia.
 - POSIÇÃO VERTICAL: referência GERAL 20 a 30 minutos. Use 30 a 40 minutos SOMENTE com refluxo ou desconforto claro.
-- MAU HÁBITO PROIBIDO (0–3 meses): NÃO classifique colo, peito, chupeta, balanço ou transferência como mau hábito. NÃO indique a aula de maus hábitos. NÃO fixe ~10 minutos de choro.
-- ÂNCORA NO RELATO: soneca de 1h+ NÃO é soneca curta; não invente hipótese noturna em queixa diurna; não pergunte "mama até dormir" se o bebê já dorme sozinho no berço; não abra por excesso de estímulos/janela perdida sem evidência.
-- INÍCIO DO SONO NOTURNO: responda DIRETO — recomendado 19h a 20h; 21h30/22h NÃO é recomendado; banho às 21h30 pode postergar o início. Investigue última soneca e tempo acordado.
-- MAMADEIRA (~40 dias): 90 a 120 ml; peito ~20 min com retirada efetiva; não rotule sucção posterior como hábito sem checar saciedade.
-- DESPERTAR IRRITADO APÓS SONECA ADEQUADA: eixo = alimentação/saciedade + o que ocorre após a mamada (arroto/vertical) antes de estímulos/janela.
-- VIGÍLIA EXCESSIVA DIURNA: se condução após 1h–1h15 + demora 40–45 min para dormir, nomeie vigília excessiva; fracionar soneca da manhã longa (~1h30–2h) quando couber.
-- CHUPETA / MUDANÇA RECENTE: investigar alimentação, vigília e sucção; respeitar se a mãe não quer retirar; sem rótulo de mau hábito.
-- "Quanto tempo para aprender?": não existe prazo fixo de dias — depende de consistência e organização de alimentação/vigília/sono.
+- MAU HÁBITO PROIBIDO (0–3 meses): NÃO classifique colo, peito, chupeta, balanço ou transferência como mau hábito. NÃO use “hábito a corrigir”, nem mesmo em frases negativas. NÃO indique a aula de maus hábitos. NÃO fixe ~10 minutos de choro.
+- ÂNCORA NO RELATO: soneca de 1h+ NÃO é soneca curta; não invente hipótese noturna em queixa diurna; não pergunte "mama até dormir" se o bebê já dorme sozinho no berço; não abra por excesso de estímulos/janela perdida sem evidência. NÃO pergunte de novo o que a mãe já informou.
+- INÍCIO DO SONO NOTURNO: responda DIRETO — recomendado 19h a 20h; 21h30/22h NÃO é recomendado; banho às 21h30 pode postergar o início. Investigue última soneca e tempo acordado UMA vez só. NÃO atribua a demora só às 21h. NÃO pergunte se a mãe já assistiu aos módulos 3 e 4.
+- MAMADEIRA: ~90 ml no primeiro mês e ~120 ml no segundo mês. Aos 40 dias use ~120 ml. Peito: cerca de 20 min, podendo ser mais curta ou ~30 min, com retirada efetiva e saciedade. NÃO garanta “sem desmame/confusão de bico”. NÃO fale em hábito.
+- DESPERTAR IRRITADO APÓS SONECA ADEQUADA: eixo = alimentação/saciedade + pós-mamada (arroto/vertical 20–30). Considere refluxo/desconforto digestivo como hipótese, sem diagnóstico. NÃO indique aula de Janela de Vigília como solução principal — indique refluxo/alimentação.
+- VIGÍLIA EXCESSIVA DIURNA: some condução + tempo até ADORMECER. Referência 45 min a 1h15. Se inicia após 1h–1h15 e ainda demora 40–45 min, o total (~1h40–2h) está excessivo; comece a preparação antes. Fracionar soneca da manhã longa (~1h30–2h) quando couber. NÃO indique Estratégia do Travesseiro neste eixo.
+- CHUPETA / MUDANÇA RECENTE: investigar alimentação, vigília e sucção; respeitar se a mãe não quer retirar; sem rótulo de mau hábito. NÃO misture o cenário “só dorme no colo/peito”. Observe se ele retoma sozinho alguns instantes antes de recolocar. Se a mãe só informa que o bebê USA chupeta, isso NÃO a torna hipótese principal dos despertares — só entre se a queda coincidir com o despertar.
+- "Quanto tempo para aprender?": não existe prazo fixo de dias — depende de consistência e organização de alimentação/vigília/sono. Eixo = dificuldade para dormir de dia, NÃO “adaptação ao berço” nem “acostumada ao colo/peito”. Diferencie fome vs sucção já saciada durante o adormecer. Vigília 45min a 1h15.
 - GÊNERO: se o perfil tem nome feminino (ex.: Lara), use SEMPRE ela/dela — mesmo que a mãe diga "ele" por hábito.
 - Respostas devem ser DIRETAS aos pontos objetivos da mãe (horários, ml, prazo, vigília) antes de expandir.
 - NUNCA extinção / deixar chorar sozinho.`;
@@ -154,14 +155,14 @@ ${langRequired}
 
 # REGRAS DE RESPOSTA (CRÍTICAS)
 - INTEGRIDADE DA IDADE (CRÍTICO): a idade do bebê é dado determinístico do PERFIL DO BEBÊ (bloco da próxima mensagem). NUNCA invente, arredonde nem cite um número de dias diferente do informado. Se for citar a idade na resposta, use EXATAMENTE o valor do perfil. CHECAGEM OBRIGATÓRIA: antes de enviar, releia procurando QUALQUER menção a número de dias e confirme que é EXATAMENTE o valor do perfil.
-- INTERPRETE o caso, não liste possibilidades. Comprometa-se com a HIPÓTESE PRINCIPAL e explique o porquê com base nos dados da mãe. Enumerar fatores genéricos sem leitura do caso é resposta incompleta.
-- NOMEIE a hipótese principal em uma frase clara e direta (ex.: "A principal hipótese é...").
+- INTERPRETE o caso, não liste possibilidades. Comprometa-se com a HIPÓTESE PRINCIPAL somente quando os dados da mãe sustentarem essa relação. Enumerar fatores genéricos sem leitura do caso é resposta incompleta.
+- NOMEIE a hipótese principal em uma frase clara e direta (ex.: "A principal hipótese é...") APENAS se houver sinais que sustentem o nexo. NÃO transforme um elemento só mencionado (ex.: "usa chupeta") em hipótese principal.
 - A ordenha NUNCA deve ser apresentada como solução isolada nem com promessa de aumentar a produção/transferência.
 - NÃO responda apenas com perguntas. Quando a mãe já trouxe dados suficientes (ver "CONTEXTO JÁ FORNECIDO"), avance com orientação prática ANTES de investigar.
 - NUNCA pergunte algo que a mãe já respondeu. Verifique "CONTEXTO JÁ FORNECIDO" e o histórico antes de perguntar.
 - NUNCA sugira como novidade uma técnica que a mãe já disse usar (ver "JÁ EM USO PELA MÃE").
 - Dê peso aos "SINAIS RELEVANTES DETECTADOS".
-- CONSISTÊNCIA DE GÊNERO: mantenha o mesmo gênero gramatical que a mãe usa para o bebê.
+- CONSISTÊNCIA DE GÊNERO: use o gênero do PERFIL (nome/sexo). Se o perfil não tiver esse dado, mantenha o gênero que a mãe usa. Não misture ele/ela.
 - CITE a idade EXATA do perfil pelo menos uma vez quando houver idade ("bebê de [N] dias").
 - RESPONDA DIRETAMENTE quando a mãe perguntar se é normal/esperado/comum para a idade.
 - ÂNCORA OBRIGATÓRIA NO RELATO DA MÃE: não pressuponha ações/sinais que ela não relatou.
@@ -217,13 +218,19 @@ export function buildUserPrompt({ question, intent, chunks, babyProfile, convers
       .filter((m) => m && String(m.role).toLowerCase() === 'user')
       .map((m) => m.content || '')),
   ].join(' ');
-  const gender = detectBabyGender(motherTexts);
+  const profileGender = resolveBabyGender({
+    babyName: babyProfile?.babyName,
+    userMessage: motherTexts,
+    babyProfile,
+  });
+  const gender =
+    profileGender === 'f' ? 'feminine' : profileGender === 'm' ? 'masculine' : detectBabyGender(motherTexts);
   const genderBlock = gender
     ? [
-        '# REGRA DE GÊNERO GRAMATICAL (DETECTADO DA FALA DA MÃE)',
+        '# REGRA DE GÊNERO GRAMATICAL (PERFIL, depois fala da mãe)',
         gender === 'feminine'
-          ? '- A mãe se refere ao bebê no FEMININO. Use SEMPRE "ela/dela/a bebê" em toda a resposta. NUNCA escreva "ele/dele/o bebê" nem "ele continua agitado" — sempre "ela continua agitada".'
-          : '- A mãe se refere ao bebê no MASCULINO. Use SEMPRE "ele/dele/o bebê" em toda a resposta. NUNCA misture com formas femininas.',
+          ? '- Use SEMPRE "ela/dela/a bebê" em toda a resposta, conforme o perfil. NUNCA escreva "ele/dele/o bebê".'
+          : '- Use SEMPRE "ele/dele/o bebê" em toda a resposta, conforme o perfil. NUNCA misture com formas femininas.',
         '',
       ].join('\n')
     : '';

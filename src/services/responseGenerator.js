@@ -56,7 +56,8 @@ function composeLocalAnswer({ question, chunks, namespace, intent, signals }) {
   }
 
   const leading = chunks[0].chunk;
-  const supporting = chunks.slice(1, 3).map((c) => c.chunk);
+  const ns = String(namespace || '').toUpperCase();
+  const supporting = ns === '30_60' ? [] : chunks.slice(1, 3).map((c) => c.chunk);
 
   const lines = [];
   lines.push(`Mãe, sobre a sua dúvida no contexto do RN (${namespace}):`);

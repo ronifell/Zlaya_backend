@@ -103,6 +103,33 @@ export function checkForbiddenContent({ text, namespace, ageDays } = {}) {
   return { safe: violations.length === 0, violations };
 }
 
+const METHOD_AGE_BANDS = [
+  [0, 28],
+  [29, 60],
+  [30, 60],
+  [0, 60],
+];
+
+function isMethodAgeBand(lo, hi) {
+  return METHOD_AGE_BANDS.some(([a, b]) => lo === a && hi === b);
+}
+
+/**
+ * "5 dias atrás", "há 2 dias", "faz 02 dias" are elapsed-time phrases, not
+ * claims about the baby's current age. TESTE 40d-2 was blocked because the
+ * draft repeated "até 5 dias atrás" and the guard treated "5 dias" as an
+ * age hallucination.
+ */
+function isElapsedTimeDayMention(fullText, index, matchLen) {
+  if (index > 0 && /[.,]/.test(fullText[index - 1])) return true;
+  const before = String(fullText).slice(Math.max(0, index - 24), index);
+  const after = String(fullText).slice(index + matchLen, index + matchLen + 28);
+  if (/\b(atras|atrás)\b/i.test(after)) return true;
+  if (/\b(ha|há|faz|fazem)\s+$/i.test(before)) return true;
+  if (/\b(uns|cerca de|aproximadamente)\s+$/i.test(before)) return true;
+  return false;
+}
+
 /**
  * Detects numeric age mentions in the draft that contradict the profile's
  * ageDays. Returns an array of violations (empty if all mentions are
@@ -116,9 +143,11 @@ export function checkAgeConsistency({ text, ageDays }) {
   if (!Number.isFinite(ageDays)) return [];
   const norm = normalize(text);
   const violations = [];
-  const re = /(\d{1,3})(?:\s*(?:a|ate|até|–|-|—)\s*(\d{1,3}))?\s*dias?\b/gi;
+  // Include "e" so "Entre 30 e 60 dias" is a range, not a standalone "60 dias".
+  const re = /(?:entre\s+)?(\d{1,3})(?:\s*(?:a|ate|até|e|–|-|—)\s*(\d{1,3}))?\s*dias?\b/gi;
   let m;
   while ((m = re.exec(norm)) !== null) {
+    if (isElapsedTimeDayMention(norm, m.index, m[0].length)) continue;
     const a = Number(m[1]);
     const b = m[2] ? Number(m[2]) : a;
     if (!Number.isFinite(a) || !Number.isFinite(b)) continue;
@@ -127,6 +156,8 @@ export function checkAgeConsistency({ text, ageDays }) {
     // Skip clearly non-RN ranges (e.g. "365 dias", "100 dias de vida"); we
     // only care about hallucinations within the RN window.
     if (lo > 60) continue;
+    // Method age-band labels ("30 a 60 dias", "0–28 dias") are not the baby's age.
+    if (isMethodAgeBand(lo, hi)) continue;
     if (ageDays < lo || ageDays > hi) {
       violations.push({
         term: `idade citada "${m[0].trim()}" diverge do perfil (${ageDays} dias)`,
@@ -1218,11 +1249,11 @@ export function correctAgeMentions({ text, ageDays }) {
   //    to auto-rewrite).
   const numericRe = /(\b\d{1,3})\s*dias?\b/gi;
   let out = text.replace(numericRe, (match, numStr, offset, fullText) => {
-    // Skip if this is the trailing number of a range like "20 a 28 dias".
-    // We look back to see if there's "a/até/-/–/—" plus a number right
-    // before this token within ~8 chars.
-    const before = fullText.slice(Math.max(0, offset - 12), offset);
-    if (/(\b\d{1,3})\s*(?:a|até|ate|–|-|—)\s*$/i.test(before)) return match;
+    // Skip if this is the trailing number of a range like "20 a 28 dias"
+    // or "Entre 30 e 60 dias".
+    const before = fullText.slice(Math.max(0, offset - 16), offset);
+    if (/(\b\d{1,3})\s*(?:a|até|ate|e|–|-|—)\s*$/i.test(before)) return match;
+    if (isElapsedTimeDayMention(fullText, offset, match.length)) return match;
 
     const n = Number(numStr);
     if (!Number.isFinite(n) || n < 0 || n > 60) return match;

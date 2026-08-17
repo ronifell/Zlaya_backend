@@ -83,18 +83,11 @@ export function renderRoute({ route, namespace, retrieval, motherName }) {
       );
       if (onlyWordingViolations && retrieval?.chunks?.length) {
         const leading = retrieval.chunks[0].chunk;
-        const supporting = retrieval.chunks.slice(1, 3).map((c) => c.chunk);
         const lines = [
           `${greet}, deixa eu te orientar de forma direta, dentro do método:`,
           '',
           leading.text,
         ];
-        if (supporting.length) {
-          lines.push('', 'Outros pontos relevantes:');
-          for (const s of supporting) {
-            lines.push(`• ${String(s.text || '').replace(/\s+/g, ' ').slice(0, 240)}`);
-          }
-        }
         return {
           text: lines.join('\n'),
           meta: {
@@ -158,6 +151,32 @@ const LESSON_SCENARIO_RULES = [
     ],
   },
   {
+    signalIds: ['excess_total_wake_30_60'],
+    whitelist: [
+      'lesson-30-60-passo-3-janela',
+      'lesson-30-60-passo-4-rotina',
+    ],
+    blacklist: [
+      'lesson-travesseiro',
+      'lesson-30-60-maus-habitos',
+      'lesson-30-60-passo-1-comportamento',
+      'lesson-30-60-caso-cecilia',
+    ],
+  },
+  {
+    signalIds: ['keep_pacifier_30_60'],
+    whitelist: [
+      'lesson-30-60-sinais-sono',
+      'lesson-30-60-passo-3-janela',
+    ],
+    blacklist: [
+      'lesson-travesseiro',
+      'lesson-30-60-maus-habitos',
+      'lesson-30-60-passo-1-comportamento',
+      'lesson-30-60-caso-cecilia',
+    ],
+  },
+  {
     signalIds: [
       'no_mau_habito_30_60',
       'wake_window_30_60',
@@ -180,6 +199,32 @@ const LESSON_SCENARIO_RULES = [
       'lesson-hora-da-bruxa',
       'lesson-30-60-passo-1-comportamento',
       'lesson-30-60-caso-cecilia',
+    ],
+  },
+  {
+    signalIds: ['short_naps_pacifier_mention_30_60'],
+    whitelist: [
+      'lesson-30-60-sinais-sono',
+      'lesson-30-60-passo-3-janela',
+    ],
+    blacklist: [
+      'lesson-30-60-maus-habitos',
+      'lesson-travesseiro',
+      'lesson-30-60-passo-1-comportamento',
+      'lesson-30-60-caso-cecilia',
+    ],
+  },
+  {
+    signalIds: ['day_sleep_difficulty_30_60'],
+    whitelist: [
+      'lesson-travesseiro',
+      'lesson-30-60-passo-3-janela',
+      'lesson-ruido-branco',
+    ],
+    blacklist: [
+      'lesson-30-60-maus-habitos',
+      'lesson-30-60-caso-cecilia',
+      'lesson-30-60-passo-1-comportamento',
     ],
   },
   {

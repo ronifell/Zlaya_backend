@@ -53,7 +53,7 @@ import {
 import { generateAnswer } from './responseGenerator.js';
 import { renderRoute, suggestedLessonsFromRetrieval } from './fallback.js';
 import { recordTurn } from './auditLogger.js';
-import { enrichThirtySixtyOfficialAnswer } from './thirtySixtyOfficialEnricher.js';
+import { enrichThirtySixtyOfficialAnswer, scrubThirtySixtySafetyWording } from './thirtySixtyOfficialEnricher.js';
 
 /**
  * Full Zlaya turn pipeline.
@@ -190,13 +190,13 @@ export async function processTurn({ message, babyProfile, conversation, conversa
       draft.ageCorrections = ageFix.corrections;
     }
 
-    // 30_60: early scrub of "mau hábito" wording (full dossier enricher runs later).
+    // 30_60: early scrub of wording that the post-generation guard treats as
+    // unsafe even in methodological negations (TESTE 40d-2 score 3.0).
     if (String(namespace).toUpperCase() === '30_60' && draft?.text) {
       const before = draft.text;
-      draft.text = draft.text
-        .replace(/\bmaus?\s+h[aá]bitos?\b/gi, 'padrão de condução do sono')
-        .replace(/Ensinando a dormir e tirando os padrão de condução do sono/gi, 'organização da vigília e da condução do sono')
-        .replace(/aula sobre padrão de condução do sono/gi, 'aula sobre janela de vigília e condução do sono');
+      draft.text = scrubThirtySixtySafetyWording(draft.text)
+        .replace(/Ensinando a dormir e tirando os padr[aã]o de condu[cç][aã]o( do sono)?/gi, 'organização da vigília e da condução do sono')
+        .replace(/aula sobre padr[aã]o de condu[cç][aã]o do sono/gi, 'aula correspondente à hipótese principal do caso');
       if (draft.text !== before) {
         draft.mauHabitoScrub = true;
       }
@@ -654,7 +654,7 @@ export async function processTurn({ message, babyProfile, conversation, conversa
         text: draft.text,
         message,
         signals,
-        babyProfile,
+        babyProfile: { ...(babyProfile || {}), ageDays: babyProfile?.ageDays ?? age?.days },
       });
       if (enriched.text !== draft.text) {
         draft.text = enriched.text;
@@ -668,6 +668,22 @@ export async function processTurn({ message, babyProfile, conversation, conversa
       ageDays: age?.days ?? null,
     });
 
+    // Recoverable wording (autorregulação, age-band labels, "5 dias atrás")
+    // must NOT interrupt the mother. Sanitize once more and only override
+    // when the draft is still actually unsafe.
+    if (!safety.safe && String(namespace).toUpperCase() === '30_60') {
+      const recovered = scrubThirtySixtySafetyWording(draft.text);
+      const safety2 = checkForbiddenContent({
+        text: recovered,
+        namespace,
+        ageDays: age?.days ?? null,
+      });
+      if (safety2.safe) {
+        draft.text = recovered;
+        safety = safety2;
+      }
+    }
+
     // 7a) Post-generation safety guard (Caminho 6)
     const guardOverride = postGenerationGuard({ draft, safetyCheck: safety });
     if (guardOverride) {
@@ -677,6 +693,46 @@ export async function processTurn({ message, babyProfile, conversation, conversa
         retrieval,
         motherName: babyProfile?.motherName,
       });
+      let recoveredText = rendered.text;
+      if (String(namespace).toUpperCase() === '30_60' && recoveredText) {
+        const cleaned = enrichThirtySixtyOfficialAnswer({
+          text: recoveredText,
+          message,
+          signals,
+          babyProfile: { ...(babyProfile || {}), ageDays: babyProfile?.ageDays ?? age?.days },
+        });
+        recoveredText = scrubThirtySixtySafetyWording(cleaned.text);
+      }
+      const recoveredSafety = checkForbiddenContent({
+        text: recoveredText,
+        namespace,
+        ageDays: age?.days ?? null,
+      });
+      // If the recovered text is clean, deliver it as a normal answer so the
+      // mother is not left with "Resposta interrompida" (TESTE 40d-2).
+      if (recoveredSafety.safe && recoveredText) {
+        const signalIds = (signals?.signals || []).map((s) => s.id);
+        const suggestedLessons = suggestedLessonsFromRetrieval(retrieval, namespace, signalIds);
+        return finalize({
+          turnId,
+          conversationId,
+          question: message,
+          babyProfile,
+          age,
+          intent,
+          retrieval,
+          route,
+          safety: recoveredSafety,
+          clinical,
+          response: {
+            text: recoveredText,
+            kind: 'answer',
+            suggestedLessons,
+          },
+          responseSource: 'guard-recovered',
+          startedAt,
+        });
+      }
       return finalize({
         turnId,
         conversationId,
@@ -688,7 +744,7 @@ export async function processTurn({ message, babyProfile, conversation, conversa
         route: guardOverride,
         safety,
         clinical,
-        response: { text: rendered.text, kind: rendered.meta.kind, meta: rendered.meta, draftBlocked: draft.text },
+        response: { text: recoveredText, kind: rendered.meta.kind, meta: rendered.meta, draftBlocked: draft.text },
         responseSource: 'guard-override',
         startedAt,
         fallbackUsed: true,

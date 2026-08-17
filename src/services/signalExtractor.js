@@ -757,7 +757,7 @@ const SIGNAL_DEFS_30_60 = [
     ],
     boostThemes: ['janela_sono_sonecas', 'vigilia_excessiva_diurna', 'rotina_estruturada'],
     priority:
-      'Faixa 30–60: janela de vigília de referência = 45 minutos a 1 hora (podendo chegar a 1h15). NÃO diga que a janela é só 1h–1h15. NÃO imponha mínimo de 4 a 5 sonecas. Se a condução começa após ~1h–1h15 e o bebê ainda demora ~40–45 min para adormecer, nomeie VIGÍLIA EXCESSIVA como eixo.',
+      'Faixa 30–60: janela de vigília de referência = 45 minutos a 1 hora e 15 minutos. NÃO diga que a janela é só 1h–1h15 e NÃO omita os 45 minutos. NÃO imponha mínimo de 4 a 5 sonecas. Se a condução começa após ~1h–1h15 e o bebê ainda demora ~40–45 min para adormecer, o tempo total até ADORMECER (~1h40–2h) é o dado central — nomeie VIGÍLIA EXCESSIVA como eixo.',
   },
   {
     id: 'no_mau_habito_30_60',
@@ -769,10 +769,7 @@ const SIGNAL_DEFS_30_60 = [
       'travesseiro', 'balancar', 'balançar', 'dorme sozinho',
     ],
     boostThemes: [
-      'conducao_sono_diurno',
-      'chupeta_despertares_soneca',
       'conducao_sem_rotulo_habito',
-      'despertar_irritado_pos_soneca',
     ],
     priority:
       'REGRA OBRIGATÓRIA 0–3 meses (inclui 30–60): NÃO classifique como mau hábito. Investigue vigília, alimentação/saciedade, desconforto e condução. NÃO indique a aula "Ensinando a dormir e tirando os maus hábitos". NÃO fixe ~10 minutos de choro.',
@@ -799,7 +796,7 @@ const SIGNAL_DEFS_30_60 = [
     ],
     boostThemes: ['inicio_sono_noturno_30_60', 'rotina_estruturada'],
     priority:
-      'Responda DIRETO: horário recomendado de início do sono noturno = 19h a 20h. 21h30/22h NÃO é recomendado. Banho às 21h30 pode postergar o início — não culpe só a "estimulação". Pergunte horário da última soneca e tempo acordado. NÃO indique Passo 1 sem necessidade.',
+      'Responda DIRETO: horário recomendado de início do sono noturno = 19h a 20h. 21h30/22h NÃO é recomendado. Banho às 21h30 pode postergar o início — não culpe só a "estimulação". A demora para adormecer NÃO se explica só pelas 21h: leia também a última soneca e a janela (45min–1h15). Pergunte a última soneca UMA vez. NÃO pergunte se assistiu aos módulos 3 e 4. NÃO indique Passo 1 sem necessidade. Mantenha o gênero consistente com o perfil.',
   },
   {
     id: 'nap_angry_wake_30_60',
@@ -812,7 +809,7 @@ const SIGNAL_DEFS_30_60 = [
     ],
     boostThemes: ['despertar_irritado_pos_soneca', 'posicao_vertical_30_60'],
     priority:
-      'Se a soneca informada é ~1h ou mais, NÃO chame de soneca curta. Eixo = despertar irritado + retorno ao peito → investigar alimentação/saciedade e o que ocorre APÓS a mamada (arroto, vertical 20–30 min). NÃO abra por excesso de estímulos/janela perdida sem evidência. NÃO use "sequência noturna" nem "sinais de saciedade no RN".',
+      'Se a soneca informada é ~1h ou mais, NÃO chame de soneca curta. Eixo = despertar irritado + retorno ao peito → investigar alimentação/saciedade e o que ocorre APÓS a mamada (arroto, vertical 20–30 min). Considere desconforto digestivo/refluxo como hipótese, sem diagnóstico. NÃO abra por excesso de estímulos/janela perdida sem evidência. NÃO indique aula de Janela de Vigília como solução principal. NÃO use "sequência noturna" nem "sinais de saciedade no RN".',
   },
   {
     id: 'bottle_volume_30_60',
@@ -824,7 +821,59 @@ const SIGNAL_DEFS_30_60 = [
     ],
     boostThemes: ['mamadeira_aprendizado_volume', 'volta_trabalho_mamadeira'],
     priority:
-      'Mamadeira de aprendizado ~40 dias: referência 90 a 120 ml. Mamada no peito ~20 min com retirada efetiva. NÃO rotule sucção após isso como hábito sem checar saciedade. Indique SOMENTE conteúdo de mamadeira/volta ao trabalho — sem maus hábitos nem sono noturno.',
+      'Mamadeira de aprendizado: ~90 ml no primeiro mês e ~120 ml no segundo mês. Aos 40 dias (segundo mês) a referência é aproximadamente 120 ml. Mamada no peito: cerca de 20 minutos, podendo ser mais curta ou chegar a ~30 minutos, com retirada efetiva e saciedade. NÃO fale em hábito a corrigir. NÃO garanta ausência de desmame/confusão de bico. Indique SOMENTE conteúdo de mamadeira/volta ao trabalho.',
+  },
+  {
+    id: 'excess_total_wake_30_60',
+    label: 'Vigília total excessiva (condução + demora para adormecer)',
+    directive: true,
+    phrases: [
+      'soneca grande pela manhã', 'soneca grande pela manha',
+      'demora muuuito', 'demora muito pra relaxar', 'demora muuuito prw relaxar',
+      '40/45 minutos', '40 a 45 minutos', 'quase 40/45',
+      '2 hrs/ 2 hrs e 30', '2 hrs/ 2 hrs',
+    ],
+    boostThemes: ['vigilia_excessiva_diurna', 'janela_sono_sonecas', 'rotina_estruturada'],
+    priority:
+      'VIGÍLIA TOTAL: some o tempo acordado antes da condução + o tempo até adormecer. Referência 45 minutos a 1 hora e 15 minutos. Se inicia após 1h–1h15 e ainda demora 40–45 min, o total (~1h40–2h) está excessivo. Fracione a soneca longa da manhã para ~1h30–2h. NÃO pergunte duração das sonecas nem tempo acordado se a mãe já informou. NÃO indique Estratégia do Travesseiro neste eixo.',
+  },
+  {
+    id: 'keep_pacifier_30_60',
+    label: 'Mãe quer manter a chupeta e conduzir despertares',
+    directive: true,
+    phrases: [
+      'nao quero retira-la', 'não quero retirá-la', 'nao quero retirar',
+      'não quero retirar', 'recolado a chupeta', 'recolocado a chupeta',
+      'retome o sono sem colocar a chupeta',
+    ],
+    boostThemes: ['chupeta_despertares_soneca'],
+    priority:
+      'A mãe NÃO quer retirar a chupeta. Respeite. Preserve iniciar o sono sozinho no berço se já existe. Investigue mudança recente, alimentação, desconforto e se há relação queda da chupeta → despertar. NÃO misture o cenário "só dorme no colo/peito / travesseiro". NÃO classifique como mau hábito. Vigília de referência: 45 minutos a 1 hora e 15 minutos.',
+  },
+  {
+    id: 'short_naps_pacifier_mention_30_60',
+    label: 'Sonecas curtas + menção de chupeta (sem nexo)',
+    directive: true,
+    phrases: [
+      'sonecas duram', 'média de 30 min', 'media de 30 min',
+      'despertares durante as sonecas',
+    ],
+    boostThemes: ['sonecas_curtas_chupeta_condicional', 'janela_sono_sonecas'],
+    priority:
+      'Sonecas de ~30 min podem ocorrer nesta idade. Hierarquia: como o bebê desperta → alimentação/saciedade → desconforto → vigília 45min a 1h15 → chupeta SOMENTE se a queda coincidir com o despertar. "Usa chupeta" NÃO autoriza hipótese principal. Formulação: "Como ele usa chupeta, vale observar se os despertares acontecem justamente quando ela cai. Se não houver essa relação, não há motivo para considerá-la causa principal." NÃO imponha mínimo de 4–5 sonecas. Vertical geral 20–30 min.',
+  },
+  {
+    id: 'day_sleep_difficulty_30_60',
+    label: 'Dificuldade para dormir de dia (colo/peito/travesseiro)',
+    directive: true,
+    phrases: [
+      'dificuldade de dormir durante o dia', 'dificuldade para dormir durante o dia',
+      'só dorme se for no colo', 'so dorme se for no colo',
+      'quanto tempo pra ela aprender', 'quanto tempo para ela aprender',
+    ],
+    boostThemes: ['conducao_sono_diurno', 'estrategia_travesseiro_execucao'],
+    priority:
+      'Eixo = dificuldade para dormir DURANTE O DIA, não "adaptação ao berço" nem "acostumada ao colo/peito". Hierarquia: vigília 45min–1h15 → alimentação/mamada efetiva/saciedade → diferenciar fome vs sucção já saciada ao adormecer → início da condução → execução do Travesseiro (se já usa) → transferência. Sem prazo fixo. Sem ~10 min de choro. Contenção e ruído branco ok.',
   },
 ];
 
