@@ -80,6 +80,42 @@ assert(!/m[ií]nimo 4–5 sonecas|m[ií]nimo 4-5 sonecas/i.test(prompt), 'prompt
 assert(!/FOCO ALIMENTAR antes de sono/i.test(prompt), 'prompt does not include RN block');
 assert(/usa chupeta, isso NÃO a torna hipótese principal/i.test(prompt), 'prompt: pacifier not auto-primary');
 assert(/NÃO “adaptação ao berço” nem “acostumada ao colo/i.test(prompt) || /NÃO “adaptação ao berço”/i.test(prompt), 'prompt: 51d hierarchy');
+assert(/banho às 21h30 NÃO é recomendado/i.test(prompt), 'prompt: bath 21h30 not recommended');
+assert(/NÃO oriente interromper o peito/i.test(prompt), 'prompt: no comfort-feed interrupt');
+assert(/mamou e dormiu/i.test(prompt) || /18h30/i.test(prompt), 'prompt: 48d early ritual');
+
+const sig48 = extractSignals({
+  message: 'Bebê de 48 dias. Estou começando a rotina do sono dela umas 18:30, até 20 horas está dormindo. transferir pro berço em sono profundo ou com os olhos abertos para criar autonomia',
+  ageBand: '30_60',
+  ageDays: 48,
+});
+assert(sig48.signals.some((s) => s.id === 'early_night_ritual_crib_30_60'), '48d: early ritual signal');
+assert(!sig48.signals.some((s) => s.id === 'night_start_19_20_30_60'), '48d: not 19-20 late-start axis');
+
+const sig55 = extractSignals({
+  message: 'quando a chupeta cai da boca ele reclama. janela de sono dele está maior que 1h15. Geralmente 1h30 a 1h45',
+  ageBand: '30_60',
+  ageDays: 55,
+});
+assert(sig55.signals.some((s) => s.id === 'pacifier_drop_long_wake_30_60'), '55d: pacifier drop + long wake');
+assert(!sig55.signals.some((s) => s.id === 'keep_pacifier_30_60'), '55d: not keep-pacifier axis');
+
+const sig56 = extractSignals({
+  message: 'Posso colocar no berço e esperar ele dormir sozinho, se não estiver chorando? Ou preciso colocar ele em sono leve ? Ou em sono profundo?',
+  ageBand: '30_60',
+  ageDays: 56,
+});
+assert(sig56.signals.some((s) => s.id === 'crib_awake_start_30_60'), '56d: crib awake start');
+assert(!sig56.signals.some((s) => s.id === 'night_start_19_20_30_60'), '56d: not 19-20 night start');
+assert(!sig56.signals.some((s) => s.id === 'early_night_ritual_crib_30_60'), '56d: not 18h30 ritual');
+
+const sig57 = extractSignals({
+  message: 'Estou ensinando a adormecer direto no berço progressivamente... avançando gradativamente. fico uns 10 min tentando acalmá-la. refaço o processo',
+  ageBand: '30_60',
+  ageDays: 57,
+});
+assert(sig57.signals.some((s) => s.id === 'crib_adaptation_same_day_30_60'), '57d: same-day crib adaptation');
+assert(!sig57.signals.some((s) => s.id === 'night_start_19_20_30_60'), '57d: not 19-20 night start');
 
 const sig49 = extractSignals({
   message: 'sonecas duram 30 min, usa chupeta. Preciso ajustar algo?',
@@ -106,7 +142,14 @@ const sig30 = extractSignals({
   ageBand: '30_60',
   ageDays: 30,
 });
+const sigNight = extractSignals({
+  message: 'após as 04:00 da manhã ele acorda de 1 em 1 hrs, coloco no peito ele mama mesmo sabendo que não é fome',
+  ageBand: '30_60',
+  ageDays: 40,
+});
 assert(sig30.signals.some((s) => s.id === 'nap_angry_wake_30_60'), '30d: angry wake signal');
+assert(sigNight.signals.some((s) => s.id === 'night_hourly_wakes_30_60'), '40d-night: hourly wakes signal');
+assert(!sigNight.signals.some((s) => s.id === 'keep_pacifier_30_60'), '40d-night: not pacifier keep');
 assert(!sig30.signals.some((s) => s.id === 'asks_how_to_improve'), '30d: no RN how-to-improve');
 
 const rnPrompt = buildSystemPrompt({
@@ -139,7 +182,7 @@ const cases = [
     message:
       'Minha bebê de 30 dias faz sonecas de 1h às vezes mais.. quando acorda ela acorda muito brava e chora bastante e só acalma dando o peito mama bem pouco e relaxa.. como melhorar? Antes da soneca ela já mama em média 20 a 30 min',
     must: [/alimenta|saciedad|vertical|arroto|p[oó]s-?mamada|depois da mamada/i],
-    mustNot: [/sonecas? curtas/i, /sequ[eê]ncia noturna/i, /sinais de saciedade no RN/i, /mau h[aá]bito/i],
+    mustNot: [/sonecas? curtas/i, /sequ[eê]ncia noturna/i, /sinais de saciedade no RN/i, /mau h[aá]bito/i, /sem evid[eê]ncia no relato|como hip[oó]tese, sem diagn[oó]stico/i],
   },
   {
     id: '31d',
@@ -149,7 +192,7 @@ const cases = [
     message:
       'Meu filho tem 31 dias, sempre fez as sonecas no berço, que duravam cerca de 2 hrs/ 2 hrs e 30. Mas faz 02 dias que ele tem feito uma soneca grande pela manha e, durante a tarde, as sonecas estao bem curtas. Um ciclo de sono. Ele desperta e eu ate tendo nina-lo no berço, mas ele nao retorna. Depois de 30 minutos ja esta com sono novamente. Outra questao eh que ele demora demais para iniciar a soneca. O ambiente esta ajustado, ele esta alimentado, tudo tranquilo, janela de sono del eh de 1 hr/1 hr 15, quando vai dando este horário, vou para o quarto; coloco ruido, quarto escuro, nino ele no colo e ainda acordado transfiro pro berço. Quando no berço, ele demora muuuito pra relaxar, quase 40/45 minutos.',
     must: [/45\s*min|vig[ií]lia|1h30|1h\s*30|fracion|1h15|1 hora e 15/i],
-    mustNot: [/mamada noturna insuficiente|produ[cç][aã]o de leite durante a noite|mau h[aá]bito/i],
+    mustNot: [/mamada noturna insuficiente|produ[cç][aã]o de leite durante a noite|mau h[aá]bito|caprichar nas mamadas.{0,40}relaxar/i],
   },
   {
     id: '40d-bottle',
@@ -159,7 +202,7 @@ const cases = [
     message:
       'minha bebê está com 40 dias. Quanto tempo dura a amamentação dela nessa fase? Já estou tentando introduzir 1 mamadeira Tb, conforme a Eliana ensina. Quantos ml devo ofertar pra ela?',
     must: [/120\s*ml/i, /20\s*minutos/i],
-    mustNot: [/60\s*a\s*90|mau h[aá]bito|sono noturno|h[aá]bito a corrigir/i],
+    mustNot: [/60\s*a\s*90|mau h[aá]bito|sono noturno|h[aá]bito a corrigir|mamadeira,\s*\./i],
   },
   {
     id: '40d-pacifier',
@@ -168,10 +211,20 @@ const cases = [
     babyName: 'Pedro',
     message:
       'Meu filho tem 40 dias. Dorme no berço, colocamos ele acordado e ele dorme sozinho. ele esta usando chupeta desde que saiu da maternidade. Até 05 dias atras, ele retornava a dormir com tranquilidade, fazia sonecas de 2,3 hrs. Contudo, com um ciclo de sono ele está acordando, chora e eu tenho recolocado a chupeta e ele volta a dormir no mesmo instante. Nao quero retira-la, mas nao sei como devo conduzir.',
-    must: [/alimenta|saciedad|vig[ií]lia|suc[cç][aã]o|mudan[cç]a recente/i],
+    must: [/alimenta|saciedad|suc[cç][aã]o|mudan[cç]a recente|retoma/i],
     mustNot: [
-      /\b(e|eh|é)\s+(um\s+)?mau\s+h[aá]bito\b|classific\w*\s+como\s+mau\s+h[aá]bito|desenvolvendo\s+um\s+mau\s+h[aá]bito|aula sobre maus h[aá]bitos|tirando os maus h[aá]bitos|rascunho bloqueado|s[oó] dorme no colo e no peito/i,
+      /\b(e|eh|é)\s+(um\s+)?mau\s+h[aá]bito\b|classific\w*\s+como\s+mau\s+h[aá]bito|desenvolvendo\s+um\s+mau\s+h[aá]bito|aula sobre maus h[aá]bitos|tirando os maus h[aá]bitos|rascunho bloqueado|s[oó] dorme no colo e no peito|principal hip[oó]tese.{0,80}vig[ií]lia excessiva/i,
     ],
+  },
+  {
+    id: '40d-night',
+    ageDays: 40,
+    motherName: 'Ana',
+    babyName: 'Pedro',
+    message:
+      'Olá. Meu bb tem 40 dias , tem noites que ele dorme super bem acorda entre 2:30 a 3 hrs , só que tem dia que após as 04:00 da manhã ele acorda de 1 em 1 hrs tento fazer ele continuar a dormir no berço porém sem sucesso, aí pego ele fico ninando no colo sem sucesso, aí coloco ele no peito ele mama mesmo sabendo que não é fome, ele mama e dorme. Continuo assim por ele ainda ser novinho ?',
+    must: [/alimenta|mamada efetiva|ganho de peso/i],
+    mustNot: [/n[aã]o [eé] necess[aá]rio acord[aá]-l[oa]|antes de 3 horas.{0,40}sem (oferecer|mamar)|mau h[aá]bito/i],
   },
   {
     id: '45d',
@@ -201,7 +254,47 @@ const cases = [
     message:
       'Minha neném 1 mês e 21 dias tem dificuldade de dormir durante o dia, só dorme se for no colo, e no peito, tento fazer a técnica do travesseiro, as vezes da certo e as vezes nao, quanto tempo pra ela aprender?',
     must: [/n[aã]o existe prazo|sem prazo fixo|n[aã]o h[aá] prazo|consist[eê]ncia|vig[ií]lia|45\s*min/i],
-    mustNot: [/\b(e|eh|é)\s+(um\s+)?mau\s+h[aá]bito\b|cerca de 10 minutos|em torno de 10 minutos|acostumad[oa]s? a dormir no colo|^[\s\S]{0,280}adapta[cç][aã]o ao ber[cç]o/i],
+    mustNot: [/\b(e|eh|é)\s+(um\s+)?mau\s+h[aá]bito\b|cerca de 10 minutos|em torno de 10 minutos|acostumad[oa]s? a dormir no colo|^[\s\S]{0,280}adapta[cç][aã]o ao ber[cç]o|mamada.{0,40}conforto.{0,80}interromper/i],
+  },
+  {
+    id: '48d',
+    ageDays: 48,
+    motherName: 'Ana',
+    babyName: 'Lara',
+    message:
+      'Bebê de 48 dias. Estou começando a rotina do sono dela umas 18:30, até 20 horas está dormindo. Estou na dúvida se está muito cedo, precisa ser mais tarde pela idade ou não tem relevância? Outra dúvida, nos momentos da soneca, o ideal é transferir pro berço em sono profundo ou com os olhos abertos, meio acordada ainda pra ela se habituar com o berço e criar autonomia',
+    must: [/18h30|18:30/i, /45\s*min|1 hora e 15|1h15/i, /j[aá] dormindo|mamar e adormecer/i],
+    mustNot: [/promove a autonomia|n[aã]o encontrei orienta[cç][aã]o suficiente/i],
+  },
+  {
+    id: '55d',
+    ageDays: 55,
+    motherName: 'Ana',
+    babyName: 'Pedro',
+    message:
+      'Bom dia! Bebê de 55 dias e chupa chupeta… quando a chupeta cai da boca ele reclama… devo colocá-la logo em seguida ou devo esperar um pouco para colocá-la na boca dele novamente? Outra coisa, a janela de sono dele está maior que 1h15. Geralmente 1h30 a 1h45! Tem problema?',
+    must: [/n[aã]o precisa recoloc|observe um pouco/i, /45\s*min/i, /1h30|1h\s*30/i],
+    mustNot: [/n[aã]o encontrei orienta[cç][aã]o suficiente|idade exata/i],
+  },
+  {
+    id: '56d',
+    ageDays: 56,
+    motherName: 'Ana',
+    babyName: 'Pedro',
+    message:
+      'Bebe de 56 dias. Posso colocar no berço e esperar ele dormir sozinho, se não estiver chorando? Ou preciso colocar ele em sono leve ? Ou em sono profundo?',
+    must: [/acordad/i, /n[aã]o [eé] necess[aá]rio esperar|sono leve/i, /j[aá] dormindo|adormecer mamando/i],
+    mustNot: [/n[aã]o encontrei orienta[cç][aã]o suficiente|idade exata/i],
+  },
+  {
+    id: '57d',
+    ageDays: 57,
+    motherName: 'Ana',
+    babyName: 'Lara',
+    message:
+      'Oi! Bebê de 57 dias. Estou ensinando a adormecer direto no berço progressivamente... começo com sono da manhã e estou avançando gradativamente para as outras sonecas, até chegar no sono noturno. O indicado é ir progressivamente ou deveria tentar em todas as sonecas de uma vez? Além disso, em algumas tentativas, há choro e fico uns 10 min tentando acalmá-la. Quando não resolve, pego no colo, acalmo e refaço o processo novamente... O caminho é esse mesmo?',
+    must: [/mesmo dia|daquele dia|todas as demais sonecas/i, /45\s*min|1 hora e 15|1h15/i],
+    mustNot: [/n[aã]o encontrei orienta[cç][aã]o suficiente|avan[cç]ar progressivamente.{0,80}sonecas da tarde/i],
   },
 ];
 

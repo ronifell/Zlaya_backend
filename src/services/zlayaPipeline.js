@@ -160,6 +160,7 @@ export async function processTurn({ message, babyProfile, conversation, conversa
     clinical,
     babyContext,
     namespace,
+    signals,
   });
 
   // 6) Generation OR templated path

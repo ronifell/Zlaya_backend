@@ -48,7 +48,7 @@
     },
     {
       "id": "30-60-sono-noturno",
-      "rule": "À noite, o bebê de 30–60 dias já pode aumentar o primeiro intervalo de sono para cerca de 3 a 4 horas seguidas (alguns perto dos 50 dias fazem mais, conforme reserva calórica do dia — não é regra). Se está bem de saúde e ganhando peso, NÃO é necessário acordá-lo para mamar. Intervalos seguintes costumam voltar a ~3h; se forem maiores (5h+), não acordar. Quando acordar ANTES de 3 horas, tentar fazer dormir novamente SEM mamar — despertares ainda são comuns e nem sempre são fome; oferecer peito em todo despertar ensina associação mamada–retorno ao sono.",
+      "rule": "À noite, o bebê de 30–60 dias já pode aumentar o primeiro intervalo de sono para cerca de 3 a 4 horas seguidas (alguns perto dos 50 dias fazem mais, conforme reserva calórica do dia — não é regra). Se está bem de saúde e ganhando peso, NÃO é necessário ACORDÁ-LO para mamar. Isso é diferente de o bebê acordar sozinho e mamar: nesse caso NÃO use intervalo fixo de 3 horas para evitar o peito. Investigue alimentação, efetividade, ganho de peso, duração do primeiro sono e se a mamada no despertar é efetiva ou só sucção breve. Na faixa 0–3 meses, NÃO comece por associação peito–sono.",
       "rationale": "Estratégias para o sono noturno — Módulo 5."
     },
     {
@@ -130,23 +130,48 @@
     },
     {
       "id": "30-60-despertar-irritado-pos-soneca",
-      "rule": "Quando a mae relata soneca de ~1h ou mais + despertar muito bravo/chorando + acalma no peito mamando pouco e relaxa: o problema NAO e duracao da soneca. Hipotese prioritaria: alimentacao/saciedade + producao/transferencia quando pertinente + medidas posturais pos-mamada (arroto, vertical 20-30 min, ou 30-40 se refluxo/desconforto). Considere desconforto digestivo/refluxo como hipotese, sem diagnostico. Encaminhe para conteudo de refluxo/alimentacao, NAO para aula de Janela de Vigilia como solucao principal. PERGUNTAR o que acontece entre o fim da mamada e deitar. So depois considerar vigilia/estimulos se houver elementos.",
+      "rule": "Quando a mae relata soneca de ~1h ou mais + despertar muito bravo/chorando + acalma no peito mamando pouco e relaxa: o problema NAO e duracao da soneca. Fale em linguagem natural (ex.: 'Como ela dorme cerca de 1 hora ou mais, eu nao consideraria a duracao o principal problema; o que chama atencao e acordar irritada e relaxar depois de sugar um pouco'). Investigue mamada e desconforto pos-mamada (arroto, vertical 20-30 min). Refluxo como possibilidade a observar, sem copiar 'como hipotese, sem diagnostico' para a mae. Encaminhe para refluxo/alimentacao, NAO para aula de Janela de Vigilia. NAO exponha regras internas ('sem evidencia no relato').",
       "rationale": "TESTE 30d."
     },
     {
       "id": "30-60-vigilia-excessiva-diurna",
-      "rule": "Se a mae inicia conducao apos 1h-1h15 e o bebe ainda demora ~40-45 min para adormecer, o tempo total acordado (~1h40-2h) EXCEDE a referencia de 45 minutos a 1 hora e 15 minutos. O dado central e o horario em que o bebe EFETIVAMENTE adormece, nao so o inicio da conducao. Em soneca manha muito longa (2h-2h30) com tarde curta: orientar fracionar a soneca da manha para cerca de 1h30-2h e caprichar nas mamadas; se ja esta no limite do intervalo para mamar e demora a dormir, amamentar pode ajudar a relaxar. NAO criar hipotese de mamada noturna insuficiente sem relato noturno.",
+      "rule": "Se a mae inicia conducao apos 1h-1h15 e o bebe ainda demora ~40-45 min para adormecer, o tempo total acordado (~1h40-2h) EXCEDE a referencia de 45 minutos a 1 hora e 15 minutos. O dado central e o horario em que o bebe EFETIVAMENTE adormece, nao so o inicio da conducao. A soneca longa da manha pode ser fracionada para cerca de 1h30-2h para observar a DISTRIBUICAO da tarde — NAO a apresente como causa direta dos 40-45 min no berco. Alimentacao: se a demora aproxima o proximo intervalo de mamada, considere fome; NAO diga 'caprichar nas mamadas para relaxar'. Se perguntar o intervalo das mamadas, explique por que precisa dessa informacao. NAO criar hipotese de mamada noturna insuficiente sem relato noturno.",
       "rationale": "TESTE 31d."
     },
     {
       "id": "30-60-chupeta-manutencao-sono",
-      "rule": "Mudanca recente nas sonecas (antes longas, agora acorda em 1 ciclo e precisa de chupeta): NAO classificar como mau habito. Investigar alimentacao, intervalos, saciedade, desconforto, vigilia e papel da succao. Se o bebe ja inicia o sono sozinho no berco, preservar essa habilidade. Se a mae NAO quer retirar a chupeta, respeitar e orientar conducao dos despertares sem rotulo de mau habito. Chupeta so entra como eixo se houver relacao clara queda-despertar. Se a mae apenas informa que o bebe USA chupeta, isso NAO autoriza coloca-la como hipotese principal dos despertares. Hierarquia: como o bebe acorda -> alimentacao/saciedade -> desconforto -> vigilia 45min a 1h15 -> chupeta SOMENTE se a queda coincidir com o despertar.",
+      "rule": "Mudanca recente nas sonecas (antes longas, agora acorda em 1 ciclo e precisa de chupeta): NAO classificar como mau habito. Eixo = mudanca recente, NAO vigilia excessiva se a mae nao informou o tempo acordado. Investigar alimentacao, saciedade, desconforto, succao e se a queda da chupeta coincide com o despertar. Se o bebe ja inicia o sono sozinho no berco, preservar. Se a mae NAO quer retirar a chupeta, respeitar. Conduta pratica: como ela ja relatou que as vezes ele retoma sem a chupeta, observar alguns instantes no despertar (se o choro nao cresce) e recolocar se precisar. Janela 45min-1h15 so como causa se houver dado de que foi ultrapassada.",
       "rationale": "TESTE 40d-2 e 49d."
     },
     {
       "id": "30-60-dificuldade-dormir-dia",
-      "rule": "Dificuldade para dormir de dia (so no colo/peito, travesseiro as vezes funciona): o eixo e a dificuldade para dormir, NAO 'adaptacao ao berco' nem 'acostumada ao colo/peito'. Hierarquia = vigilia 45min a 1h15 -> alimentacao/mamada efetiva/saciedade -> diferenciar fome vs succao durante o adormecer -> momento de inicio da conducao -> execucao do Travesseiro (se a mae ja usa) -> transferencia. Responder quanto tempo para aprender?: NAO existe prazo fixo de dias; depende de repeticao/consistencia e organizacao de alimentacao/vigilia/sono. NAO indicar aula de maus habitos.",
+      "rule": "Dificuldade para dormir de dia (so no colo/peito, travesseiro as vezes funciona): o eixo e a dificuldade para dormir, NAO 'adaptacao ao berco' nem 'acostumada ao colo/peito'. Hierarquia = vigilia 45min a 1h15 -> alimentacao/mamada efetiva/saciedade -> identificar se ainda existe fome -> se saciada, se permanece sugando ao adormecer -> momento de inicio da conducao -> execucao do Travesseiro (se a mae ja usa) -> transferencia. NAO oriente interrupcao do peito a partir de 'mamada por conforto'. Responder quanto tempo para aprender?: NAO existe prazo fixo de dias; depende de repeticao/consistencia e organizacao de alimentacao/vigilia/sono. NAO indicar aula de maus habitos.",
       "rationale": "TESTE 51d."
+    },
+    {
+      "id": "30-60-ritual-18h30-berco",
+      "rule": "Se a mae inicia o ritual as 18h30 e o bebe so adormece as 20h: ritual deve ser breve (banho, mamada, dormir). NAO interprete 18h30 so como ritual visando 19h-20h. Janela 45min a 1h15. Duas possibilidades: iniciar a noite ~18h30 se o bebe estiver pronto; OU soneca de ate ~1h e iniciar a noite depois. Berco: mamou e adormeceu -> pode ir dormindo; vai dormir sem mamar -> pode conduzir acordado. NAO exigir colocacao acordada para autonomia.",
+      "rationale": "TESTE 48d."
+    },
+    {
+      "id": "30-60-chupeta-cai-janela-longa",
+      "rule": "Chupeta cai e o bebe so reclama: NAO recolocar imediatamente; observar se continua dormindo; se despertar e precisar de ajuda, oferecer de novo. Janela habitual de 1h30 a 1h45 ultrapassa 45min-1h15: observar sinais de sono e preparar antes de passar de 1h15. NAO pedir idade de novo. NAO acionar fallback quando houver conteudo metodologico suficiente.",
+      "rationale": "TESTE 55d."
+    },
+    {
+      "id": "30-60-berco-acordado-sono-leve",
+      "rule": "Pergunta sobre colocar acordado / sono leve / sono profundo: se tranquilo e sem choro, pode colocar acordado no berco. NAO e obrigatorio esperar sono leve ou profundo. Se chorar, acalmar e seguir a conducao, sem exigir autonomia. Se adormecer mamando, pode ir ja dormindo; NAO acordar para coloca-lo acordado. NAO acionar fallback.",
+      "rationale": "TESTE 56d."
+    },
+    {
+      "id": "30-60-adaptacao-berco-mesmo-dia",
+      "rule": "Adaptacao ao berco: comece pela primeira soneca da manha e siga com todas as demais sonecas DAQUELE MESMO DIA no berco; repetir diariamente. NAO avancar uma soneca por vez ao longo dos dias. Resistencia: colo para acalmar, voltar ao berco, repetir ate adormecer. NAO cronometrar o choro. Janela 45min a 1h15. Travesseiro e aceitavel.",
+      "rationale": "TESTE 57d."
+    },
+    {
+      "id": "30-60-despertares-madrugada-alimentacao",
+      "rule": "Despertares de hora em hora apos ~4h: diferenciar nao acordar um bebe saudavel so para mamar de bebe que acorda sozinho e mama. NAO usar 3h para evitar peito. NAO dizer 'nao e necessario acorda-lo' se a mae nao esta acordando o bebe. NAO comecar por associacao peito-sono. Investigar tipo de leite, efetividade das mamadas, ganho de peso, duracao do primeiro sono, mamada efetiva vs succao breve e desconforto pos-mamada. A percepcao materna de que 'nao e fome' nao basta se ele mama e dorme.",
+      "rationale": "TESTE 40d despertares noturnos."
     }
   ],
   "investigationHierarchies": {

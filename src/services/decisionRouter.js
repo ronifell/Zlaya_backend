@@ -58,6 +58,7 @@ export function decideRoute({
   clinical,
   babyContext,
   namespace,
+  signals,
 }) {
   // Caminho 5: clinical red flag short-circuits everything
   if (clinical?.hasRedFlag) {
@@ -67,24 +68,46 @@ export function decideRoute({
     });
   }
 
+  const thirtySixtyGrounded =
+    String(namespace || '').toUpperCase() === '30_60' &&
+    Boolean(
+      signals?.hasDirectiveSignal ||
+      (signals?.signals || []).some((s) => String(s.id || '').includes('30_60')),
+    );
+
   // Caminho 7: explicitly out of scope OR no retrieval at all
-  if (intent === 'fora_da_base') {
+  if (intent === 'fora_da_base' && !thirtySixtyGrounded) {
     return route(PATHS.ROUTE_TO_HUMAN_SUPPORT, { reason: 'intent_out_of_base' });
   }
-  if (!retrieval || retrieval.status === 'no_results') {
+  if ((!retrieval || retrieval.status === 'no_results') && !thirtySixtyGrounded) {
     return route(PATHS.ROUTE_TO_HUMAN_SUPPORT, { reason: 'no_retrieval_results' });
+  }
+  if (thirtySixtyGrounded && (!retrieval || retrieval.status === 'no_results' || intent === 'fora_da_base')) {
+    return route(PATHS.ANSWER_DIRECTLY, { reason: 'thirty_sixty_method_content' });
   }
 
   // Caminho 4: ambiguous intent or low retrieval confidence
-  if (intent === 'ambiguo' || (intentConfidence ?? 0) < 0.35) {
+  if ((intent === 'ambiguo' || (intentConfidence ?? 0) < 0.35) && !thirtySixtyGrounded) {
     return route(PATHS.FALLBACK, { reason: 'low_intent_confidence', intentConfidence });
   }
+  if (thirtySixtyGrounded && (intent === 'ambiguo' || (intentConfidence ?? 0) < 0.35)) {
+    return route(PATHS.ANSWER_DIRECTLY, {
+      reason: 'thirty_sixty_method_content',
+      intentConfidence,
+    });
+  }
   if (retrieval.confidence < (config.retrieval.answerMinConfidence * 0.6)) {
+    if (thirtySixtyGrounded) {
+      return route(PATHS.ANSWER_DIRECTLY, {
+        reason: 'thirty_sixty_method_content',
+        confidence: retrieval.confidence,
+      });
+    }
     return route(PATHS.FALLBACK, { reason: 'very_low_retrieval_confidence', confidence: retrieval.confidence });
   }
 
   // Caminho 2: missing baby context required for safe answering
-  if (babyContext && !babyContext.hasMinimumContext) {
+  if (babyContext && !babyContext.hasMinimumContext && !thirtySixtyGrounded) {
     return route(PATHS.ASK_MORE_CONTEXT, {
       reason: 'missing_baby_context',
       missing: babyContext.missingFields,
@@ -120,9 +143,9 @@ export function decideRoute({
     // mother already gave rich context, in which case prefer a practical,
     // grounded answer (lessons are still attached as suggestions).
     if (retrieval.confidence < config.retrieval.answerMinConfidence) {
-      if (richContext && retrieval.confidence >= config.retrieval.answerMinConfidence * 0.75) {
+      if (thirtySixtyGrounded || (richContext && retrieval.confidence >= config.retrieval.answerMinConfidence * 0.75)) {
         return route(PATHS.ANSWER_DIRECTLY, {
-          reason: 'rich_context_practical_orientation',
+          reason: thirtySixtyGrounded ? 'thirty_sixty_method_content' : 'rich_context_practical_orientation',
           confidence: retrieval.confidence,
         });
       }

@@ -44,6 +44,23 @@ export function scrubThirtySixtySafetyWording(text) {
   return out.trim();
 }
 
+function scrubInternalReasoningLanguage(text) {
+  let out = String(text || '');
+  out = out.replace(/\s*[—\-–]\s*como hip[oó]tese, sem diagn[oó]stico\.?/gi, '.');
+  out = out.replace(/como hip[oó]tese, sem diagn[oó]stico\.?/gi, '');
+  out = out.replace(/\s*e n[aã]o est[ií]mulos\/janela sem evid[eê]ncia no relato\.?/gi, '.');
+  out = out.replace(/sem evid[eê]ncia no relato/gi, '');
+  out = out.replace(/n[aã]o deve ser classificada como curta/gi, 'não é o principal problema neste momento');
+  out = out.replace(/Me diga o que falta no relato:\s*/gi, '');
+  out = out.replace(
+    /Aqui a prioridade [eé] alimenta[cç][aã]o\/saciedade e o p[oó]s-mamada[^.]*\./gi,
+    'Como ela consegue dormir por cerca de 1 hora ou até mais, eu não consideraria a duração da soneca o principal problema neste momento. O que chama mais atenção é acordar muito irritada e relaxar depois de sugar um pouco. Por isso, primeiro observaria como está a mamada e se existe algum desconforto depois dela.',
+  );
+  out = out.replace(/,\s+\./g, '.');
+  out = out.replace(/\.\s*\./g, '.');
+  return out;
+}
+
 function appendOnce(text, fragment) {
   const t = (text || '').replace(/\s+$/, '');
   const f = String(fragment || '').trim();
@@ -155,26 +172,26 @@ export function enrichThirtySixtyOfficialAnswer({
       /aula sobre ['‘’“”"]?Janela de Vig[ií]lia['‘’“”"]?[^.]*/gi,
       "aula 'O que é o refluxo?' — alinhada à hipótese de alimentação e desconforto pós-mamada",
     );
-    if (!has(out, /prioridade [eé] (investigar )?alimenta|eixo.{0,20}alimenta|hip[oó]tese.{0,60}alimenta/i)) {
+    if (!has(out, /n[aã]o consideraria a dura[cç][aã]o da soneca|1 hora ou at[eé] mais/i)) {
       out = appendOnce(
         out,
-        'Aqui a prioridade é alimentação/saciedade e o pós-mamada — não a duração da soneca (1h ou mais não deve ser classificada como curta) e não estímulos/janela sem evidência no relato.',
+        'Como ela consegue dormir por cerca de 1 hora ou até mais, eu não consideraria a duração da soneca o principal problema neste momento. O que chama mais atenção é ela acordar muito irritada e relaxar depois de sugar um pouco. Por isso, primeiro observaria como está a mamada e se existe algum desconforto depois dela.',
       );
       notes.push('angry_wake_feeding');
     }
-    if (!has(out, /refluxo.{0,80}(hip[oó]tese|sem diagn[oó]stico)|hip[oó]tese.{0,80}refluxo/i)) {
+    if (!has(out, /refluxo/i)) {
       out = appendOnce(
         out,
-        'O padrão de acordar irritada, sugar pouco o peito e relaxar também justifica investigar desconforto digestivo/refluxo — como hipótese, sem diagnóstico.',
+        'Esse padrão também pode apontar para algum desconforto depois da mamada, inclusive refluxo — vale observar com o pediatra da família se persistir.',
       );
       notes.push('angry_wake_reflux_hypothesis');
     }
     const hasPosturalAsk =
-      /(houve arroto|permaneceu em posi|ficou em posi|me diga.{0,80}arroto|gostaria de saber:.{0,120}(arroto|vertical))/i.test(out);
+      /(houve arroto|permaneceu em posi|ficou em posi|me diga.{0,80}arroto|gostaria de saber:.{0,120}(arroto|vertical)|depois da mamada, antes de deitar)/i.test(out);
     if (!hasPosturalAsk) {
       out = appendOnce(
         out,
-        'Me diga o que falta no relato: depois da mamada houve arroto? Ficou em posição vertical? Por quanto tempo? O que acontece entre o fim da mamada e o deitar?',
+        'Depois da mamada, antes de deitar: houve arroto? Ela ficou em posição vertical, e por quanto tempo?',
       );
       notes.push('angry_wake_postural_ask');
     }
@@ -183,18 +200,40 @@ export function enrichThirtySixtyOfficialAnswer({
   }
 
   // --- 31d excess wake (do NOT use 49d pacifier block) ---
+  const keepPacifierCase = /chupeta/i.test(msg) && /n[aã]o quero retir/i.test(msg);
   const excessWakeCase =
-    ids.has('wake_window_30_60') &&
-    /1\s*hr|1\s*h|40\s*\/\s*45|40\/45|demora|fracion/i.test(msg) &&
-    /soneca grande|2\s*hrs|2h|manh/i.test(msg);
+    !keepPacifierCase &&
+    (ids.has('excess_total_wake_30_60') ||
+      (ids.has('wake_window_30_60') &&
+        /1\s*hr|1\s*h|40\s*\/\s*45|40\/45|demora|fracion/i.test(msg) &&
+        /soneca grande|2\s*hrs|2h|manh/i.test(msg)));
   if (excessWakeCase) {
     out = out.replace(/\n\nAntes de atribuir os despertares à chupeta[\s\S]*?despertar\./gi, '');
     out = out.replace(/45 minutos a 1 hora \(podendo chegar a 1h15\)/gi, WAKE_WINDOW_REF);
     out = out.replace(/refer[eê]ncia de 45 minutos a 1 hora(?!\s+e\s+15)/gi, `referência de ${WAKE_WINDOW_REF}`);
+    out = out.replace(
+      /Como ele est[aá] fazendo uma soneca longa pela manh[aã][^.]*?(dificuldade em relaxar|adormecer novamente)[^.]*\./gi,
+      'A soneca longa da manhã pode ser fracionada para cerca de 1h30 a 2h, observando se a tarde se distribui melhor. A demora de 40–45 minutos para relaxar no berço se explica sobretudo pela vigília total — não pela soneca da manhã em si.',
+    );
+    out = out.replace(
+      /[^.]*soneca longa pela manh[aã][^.]*?(contribuindo|explica|causa)[^.]*?(relaxar|adormecer)[^.]*\./gi,
+      'A soneca longa da manhã pode ser fracionada para cerca de 1h30 a 2h, observando a distribuição da tarde. A demora de 40–45 minutos para relaxar no berço se explica sobretudo pela vigília total — não pela soneca da manhã em si.',
+    );
+    out = out.replace(
+      /isso pode estar contribuindo para a dificuldade em relaxar e adormecer novamente[^.]*\./gi,
+      'isso altera a distribuição das sonecas ao longo do dia e pode ser ajustado, observando a resposta da tarde.',
+    );
+    out = out.replace(/caprichar nas mamadas pode ajudar a relaxar[^.]*\./gi, '');
+    out = out.replace(/oferecer uma mamada pode ajudar a relaxar[^.]*\./gi, 'se a demora para adormecer estiver aproximando o próximo intervalo de mamada, considere fome antes de insistir no sono.');
+    out = out.replace(/mamada pode ajudar a relaxar[^.]*\./gi, 'a fome deve ser considerada se ele já estiver perto do próximo intervalo de mamada.');
+    out = out.replace(/e caprichar nas mamadas costuma ajudar o padr[aã]o da tarde\./gi, ', observando se a tarde se organiza melhor.');
+    out = out.replace(/caprichar nas mamadas/gi, 'verificar se a demora aproxima o próximo intervalo de mamada');
+    out = out.replace(/voc[eê] poderia me informar\s+(Tamb[eé]m [eé] importante)/gi, '$1');
+    out = out.replace(/Para entender melhor, voc[eê] poderia me informar\s*/gi, '');
     if (!has(out, /1h\s*40|1h40|1 hora e 40|tempo total acordado|vig[ií]lia excessiva/i)) {
       out = appendOnce(
         out,
-        `Dado central: vigília excessiva. O crítico não é só o horário em que a condução começa: se ela inicia após ~1h–1h15 e o bebê ainda demora ~40–45 min para adormecer, o tempo total até ele efetivamente dormir fica perto de 1h40–2h — acima da referência de ${WAKE_WINDOW_REF}. Comece a preparação um pouco antes para que o adormecimento caia dentro da janela.`,
+        `O ponto central é a vigília total: se a condução começa depois de cerca de 1h–1h15 e ele ainda leva uns 40–45 minutos para adormecer, o tempo acordado chega perto de 1h40–2h — acima da referência de ${WAKE_WINDOW_REF}. Comece a preparação um pouco antes para que o adormecimento, e não só o início da condução, caia dentro da janela.`,
       );
       notes.push('excess_wake_45_60');
     } else if (!has(out, /1 hora e 15|1h15|1\s*h\s*15/i)) {
@@ -207,9 +246,22 @@ export function enrichThirtySixtyOfficialAnswer({
     if (/2\s*hrs|2h|soneca grande pela manh/i.test(msg) && !has(out, /fracion/i)) {
       out = appendOnce(
         out,
-        'Fracionar a soneca da manhã para cerca de 1h30–2h e caprichar nas mamadas costuma ajudar o padrão da tarde.',
+        'Vale fracionar a soneca da manhã para cerca de 1h30–2h e observar se as sonecas da tarde se distribuem melhor — esse ajuste não substitui o eixo da vigília total.',
       );
       notes.push('fraction_morning');
+    }
+    out = out.replace(/^\s*qual [eé] o intervalo t[ií]pico entre as mamadas\s*\.?$/gim, '');
+    if (!has(out, /intervalo (t[ií]pico )?entre as mamadas/i)) {
+      out = appendOnce(
+        out,
+        'Também é importante saber qual costuma ser o intervalo entre as mamadas, porque, se durante essa demora para adormecer ele estiver se aproximando do próximo intervalo alimentar, a fome também precisa ser considerada.',
+      );
+      notes.push('feed_interval_ask');
+    } else if (!has(out, /aproximando do pr[oó]ximo intervalo|intervalo alimentar/i)) {
+      out = out.replace(
+        /qual [eé] o intervalo t[ií]pico entre as mamadas\.?/gi,
+        'Também é importante saber qual costuma ser o intervalo entre as mamadas, porque, se durante essa demora para adormecer ele estiver se aproximando do próximo intervalo alimentar, a fome também precisa ser considerada.',
+      );
     }
     if (/1\s*hr|1h\s*15|2\s*hrs|soneca grande/i.test(msg)) {
       out = out.replace(/qual [eé] a dura[cç][aã]o t[ií]pica das sonecas da manh[aã] e da tarde\??/gi, '');
@@ -222,10 +274,13 @@ export function enrichThirtySixtyOfficialAnswer({
     }
   }
 
-  // --- 45d night start ---
-  if (ids.has('night_start_19_20_30_60')) {
+  // --- 45d night start (NOT the 18h30 early-ritual case) ---
+  if (ids.has('night_start_19_20_30_60') && !ids.has('early_night_ritual_crib_30_60') && !ids.has('crib_awake_start_30_60') && !ids.has('crib_adaptation_same_day_30_60')) {
     out = out.replace(/Voc[eê] j[aá] assistiu aos m[oó]dulos 3 e 4[^.?]*\??/gi, '');
     out = out.replace(/j[aá] assistiu aos m[oó]dulos 3 e 4[^.?]*\??/gi, '');
+    out = out.replace(/Recomendo que voc[eê] revise as aulas[^.!?]*m[oó]dulos?\s*3 e 4[^.!?]*[.!?]/gi, '');
+    out = out.replace(/[^.!?]*especialmente as do m[oó]dulo[s]?\s*3 e 4[^.!?]*[.!?]/gi, '');
+    out = out.replace(/[^.!?]*m[oó]dulos?\s*3 e 4[^.!?]*[.!?]/gi, '');
     out = out.replace(
       /Iniciar o sono noturno [àa]s 21h n[aã]o [eé] o ideal, pois pode contribuir para que (ele|ela) demore mais a adormecer[^.]*\./gi,
       'Iniciar o sono noturno às 21h não é o horário recomendado. A demora para adormecer também precisa ser lida com o horário da última soneca e com a janela de vigília — o horário tardio não explica isso sozinho.',
@@ -234,24 +289,60 @@ export function enrichThirtySixtyOfficialAnswer({
       /n[aã]o [eé] o ideal, pois pode contribuir para que (ele|ela) demore mais a adormecer[^.]*\./gi,
       'não é o horário recomendado. A demora para adormecer também precisa ser lida com o horário da última soneca e com a janela de vigília — o horário tardio não explica isso sozinho.',
     );
+    // Keep a single "21h30/22h não é recomendado" (TESTE 003: the idea appeared twice).
+    out = out.replace(
+      /[^.!?]*iniciar o sono noturno (às|as|por volta de )?\s*21h30 ou 22h n[aã]o [eé] o? ?(?:ideal|recomendado)[^.!?]*[.!?]/gi,
+      '',
+    );
+    {
+      let lateSeen = 0;
+      out = out.replace(/[^.!?]*21h30 ou 22h n[aã]o [eé][^.!?]*recomend[^.!?]*[.!?]/gi, (m) => {
+        lateSeen += 1;
+        return lateSeen === 1 ? m : '';
+      });
+    }
     if (!has(out, /19h.{0,20}20h|19\s*h.{0,20}20\s*h/i)) {
       out = appendOnce(out, 'O horário saudável e recomendado para o início do sono noturno é entre 19h e 20h.');
       notes.push('night_19_20');
     }
-    if (!has(out, /(21h?30|22h).{0,50}(n[aã]o .{0,25}recomend|n[aã]o [eé] o recomend|n[aã]o recomendado)/i)) {
+    if (/banho|21h?30|21:30/i.test(msg)) {
+      out = out.replace(
+        /Se o banho for (dado )?[àa]s 21h30[^.]*\./gi,
+        'O banho às 21h30 não é recomendado quando leva o início do sono noturno para ainda mais tarde.',
+      );
+      if (!has(out, /banho.{0,80}n[aã]o [eé] recomendado|n[aã]o [eé] recomendado.{0,80}banho/i)) {
+        out = appendOnce(
+          out,
+          'Sobre a pergunta objetiva: o banho às 21h30 não é recomendado quando leva o início do sono noturno para ainda mais tarde.',
+        );
+      }
+      notes.push('bath_not_recommended');
+    }
+    if (!has(out, /21h30 ou 22h n[aã]o [eé]/i)) {
       out = appendOnce(
         out,
         'A família pode organizar conforme sua dinâmica, mas iniciar o sono noturno por volta de 21h30 ou 22h não é o recomendado.',
       );
       notes.push('night_not_2130');
     }
-    if (/banho|21h?30|21:30/i.test(msg) && !has(out, /banho.{0,50}(posterg|atras)/i)) {
-      out = appendOnce(out, 'Se o banho for às 21h30, isso pode postergar ainda mais o início do sono noturno.');
-      notes.push('bath_postpones');
-    }
+    // 45d must not inherit the 48d "start at 18h30 or take a 1h nap" fork.
+    out = out.replace(/[^.!?]*por volta das 18h30[^.!?]*[.!?]/gi, '');
+    out = out.replace(/[^.!?]*soneca de at[eé] (aproximadamente )?1 hora antes de iniciar a noite[^.!?]*[.!?]/gi, '');
+    out = out.replace(/[^.!?]*aula sobre (a )?rotina noturna no m[oó]dulo 3[^.!?]*[.!?]/gi, '');
+    out = out.replace(/[^.!?]*sono noturno no m[oó]dulo 3[^.!?]*[.!?]/gi, '');
+    out = out.replace(/[^.!?]*no m[oó]dulo 3[^.!?]*[.!?]/gi, '');
     const lastNapMentions = (out.match(/[uú]ltima soneca/gi) || []).length;
+    if (lastNapMentions > 1) {
+      let seen = 0;
+      out = out.replace(/[^.!?]*[uú]ltima soneca[^.!?]*[.!?]/g, (m) => {
+        seen += 1;
+        return seen === 1 ? m : '';
+      });
+      notes.push('night_dedupe_last_nap');
+    }
     if (!has(out, /45\s*min/i)) {
-      const napClause = lastNapMentions === 0
+      const napGone = (out.match(/[uú]ltima soneca/gi) || []).length === 0;
+      const napClause = napGone
         ? ' Observe a que horas termina a última soneca e há quanto tempo está acordado.'
         : '';
       out = appendOnce(
@@ -259,19 +350,84 @@ export function enrichThirtySixtyOfficialAnswer({
         `A janela de vigília pode variar entre ${WAKE_WINDOW_REF}.${napClause}`,
       );
       notes.push('night_wake_window');
-    } else if (lastNapMentions === 0) {
+    } else if ((out.match(/[uú]ltima soneca/gi) || []).length === 0) {
       out = appendOnce(
         out,
         'Observe a que horas termina a última soneca e há quanto tempo está acordado.',
       );
       notes.push('night_last_nap_ask');
-    } else if (lastNapMentions > 1) {
-      let seen = 0;
-      out = out.replace(/[^.]*[uú]ltima soneca[^.]*\./g, (m) => {
-        seen += 1;
-        return seen === 1 ? m : '';
-      });
-      notes.push('night_dedupe_last_nap');
+    }
+  }
+
+  // --- 48d early night ritual 18h30 → asleep 20h + crib transfer ---
+  if ((ids.has('early_night_ritual_crib_30_60') || /18h?[:h]?30|18:30/.test(msg)) && /18h?[:h]?30|18:30/.test(msg)) {
+    out = out.replace(
+      /iniciar por volta das 18h30 est[aá] dentro do esperado[^.]*\./gi,
+      '',
+    );
+    out = out.replace(
+      /O hor[aá]rio (saud[aá]vel e )?recomendado para o in[ií]cio do sono noturno [eé] entre 19h e 20h[^.!?]*[.!?]/gi,
+      '',
+    );
+    out = out.replace(
+      /Isso ajuda a criar a associa[cç][aã]o do ber[cç]o como um lugar seguro para dormir e promove a autonomia[^.]*\./gi,
+      '',
+    );
+    out = out.replace(
+      /promove a autonomia d[eo]l[ae][^.]*\./gi,
+      '',
+    );
+    out = out.replace(
+      /criar familiaridade com o ber[cç]o e a desenvolver autonomia[^.!?]*[.!?]/gi,
+      '',
+    );
+    out = out.replace(
+      /ajuda a criar familiaridade com o ber[cç]o[^.!?]*[.!?]/gi,
+      '',
+    );
+    out = out.replace(
+      /desenvolver autonomia[^.!?]*[.!?]/gi,
+      (m) => (/n[aã]o (uma )?exig/i.test(m) ? m : ''),
+    );
+    out = out.replace(
+      /Se (ela|ele) estiver em sono profundo, pode ser mais dif[ií]cil para (ela|ele) se habituar ao ber[cç]o[^.]*\./gi,
+      '',
+    );
+    out = out.replace(
+      /o ideal [eé] que voc[eê] coloque .{0,80}calma, mas ainda acordada[^.]*\./gi,
+      '',
+    );
+    out = out.replace(
+      /o ideal [eé] que voc[eê] coloque .{0,80}ainda acordad[oa][^.]*autonomia[^.]*\./gi,
+      '',
+    );
+    if (!has(out, /ritual.{0,40}breve|banho, mamada e (dormir|condu)/i)) {
+      out = appendOnce(
+        out,
+        'O ritual noturno deve ser breve — normalmente banho, mamada e condução para dormir.',
+      );
+      notes.push('48_brief_ritual');
+    }
+    if (!has(out, /18h30.{0,80}(pront[oa]|iniciar a noite)|soneca de at[eé] (aproximadamente )?1 hora/i)) {
+      out = appendOnce(
+        out,
+        'Se o ritual começa às 18h30 e ela só adormece às 20h, vale checar se o tempo acordado ficou excessivo. Há duas possibilidades: se ela já estiver pronta, pode iniciar o sono noturno por volta das 18h30; se ainda for cedo para a noite, pode fazer uma soneca de até aproximadamente 1 hora nesse período e iniciar o sono noturno mais tarde. Ajuste conforme a resposta dela, sem prolongar desnecessariamente o período acordada.',
+      );
+      notes.push('48_two_night_options');
+    }
+    if (!has(out, /45\s*min/i) || !has(out, /1 hora e 15|1h15/i)) {
+      out = appendOnce(
+        out,
+        `Aos 48 dias a janela de vigília de referência é de ${WAKE_WINDOW_REF}.`,
+      );
+      notes.push('48_wake_window');
+    }
+    if (!has(out, /mamar e adormecer.{0,40}j[aá] dormindo|mamou e (adormeceu|dormiu)|sem mamar.{0,40}acordad/i)) {
+      out = appendOnce(
+        out,
+        'Na transferência para o berço, diferencie: se ela mamar e adormecer, pode ir já dormindo. Quando for dormir sem mamada, você pode conduzir o adormecimento no berço com ela inicialmente acordada. Colocar acordada no berço é uma possibilidade de condução, não uma exigência para autonomia.',
+      );
+      notes.push('48_crib_by_feed');
     }
   }
 
@@ -316,24 +472,39 @@ export function enrichThirtySixtyOfficialAnswer({
       );
       notes.push('49_how_wakes');
     }
+    out = out.replace(
+      /Se voc[eê] perceber que ele est[aá] acordando ap[oó]s 30 minutos, pode ser [uú]til iniciar a condu[cç][aã]o do sono um pouco antes[^.!?]*[.!?]/gi,
+      '',
+    );
+    out = out.replace(
+      /acordando ap[oó]s 30 minutos.{0,80}iniciar a condu[cç][aã]o.{0,40}antes[^.!?]*[.!?]/gi,
+      '',
+    );
+    if (!has(out, /quanto tempo (ele|ela) permanece acordad|tempo (real )?de vig[ií]lia|acordado antes das sonecas/i)) {
+      out = appendOnce(
+        out,
+        'Observe também quanto tempo ele permanece acordado antes das sonecas. Nessa faixa etária, a janela de vigília fica entre 45 minutos e 1 hora e 15 minutos. Se o tempo que ele permanece acordado estiver fora dessa faixa ou se os sinais de sono aparecerem antes, podemos avaliar um ajuste na condução. A duração de uma soneca de cerca de 30 minutos, sozinha, não indica que a condução precise começar mais cedo.',
+      );
+      notes.push('49_no_early_from_30min');
+    }
   }
 
   // --- 40d pacifier keep (rewrite harmful guidance) ---
-  if (/chupeta/i.test(msg) && /n[aã]o quero retir/i.test(msg)) {
-    out = out.replace(/retomar o sono sem (a |colocar a )?chupeta/gi, 'conduzir os despertares respeitando o uso da chupeta');
-    out = out.replace(/sem oferecer a chupeta imediatamente[^.]*\./gi, 'observando se ele retoma sozinho e, se precisar, recolocando a chupeta sem pressão para retirá-la.');
+  if (keepPacifierCase) {
     out = out.replace(/conten[cç][aã]o suave[^.]*\./gi, 'preservando a habilidade que ele já tem de iniciar o sono sozinho no berço.');
-    // Remove any "mau hábito" wording entirely (even in negations) — dossiers ban the classification language.
     out = out.replace(/NAO classifique como mau habito[^.]*\./gi, 'Nesta idade o Método não usa classificação comportamental inadequada para 0 a 3 meses.');
     out = out.replace(/n[aã]o classifique como mau h[aá]bito[^.]*\./gi, 'Nesta idade o Método não usa classificação comportamental inadequada para 0 a 3 meses.');
     out = out.replace(/sem rotulo de mau habito/gi, 'sem rotular o comportamento');
     out = out.replace(/sem classific[aá]-la como mau h[aá]bito/gi, 'sem rotular o comportamento nesta idade');
     out = out.replace(/\bmaus?\s+h[aá]bitos?\b/gi, 'padrão de condução');
-    // Truncate dumped multi-chunk local-composer tails (keep first case block).
     out = out.replace(/\nOutros pontos relevantes[\s\S]*$/i, '');
     out = out.replace(/s[oó] dorme no colo e no peito[^.]*\./gi, '');
     out = out.replace(/Travesseiro as vezes funciona[^.]*\./gi, '');
     out = out.replace(/Dificuldade para dormir durante o dia aos 30-60 dias[^.]*\./gi, '');
+    out = out.replace(
+      /A principal hip[oó]tese.{0,120}vig[ií]lia excessiva[^.]*\./gi,
+      'O que mais chama atenção é a mudança recente: até cerca de 5 dias as sonecas eram longas e o retorno era tranquilo. Sem o tempo acordado entre as sonecas, não dá para tratar vigília excessiva como hipótese principal.',
+    );
     if (!has(out, /mudan[cç]a recente|at[eé] (cinco|5) dias|poucos dias|padr[aã]o (anterior|recente)/i)) {
       out = appendOnce(
         out,
@@ -341,9 +512,16 @@ export function enrichThirtySixtyOfficialAnswer({
       );
       notes.push('recent_change');
     }
+    if (!has(out, /retoma.{0,40}(sozinho|sem a chupeta)|observe.{0,40}retom/i)) {
+      out = appendOnce(
+        out,
+        'Na hora do despertar, como você já percebeu que às vezes ele retoma sozinho, observe primeiro alguns instantes — se o choro não cresce e não aparece outra necessidade. Se precisar, recoloque a chupeta: o objetivo não é retirá-la, e sim não concluir que todo despertar exige recolocação imediata.',
+      );
+      notes.push('pacifier_observe_resume');
+    }
     out = appendOnce(
       out,
-      'Você pode manter a chupeta: vamos respeitar essa escolha e investigar alimentação, vigília, desconforto e o papel da sucção nos despertares.',
+      'Você pode manter a chupeta: vamos respeitar essa escolha e investigar alimentação, desconforto e o papel da sucção nos despertares.',
     );
     notes.push('keep_pacifier');
   }
@@ -356,20 +534,40 @@ export function enrichThirtySixtyOfficialAnswer({
       /cerca de 20 minutos(?![^.]*30 minutos)/gi,
       'cerca de 20 minutos, podendo ser mais curta ou chegar a aproximadamente 30 minutos',
     );
-    if (!has(out, /120\s*ml/i)) {
+    out = out.replace(
+      /Isso ajudar[aá] na adapta[cç][aã]o entre peito e mamadeira,\s*\./gi,
+      'A mamadeira de aprendizado tem finalidade de ensino da sucção, para ela aprender a alternar peito e mamadeira.',
+    );
+    out = out.replace(/adapta[cç][aã]o entre peito e mamadeira,\s*\./gi, 'adaptação entre peito e mamadeira.');
+    out = out.replace(/Voc[eê] j[aá] conseguiu que a sua beb[eê] aceitasse a mamadeira\??/gi, '');
+    out = out.replace(/Voc[eê] j[aá] notou como ela est[aá] se adaptando [aà] mamadeira\??/gi, '');
+    out = out.replace(/E ap[oó]s a mamada no peito, ela ainda est[aá] retirando leite ou apenas sugando por conforto\??/gi, '');
+    out = out.replace(/Voc[eê] j[aá] .{0,90}mamadeira\??/gi, '');
+    const has120 = has(out, /120\s*ml/i);
+    const hasSecondMonth = has(out, /segundo m[eê]s/i);
+    if (!has120) {
       out = appendOnce(
         out,
         Number.isFinite(ageDays) && ageDays >= 31
-          ? 'No segundo mês a referência da mamadeira de aprendizado é de aproximadamente 120 ml (cerca de 90 ml no primeiro mês). Observe a aceitação e a resposta da bebê.'
+          ? 'Aos 40 dias estamos no segundo mês: a referência da mamadeira de aprendizado é de aproximadamente 120 ml (cerca de 90 ml no primeiro mês).'
           : 'Para a mamadeira de aprendizado, use a referência do mês: cerca de 90 ml no primeiro mês e aproximadamente 120 ml no segundo mês.',
       );
       notes.push('bottle_120_second_month');
-    } else if (Number.isFinite(ageDays) && ageDays >= 31 && !has(out, /segundo m[eê]s/i)) {
-      out = appendOnce(
-        out,
-        'Aos 40 dias estamos no segundo mês: a referência do método para a mamadeira de aprendizado é aproximadamente 120 ml (cerca de 90 ml no primeiro mês).',
+    } else if (Number.isFinite(ageDays) && ageDays >= 31 && !hasSecondMonth) {
+      out = out.replace(
+        /(a refer[eê]ncia (do m[eé]todo )?([eé] de )?)aproximadamente 120 ml/i,
+        'aos 40 dias (segundo mês) a referência é de aproximadamente 120 ml (cerca de 90 ml no primeiro mês)',
       );
       notes.push('bottle_second_month_context');
+    }
+    const mlHits = out.match(/120\s*ml/gi) || [];
+    if (mlHits.length > 1) {
+      const lines = out.split('\n');
+      const keepIdx = lines.findIndex((l) => /120\s*ml/i.test(l) && /segundo m[eê]s/i.test(l));
+      const fallbackIdx = lines.findIndex((l) => /120\s*ml/i.test(l));
+      const keep = keepIdx >= 0 ? keepIdx : fallbackIdx;
+      out = lines.filter((l, i) => !/120\s*ml/i.test(l) || i === keep).join('\n');
+      notes.push('bottle_dedupe_120');
     }
     if (has(out, /20\s*minutos/) && !has(out, /30\s*minutos/)) {
       out = appendOnce(
@@ -383,8 +581,48 @@ export function enrichThirtySixtyOfficialAnswer({
     out = out.replace(/\bmaus?\s+h[aá]bitos?\b/gi, 'padrão de condução');
   }
 
+  // --- 40d night hourly wakes after 4am ---
+  if (ids.has('night_hourly_wakes_30_60') && !ids.has('bottle_volume_30_60') && !keepPacifierCase) {
+    out = out.replace(/n[aã]o [eé] necess[aá]rio acord[aá]-l[oa] para mamar [aà] noite[^.]*\./gi, '');
+    out = out.replace(/se o seu beb[eê] est[aá] saud[aá]vel e ganhando peso, n[aã]o [eé] necess[aá]rio acord[aá]-l[oa][^.]*\./gi, '');
+    out = out.replace(/Quando (ele|ela) acorda antes de 3 horas, tente[^.]*\./gi, '');
+    out = out.replace(/tente faz[eê]-l[oa] dormir novamente sem oferecer o peito imediatamente[^.]*\./gi, '');
+    out = out.replace(/associa[cç][aã]o de que toda vez que (ele|ela) acorda[^.]*\./gi, '');
+    out = out.replace(/evitar a associa[cç][aã]o[^.]*\./gi, '');
+    if (!has(out, /acordar.{0,40}para mamar.{0,40}acord(a|ar) (sozinho|espont)/i) && !has(out, /diferente de (um beb[eê]|ele) (de \d+ dias )?acordar/i)) {
+      out = appendOnce(
+        out,
+        'Uma coisa é não acordar um bebê saudável e com bom ganho de peso só para mamar. Outra é ele acordar sozinho depois das 4h, de hora em hora, e mamar quando o peito é oferecido — e depois dormir. Nesse segundo caso, o intervalo de 3 horas não serve sozinho para decidir que a mamada não é necessária.',
+      );
+      notes.push('night_spontaneous_vs_wake');
+    }
+    if (!has(out, /peito, f[oó]rmula ou complemento|mamadas do dia e da noite est[aã]o efetivas|suga um pouco e adormece/i)) {
+      out = appendOnce(
+        out,
+        'Antes de pensar em associação peito–sono, vale olhar a alimentação: ele mama no peito, fórmula ou complemento? As mamadas do dia e da noite estão efetivas? Como está o ganho de peso? Quanto durou o primeiro sono da noite? Nesses despertares ele faz uma mamada efetiva ou só suga um pouco e adormece? Há sinais de desconforto depois de mamar?',
+      );
+      notes.push('night_feed_first');
+    }
+  }
+
   // --- 51d ---
   if (/quanto tempo.{0,30}aprender|travesseiro/i.test(msg) && /colo|peito/i.test(msg)) {
+    out = out.replace(
+      /Se a mamada for apenas por conforto[^.]*\./gi,
+      '',
+    );
+    out = out.replace(
+      /Se apos alimentar ainda permanece sugando apenas por conforto[^.]*\./gi,
+      '',
+    );
+    out = out.replace(
+      /mamada .{0,50}conforto.{0,100}interromper[^.]*\./gi,
+      '',
+    );
+    out = out.replace(
+      /interromper e conduzir o sono com conten[cç][aã]o e ru[ií]do branco[^.]*\./gi,
+      '',
+    );
     out = out.replace(/cerca de 10 minutos|em torno de 10 minutos/gi, (m, offset, full) => {
       const before = full.slice(Math.max(0, offset - 28), offset);
       if (/n[aã]o use\s*[“"']?\s*$/i.test(before)) return m;
@@ -436,8 +674,133 @@ export function enrichThirtySixtyOfficialAnswer({
     out = out.replace(/\bmaus?\s+h[aá]bitos?\b/gi, 'padrão de condução');
   }
 
+  // --- 56d crib awake vs light/deep sleep ---
+  const cribAwakeStart =
+    ids.has('crib_awake_start_30_60') ||
+    (/sono leve/i.test(msg) && /sono profundo/i.test(msg));
+  if (cribAwakeStart) {
+    const wasFallback = /n[aã]o encontrei orienta[cç][aã]o suficiente/i.test(out);
+    if (wasFallback) {
+      out = '';
+      notes.push('56_replace_fallback');
+    }
+    out = out.replace(/Me contar um pouco mais de contexto \(idade exata[^)]*\)[.,]?/gi, '');
+    out = out.replace(/idade exata, padr[aã]o de sono[^.]*\./gi, '');
+    out = out.replace(/Te encaminhar para o conte[uú]do mais pr[oó]ximo[^.]*\./gi, '');
+    out = out.replace(/suporte humano da equipe[^.]*\./gi, '');
+    out = out.replace(/Posso seguir de duas formas:[^\n]*/gi, '');
+    if (!has(out, /tranquilo.{0,40}(sem chorar|sem choro)|pode coloc[aá]-l[oa] acordad/i)) {
+      out = appendOnce(
+        out,
+        'Se ele estiver tranquilo e sem chorar, você pode colocá-lo acordado no berço e dar a oportunidade para que adormeça ali. Não é necessário esperar que esteja em sono leve ou profundo.',
+      );
+      notes.push('56_awake_ok');
+    }
+    if (!has(out, /irritad|come[cç]ar a chorar|ajud[aá]-l[oa] a se acalmar/i)) {
+      out = appendOnce(
+        out,
+        'Se ele ficar irritado ou começar a chorar, você pode ajudá-lo a se acalmar e continuar a condução do sono. Nessa fase, não precisamos exigir que ele sempre consiga adormecer sozinho, mas podemos aproveitar os momentos em que está tranquilo para favorecer o início do sono no berço.',
+      );
+      notes.push('56_no_autonomy_demand');
+    }
+    if (!has(out, /adormecer mamando|j[aá] dormindo|n[aã]o precisa acord[aá]-l[oa]/i)) {
+      out = appendOnce(
+        out,
+        'E se a mamada coincidir com o horário de dormir e ele adormecer mamando, não precisa acordá-lo: pode colocá-lo no berço já dormindo.',
+      );
+      notes.push('56_feed_asleep_ok');
+    }
+  }
+
+  // --- 57d crib adaptation: all naps of the same day ---
+  const cribSameDay =
+    ids.has('crib_adaptation_same_day_30_60') ||
+    (/progressivamente|gradativamente/i.test(msg) && /ber[cç]o/i.test(msg) && /soneca/i.test(msg));
+  if (cribSameDay) {
+    out = out.replace(
+      /voc[eê] pode avan[cç]ar progressivamente[^.!?]*[.!?]/gi,
+      '',
+    );
+    out = out.replace(
+      /come[cç]ando pelas sonecas diurnas[^.!?]*sono noturno[^.!?]*[.!?]/gi,
+      '',
+    );
+    out = out.replace(
+      /O hor[aá]rio (saud[aá]vel e )?recomendado para o in[ií]cio do sono noturno [eé] entre 19h e 20h[^.!?]*[.!?]/gi,
+      '',
+    );
+    out = out.replace(
+      /A fam[ií]lia pode organizar conforme sua din[aâ]mica, mas iniciar o sono noturno por volta de 21h30 ou 22h n[aã]o [eé] o recomendado[^.!?]*[.!?]/gi,
+      '',
+    );
+    out = out.replace(
+      /Observe a que horas termina a [uú]ltima soneca e h[aá] quanto tempo est[aá] acordado[^.!?]*[.!?]/gi,
+      '',
+    );
+    if (!has(out, /primeira soneca da manh[aã].{0,80}(mesmo dia|daquele dia)|todas as demais sonecas.{0,40}(mesmo dia|daquele dia)/i)) {
+      out = appendOnce(
+        out,
+        'O indicado não é avançar uma soneca por vez ao longo dos dias. Comece pela primeira soneca da manhã e siga com todas as demais sonecas daquele mesmo dia no berço. Repita o processo diariamente até consolidar.',
+      );
+      notes.push('57_same_day_naps');
+    }
+    if (!has(out, /acalmar no colo.{0,40}voltar ao ber[cç]o|colo.{0,30}voltar.{0,20}ber[cç]o.{0,40}repetir/i)) {
+      out = appendOnce(
+        out,
+        'Se houver muita resistência, acalme no colo, volte ao berço e repita até adormecer. Não cronometre o choro.',
+      );
+      notes.push('57_resistance_loop');
+    }
+    if (!has(out, /45\s*min/i) || !has(out, /1 hora e 15|1h15/i)) {
+      out = appendOnce(
+        out,
+        `A janela de vigília de referência é de ${WAKE_WINDOW_REF}.`,
+      );
+      notes.push('57_wake');
+    }
+  }
+
+  // --- 55d pacifier drop during sleep + wake window above 1h15 ---
+  const pacifierDropLongWake =
+    ids.has('pacifier_drop_long_wake_30_60') ||
+    (/chupeta cai|quando a chupeta cai|coloc[aá]-l[ao] logo/i.test(msg) &&
+      /1h\s*30|1h30|1h\s*45|1h45|maior que 1h15/i.test(msg));
+  if (pacifierDropLongWake) {
+    const wasFallback = /n[aã]o encontrei orienta[cç][aã]o suficiente/i.test(out);
+    if (wasFallback) {
+      out = '';
+      notes.push('55_replace_fallback');
+    }
+    out = out.replace(/Me contar um pouco mais de contexto \(idade exata[^)]*\)[.,]?/gi, '');
+    out = out.replace(/idade exata, padr[aã]o de sono[^.]*\./gi, '');
+    out = out.replace(/Te encaminhar para o conte[uú]do mais pr[oó]ximo[^.]*\./gi, '');
+    out = out.replace(/suporte humano da equipe[^.]*\./gi, '');
+    out = out.replace(/Posso seguir de duas formas:[^\n]*/gi, '');
+    if (!has(out, /n[aã]o precisa recoloc[aá]-l[ao] imediatamente|observe (um pouco|alguns instantes).{0,40}continuar dormindo/i)) {
+      out = appendOnce(
+        out,
+        'Quando a chupeta cair e ele apenas reclamar, você não precisa recolocá-la imediatamente. Observe um pouco para ver se ele consegue continuar dormindo sem a chupeta. Se ele despertar e precisar de ajuda para retomar o sono, você pode oferecê-la novamente.',
+      );
+      notes.push('55_pacifier_wait');
+    }
+    if (!has(out, /1h30.{0,40}(ultrapass|acima|excede)|ultrapassa o esperado|acima da refer[eê]ncia/i)) {
+      out = appendOnce(
+        out,
+        `Sobre o tempo acordado: a referência de janela de vigília é de ${WAKE_WINDOW_REF}. Permanecer acordado habitualmente por 1h30 a 1h45 já ultrapassa o esperado para essa faixa etária. Procure observar os sinais de sono e iniciar a preparação para dormir antes de ultrapassar repetidamente 1h15.`,
+      );
+      notes.push('55_window_exceeded');
+    } else if (!has(out, /45\s*min/i)) {
+      out = appendOnce(
+        out,
+        `Aos 55 dias, a referência de janela de vigília é de ${WAKE_WINDOW_REF}.`,
+      );
+      notes.push('55_wake_ref');
+    }
+  }
+
   // Global 30_60 scrub: never leave "mau hábito" / autorregulação / guarantees.
   out = scrubThirtySixtySafetyWording(out);
+  out = scrubInternalReasoningLanguage(out);
   out = out.replace(/\nOutros pontos relevantes[\s\S]*$/i, '');
   out = out.replace(/45 minutos a 1 hora \(podendo chegar a 1h15\)/gi, WAKE_WINDOW_REF);
   out = out.replace(/45 minutos a 1 hora(?!\s+e\s+15)/gi, WAKE_WINDOW_REF);

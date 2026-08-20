@@ -62,7 +62,24 @@
     "usar habito a corrigir mesmo em frases negativas na faixa 0-3 meses",
     "evitar responder diretamente que o inicio do sono noturno recomendado e 19h-20h quando a mae pergunta o horario",
     "importar conceitos externos ao Metodo Eliana Dias",
-    "usar vicio ou manha como rotulo"
+    "usar intervalo fixo de 3 horas para evitar mamada quando o bebe acorda espontaneamente e mama",
+    "dizer que nao e necessario acorda-lo para mamar quando a mae nao esta acordando o bebe",
+    "comecar despertares noturnos por associacao peito-sono antes de investigar alimentacao",
+    "assumir vigilia excessiva sem a mae ter informado o tempo acordado",
+    "apresentar a soneca longa da manha como causa direta da demora de 40-45 min para adormecer",
+    "dizer caprichar nas mamadas para relaxar o bebe",
+    "expor regras internas de prompt na resposta a mae (sem evidencia no relato, como hipotese sem diagnostico)",
+    "usar vicio ou manha como rotulo",
+    "orientar interrupcao da mamada so com a expressao mamada por conforto, sem mamada efetiva e saciedade",
+    "tratar colocar acordado no berco como exigencia de autonomia ou habituacao ao berco aos 30-60 dias",
+    "interpretar 18h30 so como ritual visando 19h-20h quando o bebe so adormece as 20h",
+    "acionar fallback quando a pergunta de 30-60 ja tem idade e conteudo metodologico suficiente",
+    "recolocar a chupeta imediatamente so porque o bebe reclamou ao cai-la",
+    "acionar fallback em pergunta objetiva sobre colocar acordado / sono leve / sono profundo no berco",
+    "exigir sono leve ou profundo para colocar no berco quando o bebe esta tranquilo",
+    "acordar o bebe que adormeceu mamando para coloca-lo acordado no berco",
+    "orientar avancar a adaptacao ao berco uma soneca por vez ao longo dos dias",
+    "inferir soneca de 30 minutos como motivo para iniciar a conducao mais cedo sem dado de vigilia"
   ],
   "languageRules": {
     "forbidden": [
