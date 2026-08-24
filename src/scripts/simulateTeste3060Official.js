@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { buildSystemPrompt } from '../prompts/systemPrompt.js';
 import { extractSignals } from '../services/signalExtractor.js';
 import { processTurn } from '../services/zlayaPipeline.js';
+import { suggestedLessonsFromRetrieval } from '../services/fallback.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const K = path.join(__dirname, '..', 'knowledge', '30_60');
@@ -108,6 +109,43 @@ const sig56 = extractSignals({
 assert(sig56.signals.some((s) => s.id === 'crib_awake_start_30_60'), '56d: crib awake start');
 assert(!sig56.signals.some((s) => s.id === 'night_start_19_20_30_60'), '56d: not 19-20 night start');
 assert(!sig56.signals.some((s) => s.id === 'early_night_ritual_crib_30_60'), '56d: not 18h30 ritual');
+assert(
+  forbidden.forbiddenInterpretations.some((x) => /ruido branco quando a duvida e apenas colocar acordado/i.test(x)),
+  'forbidden: 56d no auto-dump of unrelated aulas',
+);
+{
+  const bercoChunk = chunks.chunks.find((c) => c.id === '30-60-chunk-inicio-sono-berco-acordado');
+  assert(!!bercoChunk, 'chunk: 56d crib-awake exists');
+  assert(
+    JSON.stringify(bercoChunk?.relatedLessons || []) === JSON.stringify(['lesson-travesseiro']),
+    'chunk: 56d relatedLessons is Travesseiro only',
+  );
+  const lessons56 = suggestedLessonsFromRetrieval(
+    {
+      chunks: [
+        {
+          chunk: {
+            relatedLessons: [
+              'lesson-30-60-passo-2-estimulos',
+              'lesson-30-60-passo-3-janela',
+              'lesson-30-60-passo-4-rotina',
+              'lesson-travesseiro',
+              'lesson-ruido-branco',
+            ],
+          },
+        },
+      ],
+    },
+    '30_60',
+    ['crib_awake_start_30_60'],
+  );
+  const ids56 = lessons56.map((l) => l.id);
+  assert(ids56.includes('lesson-travesseiro'), '56d lessons include Travesseiro');
+  assert(
+    !ids56.some((id) => /passo-2-estimulos|passo-3-janela|passo-4-rotina|ruido-branco/.test(id)),
+    '56d lessons exclude estímulos/janela/rotina/ruído',
+  );
+}
 
 const sig57 = extractSignals({
   message: 'Estou ensinando a adormecer direto no berço progressivamente... avançando gradativamente. fico uns 10 min tentando acalmá-la. refaço o processo',
@@ -116,6 +154,35 @@ const sig57 = extractSignals({
 });
 assert(sig57.signals.some((s) => s.id === 'crib_adaptation_same_day_30_60'), '57d: same-day crib adaptation');
 assert(!sig57.signals.some((s) => s.id === 'night_start_19_20_30_60'), '57d: not 19-20 night start');
+assert(!sig57.signals.some((s) => s.id === 'crib_awake_start_30_60'), '57d: not 56d awake-vs-stage axis');
+{
+  const lessons57 = suggestedLessonsFromRetrieval(
+    {
+      chunks: [
+        {
+          chunk: {
+            relatedLessons: [
+              'lesson-30-60-passo-2-estimulos',
+              'lesson-30-60-passo-3-janela',
+              'lesson-30-60-passo-4-rotina',
+              'lesson-travesseiro',
+              'lesson-ruido-branco',
+            ],
+          },
+        },
+      ],
+    },
+    '30_60',
+    ['crib_adaptation_same_day_30_60'],
+  );
+  const ids57 = lessons57.map((l) => l.id);
+  assert(ids57.includes('lesson-travesseiro'), '57d lessons include Travesseiro');
+  assert(ids57.includes('lesson-30-60-passo-3-janela'), '57d lessons include janela');
+  assert(
+    !ids57.some((id) => /passo-2-estimulos|passo-4-rotina|ruido-branco/.test(id)),
+    '57d lessons exclude estímulos/rotina/ruído',
+  );
+}
 
 const sig49 = extractSignals({
   message: 'sonecas duram 30 min, usa chupeta. Preciso ajustar algo?',
@@ -283,8 +350,15 @@ const cases = [
     babyName: 'Pedro',
     message:
       'Bebe de 56 dias. Posso colocar no berço e esperar ele dormir sozinho, se não estiver chorando? Ou preciso colocar ele em sono leve ? Ou em sono profundo?',
-    must: [/acordad/i, /n[aã]o [eé] necess[aá]rio esperar|sono leve/i, /j[aá] dormindo|adormecer mamando/i],
+    must: [/acordad/i, /n[aã]o [eé] necess[aá]rio esperar|sono leve/i, /j[aá] dormindo|adormecer mamando/i, /aula.{0,80}travesseiro|estrat[eé]gia do travesseiro/i],
     mustNot: [/n[aã]o encontrei orienta[cç][aã]o suficiente|idade exata/i],
+    mustLessons: ['lesson-travesseiro'],
+    mustNotLessons: [
+      'lesson-30-60-passo-2-estimulos',
+      'lesson-30-60-passo-3-janela',
+      'lesson-30-60-passo-4-rotina',
+      'lesson-ruido-branco',
+    ],
   },
   {
     id: '57d',
@@ -318,6 +392,12 @@ for (const c of cases) {
     assert(!re.test(text), `${c.id} mustNot ${re}`, text.slice(0, 120));
   }
   assert(!/lesson-30-60-maus-habitos/.test(lessons), `${c.id} no maus-habitos lesson`);
+  for (const id of c.mustLessons || []) {
+    assert(lessons.split(',').includes(id), `${c.id} mustLesson ${id}`, lessons);
+  }
+  for (const id of c.mustNotLessons || []) {
+    assert(!lessons.split(',').includes(id), `${c.id} mustNotLesson ${id}`, lessons);
+  }
 }
 
 console.log(`\nTOTAL: ${passed} passed, ${failed} failed\n`);

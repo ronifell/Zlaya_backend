@@ -177,6 +177,35 @@ const LESSON_SCENARIO_RULES = [
     ],
   },
   {
+    signalIds: ['crib_awake_start_30_60'],
+    whitelist: ['lesson-travesseiro'],
+    blacklist: [
+      'lesson-30-60-passo-2-estimulos',
+      'lesson-30-60-passo-3-janela',
+      'lesson-30-60-passo-4-rotina',
+      'lesson-ruido-branco',
+      'lesson-30-60-sinais-sono',
+      'lesson-30-60-maus-habitos',
+      'lesson-30-60-passo-1-comportamento',
+      'lesson-30-60-caso-cecilia',
+    ],
+  },
+  {
+    signalIds: ['crib_adaptation_same_day_30_60'],
+    whitelist: [
+      'lesson-travesseiro',
+      'lesson-30-60-passo-3-janela',
+    ],
+    blacklist: [
+      'lesson-30-60-passo-2-estimulos',
+      'lesson-30-60-passo-4-rotina',
+      'lesson-ruido-branco',
+      'lesson-30-60-maus-habitos',
+      'lesson-30-60-passo-1-comportamento',
+      'lesson-30-60-caso-cecilia',
+    ],
+  },
+  {
     signalIds: [
       'no_mau_habito_30_60',
       'wake_window_30_60',

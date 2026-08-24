@@ -76,10 +76,24 @@
     "acionar fallback quando a pergunta de 30-60 ja tem idade e conteudo metodologico suficiente",
     "recolocar a chupeta imediatamente so porque o bebe reclamou ao cai-la",
     "acionar fallback em pergunta objetiva sobre colocar acordado / sono leve / sono profundo no berco",
+    "direcionar automaticamente para excesso de estimulos, janela de sono, rotina ou ruido branco quando a duvida e apenas colocar acordado vs sono leve/profundo",
     "exigir sono leve ou profundo para colocar no berco quando o bebe esta tranquilo",
     "acordar o bebe que adormeceu mamando para coloca-lo acordado no berco",
     "orientar avancar a adaptacao ao berco uma soneca por vez ao longo dos dias",
-    "inferir soneca de 30 minutos como motivo para iniciar a conducao mais cedo sem dado de vigilia"
+    "inferir soneca de 30 minutos como motivo para iniciar a conducao mais cedo sem dado de vigilia",
+    "normalizar de imediato despertar muito irritado apos soneca adequada como adaptacao ao sono",
+    "perguntar quanto tempo permanece acordado antes das sonecas quando a mae ja informou a janela",
+    "transformar apos as 4h da manha em apos 4 horas de sono",
+    "dizer que investigar alimentacao ajuda a evitar associacao despertar-mamada",
+    "omitir que o inicio as 21h ja esta alem de 19h-20h quando a mae relatou iniciar as 21h",
+    "determinar que a rotina ou o ritual tenha que comecar entre 19h e 20h no caso 18h30-20h",
+    "usar a palavra hierarquia na resposta destinada a mae (use passo a passo)",
+    "dizer buscando conforto antes de avaliar mamada efetiva e saciedade",
+    "exigir que a Estrategia do Travesseiro comece com a bebe calma",
+    "indicar a Estrategia do Travesseiro sem direcionar para a aula correspondente",
+    "repetir a orientacao de chupeta que cai quando o bebe apenas reclama",
+    "perguntar quanto tempo demora para adormecer depois de deitar (presumindo o local)",
+    "apresentar 1h30-1h45 como principal hipotese de vigilia excessiva em vez de comparar com a referencia"
   ],
   "languageRules": {
     "forbidden": [

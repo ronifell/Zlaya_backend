@@ -172,12 +172,29 @@ export function enrichThirtySixtyOfficialAnswer({
       /aula sobre ['‘’“”"]?Janela de Vig[ií]lia['‘’“”"]?[^.]*/gi,
       "aula 'O que é o refluxo?' — alinhada à hipótese de alimentação e desconforto pós-mamada",
     );
+    out = out.replace(/,?\s*especialmente se (est[aã]o|ela est[aá]|ele est[aá]) se adaptando ao sono\.?/gi, '.');
+    out = out.replace(/[^.!?]*se adaptando ao sono[^.!?]*[.!?]/gi, '');
+    out = out.replace(
+      /[EÉ] (normal|comum) que (beb[eê]s de 30 dias|.{0,60}de 30 dias) acord(em|e) irritad[oa]s? ap[oó]s sonecas[^.!?]*[.!?]/gi,
+      '',
+    );
+    out = out.replace(
+      /[EÉ] (normal|comum) que .{0,80}acorde irritad[oa] ap[oó]s sonecas[^.!?]*[.!?]/gi,
+      '',
+    );
+    const angryOpen =
+      'Como ela consegue dormir por cerca de 1 hora ou até mais, eu não consideraria a duração da soneca o principal problema neste momento. O que chama mais atenção é ela acordar muito irritada e relaxar depois de sugar um pouco. Por isso, primeiro observaria como está a mamada e se existe algum desconforto depois dela.';
     if (!has(out, /n[aã]o consideraria a dura[cç][aã]o da soneca|1 hora ou at[eé] mais/i)) {
-      out = appendOnce(
-        out,
-        'Como ela consegue dormir por cerca de 1 hora ou até mais, eu não consideraria a duração da soneca o principal problema neste momento. O que chama mais atenção é ela acordar muito irritada e relaxar depois de sugar um pouco. Por isso, primeiro observaria como está a mamada e se existe algum desconforto depois dela.',
-      );
+      out = `${angryOpen}\n\n${out}`.trim();
       notes.push('angry_wake_feeding');
+    } else {
+      const canonRe = /Como ela consegue dormir por cerca de 1 hora ou at[eé] mais[\s\S]{0,320}desconforto depois dela\./i;
+      const hit = out.match(canonRe);
+      if (hit) {
+        const rest = out.replace(canonRe, '').replace(/\n{3,}/g, '\n\n').trim();
+        out = `${hit[0]}\n\n${rest}`.trim();
+        notes.push('angry_wake_open_first');
+      }
     }
     if (!has(out, /refluxo/i)) {
       out = appendOnce(
@@ -225,11 +242,18 @@ export function enrichThirtySixtyOfficialAnswer({
     );
     out = out.replace(/caprichar nas mamadas pode ajudar a relaxar[^.]*\./gi, '');
     out = out.replace(/oferecer uma mamada pode ajudar a relaxar[^.]*\./gi, 'se a demora para adormecer estiver aproximando o próximo intervalo de mamada, considere fome antes de insistir no sono.');
+    out = out.replace(/oferecer uma mamada pode ajudar a relax[aá]-l[oa][^.]*\./gi, 'se a demora para adormecer estiver aproximando o próximo intervalo de mamada, considere fome antes de insistir no sono.');
     out = out.replace(/mamada pode ajudar a relaxar[^.]*\./gi, 'a fome deve ser considerada se ele já estiver perto do próximo intervalo de mamada.');
     out = out.replace(/e caprichar nas mamadas costuma ajudar o padr[aã]o da tarde\./gi, ', observando se a tarde se organiza melhor.');
     out = out.replace(/caprichar nas mamadas/gi, 'verificar se a demora aproxima o próximo intervalo de mamada');
     out = out.replace(/voc[eê] poderia me informar\s+(Tamb[eé]m [eé] importante)/gi, '$1');
     out = out.replace(/Para entender melhor, voc[eê] poderia me informar\s*/gi, '');
+    out = out.replace(/[EÉ] normal que o beb[eê] de 31 dias passe por varia[cç][oõ]es nas sonecas[^.!?]*[.!?]/gi, '');
+    out = out.replace(/[EÉ] normal que.{0,50}31 dias.{0,80}varia[cç][oõ]es nas sonecas[^.!?]*[.!?]/gi, '');
+    out = out.replace(/Com 31 dias,\s*[eé] normal que o beb[eê] passe por varia[cç][oõ]es nas sonecas,\s*/gi, '');
+    out = out.replace(/[EÉ] normal que o beb[eê] passe por varia[cç][oõ]es nas sonecas,\s*/gi, '');
+    out = out.replace(/[^.!?]*se adaptando ao ritmo do dia[^.!?]*[.!?]/gi, '');
+    out = out.replace(/especialmente nesta fase em que (ele|ela) est[aá] se adaptando[^.!?]*[.!?]/gi, '');
     if (!has(out, /1h\s*40|1h40|1 hora e 40|tempo total acordado|vig[ií]lia excessiva/i)) {
       out = appendOnce(
         out,
@@ -266,9 +290,15 @@ export function enrichThirtySixtyOfficialAnswer({
     if (/1\s*hr|1h\s*15|2\s*hrs|soneca grande/i.test(msg)) {
       out = out.replace(/qual [eé] a dura[cç][aã]o t[ií]pica das sonecas da manh[aã] e da tarde\??/gi, '');
       out = out.replace(/quanto tempo ele permanece acordado antes de iniciar a condu[cç][aã]o[^.?]*\??/gi, '');
+      out = out.replace(/quanto tempo (ele|ela) permanece acordad[oa] antes das sonecas[^.?]*\??/gi, '');
+      out = out.replace(/[,:]?\s*e quanto tempo (ele|ela) permanece acordad[oa] antes das sonecas[^.?]*\??/gi, '');
       out = out.replace(/qual [eé] a dura[cç][aã]o t[ií]pica da soneca da manh[aã] agora\??/gi, '');
       out = out.replace(/Para entender melhor a situa[cç][aã]o, poderia me informar\s*/gi, '');
+      out = out.replace(/Agora, gostaria de saber:\s*/gi, '');
+      out = out.replace(/gostaria de saber:\s*(Tamb[eé]m [eé] importante)/gi, '$1');
+      out = out.replace(/Isso pode nos ajudar a entender melhor a situa[cç][aã]o\.\s*/gi, '');
       out = out.replace(/\bE\s+(?=\n|$)/gi, '');
+      out = out.replace(/\.\s+e quanto tempo/gi, '. Quanto tempo');
       out = out.replace(/[ \t]{2,}/g, ' ');
       notes.push('strip_redundant_asks');
     }
@@ -325,6 +355,15 @@ export function enrichThirtySixtyOfficialAnswer({
       );
       notes.push('night_not_2130');
     }
+    if (/sono noturno [àa]s 21h(?!\s*30)|iniciando.{0,30}[àa]s 21h(?!\s*30)|[àa]s 21h, por[eé]m/i.test(msg)) {
+      if (!has(out, /[àa]s 21h(?!\s*30).{0,80}(al[eé]m|fora da faixa|tamb[eé]m j[aá]|n[aã]o [eé] o hor[aá]rio recomendado)/i)) {
+        out = appendOnce(
+          out,
+          'O início do sono às 21h, como você relatou, também já está além da faixa recomendada de 19h a 20h.',
+        );
+        notes.push('night_21h_also_late');
+      }
+    }
     // 45d must not inherit the 48d "start at 18h30 or take a 1h nap" fork.
     out = out.replace(/[^.!?]*por volta das 18h30[^.!?]*[.!?]/gi, '');
     out = out.replace(/[^.!?]*soneca de at[eé] (aproximadamente )?1 hora antes de iniciar a noite[^.!?]*[.!?]/gi, '');
@@ -367,6 +406,14 @@ export function enrichThirtySixtyOfficialAnswer({
     );
     out = out.replace(
       /O hor[aá]rio (saud[aá]vel e )?recomendado para o in[ií]cio do sono noturno [eé] entre 19h e 20h[^.!?]*[.!?]/gi,
+      '',
+    );
+    out = out.replace(
+      /Recomendo que voc[eê] inicie (a rotina do sono|o ritual) entre 19h e 20h[^.!?]*[.!?]/gi,
+      '',
+    );
+    out = out.replace(
+      /inicie a rotina do sono entre 19h e 20h[^.!?]*[.!?]/gi,
       '',
     );
     out = out.replace(
@@ -589,6 +636,16 @@ export function enrichThirtySixtyOfficialAnswer({
     out = out.replace(/tente faz[eê]-l[oa] dormir novamente sem oferecer o peito imediatamente[^.]*\./gi, '');
     out = out.replace(/associa[cç][aã]o de que toda vez que (ele|ela) acorda[^.]*\./gi, '');
     out = out.replace(/evitar a associa[cç][aã]o[^.]*\./gi, '');
+    out = out.replace(/ap[oó]s 4 horas de sono/gi, 'após as 4h da manhã');
+    out = out.replace(/acorda ap[oó]s 4 horas(?!\s+da manh)/gi, 'acorda após as 4h da manhã');
+    out = out.replace(/acordou ap[oó]s 4 horas(?!\s+da manh)/gi, 'acordou após as 4h da manhã');
+    out = out.replace(/Isso ajuda a evitar que (ele|ela) associe o despertar [aà] necessidade de mamar[^.]*\./gi, '');
+    out = out.replace(/evitar que (ele|ela) associe o despertar [aà] necessidade de mamar[^.]*\./gi, '');
+    out = out.replace(/quanto tempo durou o primeiro sono da noite\??/gi, '');
+    out = out.replace(/Quando (ele|ela) acorda antes de 3 horas, voc[eê] oferece o peito automaticamente\??/gi, '');
+    out = out.replace(/H[aá] sinais claros de fome ou apenas agita[cç][aã]o breve\??/gi, '');
+    out = out.replace(/Para entender melhor a situa[cç][aã]o, gostaria de saber:\s*/gi, '');
+    out = out.replace(/gostaria de saber:\s*(?=A pergunta decisiva|Antes de pensar|$)/gi, '');
     if (!has(out, /acordar.{0,40}para mamar.{0,40}acord(a|ar) (sozinho|espont)/i) && !has(out, /diferente de (um beb[eê]|ele) (de \d+ dias )?acordar/i)) {
       out = appendOnce(
         out,
@@ -596,10 +653,17 @@ export function enrichThirtySixtyOfficialAnswer({
       );
       notes.push('night_spontaneous_vs_wake');
     }
+    if (!has(out, /[uú]ltima mamada antes das 4h|hor[aá]rio.{0,40}mamou.{0,40}4h|antes das 4h.{0,50}mam/i)) {
+      out = appendOnce(
+        out,
+        'A pergunta decisiva é: antes das 4h da manhã, qual foi o horário da última mamada? Se já tinham passado cerca de 2h30 a 3h, ele precisa de uma mamada efetiva até a saciedade. Se depois disso voltar a despertar em intervalo curto buscando o peito, investigue efetividade, transferência e se a produção está suficiente. A percepção de que “não é fome” não basta — e a decisão de oferecer o peito não se resume a ele ainda ser novinho.',
+      );
+      notes.push('night_last_feed_before_4');
+    }
     if (!has(out, /peito, f[oó]rmula ou complemento|mamadas do dia e da noite est[aã]o efetivas|suga um pouco e adormece/i)) {
       out = appendOnce(
         out,
-        'Antes de pensar em associação peito–sono, vale olhar a alimentação: ele mama no peito, fórmula ou complemento? As mamadas do dia e da noite estão efetivas? Como está o ganho de peso? Quanto durou o primeiro sono da noite? Nesses despertares ele faz uma mamada efetiva ou só suga um pouco e adormece? Há sinais de desconforto depois de mamar?',
+        'Antes de pensar em associação peito–sono, vale olhar a alimentação: ele mama no peito, fórmula ou complemento? As mamadas do dia e da noite estão efetivas? Como está o ganho de peso? Nesses despertares ele faz uma mamada efetiva ou só suga um pouco e adormece? Há sinais de desconforto depois de mamar?',
       );
       notes.push('night_feed_first');
     }
@@ -630,6 +694,22 @@ export function enrichThirtySixtyOfficialAnswer({
     });
     out = out.replace(/,?\s*especialmente se est[aã]o acostumad[oa]s? a dormir no colo ou no peito[^.]*\./gi, '.');
     out = out.replace(/acostumad[oa]s? a dormir no colo(?: ou no peito)?[^.]*\./gi, '');
+    out = out.replace(/seguir uma hierarquia/gi, 'seguir este passo a passo');
+    out = out.replace(/siga esta hierarquia/gi, 'siga este passo a passo');
+    out = out.replace(/seguir esta hierarquia/gi, 'seguir este passo a passo');
+    out = out.replace(
+      /Se ela ainda estiver sugando ao adormecer, isso pode indicar que ela ainda tem fome ou que est[aá] buscando conforto[^.]*\./gi,
+      '',
+    );
+    out = out.replace(/fome ou que est[aá] buscando conforto[^.]*\./gi, '');
+    out = out.replace(
+      /, mas [eé] fundamental que voc[eê] a inicie quando a beb[eê] estiver calma/gi,
+      '',
+    );
+    out = out.replace(
+      /[eé] fundamental que voc[eê] a inicie quando a beb[eê] estiver calma[^.]*\./gi,
+      '',
+    );
     out = out.replace(/  +/g, ' ');
     out = out.replace(/\.\s*\./g, '.');
     out = out.replace(/\(n[aã]o use ['"“”']?o tempo que a beb[eê] precisar[^)]*\)/gi, '');
@@ -650,19 +730,45 @@ export function enrichThirtySixtyOfficialAnswer({
       );
       notes.push('51_wake_feed');
     }
+    const conductAfterSatiety =
+      'Se ainda houver sinais de fome, mantenha a alimentação. Se ela já estiver saciada e continuar no peito, retire-a do peito, coloque em posição vertical e, depois, conduza ao sono.';
     if (!has(out, /fome.{0,60}adormec|suc[cç][aã]o durante o adormec|peito porque ainda est[aá] com fome|saciad[oa] permanece sugando|diferencie: ainda est[aá] com fome/i)) {
       out = appendOnce(
         out,
-        'Quando ela “só dorme no peito”, diferencie: ainda está com fome; fez mamada efetiva e ficou saciada; ou já saciada permanece sugando enquanto adormece. Essa leitura vem antes de tratar o peito só como forma de adormecer.',
+        `Quando ela “só dorme no peito”, diferencie: ainda está com fome; fez mamada efetiva e ficou saciada; ou já saciada permanece sugando enquanto adormece. ${conductAfterSatiety}`,
       );
       notes.push('51_hunger_vs_sleep_suck');
+    } else if (!has(out, /retir[ae]-a do peito|retire-a do peito|retir[aá]-l[oa] do peito/i)) {
+      if (has(out, /Essa leitura vem antes de tratar o peito/i)) {
+        out = out.replace(
+          /Essa leitura vem antes de tratar o peito s[oó] como forma de adormecer\./gi,
+          `Essa leitura vem antes de tratar o peito só como forma de adormecer. ${conductAfterSatiety}`,
+        );
+      } else {
+        out = appendOnce(out, conductAfterSatiety);
+      }
+      notes.push('51_satiety_conduct');
     }
-    if (/travesseiro/i.test(msg) && !has(out, /travesseiro.{0,90}(execu[cç]|como est[aá] sendo|em que momento)|como voc[eê] est[aá] executando a t[eé]cnica do travesseiro/i)) {
+    const asksTravesseiroExec =
+      /como voc[eê] est[aá] executando.{0,50}travesseiro|como est[aá] (sendo )?a execu[cç][aã]o.{0,40}travesseiro|travesseiro.{0,90}(execu[cç]|em que momento)/i.test(out);
+    if (asksTravesseiroExec) {
+      out = out.replace(
+        /Se voc[eê] j[aá] est[aá] utilizando a t[eé]cnica do travesseiro, investigue como est[aá] sendo a execu[cç][aã]o e em que momento da vig[ií]lia voc[eê] a inicia\./gi,
+        '',
+      );
+    } else if (/travesseiro/i.test(msg)) {
       out = appendOnce(
         out,
         'Se você já está utilizando a técnica do travesseiro, investigue como está sendo a execução e em que momento da vigília você a inicia.',
       );
       notes.push('51_travesseiro_exec');
+    }
+    if (/travesseiro/i.test(msg) && !has(out, /aula.{0,60}travesseiro/i)) {
+      out = appendOnce(
+        out,
+        'Recomendo que você revise a aula sobre a estratégia do travesseiro para obter mais orientações sobre como aplicá-la de forma eficaz.',
+      );
+      notes.push('51_travesseiro_lesson');
     }
     if (!has(out, /sem cronometrar|sem tempo (fixo|predeterminado)|n[aã]o (h[aá]|existe) tempo (fixo|predeterminado) de choro|observando a resposta/i)) {
       out = appendOnce(
@@ -710,6 +816,19 @@ export function enrichThirtySixtyOfficialAnswer({
       );
       notes.push('56_feed_asleep_ok');
     }
+    if (!has(out, /estrat[eé]gia do travesseiro/i)) {
+      out = appendOnce(
+        out,
+        'A Estratégia do Travesseiro também pode ajudar bastante nessa fase, principalmente para facilitar a condução e dar mais segurança na colocação do bebê no berço. Assista à aula sobre a Estratégia do Travesseiro no aplicativo para aprender como aplicá-la corretamente.',
+      );
+      notes.push('56_travesseiro');
+    } else if (!has(out, /aula.{0,80}travesseiro/i)) {
+      out = appendOnce(
+        out,
+        'Assista à aula sobre a Estratégia do Travesseiro no aplicativo para aprender como aplicá-la corretamente.',
+      );
+      notes.push('56_travesseiro_lesson');
+    }
   }
 
   // --- 57d crib adaptation: all naps of the same day ---
@@ -744,12 +863,23 @@ export function enrichThirtySixtyOfficialAnswer({
       );
       notes.push('57_same_day_naps');
     }
+    out = out.replace(
+      /[^.!?]*(avan[cç]ar gradativamente|progressivamente)[^.!?]*boa abordagem[^.!?]*[.!?]/gi,
+      '',
+    );
     if (!has(out, /acalmar no colo.{0,40}voltar ao ber[cç]o|colo.{0,30}voltar.{0,20}ber[cç]o.{0,40}repetir/i)) {
       out = appendOnce(
         out,
         'Se houver muita resistência, acalme no colo, volte ao berço e repita até adormecer. Não cronometre o choro.',
       );
       notes.push('57_resistance_loop');
+    }
+    if (!has(out, /n[aã]o cronometr|sem cronometrar|sem tempo (fixo|predeterminado)/i)) {
+      out = appendOnce(
+        out,
+        'Não cronometre o choro: observe a resposta e, se precisar, acalme no colo, volte ao berço e repita até adormecer.',
+      );
+      notes.push('57_no_timer');
     }
     if (!has(out, /45\s*min/i) || !has(out, /1 hora e 15|1h15/i)) {
       out = appendOnce(
@@ -776,7 +906,46 @@ export function enrichThirtySixtyOfficialAnswer({
     out = out.replace(/Te encaminhar para o conte[uú]do mais pr[oó]ximo[^.]*\./gi, '');
     out = out.replace(/suporte humano da equipe[^.]*\./gi, '');
     out = out.replace(/Posso seguir de duas formas:[^\n]*/gi, '');
-    if (!has(out, /n[aã]o precisa recoloc[aá]-l[ao] imediatamente|observe (um pouco|alguns instantes).{0,40}continuar dormindo/i)) {
+    out = out.replace(
+      /A principal hip[oó]tese aqui [eé] que ele pode estar experimentando vig[ií]lia excessiva[^.]*\./gi,
+      'Se ele permanece acordado habitualmente por 1h30 a 1h45, esse tempo já está acima do indicado para a idade.',
+    );
+    out = out.replace(
+      /principal hip[oó]tese.{0,50}vig[ií]lia excessiva[^.]*\./gi,
+      '1h30 a 1h45 já está acima da janela indicada para essa idade.',
+    );
+    out = out.replace(
+      /Seria [uú]til saber quanto tempo ele demora para (adormecer depois de deitar|entrar em sono)[^.!?]*[.!?]/gi,
+      'Também é importante observar quanto tempo ele demora para entrar em sono. Essa informação ajuda a avaliar melhor como a janela está funcionando, sem presumir a forma ou o local em que ele adormece.',
+    );
+    out = out.replace(/adormecer depois de deitar/gi, 'entrar em sono');
+    out = out.replace(/\s*e a dura[cç][aã]o da soneca da manh[aã][^.?]*\??/gi, '');
+    out = out.replace(/Isso pode ajudar a ajustar a rotina d[ea]le\./gi, '');
+    if (!has(out, /entrar em sono/i)) {
+      out = appendOnce(
+        out,
+        'Também é importante observar quanto tempo ele demora para entrar em sono. Essa informação ajuda a avaliar melhor como a janela está funcionando, sem presumir a forma ou o local em que ele adormece.',
+      );
+      notes.push('55_enter_sleep_ask');
+    }
+    const longPacifierRe =
+      /Quando a chupeta cair e ele apenas reclamar[\s\S]{0,360}?oferec[eê]-l[ao] novamente\./gi;
+    const shortPacifierRe =
+      /Se ele s[oó] est[aá] reclamando[\s\S]{0,280}?(oferecer a chupeta novamente|oferec[eê]-l[ao] novamente)\./gi;
+    const hasLongPacifier = longPacifierRe.test(out);
+    longPacifierRe.lastIndex = 0;
+    const hasShortPacifier =
+      /n[aã]o (precisa|[eé] necess[aá]rio) recoloc/i.test(out) &&
+      /continua dormindo|continuar dormindo/i.test(out);
+    if (hasLongPacifier) {
+      let pacSeen = 0;
+      out = out.replace(longPacifierRe, (m) => {
+        pacSeen += 1;
+        return pacSeen === 1 ? m : '';
+      });
+      out = out.replace(shortPacifierRe, '');
+      notes.push('55_pacifier_once');
+    } else if (!hasShortPacifier) {
       out = appendOnce(
         out,
         'Quando a chupeta cair e ele apenas reclamar, você não precisa recolocá-la imediatamente. Observe um pouco para ver se ele consegue continuar dormindo sem a chupeta. Se ele despertar e precisar de ajuda para retomar o sono, você pode oferecê-la novamente.',
@@ -804,6 +973,9 @@ export function enrichThirtySixtyOfficialAnswer({
   out = out.replace(/\nOutros pontos relevantes[\s\S]*$/i, '');
   out = out.replace(/45 minutos a 1 hora \(podendo chegar a 1h15\)/gi, WAKE_WINDOW_REF);
   out = out.replace(/45 minutos a 1 hora(?!\s+e\s+15)/gi, WAKE_WINDOW_REF);
+  out = out.replace(/seguir uma hierarquia/gi, 'seguir este passo a passo');
+  out = out.replace(/siga esta hierarquia/gi, 'siga este passo a passo');
+  out = out.replace(/seguir esta hierarquia/gi, 'seguir este passo a passo');
 
   const gender = enforceProfileGender({
     text: out,
