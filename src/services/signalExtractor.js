@@ -653,6 +653,29 @@ const PROVIDED_FACTS = [
     phrases: ['a cada 2', 'a cada 3', 'de 2 em 2', 'de 3 em 3', 'intervalo de', 'mama de', 'a cada duas', 'a cada tres'],
     askKeywords: ['intervalo'],
   },
+  {
+    id: 'wake_window_before_nap',
+    label: 'tempo acordado antes de iniciar a condução da soneca (já informado)',
+    phrases: [
+      'janela de sono del eh de 1',
+      'janela de sono dele eh de 1',
+      'janela de sono dele e de 1',
+      'janela de sono dela eh de 1',
+      '1 hr/1 hr 15',
+      '1 hr/1 hr',
+      '1h/1h15',
+      '1h / 1h15',
+      'quando vai dando este horario',
+      'quando vai dando este horário',
+    ],
+    askKeywords: [
+      'permanece acordado antes',
+      'permanecer acordado antes',
+      'antes de iniciar a conducao',
+      'antes de iniciar a condução',
+      'antes das sonecas',
+    ],
+  },
   // Deliberately NOT mapping "mama bem" / "acho que tenho leite" as a
   // provided fact: test feedback (caso 23d) flagged that these subjective
   // perceptions cannot be accepted as confirmation of effective feeding,
@@ -809,7 +832,7 @@ const SIGNAL_DEFS_30_60 = [
     ],
     boostThemes: ['despertar_irritado_pos_soneca', 'posicao_vertical_30_60'],
     priority:
-      'Se a soneca informada é ~1h ou mais, NÃO chame de soneca curta. NÃO abra dizendo que é normal acordar irritado nem cite “adaptação ao sono”. COMECE: como ela consegue dormir por cerca de 1 hora ou mais, a duração não é o principal ponto; o que chama atenção é acordar muito irritada e relaxar depois de sugar um pouco. Eixo = despertar irritado + retorno ao peito → mamada e o que ocorre APÓS (arroto, vertical 20–30 min). Refluxo/desconforto como possibilidade a observar. ESCREVA EM LINGUAGEM NATURAL PARA A MÃE — NÃO copie regras internas ("sem evidência no relato", "como hipótese, sem diagnóstico", "não classifique como curta"). NÃO indique aula de Janela de Vigília como solução principal.',
+      'Se a soneca informada é ~1h ou mais, NÃO chame de soneca curta. NÃO abra dizendo que é normal acordar irritado/chorando nem cite “adaptação ao sono”. NÃO normalize o choro pelo fato de a soneca ter durado 1h ou mais — isso só afasta soneca curta como eixo, sem explicar o choro. NÃO pergunte como está o sono noturno: a queixa é o despertar após a soneca diurna. COMECE: como ela consegue dormir por cerca de 1 hora ou mais, a duração não é o principal ponto; o que chama atenção é acordar muito irritada e relaxar depois de sugar um pouco. Eixo = alimentação/saciedade → efetividade da mamada → pós-mamada (arroto, vertical 20–30 min) → desconforto/refluxo. ESCREVA EM LINGUAGEM NATURAL PARA A MÃE. NÃO indique aula de Janela de Vigília como solução principal.',
   },
   {
     id: 'bottle_volume_30_60',
@@ -821,7 +844,7 @@ const SIGNAL_DEFS_30_60 = [
     ],
     boostThemes: ['mamadeira_aprendizado_volume', 'volta_trabalho_mamadeira'],
     priority:
-      'Mamadeira de aprendizado: ~90 ml no primeiro mês e ~120 ml no segundo mês. Aos 40 dias (segundo mês) a referência é aproximadamente 120 ml — diga UMA vez, já com o contexto do segundo mês. Peito: cerca de 20 minutos, podendo ser mais curta ou ~30 minutos, com retirada efetiva e saciedade. NÃO fale em hábito a corrigir. NÃO garanta ausência de desmame/confusão de bico. NÃO gere frases truncadas. Se as duas perguntas objetivas (duração e ml) já foram respondidas e não há sinal de problema, NÃO faça perguntas complementares. Indique SOMENTE conteúdo de mamadeira/volta ao trabalho.',
+      'Mamadeira de aprendizado: ~90 ml no primeiro mês e ~120 ml no segundo mês. Aos 40 dias (segundo mês) a referência é aproximadamente 120 ml — diga UMA vez, já com o contexto do segundo mês. Peito: cerca de 20 minutos, podendo ser mais curta ou ~30 minutos. O tempo isoladamente não determina o término: o parâmetro é retirada efetiva de leite e sinais de saciedade. NÃO introduza leitura comportamental da sucção. NÃO fale em hábito a corrigir. NÃO garanta ausência de desmame/confusão de bico. NÃO gere frases truncadas. Se as duas perguntas objetivas (duração e ml) já foram respondidas e não há sinal de problema, NÃO faça perguntas complementares. Indique SOMENTE conteúdo de mamadeira/volta ao trabalho.',
   },
   {
     id: 'excess_total_wake_30_60',
@@ -835,7 +858,7 @@ const SIGNAL_DEFS_30_60 = [
     ],
     boostThemes: ['vigilia_excessiva_diurna', 'janela_sono_sonecas', 'rotina_estruturada'],
     priority:
-      'VIGÍLIA TOTAL: some o tempo acordado antes da condução + o tempo até adormecer. Referência 45 minutos a 1 hora e 15 minutos. Se inicia após 1h–1h15 e ainda demora 40–45 min, o total (~1h40–2h) está excessivo — ESSE é o eixo da demora para relaxar no berço. Avance direto para essa análise — NÃO abra com “é normal ter variações nas sonecas”. Fracione a soneca longa da manhã para ~1h30–2h para observar a DISTRIBUIÇÃO da tarde; NÃO apresente a soneca da manhã como causa direta dos 40–45 min. Alimentação: verifique se a demora aproxima o próximo intervalo de mamada e, nesse caso, considere fome — NÃO diga "caprichar nas mamadas para relaxar". Se perguntar o intervalo das mamadas, explique por quê, SEM concatenar outra pergunta. NÃO pergunte duração das sonecas nem tempo acordado se a mãe já informou (incluindo “antes das sonecas”). NÃO indique Estratégia do Travesseiro neste eixo.',
+      'VIGÍLIA TOTAL: some o tempo acordado antes da condução + o tempo até adormecer. Referência 45 minutos a 1 hora e 15 minutos. Se inicia após 1h–1h15 e ainda demora 40–45 min, o total (~1h40–2h) está excessivo — ESSE é o eixo da demora para relaxar no berço. Avance direto para essa análise — NÃO abra com “é normal ter variações nas sonecas”. Fracione a soneca longa da manhã para ~1h30–2h para observar a DISTRIBUIÇÃO da tarde — diga isso UMA vez; NÃO apresente a soneca da manhã como causa direta dos 40–45 min. Alimentação: una em UM único trecho — se a demora aproxima o próximo intervalo de mamada, considere fome; pergunte o intervalo UMA vez, já explicando por quê. NÃO diga "caprichar nas mamadas para relaxar". NÃO pergunte duração das sonecas nem tempo acordado se a mãe já informou (incluindo “antes de iniciar a condução” e “antes das sonecas”). NÃO indique Estratégia do Travesseiro neste eixo. Antes de entregar: elimine repetições e perguntas já respondidas.',
   },
   {
     id: 'keep_pacifier_30_60',
@@ -860,7 +883,7 @@ const SIGNAL_DEFS_30_60 = [
     ],
     boostThemes: ['sonecas_curtas_chupeta_condicional', 'janela_sono_sonecas'],
     priority:
-      'Sonecas de ~30 min podem ocorrer nesta idade. Hierarquia: como o bebê desperta → alimentação/saciedade → desconforto → vigília 45min a 1h15 → chupeta SOMENTE se a queda coincidir com o despertar. "Usa chupeta" NÃO autoriza hipótese principal. Formulação: "Como ele usa chupeta, vale observar se os despertares acontecem justamente quando ela cai. Se não houver essa relação, não há motivo para considerá-la causa principal." NÃO infira soneca de 30 min → iniciar a condução mais cedo. Só ajuste a janela se o tempo acordado estiver fora de 45min–1h15 ou se os sinais de sono aparecerem antes. NÃO imponha mínimo de 4–5 sonecas. Vertical geral 20–30 min.',
+      'Sonecas de ~30 min podem ocorrer nesta idade. Hierarquia: como o bebê desperta → alimentação/saciedade → desconforto → vigília 45min a 1h15 → chupeta SOMENTE se a queda coincidir com o despertar. "Usa chupeta" NÃO autoriza hipótese principal. Formulação: "Como ele usa chupeta, vale observar se os despertares acontecem justamente quando ela cai. Se não houver essa relação, não há motivo para considerá-la causa principal." NÃO infira soneca de 30 min → iniciar a condução mais cedo. Só ajuste a janela se o tempo acordado estiver fora de 45min–1h15 ou se os sinais de sono aparecerem antes. NÃO acrescente que acorda irritado se a mãe só informou despertares: pergunte/observe como desperta. Consolide chupeta e janela em um trecho cada. NÃO imponha mínimo de 4–5 sonecas. Vertical geral 20–30 min.',
   },
   {
     id: 'day_sleep_difficulty_30_60',
@@ -873,7 +896,7 @@ const SIGNAL_DEFS_30_60 = [
     ],
     boostThemes: ['conducao_sono_diurno', 'estrategia_travesseiro_execucao'],
     priority:
-      'Eixo = dificuldade para dormir DURANTE O DIA, não "adaptação ao berço" nem "acostumada ao colo/peito". Na fala à mãe use “passo a passo”, não “hierarquia”. Passo a passo: vigília 45min–1h15 → mamada efetiva → saciedade → se ainda há fome, manter alimentação; se saciada e permanece no peito, retirar do peito → posição vertical → conduzir ao sono. NÃO diga “buscando conforto” antes de avaliar a mamada. NÃO oriente interrupção do peito a partir de “mamada por conforto”. NÃO exija iniciar o Travesseiro com a bebê calma: investigue execução e momento da vigília UMA vez. Sempre que indicar a Estratégia do Travesseiro, direcione para a aula correspondente. Sem prazo fixo. Sem ~10 min de choro. Contenção ok.',
+      'Eixo = dificuldade para dormir DURANTE O DIA, não "adaptação ao berço" nem "acostumada ao colo/peito". Na fala à mãe use “passo a passo”, não “hierarquia”. Passo a passo: vigília 45min–1h15 → mamada efetiva → saciedade → se ainda há fome, manter alimentação; se saciada e permanece no peito, retirar do peito → posição vertical → conduzir ao sono. NÃO vincule o fim da janela a uma nova mamada: alimentação = horário da última mamada → mamada efetiva → saciedade → sinais de fome. NÃO diga “buscando conforto” antes de avaliar a mamada. NÃO use “apenas por conforto” como critério para retirar do peito. NÃO oriente interrupção do peito a partir de “mamada por conforto”. NÃO exija iniciar o Travesseiro com a bebê calma: investigue execução e momento da vigília UMA vez. Sempre que indicar a Estratégia do Travesseiro, direcione para a aula correspondente. Sem prazo fixo. Sem ~10 min de choro. Contenção ok.',
   },
   {
     id: 'early_night_ritual_crib_30_60',
@@ -887,7 +910,7 @@ const SIGNAL_DEFS_30_60 = [
     ],
     boostThemes: ['ritual_noturno_cedo_30_60', 'janela_sono_sonecas'],
     priority:
-      'NÃO leia 18h30 só como ritual visando 19h–20h. NÃO determine que a rotina/ritual tenha que começar entre 19h e 20h. Ritual noturno deve ser BREVE (banho, mamada, dormir). Se inicia às 18h30 e só adormece às 20h, pode ser vigília excessiva (45min–1h15). Duas possibilidades: (1) se estiver pronta, iniciar a noite ~18h30; (2) se ainda for cedo, soneca de até ~1h e iniciar a noite depois. Berço: mamou e adormeceu → pode ir dormindo; vai dormir sem mamar → pode conduzir no berço acordada. NÃO exija “colocar acordada” para autonomia/habituação ao berço.',
+      'NÃO leia 18h30 só como ritual visando 19h–20h. NÃO determine que a rotina/ritual tenha que começar entre 19h e 20h. Ritual noturno deve ser BREVE (banho, mamada, dormir). NÃO normalize 18h30 até 20h como “não é necessariamente um problema”: se inicia às 18h30 e só adormece às 20h, verifique quanto tempo permaneceu acordada — ritual breve e janela 45min–1h15. Duas possibilidades: (1) se estiver pronta, iniciar a noite ~18h30; (2) se ainda for cedo, soneca de até ~1h e iniciar a noite depois. Berço: mamou e adormeceu → pode ir dormindo; vai dormir sem mamar → pode conduzir no berço acordada. NÃO exija “colocar acordada” para autonomia/habituação ao berço.',
   },
   {
     id: 'crib_awake_start_30_60',
@@ -902,7 +925,7 @@ const SIGNAL_DEFS_30_60 = [
     ],
     boostThemes: ['inicio_sono_berco_acordado_30_60'],
     priority:
-      'Responda DIRETO, sem fallback. Se estiver tranquilo e sem chorar, PODE colocar acordado no berço e dar a oportunidade de adormecer ali. NÃO é obrigatório esperar sono leve ou profundo. Se irritar/chorar, acalmar e seguir a condução — NÃO exigir autonomia. Se a mamada coincidir e adormecer mamando, pode ir já dormindo; NÃO acordar para colocar acordado. A Estratégia do Travesseiro PODE ser indicada (segurança da mãe na condução), mesmo sem resistência explícita ao berço; sempre direcione para a aula correspondente. NÃO puxe excesso de estímulos, janela de sono, rotina ou ruído branco nesta dúvida. NÃO peça idade de novo.',
+      'Responda DIRETO, sem fallback. Se estiver tranquilo e sem chorar, PODE colocar acordado no berço e dar a oportunidade de adormecer ali. NÃO é obrigatório esperar sono leve ou profundo. Se irritar/chorar, acalmar e seguir a condução — NÃO exigir autonomia. Se a mamada coincidir e adormecer mamando, pode ir já dormindo; NÃO acordar para colocar acordado. A Estratégia do Travesseiro pode ajudar na condução e na colocação no berço, dando mais segurança à mãe — NÃO diga só “ajudar na transição”. Direcione para a aula UMA vez. NÃO puxe excesso de estímulos, janela de sono, rotina ou ruído branco nesta dúvida. NÃO peça idade de novo.',
   },
   {
     id: 'crib_adaptation_same_day_30_60',
@@ -916,7 +939,7 @@ const SIGNAL_DEFS_30_60 = [
     ],
     boostThemes: ['adaptacao_berco_mesmo_dia_30_60', 'conducao_sono_diurno'],
     priority:
-      'NÃO oriente avançar UMA soneca por vez ao longo dos dias. Comece pela PRIMEIRA soneca da manhã e siga com TODAS as demais sonecas DAQUELE MESMO DIA no berço. Repita diariamente até consolidar. Resistência: acalmar no colo → voltar ao berço → repetir até adormecer. NÃO cronometrar o choro. Janela 45min–1h15. Travesseiro é aceitável. NÃO puxe horário de início da noite 19h–20h neste eixo.',
+      'NÃO oriente avançar UMA soneca por vez ao longo dos dias. Comece pela PRIMEIRA soneca da manhã e siga com TODAS as demais sonecas DAQUELE MESMO DIA no berço. Repita diariamente até consolidar. Resistência: acalmar no colo → voltar ao berço → repetir até adormecer. NÃO cronometrar o choro. Janela 45min–1h15. NÃO diga “ter paciência e respeitar a resposta do bebê”: oriente consistência e repetição, acolhendo o choro e ajudando no colo quando necessário. Indique a Estratégia do Travesseiro de forma DIRETA (não “pode ser uma boa estratégia”) e encaminhe para a aula. NÃO puxe horário de início da noite 19h–20h neste eixo.',
   },
   {
     id: 'pacifier_drop_long_wake_30_60',
@@ -931,7 +954,7 @@ const SIGNAL_DEFS_30_60 = [
     ],
     boostThemes: ['chupeta_cai_durante_sono_30_60', 'janela_sono_sonecas'],
     priority:
-      'Responda as DUAS dúvidas. Chupeta: se só reclamar ao cair, NÃO recolocar imediatamente — observe se continua dormindo; se despertar e precisar de ajuda, ofereça de novo. Diga isso UMA vez. Janela: 45 minutos a 1 hora e 15 minutos; 1h30–1h45 habitual JÁ está acima — compare com a referência, SEM “principal hipótese de vigília excessiva”. Observar sinais de sono e preparar ANTES de passar de 1h15. Pergunte “quanto tempo ele demora para entrar em sono” — NÃO “depois de deitar”. NÃO pergunte a duração da soneca da manhã. NÃO peça idade de novo. NÃO use fallback nem suporte humano: há conteúdo metodológico suficiente.',
+      'Responda as DUAS dúvidas. Chupeta: se só reclamar ao cair, NÃO recolocar imediatamente — observe se continua dormindo; se despertar e precisar de ajuda, ofereça de novo. Diga isso UMA vez. Janela: 45 minutos a 1 hora e 15 minutos; 1h30–1h45 habitual JÁ está acima — compare com a referência, SEM “principal hipótese de vigília excessiva” e sem rotular “vigília excessiva” se basta dizer que está acima. Observar sinais de sono e preparar ANTES de passar de 1h15. Pergunte “quanto tempo ele demora para entrar em sono” — NÃO “depois de deitar”. NÃO pergunte a duração da soneca da manhã. NÃO fracionar a soneca da manhã nem inferir dificuldade na tarde se a mãe não informou; se faltar dado, pergunte antes de intervir. NÃO peça idade de novo. NÃO use fallback nem suporte humano: há conteúdo metodológico suficiente.',
   },
   {
     id: 'night_hourly_wakes_30_60',
@@ -947,7 +970,7 @@ const SIGNAL_DEFS_30_60 = [
     ],
     boostThemes: ['despertares_madrugada_alimentacao_30_60', 'sono_noturno_30_60'],
     priority:
-      'Preserve o relógio: “após as 4h da manhã” NÃO é “após 4 horas de sono”. Pergunta decisiva: “Antes das 4h da manhã, qual foi o horário da última mamada?” Se já passaram ~2h30–3h, oriente mamada efetiva até a saciedade; se voltar a despertar em intervalo curto, investigue efetividade/transferência/produção. Diferencie: NÃO acordar um bebê saudável/ganhando peso só para mamar ≠ bebê que ACORDA sozinho e mama quando o peito é oferecido. NÃO use intervalo fixo de 3h para evitar mamada. NÃO diga "não é necessário acordá-lo" se a mãe NÃO está acordando o bebê. NÃO diga que investigar alimentação ajuda a evitar associação despertar–mamada. NÃO comece por associação peito–sono. A percepção de que "não é fome" NÃO basta — oferecer o peito não se resume a ele ser novinho. Só depois avalie forma de adormecer.',
+      'Preserve o relógio: “após as 4h da manhã” NÃO é “após 4 horas de sono”. Fluxo: (1) horário da última mamada antes das 4h; (2) rotina alimentar do DIA (intervalos, efetividade, manutenção da saciedade, produção); (3) medidas posturais pós-mamada (arroto, vertical 20–30 min) e desconforto; (4) se já passaram ~2h30–3h, mamada efetiva até a saciedade; se ainda não completou o intervalo desde uma mamada efetiva, tentar conduzir ao sono sem oferecer o peito imediatamente. O intervalo de 3h NÃO decide sozinho, isolado desses dados, que a mamada é desnecessária. NÃO use intervalo fixo de 3h para evitar mamada sem essa avaliação. NÃO diga "não é necessário acordá-lo" se a mãe NÃO está acordando o bebê. NÃO diga que investigar alimentação ajuda a evitar associação despertar–mamada. NÃO comece por associação peito–sono. A percepção de que "não é fome" NÃO basta — oferecer o peito não se resume a ele ser novinho. NÃO entregue frases truncadas (ex.: "Isso pode ajudar a" sem conclusão).',
   },
 ];
 

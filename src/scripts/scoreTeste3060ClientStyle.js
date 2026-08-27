@@ -70,8 +70,9 @@ PROIBIDO: chamar de soneca curta; hipótese de estímulos/janela perdida sem dad
       { id: 'no_night_sequence', w: 10, pass: (t) => !/sequ[eê]ncia noturna/i.test(t) },
       { id: 'no_rn_satiety_block', w: 5, pass: (t) => !/sinais de saciedade no RN/i.test(t) },
       { id: 'problem_is_wake', w: 10, pass: (t) => /acord|despert|irritad|brav|chor/i.test(t) },
-      { id: 'no_normalize_angry', w: 10, pass: (t) => !/[eé] (normal|comum) que .{0,90}acord(em|e) irritad/i.test(t) },
+      { id: 'no_normalize_angry', w: 10, pass: (t) => !/[eé] (normal|comum) que .{0,140}acord(em|e) (irritad|chorando)/i.test(t) },
       { id: 'no_adaptacao_sono', w: 5, pass: (t) => !/se adaptando ao sono/i.test(t) },
+      { id: 'no_night_sleep_ask', w: 10, pass: (t) => !/como est[aá] o sono noturno/i.test(t) },
     ],
   },
   {
@@ -91,7 +92,9 @@ Pergunta do intervalo das mamadas deve vir explicada. Sem Travesseiro. Sem hipó
       { id: 'excess_wake_central', w: 15, pass: (t) => /(1h\s*40|1h40|2h|demais|excessiv|muito tempo|longo).{0,40}(acord|vig[ií]lia)|vig[ií]lia.{0,40}(excess|longo|demais)|45\s*min.{0,30}1\s*h/i.test(t) },
       { id: 'wake_ref_45_115', w: 15, pass: (t) => /45\s*min/i.test(t) && /1\s*h\s*15|1h15|1 hora e 15/i.test(t) },
       { id: 'no_invented_night_supply', w: 15, pass: (t) => !/mamada noturna insuficiente|produ[cç][aã]o de leite durante a noite|baixa produ[cç][aã]o.{0,20}noite/i.test(t) },
-      { id: 'no_redundant_asks', w: 10, pass: (t) => !/dura[cç][aã]o t[ií]pica das sonecas da manh[aã] e da tarde/i.test(t) && !/quanto tempo ele permanece acordado antes de iniciar/i.test(t) && !/quanto tempo (ele|ela) permanece acordad[oa] antes das sonecas/i.test(t) },
+      { id: 'no_redundant_asks', w: 10, pass: (t) => !/dura[cç][aã]o t[ií]pica das sonecas da manh[aã] e da tarde/i.test(t) && !/quanto tempo (ele|ela) (costuma )?(permanece|permanecer) acordad[oa] antes de iniciar/i.test(t) && !/quanto tempo (ele|ela) permanece acordad[oa] antes das sonecas/i.test(t) },
+      { id: 'fraction_once', w: 10, pass: (t) => ((t.match(/fracion\w*[^.!?\n]{0,50}soneca (?:longa )?da manh|soneca (?:longa )?da manh[^.!?\n]{0,50}fracion/gi) || []).length <= 1) },
+      { id: 'feed_interval_once', w: 5, pass: (t) => ((t.match(/intervalo.{0,30}mamadas/gi) || []).length <= 1) },
       { id: 'no_broken_concat', w: 5, pass: (t) => !/gostaria de saber:\s*Tamb[eé]m/i.test(t) },
       { id: 'no_generic_open', w: 5, pass: (t) => !/se adaptando ao ritmo do dia/i.test(t) && !/[eé] normal que.{0,80}varia[cç][oõ]es nas sonecas/i.test(t) },
       { id: 'no_travesseiro_lesson', w: 10, pass: (t, meta) => !/travesseiro/i.test(meta.lessonsText || '') },
@@ -123,6 +126,7 @@ NÃO garantir sem desmame/confusão de bico. NÃO usar hábito a corrigir. Sem f
       { id: 'no_wrong_lessons', w: 10, pass: (t, meta) => !/maus h[aá]bitos|hora da bruxa|estrat[eé]gias para o sono noturno/i.test(t + ' ' + (meta.lessonsText || '')) },
       { id: 'no_truncated', w: 10, pass: (t) => !/mamadeira,\s*\./i.test(t) && !/,\s+\./.test(t) },
       { id: '120_once', w: 5, pass: (t) => (t.match(/120\s*ml/gi) || []).length <= 1 },
+      { id: 'no_behavioral_sucking', w: 10, pass: (t) => !/leitura comportamental|suc[cç][aã]o ap[oó]s esse tempo|ponto a observar ap[oó]s checar saciedade/i.test(t) },
     ],
   },
   {
@@ -158,18 +162,19 @@ Respeitar manter chupeta. Conduta: observar retomada (ela já relatou que às ve
     message:
       'Olá. Meu bb tem 40 dias , tem noites que ele dorme super bem acorda entre 2:30 a 3 hrs , só que tem dia que após as 04:00 da manhã ele acorda de 1 em 1 hrs tento fazer ele continuar a dormir no berço porém sem sucesso, aí pego ele fico ninando no colo sem sucesso, aí coloco ele no peito ele mama mesmo sabendo que não é fome, ele mama e dorme. Continuo assim por ele ainda ser novinho ?',
     dossierSummary: `Preserve “após as 4h da manhã” (não “após 4 horas de sono”).
-Pergunta decisiva: horário da última mamada ANTES das 4h. Se ~2h30–3h, mamada efetiva até saciedade; se despertar cedo de novo, efetividade/transferência/produção.
-NÃO usar 3h para evitar peito. NÃO dizer que investigar alimentação evita associação. NÃO começar por associação peito–sono. “Não é fome” não basta; oferecer peito não se resume a ser novinho.`,
+Fluxo: última mamada → rotina alimentar do dia + efetividade + saciedade → posturais/desconforto → se ~2h30–3h, mamada efetiva; se ainda não completou o intervalo, tentar conduzir sem oferecer o peito imediatamente.
+NÃO usar 3h sozinho para evitar peito. NÃO dizer que investigar alimentação evita associação. NÃO começar por associação peito–sono. Sem frases truncadas.`,
     criteria: [
-      { id: 'no_3h_withhold', w: 15, pass: (t) => !/antes de 3 horas.{0,40}sem (oferecer|mamar)|sem oferecer o peito imediatamente/i.test(t) },
+      { id: 'offer_if_due', w: 10, pass: (t) => /2h\s*30|2h30/i.test(t) && /mamada efetiva/i.test(t) },
       { id: 'no_dont_wake_mismatch', w: 10, pass: (t) => !/n[aã]o [eé] necess[aá]rio acord[aá]-l[oa]/i.test(t) },
-      { id: 'clock_not_duration', w: 15, pass: (t) => !/ap[oó]s 4 horas de sono/i.test(t) },
-      { id: 'last_feed_before_4', w: 15, pass: (t) => /[uú]ltima mamada antes das 4h|antes das 4h.{0,50}mam/i.test(t) },
+      { id: 'clock_not_duration', w: 10, pass: (t) => !/ap[oó]s 4 horas de sono/i.test(t) },
+      { id: 'last_feed_before_4', w: 10, pass: (t) => /[uú]ltima mamada antes das 4h|antes das 4h.{0,50}mam/i.test(t) },
       { id: 'no_association_avoid', w: 10, pass: (t) => !/evitar que (ele|ela) associe o despertar/i.test(t) },
       { id: 'feed_before_association', w: 10, pass: (t) => /alimenta|mamada efetiva|ganho de peso|peito.{0,20}f[oó]rmula/i.test(t) && !/^[\s\S]{0,280}associa[cç][aã]o/i.test(t) },
       { id: 'spontaneous_vs_wake', w: 10, pass: (t) => /acord(a|ar) (sozinho|espont)|diferente de .{0,40}acord/i.test(t) || /n[aã]o (est[aá]|est[aá] )acordando/i.test(t) },
-      { id: 'mother_perception_not_enough', w: 10, pass: (t) => /n[aã]o [eé] fome|mama e (depois )?dorme|percep[cç][aã]o|novinho/i.test(t) || /mamada efetiva|suga.{0,20}adormece/i.test(t) },
-      { id: 'no_mau_habito', w: 5, pass: (t) => !/mau h[aá]bito/i.test(t) },
+      { id: 'daytime_feeding', w: 10, pass: (t) => /mamadas do dia|rotina alimentar/i.test(t) },
+      { id: 'postural', w: 5, pass: (t) => /vertical|arroto|postur/i.test(t) },
+      { id: 'no_truncated', w: 5, pass: (t) => !/Isso pode ajudar a\s+(?=[A-ZÁ])|Isso pode ajudar a\s*$/m.test(t) },
       { id: 'asks_weight_or_feed_type', w: 10, pass: (t) => /ganho de peso|peito.{0,15}f[oó]rmula|complemento|tipo de (leite|alimenta)/i.test(t) },
     ],
   },
@@ -219,7 +224,8 @@ Usar chupeta NÃO a torna hipótese principal. PROIBIDO: mínimo 4–5 sonecas; 
       { id: 'wake_45_115', w: 20, pass: (t) => /45\s*min/i.test(t) && /1h15|1 hora e 15|1\s*h\s*15|1\s*hora/i.test(t) },
       { id: 'no_min_naps', w: 15, pass: (t) => !/(garant|busque|imponha|m[ií]nimo de)\s*.{0,20}4 a 5 sonecas|garantir um m[ií]nimo de 4 a 5/i.test(t) || /n[aã]o h[aá] m[ií]nimo|n[aã]o imponha|n[uú]mero varia/i.test(t) },
       { id: 'vertical_20_30', w: 15, pass: (t) => /20\s*a\s*30/i.test(t) || !/30\s*a\s*40 minutos ap[oó]s (todas|as mamadas)/i.test(t) },
-      { id: 'pacifier_not_primary', w: 25, pass: (t) => !/principal hip[oó]tese.{0,120}chupeta|chupeta.{0,40}principal hip[oó]tese/i.test(t) },
+      { id: 'pacifier_not_primary', w: 20, pass: (t) => !/principal hip[oó]tese.{0,120}chupeta|chupeta.{0,40}principal hip[oó]tese/i.test(t) },
+      { id: 'no_invented_irritado', w: 15, pass: (t) => !/acordando irritad|acorda irritad/i.test(t) },
       { id: 'no_early_from_30min', w: 15, pass: (t) => !/acordando ap[oó]s 30 minutos.{0,80}iniciar a condu[cç][aã]o.{0,40}antes/i.test(t) },
     ],
   },
@@ -240,14 +246,15 @@ Sem “buscando conforto” antes da mamada. Sem exigir Travesseiro com bebê ca
       { id: 'wake_45_115', w: 10, pass: (t) => /45\s*min/i.test(t) && /1h15|1 hora e 15|1\s*h\s*15/i.test(t) },
       { id: 'feeding_before_behavior', w: 10, pass: (t) => /mamada efetiva|saciedad|alimenta|retirando leite|fome/i.test(t) },
       { id: 'satiety_conduct', w: 15, pass: (t) => /retir.{0,25}peito|retire-a do peito/i.test(t) && /vertical/i.test(t) },
-      { id: 'no_conforto_shortcut', w: 5, pass: (t) => !/buscando conforto/i.test(t) },
+      { id: 'no_conforto_shortcut', w: 5, pass: (t) => !/buscando conforto|apenas por conforto/i.test(t) },
       { id: 'no_travesseiro_calma', w: 5, pass: (t) => !/inicie quando a beb[eê] estiver calma/i.test(t) },
       { id: 'no_acostumada', w: 5, pass: (t) => !/acostumad[oa]s? a dormir no colo/i.test(t) },
       { id: 'not_crib_first', w: 5, pass: (t) => !/^[\s\S]{0,280}adapta[cç][aã]o ao ber[cç]o/i.test(t) },
       { id: 'no_fixed_timeline', w: 10, pass: (t) => /n[aã]o existe prazo|sem prazo|n[aã]o h[aá] prazo|prazo fixo|depende da (repeti[cç][aã]o|consist[eê]ncia)/i.test(t) },
       { id: 'no_10min_cry', w: 5, pass: (t) => !/cerca de 10 minutos|em torno de 10 minutos|10 minutos.{0,20}(choro|acalmar)/i.test(t) || /n[aã]o use.{0,20}10 minutos/i.test(t) },
       { id: 'travesseiro_lesson', w: 10, pass: (t) => /aula.{0,60}travesseiro/i.test(t) },
-      { id: 'no_interrupt_comfort', w: 10, pass: (t) => !/mamada.{0,50}conforto.{0,80}interromper|interromper.{0,60}(peito|mamada|conforto)/i.test(t) },
+      { id: 'no_interrupt_comfort', w: 10, pass: (t) => !/mamada.{0,50}conforto.{0,80}interromper|peito.{0,40}conforto.{0,80}interromper|apenas por conforto.{0,80}interromper|interromper.{0,60}(peito|mamada|conforto)/i.test(t) },
+      { id: 'no_window_to_feed', w: 10, pass: (t) => !/ap[oó]s esse tempo.{0,50}mamada efetiva|final da janela.{0,40}mamada/i.test(t) },
     ],
   },
   {
@@ -260,11 +267,14 @@ Sem “buscando conforto” antes da mamada. Sem exigir Travesseiro com bebê ca
     message:
       'Bebê de 48 dias. Estou começando a rotina do sono dela umas 18:30, até 20 horas está dormindo. Estou na dúvida se está muito cedo, precisa ser mais tarde pela idade ou não tem relevância? Outra dúvida, nos momentos da soneca, o ideal é transferir pro berço em sono profundo ou com os olhos abertos, meio acordada ainda pra ela se habituar com o berço e criar autonomia',
     dossierSummary: `Ritual breve (banho, mamada, dormir). 18h30→20h pode ser vigília excessiva (45min–1h15).
-NÃO determinar que a rotina comece entre 19h e 20h. Duas opções: iniciar a noite ~18h30 se pronta, OU soneca ~1h e iniciar depois.
+NÃO determinar que a rotina comece entre 19h e 20h. NÃO normalize 18h30→20h sem checar o tempo acordado (ritual breve; janela 45min–1h15).
+Duas opções: iniciar a noite ~18h30 se pronta, OU soneca ~1h e iniciar depois.
 Berço: mamou e dormiu → pode ir dormindo; sem mamada → pode acordada. NÃO exigir acordada para autonomia.`,
     criteria: [
       { id: 'brief_ritual', w: 10, pass: (t) => /ritual.{0,40}breve|banho.{0,20}mamada.{0,20}(dormir|condu)/i.test(t) },
-      { id: 'no_force_19_20_routine', w: 15, pass: (t) => !/inicie a rotina do sono entre 19h e 20h/i.test(t) && !/recomendo que voc[eê] inicie.{0,40}entre 19h e 20h/i.test(t) },
+      { id: 'no_force_19_20_routine', w: 10, pass: (t) => !/inicie a rotina do sono entre 19h e 20h/i.test(t) && !/recomendo que voc[eê] inicie.{0,40}entre 19h e 20h/i.test(t) },
+      { id: 'no_normalize_1830_20', w: 10, pass: (t) => !/n[aã]o [eé] necessariamente um problema/i.test(t) },
+      { id: 'check_awake_time', w: 10, pass: (t) => /permaneceu acordad|verificar quanto tempo|vale checar se o tempo acordado|vig[ií]lia/i.test(t) },
       { id: 'wake_45_115', w: 10, pass: (t) => /45\s*min/i.test(t) && /1h15|1 hora e 15|1\s*h\s*15/i.test(t) },
       { id: 'two_options', w: 20, pass: (t) => /18h30|18:30/i.test(t) && /soneca.{0,40}1 hora|soneca de at[eé]/i.test(t) },
       { id: 'crib_if_fed_asleep', w: 15, pass: (t) => /j[aá] dormindo|mamou e (adormeceu|dormiu)|mamar e adormecer/i.test(t) },
@@ -282,14 +292,15 @@ Berço: mamou e dormiu → pode ir dormindo; sem mamada → pode acordada. NÃO 
     message:
       'Bom dia! Bebê de 55 dias e chupa chupeta… quando a chupeta cai da boca ele reclama… devo colocá-la logo em seguida ou devo esperar um pouco para colocá-la na boca dele novamente? Outra coisa, a janela de sono dele está maior que 1h15. Geralmente 1h30 a 1h45! Tem problema?',
     dossierSummary: `Chupeta: se só reclamar, não recolocar imediatamente — UMA vez. Janela 45min–1h15; 1h30–1h45 está acima (sem “principal hipótese”).
-Pergunte “entrar em sono”, não “depois de deitar”. Sem duração da soneca da manhã. Sem fallback.`,
+Pergunte “entrar em sono”, não “depois de deitar”. Sem duração da soneca da manhã. Sem fracionar soneca da manhã sem relato. Sem fallback.`,
     criteria: [
-      { id: 'no_fallback', w: 15, pass: (t) => !/n[aã]o encontrei orienta[cç][aã]o suficiente/i.test(t) },
+      { id: 'no_fallback', w: 10, pass: (t) => !/n[aã]o encontrei orienta[cç][aã]o suficiente/i.test(t) },
       { id: 'pacifier_wait', w: 15, pass: (t) => /n[aã]o precisa recoloc|n[aã]o [eé] necess[aá]rio recoloc|observe .{0,40}(continuar|continua) dormindo|observe um pouco/i.test(t) },
       { id: 'pacifier_once', w: 10, pass: (t) => ((t.match(/recoloc/gi) || []).length <= 1) },
-      { id: 'wake_45_115', w: 15, pass: (t) => /45\s*min/i.test(t) && /1h15|1 hora e 15|1\s*h\s*15/i.test(t) },
+      { id: 'wake_45_115', w: 10, pass: (t) => /45\s*min/i.test(t) && /1h15|1 hora e 15|1\s*h\s*15/i.test(t) },
       { id: 'window_exceeded', w: 15, pass: (t) => /1h30|1h\s*30/i.test(t) && /ultrapass|acima|excede|n[aã]o [eé] o esperado|j[aá] ultrapassa/i.test(t) },
-      { id: 'no_hipotese', w: 10, pass: (t) => !/principal hip[oó]tese.{0,50}vig[ií]lia excessiva/i.test(t) },
+      { id: 'no_hipotese', w: 10, pass: (t) => !/principal hip[oó]tese.{0,50}vig[ií]lia excessiva|vig[ií]lia excessiva/i.test(t) },
+      { id: 'no_morning_fraction', w: 10, pass: (t) => !/fracion.{0,50}soneca da manh[aã]/i.test(t) },
       { id: 'no_deitar', w: 10, pass: (t) => !/depois de deitar/i.test(t) },
       { id: 'entrar_em_sono', w: 5, pass: (t) => /entrar em sono/i.test(t) },
       { id: 'no_reask_age', w: 5, pass: (t) => !/idade exata/i.test(t) },
@@ -306,13 +317,17 @@ Pergunte “entrar em sono”, não “depois de deitar”. Sem duração da son
       'Bebe de 56 dias. Posso colocar no berço e esperar ele dormir sozinho, se não estiver chorando? Ou preciso colocar ele em sono leve ? Ou em sono profundo?',
     dossierSummary: `Tranquilo e sem choro → pode acordado no berço. Não obrigatório sono leve/profundo.
 Se chorar, acalmar e conduzir — sem exigir autonomia. Se adormecer mamando, pode ir dormindo.
-Travesseiro pertinente (segurança da mãe) + aula. Sem aulas de estímulos/janela/rotina/ruído branco. Sem fallback.`,
+Travesseiro: condução e colocação no berço, com mais segurança à mãe — não “ajudar na transição”. Aula UMA vez.
+Sem aulas de estímulos/janela/rotina/ruído branco. Sem fallback.`,
     criteria: [
-      { id: 'no_fallback', w: 15, pass: (t) => !/n[aã]o encontrei orienta[cç][aã]o suficiente/i.test(t) },
-      { id: 'awake_ok', w: 20, pass: (t) => /acordad/i.test(t) && /ber[cç]o/i.test(t) },
-      { id: 'not_required_sleep_stage', w: 15, pass: (t) => /n[aã]o [eé] (necess[aá]rio|obrigat[oó]rio).{0,40}(sono leve|sono profundo)|n[aã]o [eé] necess[aá]rio esperar/i.test(t) },
-      { id: 'feed_asleep_ok', w: 15, pass: (t) => /j[aá] dormindo|adormecer mamando|n[aã]o precisa acord[aá]/i.test(t) },
-      { id: 'travesseiro_lesson', w: 15, pass: (t) => /aula.{0,80}travesseiro|estrat[eé]gia do travesseiro/i.test(t) },
+      { id: 'no_fallback', w: 10, pass: (t) => !/n[aã]o encontrei orienta[cç][aã]o suficiente/i.test(t) },
+      { id: 'awake_ok', w: 15, pass: (t) => /acordad/i.test(t) && /ber[cç]o/i.test(t) },
+      { id: 'not_required_sleep_stage', w: 10, pass: (t) => /n[aã]o [eé] (necess[aá]rio|obrigat[oó]rio).{0,40}(sono leve|sono profundo)|n[aã]o [eé] necess[aá]rio esperar/i.test(t) },
+      { id: 'feed_asleep_ok', w: 10, pass: (t) => /j[aá] dormindo|adormecer mamando|n[aã]o precisa acord[aá]/i.test(t) },
+      { id: 'travesseiro_purpose', w: 10, pass: (t) => /tamb[eé]m pode ajudar na condu[cç][aã]o e na coloca[cç][aã]o do beb[eê] no ber[cç]o/i.test(t) && /seguran[cç]a/i.test(t) },
+      { id: 'no_transicao_generica', w: 10, pass: (t) => !/ajudar na transi[cç][aã]o/i.test(t) },
+      { id: 'travesseiro_lesson', w: 10, pass: (t) => /aula.{0,80}travesseiro|estrat[eé]gia do travesseiro/i.test(t) },
+      { id: 'aula_once', w: 10, pass: (t) => ((t.match(/aula.{0,80}(travesseiro|estrat[eé]gia)|aula correspondente|confira a aula|assista [àa] aula|revise a aula/gi) || []).length <= 1) },
       { id: 'no_unrelated_lessons', w: 15, pass: (t, meta) => {
         const L = meta?.lessonsText || '';
         return !/passo-2-estimulos|excesso de est[ií]mulos|passo-3-janela|passo-4-rotina|lesson-ruido-branco|ru[ií]do branco/i.test(L);
@@ -330,13 +345,17 @@ Travesseiro pertinente (segurança da mãe) + aula. Sem aulas de estímulos/jane
     message:
       'Oi! Bebê de 57 dias. Estou ensinando a adormecer direto no berço progressivamente... começo com sono da manhã e estou avançando gradativamente para as outras sonecas, até chegar no sono noturno. O indicado é ir progressivamente ou deveria tentar em todas as sonecas de uma vez? Além disso, em algumas tentativas, há choro e fico uns 10 min tentando acalmá-la. Quando não resolve, pego no colo, acalmo e refaço o processo novamente... O caminho é esse mesmo?',
     dossierSummary: `Primeira soneca da manhã + demais sonecas DO MESMO DIA no berço. Não uma por dia.
-Colo → berço → repetir. Sem cronometrar. Janela 45min–1h15. Travesseiro ok.`,
+Colo → berço → repetir. Sem cronometrar. Janela 45min–1h15. Consistência e repetição (não “ter paciência”). Travesseiro direto + aula.`,
     criteria: [
-      { id: 'same_day', w: 30, pass: (t) => /mesmo dia|daquele dia|todas as demais sonecas/i.test(t) },
-      { id: 'not_progressive_days', w: 20, pass: (t) => !/avan[cç]ar progressivamente.{0,80}sonecas da tarde/i.test(t) },
-      { id: 'resistance_loop', w: 20, pass: (t) => /colo/i.test(t) && /ber[cç]o/i.test(t) },
-      { id: 'no_timer', w: 15, pass: (t) => /n[aã]o cronometr|sem cronometrar|sem tempo predeterminado/i.test(t) },
-      { id: 'wake_45_115', w: 15, pass: (t) => /45\s*min/i.test(t) && /1h15|1 hora e 15|1\s*h\s*15/i.test(t) },
+      { id: 'same_day', w: 25, pass: (t) => /mesmo dia|daquele dia|todas as demais sonecas/i.test(t) },
+      { id: 'not_progressive_days', w: 15, pass: (t) => !/avan[cç]ar progressivamente.{0,80}sonecas da tarde/i.test(t) },
+      { id: 'resistance_loop', w: 15, pass: (t) => /colo/i.test(t) && /ber[cç]o/i.test(t) },
+      { id: 'no_timer', w: 10, pass: (t) => /n[aã]o cronometr|sem cronometrar|sem tempo predeterminado/i.test(t) },
+      { id: 'wake_45_115', w: 10, pass: (t) => /45\s*min/i.test(t) && /1h15|1 hora e 15|1\s*h\s*15/i.test(t) },
+      { id: 'no_paciencia_vaga', w: 10, pass: (t) => !/paci[eê]ncia e respeitar a resposta/i.test(t) },
+      { id: 'consistency', w: 10, pass: (t) => /mantenha o processo com consist[eê]ncia e repeti[cç][aã]o/i.test(t) && /acolhendo o choro/i.test(t) },
+      { id: 'no_boa_estrategia', w: 10, pass: (t) => !/pode ser uma boa estrat[eé]gia/i.test(t) },
+      { id: 'travesseiro_direct', w: 5, pass: (t) => /estrat[eé]gia do travesseiro|use a estrat[eé]gia/i.test(t) },
     ],
   },
 ];
