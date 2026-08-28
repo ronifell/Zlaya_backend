@@ -73,6 +73,7 @@ PROIBIDO: chamar de soneca curta; hipótese de estímulos/janela perdida sem dad
       { id: 'no_normalize_angry', w: 10, pass: (t) => !/[eé] (normal|comum) que .{0,140}acord(em|e) (irritad|chorando)/i.test(t) },
       { id: 'no_adaptacao_sono', w: 5, pass: (t) => !/se adaptando ao sono/i.test(t) },
       { id: 'no_night_sleep_ask', w: 10, pass: (t) => !/como est[aá] o sono noturno/i.test(t) },
+      { id: 'no_situacao_comum', w: 10, pass: (t) => !/essa situa[cç][aã]o [eé] comum/i.test(t) },
     ],
   },
   {
@@ -102,6 +103,10 @@ Pergunta do intervalo das mamadas deve vir explicada. Sem Travesseiro. Sem hipó
       { id: 'day_naps_focus', w: 5, pass: (t) => /soneca|tarde|manh[aã]|fracion/i.test(t) },
       { id: 'morning_nap_not_delay_cause', w: 10, pass: (t) => !/soneca longa pela manh[aã].{0,80}(contribuindo|explica|causa).{0,40}(relaxar|adormecer)/i.test(t) },
       { id: 'no_feed_to_relax', w: 10, pass: (t) => !/caprichar nas mamadas.{0,40}relaxar/i.test(t) },
+      { id: 'no_long_nap_as_excess', w: 10, pass: (t) => !/soneca longa pela manh[aã].{0,220}tempo total acordado que excede/i.test(t) },
+      { id: 'anticipate', w: 10, pass: (t) => /antecip/i.test(t) },
+      { id: 'no_sleep_sign_gate', w: 5, pass: (t) => !/observe os sinais de sono e inicie a condu/i.test(t) },
+      { id: 'no_orphan_feed', w: 5, pass: (t) => !/Isso pode ajudar a avaliar se (ele|ela) est[aá] se alimentando adequadamente/i.test(t) },
       { id: 'feed_interval_explained', w: 5, pass: (t) => !/intervalo.{0,20}mamadas/i.test(t) || /porque|por que|aproxim/i.test(t) },
     ],
   },
@@ -204,6 +209,7 @@ Janela 45min–1h15. Investigar última soneca UMA vez. Gênero consistente com 
       { id: 'start_21h_beyond', w: 10, pass: (t) => /[àa]s 21h(?!\s*30).{0,80}(al[eé]m|fora da faixa|n[aã]o [eé] o hor[aá]rio recomendado)/i.test(t) },
       { id: 'last_nap_once', w: 5, pass: (t) => ((t.match(/[uú]ltima soneca/gi) || []).length <= 1) },
       { id: 'late_start_once', w: 5, pass: (t) => ((t.match(/21h30 ou 22h n[aã]o [eé]/gi) || []).length <= 1) },
+      { id: 'late_2130_sentences_once', w: 10, pass: (t) => ((t.match(/[^.!?\n]*(?:21h30|21:30)[^.!?]*[.!?]/gi) || []).length <= 1) },
     ],
   },
   {
@@ -226,7 +232,9 @@ Usar chupeta NÃO a torna hipótese principal. PROIBIDO: mínimo 4–5 sonecas; 
       { id: 'vertical_20_30', w: 15, pass: (t) => /20\s*a\s*30/i.test(t) || !/30\s*a\s*40 minutos ap[oó]s (todas|as mamadas)/i.test(t) },
       { id: 'pacifier_not_primary', w: 20, pass: (t) => !/principal hip[oó]tese.{0,120}chupeta|chupeta.{0,40}principal hip[oó]tese/i.test(t) },
       { id: 'no_invented_irritado', w: 15, pass: (t) => !/acordando irritad|acorda irritad/i.test(t) },
-      { id: 'no_early_from_30min', w: 15, pass: (t) => !/acordando ap[oó]s 30 minutos.{0,80}iniciar a condu[cç][aã]o.{0,40}antes/i.test(t) },
+      { id: 'no_early_from_30min', w: 10, pass: (t) => !/acordando ap[oó]s 30 minutos.{0,80}iniciar a condu[cç][aã]o.{0,40}antes/i.test(t) },
+      { id: 'no_post_window_ok', w: 10, pass: (t) => !/ap[oó]s esse per[ií]odo.{0,30}est[aá] correto/i.test(t) },
+      { id: 'no_premature_pacifier', w: 10, pass: (t) => !/chupeta tamb[eé]m pode influenciar/i.test(t) },
     ],
   },
   {
@@ -303,6 +311,8 @@ Pergunte “entrar em sono”, não “depois de deitar”. Sem duração da son
       { id: 'no_morning_fraction', w: 10, pass: (t) => !/fracion.{0,50}soneca da manh[aã]/i.test(t) },
       { id: 'no_deitar', w: 10, pass: (t) => !/depois de deitar/i.test(t) },
       { id: 'entrar_em_sono', w: 5, pass: (t) => /entrar em sono/i.test(t) },
+      { id: 'no_invented_4045', w: 10, pass: (t) => !/40.{0,4}45 minutos para adormecer/i.test(t) },
+      { id: 'no_leaked_nap_wake', w: 10, pass: (t) => !/acordar ap[oó]s as sonecas|mamando efetivamente|despertares coincidem com a queda/i.test(t) },
       { id: 'no_reask_age', w: 5, pass: (t) => !/idade exata/i.test(t) },
     ],
   },
@@ -328,6 +338,7 @@ Sem aulas de estímulos/janela/rotina/ruído branco. Sem fallback.`,
       { id: 'no_transicao_generica', w: 10, pass: (t) => !/ajudar na transi[cç][aã]o/i.test(t) },
       { id: 'travesseiro_lesson', w: 10, pass: (t) => /aula.{0,80}travesseiro|estrat[eé]gia do travesseiro/i.test(t) },
       { id: 'aula_once', w: 10, pass: (t) => ((t.match(/aula.{0,80}(travesseiro|estrat[eé]gia)|aula correspondente|confira a aula|assista [àa] aula|revise a aula/gi) || []).length <= 1) },
+      { id: 'cry_calm_once', w: 10, pass: (t) => ((t.match(/[^.!?\n]*(?:irritar|ficar irritad|come[cç]ar a chorar)[^.!?]{0,200}(?:acalme|acalm[aá]|se acalmar|siga a condu|continuar a condu|continue a condu)[^.!?]*[.!?]/gi) || []).length <= 1) },
       { id: 'no_unrelated_lessons', w: 15, pass: (t, meta) => {
         const L = meta?.lessonsText || '';
         return !/passo-2-estimulos|excesso de est[ií]mulos|passo-3-janela|passo-4-rotina|lesson-ruido-branco|ru[ií]do branco/i.test(L);

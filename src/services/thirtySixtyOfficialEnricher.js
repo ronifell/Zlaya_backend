@@ -82,6 +82,55 @@ function keepFirstMatch(text, re) {
   });
 }
 
+const ANGRY_WAKE_CANON =
+  'Como ela consegue dormir por cerca de 1 hora ou até mais, eu não consideraria a duração da soneca o principal problema neste momento. O que chama mais atenção é ela acordar muito irritada e relaxar depois de sugar um pouco. Por isso, primeiro observaria como está a mamada e se existe algum desconforto depois dela.';
+
+function stripCommonSituationFraming(text) {
+  let out = String(text || '');
+  out = out.replace(/[^.!?\n]*[Ee]ssa situa[cç][aã]o [eé] comum[^.!?]*[.!?]/gi, '');
+  out = out.replace(/[^.!?\n]*[eé] comum e pode ser ajustada com algumas orienta[cç][oõ]es[^.!?]*[.!?]/gi, '');
+  out = out.replace(/pode ser ajustada com algumas orienta[cç][oõ]es[^.!?]*[.!?]?/gi, '');
+  return out;
+}
+
+function isAngryWakeRepeatParagraph(para) {
+  const t = String(para || '');
+  if (/Como ela consegue dormir por cerca de 1 hora/i.test(t)) return false;
+  const nap = /1 hora ou at[eé] mais|soneca de (cerca de )?1\s*h|dura[cç][aã]o da soneca/i.test(t);
+  const wake = /irritad|brav[oa]|chor/i.test(t);
+  const suck = /sugar|relax/i.test(t);
+  const feed = /mamada|desconforto|alimenta|saciedad/i.test(t);
+  return nap && wake && (suck || feed);
+}
+
+function salvageAngryWakeExtras(para) {
+  const sentences = String(para || '').match(/[^.!?]+[.!?]+/g) || [];
+  return sentences
+    .filter((s) => /refluxo|arroto|posi[cç][aã]o vertical|20 a 30 minutos/i.test(s))
+    .filter((s) => !isAngryWakeRepeatParagraph(s))
+    .join(' ')
+    .trim();
+}
+
+/** TESTE 006 (30d): one feeding/discomfort reading; never pre-label as "comum". */
+function dedupeAngryWakeExplanation(text) {
+  let out = stripCommonSituationFraming(text);
+  const canonRe = /Como ela consegue dormir por cerca de 1 hora ou at[eé] mais[\s\S]{0,400}desconforto depois dela\./i;
+  const hit = out.match(canonRe);
+  const canon = hit ? hit[0] : ANGRY_WAKE_CANON;
+  if (hit) out = out.replace(canonRe, '').trim();
+  const kept = [];
+  for (const p of out.split(/\n{2,}/).map((x) => x.trim()).filter(Boolean)) {
+    if (!isAngryWakeRepeatParagraph(p)) {
+      kept.push(p);
+      continue;
+    }
+    const salvage = salvageAngryWakeExtras(p);
+    if (salvage) kept.push(salvage);
+  }
+  return `${canon}\n\n${kept.join('\n\n')}`.replace(/\n{3,}/g, '\n\n').trim();
+}
+
 function scrubTruncatedClauses(text) {
   let out = String(text || '');
   out = out.replace(/Isso pode ajudar a(?=\s+[A-ZÁÉÍÓÚÃÕÂÊÔÀÜ])/g, '');
@@ -106,12 +155,152 @@ function stripBottleBehavioralReading(text) {
 const FEED_INTERVAL_CANONICAL =
   'Também é importante saber qual costuma ser o intervalo entre as mamadas: se durante a demora para adormecer ele estiver se aproximando do próximo intervalo alimentar, considere fome antes de insistir no sono.';
 
-function consolidateExcessWakeComposition(text) {
+/** TESTE 006 (31d): long morning nap ≠ excess wake; anticipate conduction; drop orphan feed leftover. */
+function splitMorningNapFromExcessWake(text) {
   let out = String(text || '');
+  out = out.replace(
+    /Quando o beb[eê] faz uma soneca longa pela manh[aã] e depois tem sonecas curtas [àa] tarde, isso pode resultar em um tempo total acordado que excede a refer[eê]ncia[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*soneca longa pela manh[aã][^.!?]{0,220}(?:tempo total acordado que excede|excede a refer[eê]ncia|resultar em um tempo total acordado)[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*observe os sinais de sono e inicie a condu[cç][aã]o[^.!?]*sonolento[^.!?]*[.!?]/gi,
+    'Como ele já demora cerca de 40 a 45 minutos para adormecer, antecipe o início da condução — não espere os sinais de sono — para que ele entre em sono dentro da janela de 45 minutos a 1 hora e 15 minutos.',
+  );
+  out = out.replace(
+    /[^.!?\n]*observe os sinais de sono e inicie a condu[cç][aã]o[^.!?]*[.!?]/gi,
+    'Como ele já demora cerca de 40 a 45 minutos para adormecer, antecipe o início da condução para que o adormecimento caia dentro da janela de 45 minutos a 1 hora e 15 minutos.',
+  );
+  out = out.replace(
+    /Isso pode ajudar a avaliar se (ele|ela) est[aá] se alimentando adequadamente[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*fome pode estar influenciando os despertares[^.!?]*[.!?]/gi,
+    '',
+  );
+  return out;
+}
+
+function hasWakeArithmetic(text) {
+  return /1h[–\-–]1h15.{0,120}40.{0,30}45|condu[cç][aã]o (come[cç]a|inicia).{0,100}40.{0,30}45|1h.{0,12}1h\s*15.{0,100}40.{0,30}45|1h–1h15.{0,80}40/i.test(
+    String(text || ''),
+  );
+}
+
+/** TESTE 006 (45d): one 21h30 orientation (bath + late night), keep “21h já está além”. */
+function consolidate2130Mentions(text, { includeBath } = {}) {
+  let out = String(text || '');
+  const lateRe = /[^.!?\n]*(?:21h30|21:30)[^.!?]*[.!?]/gi;
+  const hits = out.match(lateRe) || [];
+  if (hits.length === 0) return out;
+  const one = includeBath
+    ? 'A família pode organizar conforme sua dinâmica, mas o banho às 21h30 não é recomendado quando leva o início do sono noturno para ainda mais tarde — 21h30 ou 22h não é o horário recomendado.'
+    : 'A família pode organizar conforme sua dinâmica, mas iniciar o sono noturno por volta de 21h30 ou 22h não é o recomendado.';
+  if (hits.length === 1 && !includeBath) return out;
+  let seen = 0;
+  lateRe.lastIndex = 0;
+  out = out.replace(lateRe, (m) => {
+    const has21hLate = /(?:[àa]s |iniciar .{0,40})21h(?!\s*30).{0,60}(al[eé]m|fora da faixa|j[aá] est[aá])/i.test(m);
+    seen += 1;
+    if (has21hLate) {
+      const kept21h = m
+        .replace(/,?\s*e 21h30 n[aã]o [eé] recomendado[^.!?]*/i, '')
+        .replace(/\s{2,}/g, ' ')
+        .replace(/\s+\./g, '.')
+        .trim();
+      const prefix = /[.!?]$/.test(kept21h) ? kept21h : `${kept21h}.`;
+      return seen === 1 ? `${prefix} ${one}` : prefix;
+    }
+    return seen === 1 ? one : '';
+  });
+  return out;
+}
+
+function dedupeCribCryCalm(text) {
+  let out = String(text || '');
+  const cryCalmRe =
+    /[^.!?\n]*(?:se (?:ele|ela) (?:se )?irritar|ficar irritad[oa]|come[cç]ar a chorar|irritar ou chorar)[^.!?]{0,200}(?:acalme|acalm[aá]|se acalmar|siga a condu[cç][aã]o|continuar a condu[cç][aã]o|continue a condu[cç][aã]o)[^.!?]*[.!?]/gi;
+  out = keepFirstMatch(out, cryCalmRe);
+  const autonomyRe =
+    /[^.!?\n]*(?:n[aã]o precisamos exigir|sem exigir que (?:ele|ela) (?:sempre )?(?:consiga )?adormecer sozinho|sem exigir que adorme[cç]a sozinho)[^.!?]*[.!?]/gi;
+  out = keepFirstMatch(out, autonomyRe);
+  out = out.replace(
+    /[^.!?\n]*aproveitar os momentos em que est[aá] tranquil[oa] para favorecer o in[ií]cio do sono no ber[cç]o[^.!?]*[.!?]/gi,
+    '',
+  );
+  return out;
+}
+
+function stripInventedSleepOnsetDelay(text) {
+  let out = String(text || '');
+  out = out.replace(
+    /Se a condu[cç][aã]o come[cç]a ap[oó]s 1h30 a 1h45 e (ele|ela) demora cerca de 40.{0,4}45 minutos para adormecer[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*condu[cç][aã]o come[cç]a ap[oó]s 1h30 a 1h45[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*demora cerca de 40.{0,4}45 minutos para adormecer[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*40.{0,4}45 minutos para (adormecer|entrar em sono|relaxar)[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*tempo total acordado pode estar excessivo[^.!?]*[.!?]/gi,
+    '',
+  );
+  return out;
+}
+
+/** 55d: mother asked only pacifier-replace + long wake — do not leak 49d nap-wake/feed investigation. */
+function stripLeaked55dInvestigation(text) {
+  let out = String(text || '');
+  out = out.replace(
+    /[^.!?\n]*como (ele|ela|o beb[eê]) costuma acordar(?: das sonecas| ap[oó]s as sonecas)[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*como (ele|ela|o beb[eê]) (?:desperta|acorda) ap[oó]s as sonecas[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(/[^.!?\n]*Ele parece irritado ou calmo[^.!?]*[.!?]/gi, '');
+  out = out.replace(
+    /[^.!?\n]*(?:est[aá] mamando efetivamente|apresentando sinais de saciedade|intervalos entre as mamadas)[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(/[^.!?\n]*E como est[aá] a alimenta[cç][aã]o[^.!?]*[.!?]/gi, '');
+  out = out.replace(
+    /[^.!?\n]*(?:voc[eê] percebe se )?os despertares coincidem com a queda da chupeta[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*Como ele usa chupeta, vale observar se os despertares[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(/Para entender melhor,\s*(?=Para entender melhor,)/gi, '');
+  out = out.replace(/Para entender melhor,\s*\n+\s*/g, 'Para entender melhor, ');
+  out = keepFirstMatch(
+    out,
+    /Para entender melhor, quanto tempo (ele|ela) demora para entrar em sono[^.!?]*[.!?]/gi,
+  );
+  return out;
+}
+
+function consolidateExcessWakeComposition(text) {
+  let out = splitMorningNapFromExcessWake(text);
   const morningFractionRe =
     /[^.!?\n]*(?:fracion\w{0,12}\s+a soneca da manh[aã]|soneca (?:longa )?da manh[aã][^.!?\n]{0,40}fracion)[^.!?]*[.!?]/gi;
   out = keepFirstMatch(out, morningFractionRe);
   out = out.replace(/Isso pode ajudar a melhorar a distribui[cç][aã]o das sonecas durante a tarde[^.!?]*[.!?]/gi, '');
+  out = out.replace(/Isso pode ajudar a entender melhor a situa[cç][aã]o[^.!?]*[.!?]/gi, '');
   out = out.replace(
     /[^.!?\n]*(?:qual [eé]|quanto tempo|e quanto tempo)[^.!?]{0,140}(?:permanece|permanecer|costuma permanecer) acordad[oa][^.!?]{0,120}(?:antes de iniciar|antes da condu|[àa] soneca|para a soneca|antes das sonecas)[^.!?]*[.!?]*/gi,
     '',
@@ -248,6 +437,11 @@ export function enrichThirtySixtyOfficialAnswer({
     );
     out = out.replace(/,?\s*especialmente se (est[aã]o|ela est[aá]|ele est[aá]) se adaptando ao sono\.?/gi, '.');
     out = out.replace(/[^.!?]*se adaptando ao sono[^.!?]*[.!?]/gi, '');
+    out = out.replace(/[^.!?]*se ajustando ao sono[^.!?]*[.!?]/gi, '');
+    out = out.replace(
+      /[EÉ] normal que os beb[eê]s ainda estejam se ajustando[^.!?]*[.!?]/gi,
+      '',
+    );
     out = out.replace(
       /[EÉ] (normal|comum) que (beb[eê]s de 30 dias|.{0,60}de 30 dias) acord(em|e) irritad[oa]s? ap[oó]s sonecas[^.!?]*[.!?]/gi,
       '',
@@ -298,6 +492,8 @@ export function enrichThirtySixtyOfficialAnswer({
     }
     out = out.replace(/\n\nA janela de vigília de referência nesta faixa é de 45 minutos a 1 hora \(podendo chegar a 1h15\)\./gi, '');
     out = out.replace(new RegExp(`\\n\\nA janela de vigília de referência nesta faixa é de ${WAKE_WINDOW_REF}\\.`, 'gi'), '');
+    out = dedupeAngryWakeExplanation(out);
+    notes.push('angry_wake_once');
   }
 
   // --- 31d excess wake (do NOT use 49d pacifier block) ---
@@ -309,6 +505,7 @@ export function enrichThirtySixtyOfficialAnswer({
         /1\s*hr|1\s*h|40\s*\/\s*45|40\/45|demora|fracion/i.test(msg) &&
         /soneca grande|2\s*hrs|2h|manh/i.test(msg)));
   if (excessWakeCase) {
+    out = splitMorningNapFromExcessWake(out);
     out = out.replace(/\n\nAntes de atribuir os despertares à chupeta[\s\S]*?despertar\./gi, '');
     out = out.replace(/45 minutos a 1 hora \(podendo chegar a 1h15\)/gi, WAKE_WINDOW_REF);
     out = out.replace(/refer[eê]ncia de 45 minutos a 1 hora(?!\s+e\s+15)/gi, `referência de ${WAKE_WINDOW_REF}`);
@@ -336,12 +533,13 @@ export function enrichThirtySixtyOfficialAnswer({
     out = out.replace(/[EÉ] normal que.{0,50}31 dias.{0,80}varia[cç][oõ]es nas sonecas[^.!?]*[.!?]/gi, '');
     out = out.replace(/Com 31 dias,\s*[eé] normal que o beb[eê] passe por varia[cç][oõ]es nas sonecas,\s*/gi, '');
     out = out.replace(/[EÉ] normal que o beb[eê] passe por varia[cç][oõ]es nas sonecas,\s*/gi, '');
+    out = out.replace(/[EÉ] normal que os padr[oõ]es de sono[^.!?]*vari[^.!?]*[.!?]/gi, '');
     out = out.replace(/[^.!?]*se adaptando ao ritmo do dia[^.!?]*[.!?]/gi, '');
     out = out.replace(/especialmente nesta fase em que (ele|ela) est[aá] se adaptando[^.!?]*[.!?]/gi, '');
-    if (!has(out, /1h\s*40|1h40|1 hora e 40|tempo total acordado|vig[ií]lia excessiva/i)) {
+    if (!hasWakeArithmetic(out)) {
       out = appendOnce(
         out,
-        `O ponto central é a vigília total: se a condução começa depois de cerca de 1h–1h15 e ele ainda leva uns 40–45 minutos para adormecer, o tempo acordado chega perto de 1h40–2h — acima da referência de ${WAKE_WINDOW_REF}. Comece a preparação um pouco antes para que o adormecimento, e não só o início da condução, caia dentro da janela.`,
+        `A vigília excessiva vem da soma — não da soneca longa da manhã: se a condução começa depois de cerca de 1h–1h15 e ele ainda leva uns 40–45 minutos para adormecer, o tempo acordado chega perto de 1h40–2h — acima da referência de ${WAKE_WINDOW_REF}.`,
       );
       notes.push('excess_wake_45_60');
     } else if (!has(out, /1 hora e 15|1h15|1\s*h\s*15/i)) {
@@ -357,6 +555,13 @@ export function enrichThirtySixtyOfficialAnswer({
         'Vale fracionar a soneca da manhã para cerca de 1h30–2h e observar se as sonecas da tarde se distribuem melhor — esse ajuste não substitui o eixo da vigília total.',
       );
       notes.push('fraction_morning');
+    }
+    if (!has(out, /antecip.{0,60}condu[cç][aã]o|antecipe o in[ií]cio da condu[cç][aã]o/i)) {
+      out = appendOnce(
+        out,
+        'Como ele já demora cerca de 40 a 45 minutos para adormecer, antecipe o início da condução — não espere os sinais de sono — para que ele entre em sono dentro da janela de 45 minutos a 1 hora e 15 minutos.',
+      );
+      notes.push('anticipate_conduction');
     }
     out = out.replace(/^\s*qual [eé] o intervalo t[ií]pico entre as mamadas\s*\.?$/gim, '');
     if (!has(out, /intervalo .{0,20}entre as mamadas/i)) {
@@ -397,41 +602,33 @@ export function enrichThirtySixtyOfficialAnswer({
       /n[aã]o [eé] o ideal, pois pode contribuir para que (ele|ela) demore mais a adormecer[^.]*\./gi,
       'não é o horário recomendado. A demora para adormecer também precisa ser lida com o horário da última soneca e com a janela de vigília — o horário tardio não explica isso sozinho.',
     );
-    // Keep a single "21h30/22h não é recomendado" (TESTE 003: the idea appeared twice).
-    out = out.replace(
-      /[^.!?]*iniciar o sono noturno (às|as|por volta de )?\s*21h30 ou 22h n[aã]o [eé] o? ?(?:ideal|recomendado)[^.!?]*[.!?]/gi,
-      '',
-    );
-    {
-      let lateSeen = 0;
-      out = out.replace(/[^.!?]*21h30 ou 22h n[aã]o [eé][^.!?]*recomend[^.!?]*[.!?]/gi, (m) => {
-        lateSeen += 1;
-        return lateSeen === 1 ? m : '';
-      });
-    }
     if (!has(out, /19h.{0,20}20h|19\s*h.{0,20}20\s*h/i)) {
       out = appendOnce(out, 'O horário saudável e recomendado para o início do sono noturno é entre 19h e 20h.');
       notes.push('night_19_20');
     }
-    if (/banho|21h?30|21:30/i.test(msg)) {
-      out = out.replace(
-        /Se o banho for (dado )?[àa]s 21h30[^.]*\./gi,
-        'O banho às 21h30 não é recomendado quando leva o início do sono noturno para ainda mais tarde.',
-      );
-      if (!has(out, /banho.{0,80}n[aã]o [eé] recomendado|n[aã]o [eé] recomendado.{0,80}banho/i)) {
+    {
+      const askedBath = /banho|21h?30|21:30/i.test(msg);
+      if (askedBath) {
+        out = out.replace(
+          /Se o banho for (dado )?[àa]s 21h30[^.]*\./gi,
+          'O banho às 21h30 não é recomendado quando leva o início do sono noturno para ainda mais tarde.',
+        );
+        notes.push('bath_not_recommended');
+      }
+      const alreadyLate = /21h30|21:30/i.test(out);
+      if (!alreadyLate) {
         out = appendOnce(
           out,
-          'Sobre a pergunta objetiva: o banho às 21h30 não é recomendado quando leva o início do sono noturno para ainda mais tarde.',
+          askedBath
+            ? 'A família pode organizar conforme sua dinâmica, mas o banho às 21h30 não é recomendado quando leva o início do sono noturno para ainda mais tarde — 21h30 ou 22h não é o horário recomendado.'
+            : 'A família pode organizar conforme sua dinâmica, mas iniciar o sono noturno por volta de 21h30 ou 22h não é o recomendado.',
         );
+        notes.push('night_not_2130');
       }
-      notes.push('bath_not_recommended');
-    }
-    if (!has(out, /21h30 ou 22h n[aã]o [eé]/i)) {
-      out = appendOnce(
-        out,
-        'A família pode organizar conforme sua dinâmica, mas iniciar o sono noturno por volta de 21h30 ou 22h não é o recomendado.',
-      );
-      notes.push('night_not_2130');
+      const before2130 = (out.match(/21h30|21:30/gi) || []).length;
+      out = consolidate2130Mentions(out, { includeBath: askedBath });
+      out = out.replace(/\.([A-ZÁÉÍÓÚÃÕ])/g, '. $1');
+      if ((out.match(/21h30|21:30/gi) || []).length < before2130) notes.push('night_2130_once');
     }
     if (/sono noturno [àa]s 21h(?!\s*30)|iniciando.{0,30}[àa]s 21h(?!\s*30)|[àa]s 21h, por[eé]m/i.test(msg)) {
       if (!has(out, /[àa]s 21h(?!\s*30).{0,80}(al[eé]m|fora da faixa|tamb[eé]m j[aá]|n[aã]o [eé] o hor[aá]rio recomendado)/i)) {
@@ -610,6 +807,26 @@ export function enrichThirtySixtyOfficialAnswer({
       /A necessidade de suc[cç][aã]o com a chupeta pode estar influenciando[^.]*\./gi,
       pacifierConditional,
     );
+    out = out.replace(
+      /O fato de (ele|ela) usar chupeta tamb[eé]m pode influenciar os despertares[^.!?]*[.!?]/gi,
+      '',
+    );
+    out = out.replace(
+      /[^.!?\n]*usar chupeta tamb[eé]m pode influenciar os despertares[^.!?]*[.!?]/gi,
+      '',
+    );
+    out = out.replace(
+      /Se voc[eê] est[aá] iniciando a condu[cç][aã]o para a soneca ap[oó]s esse per[ií]odo, isso est[aá] correto[^.!?]*[.!?]/gi,
+      'A condução deve respeitar a janela de 45 minutos a 1 hora e 15 minutos e os sinais de sono — não iniciar depois que a faixa já foi ultrapassada.',
+    );
+    out = out.replace(
+      /iniciando a condu[cç][aã]o.{0,80}ap[oó]s (esse per[ií]odo|esse tempo|essa faixa).{0,40}est[aá] correto[^.!?]*[.!?]/gi,
+      'A condução deve respeitar a janela de 45 minutos a 1 hora e 15 minutos e os sinais de sono.',
+    );
+    out = out.replace(
+      /[^.!?\n]*ap[oó]s esse per[ií]odo, isso est[aá] correto[^.!?]*[.!?]/gi,
+      'A condução deve respeitar a janela de 45 minutos a 1 hora e 15 minutos e os sinais de sono.',
+    );
     if (/chupeta/i.test(msg) && /principal hip[oó]tese.{0,80}chupeta/i.test(out)) {
       out = out.replace(/A principal hip[oó]tese[^.]*\./i, pacifierConditional);
     }
@@ -621,7 +838,15 @@ export function enrichThirtySixtyOfficialAnswer({
     }
     out = keepFirstMatch(
       out,
-      /[^.!?\n]*(?:vale observar se os despertares acontecem justamente quando ela cai|despertares coincidem com a queda da chupeta)[^.!?]*[.!?]/gi,
+      /[^.!?\n]*(?:vale observar se os despertares acontecem justamente quando ela cai|despertares coincidem com a queda da chupeta|despertares acontecem quando a chupeta cai)[^.!?]*[.!?]/gi,
+    );
+    out = out.replace(
+      /despertares acontecem quando a chupeta cai/gi,
+      'despertares acontecem justamente quando ela cai',
+    );
+    out = keepFirstMatch(
+      out,
+      /[^.!?\n]*despertares acontecem justamente quando ela cai[^.!?]*[.!?]/gi,
     );
     out = keepFirstMatch(
       out,
@@ -659,6 +884,23 @@ export function enrichThirtySixtyOfficialAnswer({
         'A duração de uma soneca de cerca de 30 minutos, sozinha, não indica que a condução precise começar mais cedo.',
       );
       notes.push('49_no_early_from_30min');
+    }
+    if (!has(out, /respeitar a janela de 45 minutos a 1 hora e 15/i)) {
+      out = appendOnce(
+        out,
+        'A condução deve respeitar a janela de 45 minutos a 1 hora e 15 minutos e os sinais de sono.',
+      );
+      notes.push('49_respect_window');
+    }
+    if (
+      /chegar a durar 1h|em exce[cç][aã]o.{0,30}1h/i.test(msg) &&
+      !has(out, /1 hora n[aã]o devem ser consideradas curtas|cerca de 1 hora.{0,50}n[aã]o.{0,30}curtas/i)
+    ) {
+      out = appendOnce(
+        out,
+        'Sonecas de cerca de 1 hora não devem ser consideradas curtas.',
+      );
+      notes.push('49_1h_not_short');
     }
   }
 
@@ -981,13 +1223,18 @@ export function enrichThirtySixtyOfficialAnswer({
       );
       notes.push('56_awake_ok');
     }
-    if (!has(out, /irritad|come[cç]ar a chorar|ajud[aá]-l[oa] a se acalmar/i)) {
+    const hasCryCalm =
+      /(?:irritar|irritad|come[cç]ar a chorar|(?<!sem )chorar)/i.test(out) &&
+      /acalme|acalm[aá]|se acalmar|siga a condu[cç][aã]o|continue a condu[cç][aã]o|continuar a condu[cç][aã]o/i.test(out);
+    if (!hasCryCalm) {
       out = appendOnce(
         out,
-        'Se ele ficar irritado ou começar a chorar, você pode ajudá-lo a se acalmar e continuar a condução do sono. Nessa fase, não precisamos exigir que ele sempre consiga adormecer sozinho, mas podemos aproveitar os momentos em que está tranquilo para favorecer o início do sono no berço.',
+        'Se ele se irritar ou chorar, acalme-o e continue a condução do sono, sem exigir que adormeça sozinho.',
       );
       notes.push('56_no_autonomy_demand');
     }
+    out = dedupeCribCryCalm(out);
+    notes.push('56_cry_calm_once');
     if (!has(out, /adormecer mamando|j[aá] dormindo|n[aã]o precisa acord[aá]-l[oa]/i)) {
       out = appendOnce(
         out,
@@ -1166,17 +1413,25 @@ export function enrichThirtySixtyOfficialAnswer({
       out = out.replace(/[^.!?]*melhora as sonecas da tarde[^.!?]*[.!?]/gi, '');
       notes.push('55_no_invented_morning_fraction');
     }
+    if (!/40\s*[\/\-–]\s*45|40\s*a\s*45|quase 40/i.test(msg)) {
+      out = stripInventedSleepOnsetDelay(out);
+      notes.push('55_no_invented_sleep_onset');
+    }
+    if (!/despertares durante as sonecas|sonecas duram|m[eé]dia de 30\s*min/i.test(msg)) {
+      out = stripLeaked55dInvestigation(out);
+      notes.push('55_no_leaked_nap_investigation');
+    }
     out = out.replace(
       /Seria [uú]til saber quanto tempo ele demora para (adormecer depois de deitar|entrar em sono)[^.!?]*[.!?]/gi,
-      'Também é importante observar quanto tempo ele demora para entrar em sono. Essa informação ajuda a avaliar melhor como a janela está funcionando, sem presumir a forma ou o local em que ele adormece.',
+      'Para entender melhor, quanto tempo ele demora para entrar em sono após você iniciar a condução?',
     );
     out = out.replace(/adormecer depois de deitar/gi, 'entrar em sono');
     out = out.replace(/\s*e a dura[cç][aã]o da soneca da manh[aã][^.?]*\??/gi, '');
     out = out.replace(/Isso pode ajudar a ajustar a rotina d[ea]le\./gi, '');
-    if (!has(out, /entrar em sono/i)) {
+    if (!has(out, /quanto tempo (ele|ela) demora para entrar em sono/i)) {
       out = appendOnce(
         out,
-        'Também é importante observar quanto tempo ele demora para entrar em sono. Essa informação ajuda a avaliar melhor como a janela está funcionando, sem presumir a forma ou o local em que ele adormece.',
+        'Para entender melhor, quanto tempo ele demora para entrar em sono após você iniciar a condução?',
       );
       notes.push('55_enter_sleep_ask');
     }
@@ -1204,7 +1459,7 @@ export function enrichThirtySixtyOfficialAnswer({
       );
       notes.push('55_pacifier_wait');
     }
-    if (!has(out, /1h30.{0,40}(ultrapass|acima|excede)|ultrapassa o esperado|acima da refer[eê]ncia/i)) {
+    if (!has(out, /1h30.{0,80}(ultrapass|acima|excede)|1h\s*30.{0,80}(ultrapass|acima|excede)/i)) {
       out = appendOnce(
         out,
         `Sobre o tempo acordado: a referência de janela de vigília é de ${WAKE_WINDOW_REF}. Permanecer acordado habitualmente por 1h30 a 1h45 já ultrapassa o esperado para essa faixa etária. Procure observar os sinais de sono e iniciar a preparação para dormir antes de ultrapassar repetidamente 1h15.`,
@@ -1241,6 +1496,7 @@ export function enrichThirtySixtyOfficialAnswer({
   if (ids.has('nap_angry_wake_30_60')) {
     out = out.replace(/[EÉ] (normal|comum) que .{0,140}acord(em|e) chorando[^.!?]*[.!?]/gi, '');
     out = out.replace(/[^.!?]*como est[aá] o sono noturno[^.!?]*[.!?]/gi, '');
+    out = dedupeAngryWakeExplanation(out);
   }
   if (excessWakeCase) {
     out = consolidateExcessWakeComposition(out);
