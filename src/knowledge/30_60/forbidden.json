@@ -71,6 +71,7 @@
     "deixar o inicio da conducao depender principalmente dos sinais de sono quando o bebe ja demora 40-45 min para adormecer",
     "deixar um trecho residual do tipo 'Isso pode ajudar a avaliar se ele esta se alimentando adequadamente' sem antecedente",
     "dizer caprichar nas mamadas para relaxar o bebe",
+    "oferecer o peito para relaxar ou facilitar a transicao para o sono quando o criterio e proximidade do intervalo alimentar",
     "expor regras internas de prompt na resposta a mae (sem evidencia no relato, como hipotese sem diagnostico)",
     "usar vicio ou manha como rotulo",
     "orientar interrupcao da mamada so com a expressao mamada por conforto, sem mamada efetiva e saciedade",
@@ -88,12 +89,15 @@
     "classificar como comum o despertar muito irritado, com bastante choro e alivio apos sugar",
     "dizer que essa situacao e comum e pode ser ajustada com algumas orientacoes",
     "repetir no mesmo texto a leitura soneca de 1h + despertar irritado + relaxar apos sugar + investigar alimentacao",
+    "interpretar automaticamente sugar pouco e relaxar ao despertar como necessidade de alimentacao",
     "normalizar o choro intenso ao despertar pelo fato de a soneca ter durado 1h ou mais",
     "perguntar sobre o sono noturno quando a queixa e apenas o despertar irritado apos soneca diurna",
     "perguntar quanto tempo permanece acordado antes das sonecas quando a mae ja informou a janela",
     "repetir na mesma resposta a orientacao de fracionar a soneca da manha",
     "introduzir leitura comportamental da succao quando a duvida e apenas duracao da mamada e volume da mamadeira",
     "entregar frases truncadas (ex.: Isso pode ajudar a sem conclusao)",
+    "entregar frases truncadas (ex.: Isso e importante para sem conclusao)",
+    "orientar retorno ao sono sem peito ANTES de verificar o horario da ultima mamada nos despertares apos as 4h",
     "transformar apos as 4h da manha em apos 4 horas de sono",
     "dizer que investigar alimentacao ajuda a evitar associacao despertar-mamada",
     "omitir que o inicio as 21h ja esta alem de 19h-20h quando a mae relatou iniciar as 21h",
@@ -119,7 +123,12 @@
     "dizer que a Estrategia do Travesseiro serve para ajudar na transicao sem explicar conducao, colocacao no berco e seguranca da mae",
     "direcionar duas vezes para a aula da Estrategia do Travesseiro na mesma resposta",
     "dizer que e importante ter paciencia e respeitar a resposta do bebe no lugar de consistencia e repeticao na adaptacao ao berco",
-    "indicar o Travesseiro como pode ser uma boa estrategia em vez de orientar a aplicacao de forma direta"
+    "indicar o Travesseiro como pode ser uma boa estrategia ou boa ferramenta em vez de orientar a aplicacao de forma direta",
+    "duplicar a orientacao da chupeta ou da janela de vigilia na mesma resposta de chupeta que cai",
+    "fazer duas perguntas sobre o tempo para entrar em sono apos iniciar a conducao",
+    "substituir a aula de Janela de Vigilia por Sinais de Sono quando a duvida principal e a janela habitual acima de 1h15",
+    "normalizar automaticamente a dificuldade de um bebe de 30-60 dias que so consegue dormir no colo ou no peito como caracteristica da idade ou fase de adaptacao",
+    "indicar ruido branco sem relacao demonstrada com a dificuldade de dormir de dia no colo/peito"
   ],
   "languageRules": {
     "forbidden": [

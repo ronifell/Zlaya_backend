@@ -111,7 +111,7 @@ A janela de vigília pode variar entre 45 minutos a 1 hora e 15 minutos. Observe
       { id: 'wake_ref', w: 10, pass: (t) => /45\s*min/i.test(t) && /1 hora e 15|1h15/i.test(t) },
       { id: 'no_paciencia_vaga', w: 10, pass: (t) => !/paci[eê]ncia e respeitar a resposta/i.test(t) },
       { id: 'consistency', w: 10, pass: (t) => /mantenha o processo com consist[eê]ncia e repeti[cç][aã]o/i.test(t) && /acolhendo o choro/i.test(t) },
-      { id: 'no_boa_estrategia', w: 10, pass: (t) => !/pode ser uma boa estrat[eé]gia/i.test(t) },
+      { id: 'no_boa_estrategia', w: 10, pass: (t) => !/pode ser uma boa (estrat[eé]gia|ferramenta)/i.test(t) },
     ],
   },
   {

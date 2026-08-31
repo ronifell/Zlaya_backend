@@ -191,6 +191,19 @@ const LESSON_SCENARIO_RULES = [
     ],
   },
   {
+    signalIds: ['pacifier_drop_long_wake_30_60'],
+    whitelist: [
+      'lesson-30-60-passo-3-janela',
+      'lesson-30-60-sinais-sono',
+    ],
+    blacklist: [
+      'lesson-travesseiro',
+      'lesson-30-60-maus-habitos',
+      'lesson-30-60-passo-1-comportamento',
+      'lesson-30-60-caso-cecilia',
+    ],
+  },
+  {
     signalIds: ['crib_adaptation_same_day_30_60'],
     whitelist: [
       'lesson-travesseiro',
@@ -248,9 +261,9 @@ const LESSON_SCENARIO_RULES = [
     whitelist: [
       'lesson-travesseiro',
       'lesson-30-60-passo-3-janela',
-      'lesson-ruido-branco',
     ],
     blacklist: [
+      'lesson-ruido-branco',
       'lesson-30-60-maus-habitos',
       'lesson-30-60-caso-cecilia',
       'lesson-30-60-passo-1-comportamento',

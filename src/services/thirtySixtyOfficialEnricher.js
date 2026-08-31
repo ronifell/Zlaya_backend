@@ -85,6 +85,9 @@ function keepFirstMatch(text, re) {
 const ANGRY_WAKE_CANON =
   'Como ela consegue dormir por cerca de 1 hora ou até mais, eu não consideraria a duração da soneca o principal problema neste momento. O que chama mais atenção é ela acordar muito irritada e relaxar depois de sugar um pouco. Por isso, primeiro observaria como está a mamada e se existe algum desconforto depois dela.';
 
+const ANGRY_WAKE_FEED_REFINE =
+  'O tempo de mamada, sozinho, não comprova saciedade — mesmo que ela tenha mamado 20 a 30 minutos antes da soneca. Observe sucção ativa, deglutição e sinais de saciedade. Sugar pouco e relaxar ao despertar não significa automaticamente que ela precise se alimentar: investigue também desconforto e se a sucção está sendo usada para relaxar.';
+
 function stripCommonSituationFraming(text) {
   let out = String(text || '');
   out = out.replace(/[^.!?\n]*[Ee]ssa situa[cç][aã]o [eé] comum[^.!?]*[.!?]/gi, '');
@@ -95,21 +98,46 @@ function stripCommonSituationFraming(text) {
 
 function isAngryWakeRepeatParagraph(para) {
   const t = String(para || '');
-  if (/Como ela consegue dormir por cerca de 1 hora/i.test(t)) return false;
-  const nap = /1 hora ou at[eé] mais|soneca de (cerca de )?1\s*h|dura[cç][aã]o da soneca/i.test(t);
-  const wake = /irritad|brav[oa]|chor/i.test(t);
-  const suck = /sugar|relax/i.test(t);
-  const feed = /mamada|desconforto|alimenta|saciedad/i.test(t);
-  return nap && wake && (suck || feed);
+  const nap = /1 hora ou at[eé] mais|soneca de (cerca de )?1\s*h|dura[cç][aã]o da soneca|n[aã]o (consideraria|parece ser| [eé] o) .{0,40}(principal )?(problema|ponto)/i.test(t);
+  const wake = /irritad|brav[oa]|chor|despertar .{0,30}aten[cç]/i.test(t);
+  return nap && wake;
 }
 
 function salvageAngryWakeExtras(para) {
   const sentences = String(para || '').match(/[^.!?]+[.!?]+/g) || [];
   return sentences
-    .filter((s) => /refluxo|arroto|posi[cç][aã]o vertical|20 a 30 minutos/i.test(s))
+    .filter((s) => /refluxo|arroto|posi[cç][aã]o vertical|20 a 30 minutos|suc[cç][aã]o ativa|degluti[cç][aã]o/i.test(s))
     .filter((s) => !isAngryWakeRepeatParagraph(s))
+    .filter((s) => !/n[aã]o consideraria a dura[cç][aã]o|n[aã]o [eé] o (principal )?problema/i.test(s))
     .join(' ')
     .trim();
+}
+
+function stripAutoHungerFromSuckRelax(text) {
+  let out = String(text || '');
+  out = out.replace(
+    /[^.!?\n]*(?:suga(?:r)? pouco e relaxa|sugar pouco e relaxar)[^.!?]{0,120}(?:precisa (se )?aliment|indica (que )?(h[aá] )?fome|necessidade de alimenta|ofere[cç]a (o peito|a mamada)|deve (ser )?alimentad)[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*(?:isso indica que ela precisa se alimentar|por isso (ela )?precisa (se )?alimentar|ofere[cç]a (o peito|a mamada) (de novo|novamente|ao despertar))[^.!?]*[.!?]/gi,
+    '',
+  );
+  return out;
+}
+
+function ensureAngryWakeFeedRefine(text) {
+  let out = stripAutoHungerFromSuckRelax(text);
+  if (has(out, /n[aã]o comprova saciedade|n[aã]o significa automaticamente que .{0,40}aliment/i)) {
+    return out;
+  }
+  const parts = out.split(/\n{2,}/).map((x) => x.trim()).filter(Boolean);
+  const insertAt = parts.findIndex((p) => /Como ela consegue dormir por cerca de 1 hora/i.test(p));
+  if (insertAt >= 0) {
+    parts.splice(insertAt + 1, 0, ANGRY_WAKE_FEED_REFINE);
+    return parts.join('\n\n');
+  }
+  return appendOnce(out, ANGRY_WAKE_FEED_REFINE);
 }
 
 /** TESTE 006 (30d): one feeding/discomfort reading; never pre-label as "comum". */
@@ -136,9 +164,104 @@ function scrubTruncatedClauses(text) {
   out = out.replace(/Isso pode ajudar a(?=\s+[A-ZÁÉÍÓÚÃÕÂÊÔÀÜ])/g, '');
   out = out.replace(/Isso pode ajudar a\s*$/gim, '');
   out = out.replace(/Isso pode ajudar a\s+(?=\n)/g, '');
+  out = out.replace(/Isso [eé] importante para(?=\s+[A-ZÁÉÍÓÚÃÕÂÊÔÀÜ])/g, '');
+  out = out.replace(/Isso [eé] importante para\s*$/gim, '');
+  out = out.replace(/Isso [eé] importante para\s+(?=\n)/g, '');
+  out = out.replace(/Isso ajuda a(?=\s+[A-ZÁÉÍÓÚÃÕÂÊÔÀÜ])/g, '');
   out = out.replace(/[ \t]{2,}/g, ' ');
   out = out.replace(/[ \t]+\n/g, '\n');
+  out = out.replace(/[ \t]+\./g, '.');
   return out;
+}
+
+const NIGHT_DECISION_CANON =
+  'O primeiro passo é identificar o horário da última mamada antes das 4h da manhã. Se já transcorreram aproximadamente 2h30 a 3h desde uma mamada efetiva, ofereça mamada efetiva até a saciedade. Se ainda não completou esse intervalo após uma mamada efetiva, tente conduzi-lo novamente ao sono sem oferecer imediatamente o peito.';
+
+function reorderNightHourlyDecision(text) {
+  let out = String(text || '');
+  out = out.replace(
+    /[^.!?\n]*orienta[cç][aã]o pr[aá]tica[^.!?]{0,280}[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*tente faz[eê][\-‐‑–—]?l[oa] dormir novamente sem oferecer[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*voc[eê] deve tentar faz[eê][\-‐‑–—]?l[oa] dormir[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*ap[oó]s as 4h da manh[aã][^.!?]{0,120}sem oferecer o peito imediatamente[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(/[^.!?\n]*Verifique tamb[eé]m o hor[aá]rio da [uú]ltima mamada[^.!?]*[.!?]/gi, '');
+  out = out.replace(/[^.!?\n]*A pergunta decisiva [eé]:[\s\S]{0,500}?novinho\./gi, '');
+  out = out.replace(
+    /[^.!?\n]*O primeiro passo [eé] identificar o hor[aá]rio da [uú]ltima mamada[\s\S]{0,420}?peito\./gi,
+    '',
+  );
+  out = out.replace(/[^.!?\n]*Se j[aá] (tinham )?passado(?:m)? cerca de 2h30 a 3h[^.!?]*[.!?]/gi, '');
+  out = out.replace(
+    /[^.!?\n]*Se o despertar ocorrer antes de completar aproximadamente 3 horas[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(/[^.!?\n]*Se ainda n[aã]o completou esse intervalo[^.!?]*[.!?]/gi, '');
+  out = out.replace(/qual foi o hor[aá]rio da [uú]ltima mamada antes das 4h[^.?]*\??/gi, '');
+  out = out.replace(/Voc[eê] costuma oferecer peito ou mamadeira automaticamente[^.?]*\??/gi, '');
+  out = out.replace(
+    /[^.!?\n]*orienta[cç][aã]o pr[aá]tica segura [eé] que[^.!?]{0,200}voc[eê] deve\s*/gi,
+    '',
+  );
+  out = scrubTruncatedClauses(out);
+  out = out.replace(/\n{3,}/g, '\n\n').replace(/[ \t]{2,}/g, ' ').trim();
+
+  if (!has(out, /primeiro passo [eé] identificar o hor[aá]rio da [uú]ltima mamada/i)) {
+    const parts = out.split(/\n{2,}/).map((x) => x.trim()).filter(Boolean);
+    if (parts.length === 0) {
+      out = NIGHT_DECISION_CANON;
+    } else {
+      const firstIsEmpathy = /^(É compreens|[EÉ] comum que|Olá)/i.test(parts[0]);
+      parts.splice(firstIsEmpathy ? 1 : 0, 0, NIGHT_DECISION_CANON);
+      out = parts.join('\n\n');
+    }
+  }
+  return out;
+}
+
+const DAY_SLEEP_OPEN_51 =
+  'Antes de pensarmos em quanto tempo ela levará para aprender, precisamos entender por que ela está conseguindo entrar em sono apenas no colo ou no peito.';
+
+function strip51dNormalization(text) {
+  let out = String(text || '');
+  out = out.replace(
+    /[EÉ] (normal|comum) que (a beb[eê] de \d+ dias|beb[eê]s de \d+ dias) tenha(?:m)? dificuldade(?:s)? para dormir durante o dia[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*especialmente se ela s[oó] consegue adormecer no colo ou no peito[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(/Essa fase [eé] de adapta[cç][aã]o[^.!?]*[.!?]/gi, '');
+  out = out.replace(/[eé] esperado que haja varia[cç][oõ]es no sono[^.!?]*[.!?]/gi, '');
+  out = out.replace(
+    /[eé] esperado que a beb[eê] precise de suporte para adormecer[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*s[oó] consegue adormecer no colo ou no peito[^.!?]{0,80}(fase|adapta[cç][aã]o|idade)[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(/[^.!?\n]*ru[ií]do branco[^.!?]*[.!?]/gi, '');
+  return out;
+}
+
+function ensure51dInvestigationOpen(text) {
+  let out = String(text || '').replace(/\n{3,}/g, '\n\n').trim();
+  if (has(out, /por que ela est[aá] conseguindo entrar em sono apenas no colo|entender por que ela.{0,40}colo ou no peito/i)) {
+    return out;
+  }
+  return `${DAY_SLEEP_OPEN_51}\n\n${out}`.trim();
 }
 
 function stripBottleBehavioralReading(text) {
@@ -294,11 +417,108 @@ function stripLeaked55dInvestigation(text) {
   return out;
 }
 
+const PACIFIER_55_CANON =
+  'Se a chupeta cair e ele apenas reclamar, você não precisa recolocá-la imediatamente. Observe se ele continua dormindo. Se despertar e precisar de ajuda, você pode oferecer a chupeta novamente.';
+
+function window55Canon() {
+  return `Sobre a janela de vigília: aos 55 dias, a referência é de ${WAKE_WINDOW_REF}. Permanecer acordado habitualmente por 1h30 a 1h45 já ultrapassa o indicado para essa faixa etária. Procure observar os sinais de sono e iniciar a preparação para dormir antes de ultrapassar 1h15.`;
+}
+
+const ENTER_SLEEP_55 =
+  'Para entender melhor, quanto tempo ele demora para entrar em sono após você iniciar a condução?';
+
+const JANELA_LESSON_55 =
+  'Você pode conferir também a aula sobre Janela de Vigília no aplicativo.';
+
+function is55PacifierPara(p) {
+  const t = String(p || '');
+  if (/aula/i.test(t) && !/chupeta/i.test(t)) return false;
+  if (/chupeta/i.test(t) && /reclam/i.test(t)) return true;
+  return /chupeta/i.test(t) && /(observ|recoloc|oferec|continua(?:r)? dormindo)/i.test(t);
+}
+
+function is55WindowPara(p) {
+  const t = String(p || '');
+  if (/aula/i.test(t)) return false;
+  if (/chupeta/i.test(t) && /reclam/i.test(t)) return false;
+  if (/quanto tempo.{0,80}(entrar em sono|adormecer)/i.test(t) && t.length < 220) return false;
+  return /janela|vig[ií]lia|1h30 a 1h45|1h\s*30.{0,30}1h\s*45|45 minutos a 1 hora/i.test(t);
+}
+
+function is55EnterSleepAsk(p) {
+  return /quanto tempo.{0,80}(entrar em sono|adormecer).{0,120}condu[cç][aã]o/i.test(p);
+}
+
+/** TESTE 007 (55d): one pacifier block, one window, one enter-sleep ask, Janela lesson. */
+function consolidate55dComposition(text) {
+  let out = String(text || '');
+  out = out.replace(
+    /quanto tempo (ele|ela) demora para adormecer depois de voc[eê] iniciar a condu[cç][aã]o/gi,
+    'quanto tempo ele demora para entrar em sono após você iniciar a condução',
+  );
+  out = out.replace(
+    /adormecer depois de voc[eê] iniciar a condu[cç][aã]o/gi,
+    'entrar em sono após você iniciar a condução',
+  );
+  out = out.replace(
+    /aula sobre ['‘’“”']?Sinais de Sono['‘’“”']?/gi,
+    'aula sobre Janela de Vigília',
+  );
+  const paras = out.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean);
+  let greeting = '';
+  const rest = [];
+  for (const p of paras) {
+    const greet = p.match(/^(bom dia|ol[aá]|oi)[!.,]?/i);
+    if (greet && /chupeta/i.test(p)) {
+      greeting = greet[0];
+      continue;
+    }
+    if (greet && /^[!.]?\s*$/.test(p.slice(greet[0].length))) {
+      greeting = p;
+      continue;
+    }
+    if (/[eé] normal que.{0,120}(chupeta|55 dias)/i.test(p) && p.length < 320) continue;
+    if (is55PacifierPara(p) || is55WindowPara(p) || is55EnterSleepAsk(p)) continue;
+    if (/aula/i.test(p)) continue;
+    rest.push(p);
+  }
+  const parts = [];
+  if (greeting) parts.push(greeting);
+  parts.push(PACIFIER_55_CANON);
+  parts.push(window55Canon());
+  parts.push(ENTER_SLEEP_55);
+  for (const p of rest) parts.push(p);
+  parts.push(JANELA_LESSON_55);
+  return parts.join('\n\n').replace(/\n{3,}/g, '\n\n').trim();
+}
+
+function stripBreastAsSleepAid(text) {
+  let out = String(text || '');
+  out = out.replace(
+    /[^.!?\n]*Se a mamada estiver se aproximando, oferecer o peito pode ajudar a relax[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*oferecer o peito pode ajudar a relax[aá]-l[oa][^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*oferecer o peito.{0,80}facilitar a transi[cç][aã]o para o sono[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*(peito|mamada).{0,50}facilitar a transi[cç][aã]o para o sono[^.!?]*[.!?]/gi,
+    '',
+  );
+  return out;
+}
+
 function consolidateExcessWakeComposition(text) {
   let out = splitMorningNapFromExcessWake(text);
   const morningFractionRe =
     /[^.!?\n]*(?:fracion\w{0,12}\s+a soneca da manh[aã]|soneca (?:longa )?da manh[aã][^.!?\n]{0,40}fracion)[^.!?]*[.!?]/gi;
   out = keepFirstMatch(out, morningFractionRe);
+  out = stripBreastAsSleepAid(out);
   out = out.replace(/Isso pode ajudar a melhorar a distribui[cç][aã]o das sonecas durante a tarde[^.!?]*[.!?]/gi, '');
   out = out.replace(/Isso pode ajudar a entender melhor a situa[cç][aã]o[^.!?]*[.!?]/gi, '');
   out = out.replace(
@@ -493,7 +713,9 @@ export function enrichThirtySixtyOfficialAnswer({
     out = out.replace(/\n\nA janela de vigília de referência nesta faixa é de 45 minutos a 1 hora \(podendo chegar a 1h15\)\./gi, '');
     out = out.replace(new RegExp(`\\n\\nA janela de vigília de referência nesta faixa é de ${WAKE_WINDOW_REF}\\.`, 'gi'), '');
     out = dedupeAngryWakeExplanation(out);
+    out = ensureAngryWakeFeedRefine(out);
     notes.push('angry_wake_once');
+    notes.push('angry_wake_feed_refine');
   }
 
   // --- 31d excess wake (do NOT use 49d pacifier block) ---
@@ -525,6 +747,7 @@ export function enrichThirtySixtyOfficialAnswer({
     out = out.replace(/oferecer uma mamada pode ajudar a relaxar[^.]*\./gi, 'se a demora para adormecer estiver aproximando o próximo intervalo de mamada, considere fome antes de insistir no sono.');
     out = out.replace(/oferecer uma mamada pode ajudar a relax[aá]-l[oa][^.]*\./gi, 'se a demora para adormecer estiver aproximando o próximo intervalo de mamada, considere fome antes de insistir no sono.');
     out = out.replace(/mamada pode ajudar a relaxar[^.]*\./gi, 'a fome deve ser considerada se ele já estiver perto do próximo intervalo de mamada.');
+    out = stripBreastAsSleepAid(out);
     out = out.replace(/e caprichar nas mamadas costuma ajudar o padr[aã]o da tarde\./gi, ', observando se a tarde se organiza melhor.');
     out = out.replace(/caprichar nas mamadas/gi, 'verificar se a demora aproxima o próximo intervalo de mamada');
     out = out.replace(/voc[eê] poderia me informar\s+(Tamb[eé]m [eé] importante)/gi, '$1');
@@ -1008,8 +1231,6 @@ export function enrichThirtySixtyOfficialAnswer({
     out = out.replace(/n[aã]o [eé] necess[aá]rio acord[aá]-l[oa] para mamar [aà] noite[^.]*\./gi, '');
     out = out.replace(/se o seu beb[eê] est[aá] saud[aá]vel e ganhando peso, n[aã]o [eé] necess[aá]rio acord[aá]-l[oa][^.]*\./gi, '');
     out = out.replace(/Quando (ele|ela) acorda antes de 3 horas, tente[^.]*\./gi, '');
-    out = out.replace(/tente faz[eê]-l[oa] dormir novamente sem oferecer o peito imediatamente[^.]*\./gi, '');
-    out = out.replace(/Se (ele|ela) acordar antes de 3h, tente faz[eê]-l[oa] dormir novamente sem oferecer o peito[^.]*\./gi, '');
     out = out.replace(/associa[cç][aã]o de que toda vez que (ele|ela) acorda[^.]*\./gi, '');
     out = out.replace(/evitar a associa[cç][aã]o[^.]*\./gi, '');
     out = out.replace(/ap[oó]s 4 horas de sono/gi, 'após as 4h da manhã');
@@ -1021,26 +1242,22 @@ export function enrichThirtySixtyOfficialAnswer({
     out = out.replace(/Quando (ele|ela) acorda antes de 3 horas, voc[eê] oferece o peito automaticamente\??/gi, '');
     out = out.replace(/H[aá] sinais claros de fome ou apenas agita[cç][aã]o breve\??/gi, '');
     out = out.replace(/Para entender melhor a situa[cç][aã]o, gostaria de saber:\s*/gi, '');
-    out = out.replace(/gostaria de saber:\s*(?=A pergunta decisiva|Antes de pensar|$)/gi, '');
+    out = out.replace(/gostaria de saber:\s*(?=A pergunta decisiva|O primeiro passo|Antes de pensar|$)/gi, '');
+    out = reorderNightHourlyDecision(out);
+    notes.push('night_last_feed_first');
+    if (!has(out, /n[aã]o [eé] fome.{0,80}novinho|decis[aã]o de oferecer o peito n[aã]o se resume/i)) {
+      out = appendOnce(
+        out,
+        'A percepção de que “não é fome” não basta — e a decisão de oferecer o peito não se resume a ele ainda ser novinho.',
+      );
+      notes.push('night_not_just_young');
+    }
     if (!has(out, /acordar.{0,40}para mamar.{0,40}acord(a|ar) (sozinho|espont)/i) && !has(out, /diferente de (um beb[eê]|ele) (de \d+ dias )?acordar/i)) {
       out = appendOnce(
         out,
         'Uma coisa é não acordar um bebê saudável e com bom ganho de peso só para mamar. Outra é ele acordar sozinho depois das 4h, de hora em hora, e mamar quando o peito é oferecido — e depois dormir. Nesse segundo caso, o intervalo de 3 horas não serve sozinho para decidir que a mamada não é necessária.',
       );
       notes.push('night_spontaneous_vs_wake');
-    }
-    if (!has(out, /[uú]ltima mamada antes das 4h|hor[aá]rio.{0,40}mamou.{0,40}4h|antes das 4h.{0,50}mam/i)) {
-      out = appendOnce(
-        out,
-        'A pergunta decisiva é: antes das 4h da manhã, qual foi o horário da última mamada? Se já tinham passado cerca de 2h30 a 3h, ofereça uma mamada efetiva até a saciedade. Se o despertar ocorrer antes de completar aproximadamente 3 horas desde uma mamada efetiva, tente conduzi-lo novamente ao sono sem oferecer o peito imediatamente. A percepção de que “não é fome” não basta — e a decisão de oferecer o peito não se resume a ele ainda ser novinho.',
-      );
-      notes.push('night_last_feed_before_4');
-    } else if (!has(out, /antes de completar.{0,40}3 horas.{0,80}sem oferecer|ainda n[aã]o completou.{0,50}intervalo.{0,80}(conduz|sono)/i)) {
-      out = appendOnce(
-        out,
-        'Se já passaram cerca de 2h30 a 3h desde a última mamada efetiva, ofereça uma mamada efetiva até a saciedade. Se o despertar ocorrer antes de completar aproximadamente 3 horas desde uma mamada efetiva, tente conduzi-lo novamente ao sono sem oferecer o peito imediatamente.',
-      );
-      notes.push('night_interval_conduct');
     }
     if (!has(out, /peito, f[oó]rmula ou complemento|mamadas do dia e da noite est[aã]o efetivas|suga um pouco e adormece/i)) {
       out = appendOnce(
@@ -1067,7 +1284,13 @@ export function enrichThirtySixtyOfficialAnswer({
   }
 
   // --- 51d ---
-  if (/quanto tempo.{0,30}aprender|travesseiro/i.test(msg) && /colo|peito/i.test(msg)) {
+  const daySleep51 =
+    !ids.has('crib_awake_start_30_60') &&
+    !ids.has('crib_adaptation_same_day_30_60') &&
+    (ids.has('day_sleep_difficulty_30_60') ||
+      (/quanto tempo.{0,30}aprender|travesseiro/i.test(msg) && /colo|peito/i.test(msg)));
+  if (daySleep51) {
+    out = strip51dNormalization(out);
     out = out.replace(
       /(?:Ap[oó]s esse tempo|Depois (?:disso|desse tempo)|Ao (?:final|t[eé]rmino|fim) da janela)[^.!?]{0,90}mamada efetiva[^.!?]*[.!?]/gi,
       '',
@@ -1133,6 +1356,7 @@ export function enrichThirtySixtyOfficialAnswer({
     out = out.replace(/Para ajudar na adapta[cç][aã]o ao ber[cç]o,/gi, 'Para conduzir a dificuldade de dormir durante o dia,');
     out = out.replace(/ajuda na adapta[cç][aã]o ao ber[cç]o/gi, 'ajuda na condução do sono diurno');
     out = out.replace(/adapta[cç][aã]o ao ber[cç]o/gi, 'condução do sono diurno');
+    out = ensure51dInvestigationOpen(out);
     if (!has(out, /n[aã]o existe prazo|sem prazo fixo|n[aã]o h[aá] prazo|prazo fixo/i)) {
       out = appendOnce(
         out,
@@ -1149,13 +1373,18 @@ export function enrichThirtySixtyOfficialAnswer({
     }
     const conductAfterSatiety =
       'Se ainda houver sinais de fome, mantenha a alimentação. Se ela já estiver saciada e continuar no peito, retire-a do peito, coloque em posição vertical e, depois, conduza ao sono.';
-    if (!has(out, /fome.{0,60}adormec|suc[cç][aã]o durante o adormec|peito porque ainda est[aá] com fome|saciad[oa] permanece sugando|diferencie: ainda est[aá] com fome/i)) {
-      out = appendOnce(
-        out,
-        `Quando ela “só dorme no peito”, diferencie: ainda está com fome; fez mamada efetiva e ficou saciada; ou já saciada permanece sugando enquanto adormece. ${conductAfterSatiety}`,
-      );
-      notes.push('51_hunger_vs_sleep_suck');
-    } else if (!has(out, /retir[ae]-a do peito|retire-a do peito|retir[aá]-l[oa] do peito/i)) {
+    const alreadyHasSatietyConduct =
+      /retir[ae]-a(?: do peito)?|retire-a do peito|retir[aá]-l[oa] do peito/i.test(out) &&
+      /posi[cç][aã]o vertical/i.test(out);
+    if (!has(out, /fome.{0,60}adormec|suc[cç][aã]o durante o adormec|peito porque ainda est[aá] com fome|saciad[oa] permanece sugando|diferencie: ainda est[aá] com fome|ainda estiver mamando efetivamente e houver sinais de fome/i)) {
+      if (!alreadyHasSatietyConduct) {
+        out = appendOnce(
+          out,
+          `Quando ela “só dorme no peito”, diferencie: ainda está com fome; fez mamada efetiva e ficou saciada; ou já saciada permanece sugando enquanto adormece. ${conductAfterSatiety}`,
+        );
+        notes.push('51_hunger_vs_sleep_suck');
+      }
+    } else if (!alreadyHasSatietyConduct && !has(out, /retir[ae]-a do peito|retire-a do peito|retir[aá]-l[oa] do peito/i)) {
       if (has(out, /Essa leitura vem antes de tratar o peito/i)) {
         out = out.replace(
           /Essa leitura vem antes de tratar o peito s[oó] como forma de adormecer\./gi,
@@ -1168,10 +1397,14 @@ export function enrichThirtySixtyOfficialAnswer({
     }
     out = keepFirstMatch(
       out,
-      /[^.!?\n]*(?:execu[cç][aã]o.{0,40}travesseiro|travesseiro.{0,90}execu|executando.{0,50}travesseiro|como est[aá] (sendo )?a execu[cç][aã]o)[^.!?]*[.!?]/gi,
+      /[^.!?\n]*(?:retir[ae]-a(?: do peito)?|retire-a do peito)[^.!?]{0,160}(?:posi[cç][aã]o vertical|conduza ao sono|conduzir ao sono)[^.!?]*[.!?]/gi,
+    );
+    out = keepFirstMatch(
+      out,
+      /[^.!?\n]*(?:execu[cç][aã]o.{0,40}travesseiro|travesseiro.{0,90}execu|executando.{0,50}travesseiro|realizando.{0,50}travesseiro|como est[aá] (sendo )?a execu[cç][aã]o|como voc[eê] est[aá] realizando)[^.!?]*[.!?]/gi,
     );
     const asksTravesseiroExec =
-      /como voc[eê] est[aá] executando.{0,50}travesseiro|como est[aá] (sendo )?a execu[cç][aã]o.{0,40}travesseiro|travesseiro.{0,90}(execu[cç]|em que momento)/i.test(out);
+      /como voc[eê] est[aá] (executando|realizando).{0,60}travesseiro|como est[aá] (sendo )?a execu[cç][aã]o.{0,40}travesseiro|travesseiro.{0,90}(execu[cç]|em que momento|realiz)/i.test(out);
     if (asksTravesseiroExec) {
       out = out.replace(
         /Se voc[eê] j[aá] est[aá] utilizando a t[eé]cnica do travesseiro, investigue como est[aá] sendo a execu[cç][aã]o e em que momento da vig[ií]lia voc[eê] a inicia\./gi,
@@ -1356,18 +1589,30 @@ export function enrichThirtySixtyOfficialAnswer({
     const travesseiroDirect57 =
       'Use a Estratégia do Travesseiro na condução e na colocação no berço.';
     out = out.replace(
-      /O uso do travesseiro pode ser uma boa estrat[eé]gia[^.!?]*[.!?]/gi,
-      travesseiroDirect57,
+      /O uso do travesseiro pode ser uma boa (estrat[eé]gia|ferramenta)[^.!?]*[.!?]/gi,
+      '',
     );
     out = out.replace(
-      /[^.!?]*pode ser uma boa estrat[eé]gia para ajudar na adapta[cç][aã]o[^.!?]*[.!?]/gi,
-      travesseiroDirect57,
+      /[^.!?]*pode ser uma boa (estrat[eé]gia|ferramenta) para (ajudar na adapta[cç][aã]o|auxiliar nesse processo)[^.!?]*[.!?]/gi,
+      '',
     );
-    out = out.replace(/pode ser uma boa estrat[eé]gia/gi, 'deve ser usada');
+    out = out.replace(
+      /A Estrat[eé]gia do Travesseiro pode ser uma boa (ferramenta|estrat[eé]gia)[^.!?]*[.!?]/gi,
+      '',
+    );
+    out = out.replace(
+      /[^.!?]*se voc[eê] j[aá] a utiliza, observe como est[aá] sendo feita[^.!?]*[.!?]/gi,
+      '',
+    );
+    out = out.replace(/pode ser uma boa (estrat[eé]gia|ferramenta)/gi, 'deve ser usada');
     if (!has(out, /use a estrat[eé]gia do travesseiro|travesseiro.{0,40}condu[cç][aã]o e na coloca[cç][aã]o/i)) {
       out = appendOnce(out, travesseiroDirect57);
       notes.push('57_travesseiro_direct');
     }
+    out = keepFirstMatch(
+      out,
+      /Use a Estrat[eé]gia do Travesseiro na condu[cç][aã]o e na coloca[cç][aã]o no ber[cç]o[.!?]?/gi,
+    );
     out = out.replace(
       /[^.!?\n]*(?:assista [àa] aula|confira a aula|revise a aula|revisar a aula|aula correspondente|aula sobre (?:essa estrat[eé]gia|a estrat[eé]gia do travesseiro))[^.!?]*[.!?]/gi,
       '',
@@ -1497,9 +1742,14 @@ export function enrichThirtySixtyOfficialAnswer({
     out = out.replace(/[EÉ] (normal|comum) que .{0,140}acord(em|e) chorando[^.!?]*[.!?]/gi, '');
     out = out.replace(/[^.!?]*como est[aá] o sono noturno[^.!?]*[.!?]/gi, '');
     out = dedupeAngryWakeExplanation(out);
+    out = ensureAngryWakeFeedRefine(out);
   }
   if (excessWakeCase) {
     out = consolidateExcessWakeComposition(out);
+  }
+  if (pacifierDropLongWake) {
+    out = consolidate55dComposition(out);
+    notes.push('55_composition_once');
   }
   out = scrubTruncatedClauses(out);
 

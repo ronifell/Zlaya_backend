@@ -492,7 +492,7 @@ A janela de vigília pode variar entre 45 minutos a 1 hora e 15 minutos. Observe
       { id: 'wake_ref', w: 15, pass: (t) => /45\s*min/i.test(t) && /1 hora e 15|1h15/i.test(t) },
       { id: 'no_paciencia_vaga', w: 10, pass: (t) => !/paci[eê]ncia e respeitar a resposta/i.test(t) },
       { id: 'consistency', w: 10, pass: (t) => /mantenha o processo com consist[eê]ncia e repeti[cç][aã]o/i.test(t) && /acolhendo o choro/i.test(t) },
-      { id: 'no_boa_estrategia', w: 10, pass: (t) => !/pode ser uma boa estrat[eé]gia/i.test(t) },
+      { id: 'no_boa_estrategia', w: 10, pass: (t) => !/pode ser uma boa (estrat[eé]gia|ferramenta)/i.test(t) },
     ],
   },
   {
@@ -750,7 +750,7 @@ O uso do travesseiro pode ser uma boa estratégia para ajudar na adaptação. As
     criteria: [
       { id: 'no_paciencia_vaga', w: 20, pass: (t) => !/paci[eê]ncia e respeitar a resposta/i.test(t) },
       { id: 'consistency', w: 20, pass: (t) => /mantenha o processo com consist[eê]ncia e repeti[cç][aã]o/i.test(t) && /acolhendo o choro/i.test(t) },
-      { id: 'no_boa_estrategia', w: 20, pass: (t) => !/pode ser uma boa estrat[eé]gia/i.test(t) },
+      { id: 'no_boa_estrategia', w: 20, pass: (t) => !/pode ser uma boa (estrat[eé]gia|ferramenta)/i.test(t) },
       { id: 'travesseiro_direct', w: 10, pass: (t) => /use a estrat[eé]gia do travesseiro|estrat[eé]gia do travesseiro/i.test(t) },
       { id: 'aula', w: 10, pass: (t) => /aula.{0,80}travesseiro/i.test(t) },
       { id: 'same_day', w: 10, pass: (t) => /mesmo dia|daquele dia|todas as demais sonecas/i.test(t) },
@@ -928,6 +928,198 @@ A duração de uma soneca de cerca de 30 minutos, sozinha, não indica que a con
       { id: 'conditional_pacifier', w: 10, pass: (t) => /quando ela cai|quando a chupeta cai/i.test(t) },
       { id: 'one_hour_not_short', w: 10, pass: (t) => /1 hora n[aã]o devem ser consideradas curtas|cerca de 1 hora.{0,40}n[aã]o.{0,20}curtas/i.test(t) },
       { id: 'no_invented_irritado', w: 10, pass: (t) => !/ainda est[aá] acordando irritad/i.test(t) },
+    ],
+  },
+  {
+    id: '30d-t007',
+    ageDays: 30,
+    babyName: 'Lara',
+    sex: 'f',
+    officialNote: 9.4,
+    message:
+      'Minha bebê de 30 dias faz sonecas de 1h às vezes mais.. quando acorda ela acorda muito brava e chora bastante e só acalma dando o peito mama bem pouco e relaxa.. como melhorar? Antes da soneca ela já mama em média 20 a 30 min',
+    draft: `Como ela consegue dormir por cerca de 1 hora ou até mais, eu não consideraria a duração da soneca o principal problema neste momento. O que chama mais atenção é ela acordar muito irritada e relaxar depois de sugar um pouco. Por isso, primeiro observaria como está a mamada e se existe algum desconforto depois dela.
+
+A soneca de 1h ou mais não é o problema principal. O despertar irritado merece atenção.
+
+Como ela mama 20 a 30 minutos antes da soneca e, ao despertar, suga pouco e relaxa, isso indica que ela precisa se alimentar.
+
+Depois da mamada, antes de deitar: houve arroto? Ela ficou em posição vertical, e por quanto tempo? A referência é permanecer 20 a 30 minutos em posição vertical.
+
+Esse padrão também pode apontar para algum desconforto depois da mamada, inclusive refluxo. Você pode conferir a aula 'O que é o refluxo?' no aplicativo.`,
+    criteria: [
+      { id: 'reading_once', w: 25, pass: (t) => t.split(/\n{2,}/).filter((p) => {
+        const nap = /1 hora ou at[eé] mais|soneca de (cerca de )?1\s*h|dura[cç][aã]o da soneca|n[aã]o (consideraria|parece ser) .{0,40}(principal )?(problema|ponto)/i.test(p);
+        const wake = /irritad|brav[oa]|chor|despertar .{0,30}aten[cç]/i.test(p);
+        return nap && wake;
+      }).length === 1 },
+      { id: 'no_auto_hunger', w: 20, pass: (t) => !/indica que ela precisa se alimentar/i.test(t) },
+      { id: 'time_not_satiety', w: 15, pass: (t) => /n[aã]o comprova saciedade|n[aã]o significa automaticamente/i.test(t) },
+      { id: 'keep_axis', w: 10, pass: (t) => /n[aã]o consideraria a dura[cç][aã]o da soneca|1 hora.{0,40}n[aã]o .{0,30}principal/i.test(t) },
+      { id: 'feeding', w: 10, pass: (t) => /mamada|alimenta|saciedad/i.test(t) },
+      { id: 'reflux', w: 10, pass: (t) => /refluxo/i.test(t) },
+      { id: 'vertical', w: 10, pass: (t) => /20 a 30 minutos/i.test(t) },
+    ],
+  },
+  {
+    id: '40d-night-t007',
+    ageDays: 40,
+    babyName: 'Pedro',
+    sex: 'm',
+    officialNote: 9.0,
+    message:
+      'Olá. Meu bb tem 40 dias , tem noites que ele dorme super bem acorda entre 2:30 a 3 hrs , só que tem dia que após as 04:00 da manhã ele acorda de 1 em 1 hrs tento fazer ele continuar a dormir no berço porém sem sucesso, aí pego ele fico ninando no colo sem sucesso, aí coloco ele no peito ele mama mesmo sabendo que não é fome, ele mama e dorme. Continuo assim por ele ainda ser novinho ?',
+    draft: `É compreensível que você esteja enfrentando dificuldades com os despertares noturnos do seu bebê de 40 dias. É comum que, nesta faixa etária, os bebês tenham variações no padrão de sono, e isso pode ser desafiador.
+
+A orientação prática segura é que, após as 4h da manhã, se ele acordar de hora em hora, você deve tentar fazê-lo dormir novamente sem oferecer o peito imediatamente. Isso é importante para Verifique também o horário da última mamada antes das 4h e a rotina alimentar do dia, pois isso pode influenciar os despertares. Se já passaram cerca de 2h30 a 3h desde a última mamada efetiva, você pode oferecer o peito até a saciedade.
+
+Você costuma oferecer peito ou mamadeira automaticamente quando ele acorda antes de 3h?
+
+Recomendo que você revise a aula sobre sono noturno no módulo 3, que pode ajudar a entender melhor como lidar com esses despertares.
+
+Uma coisa é não acordar um bebê saudável e com bom ganho de peso só para mamar. Outra é ele acordar sozinho depois das 4h, de hora em hora, e mamar quando o peito é oferecido — e depois dormir. Nesse segundo caso, o intervalo de 3 horas não serve sozinho para decidir que a mamada não é necessária.
+
+Antes de pensar em associação peito–sono, vale olhar a alimentação: ele mama no peito, fórmula ou complemento? Como está a rotina alimentar do dia — intervalos, efetividade das mamadas e manutenção da saciedade? Como está o ganho de peso e a produção de leite? Nesses despertares ele faz uma mamada efetiva ou só suga um pouco e adormece? Depois de mamar, houve arroto e posição vertical por 20 a 30 minutos? Há sinais de desconforto?`,
+    criteria: [
+      { id: 'last_feed_first', w: 25, pass: (t) => {
+        const feedPos = t.search(/[uú]ltima mamada/i);
+        const sleepPos = t.search(/sem oferecer (imediatamente o peito|o peito imediatamente)/i);
+        return feedPos >= 0 && (sleepPos < 0 || feedPos < sleepPos);
+      } },
+      { id: 'no_truncated', w: 20, pass: (t) => !/Isso [eé] importante para/i.test(t) && !/Isso pode ajudar a\s+(?=[A-ZÁ])/m.test(t) },
+      { id: 'offer_if_due', w: 15, pass: (t) => /2h\s*30|2h30/i.test(t) && /mamada efetiva/i.test(t) },
+      { id: 'daytime_feeding', w: 15, pass: (t) => /rotina alimentar/i.test(t) },
+      { id: 'postural', w: 15, pass: (t) => /vertical|arroto/i.test(t) },
+      { id: 'no_auto_offer_q', w: 10, pass: (t) => !/oferecer peito ou mamadeira automaticamente/i.test(t) },
+    ],
+  },
+  {
+    id: '51d-t007',
+    ageDays: 51,
+    babyName: 'Lara',
+    sex: 'f',
+    officialNote: 8.8,
+    message:
+      'Minha neném1 mês e 21 dias tem dificuldade de dormir durante o dia, só dorme se for no colo, e no peito, tento fazer a técnica do travesseiro, as vezes da certo e as vezes não, quanto tempo pra ela aprender?',
+    draft: `É normal que a bebê de 51 dias tenha dificuldade para dormir durante o dia, especialmente se ela só consegue adormecer no colo ou no peito. Essa fase é de adaptação e é esperado que haja variações no sono.
+
+Para ajudar a bebê a dormir, siga este passo a passo: primeiro, observe a janela de vigília de 45 minutos a 1 hora e 15 minutos e conduza a mamada efetiva, garantindo que ela esteja saciada. Se ela ainda estiver no peito, retire-a e mantenha-a em posição vertical por 20 a 30 minutos. Depois, inicie a condução do sono, utilizando a técnica do travesseiro que você já está aplicando. É importante que a transferência para o berço ou outra superfície ocorra quando ela estiver calma, não durante uma crise de choro.
+
+Não existe um prazo fixo para que ela aprenda a dormir de forma mais independente; a evolução depende da repetição e consistência nas práticas, respeitando a maturidade dela.
+
+Para entender melhor, gostaria de saber: quanto tempo a bebê permanece acordada antes das sonecas? Como você está realizando a Estratégia do Travesseiro?
+
+Recomendo que você confira a aula sobre a Estratégia do Travesseiro para mais orientações práticas.
+
+Quando ela ‘só dorme no peito’, diferencie: ainda está com fome; fez mamada efetiva e ficou saciada; ou já saciada permanece sugando enquanto adormece. Se ainda houver sinais de fome, mantenha a alimentação. Se ela já estiver saciada e continuar no peito, retire-a do peito, coloque em posição vertical e, depois, conduza ao sono.
+
+Se você já está utilizando a técnica do travesseiro, investigue como está sendo a execução e em que momento da vigília você a inicia.
+
+Na condução, use contenção e presença observando a resposta da bebê — sem cronometrar o choro e sem tempo predeterminado.`,
+    criteria: [
+      { id: 'no_normalize_open', w: 25, pass: (t) => !/[eé] (normal|comum) que a beb[eê] de 51 dias/i.test(t) && !/fase [eé] de adapta[cç][aã]o/i.test(t) },
+      { id: 'investigate_first', w: 20, pass: (t) => /por que ela est[aá] conseguindo entrar em sono apenas no colo/i.test(t) },
+      { id: 'satiety_once', w: 15, pass: (t) => ((t.match(/retir[ae]-a(?: do peito)?|retire-a do peito/gi) || []).length <= 1) },
+      { id: 'travesseiro_once', w: 10, pass: (t) => ((t.match(/execu[cç][aã]o.{0,40}travesseiro|travesseiro.{0,40}execu|executando.{0,40}travesseiro|realizando.{0,40}travesseiro/gi) || []).length <= 1) },
+      { id: 'no_ruido', w: 10, pass: (t) => !/ru[ií]do branco/i.test(t) },
+      { id: 'travesseiro_lesson', w: 10, pass: (t) => /aula.{0,80}travesseiro/i.test(t) },
+      { id: 'wake_ref', w: 5, pass: (t) => /45\s*min/i.test(t) && /1 hora e 15|1h15/i.test(t) },
+      { id: 'no_fixed', w: 5, pass: (t) => /prazo fixo|n[aã]o existe/i.test(t) },
+    ],
+  },
+  {
+    id: '31d-t007',
+    ageDays: 31,
+    babyName: 'João',
+    sex: 'm',
+    officialNote: 9.5,
+    message:
+      'Ola tudo bem? Meu filho tem 31 dias, sempre fez as sonecas no berço, que duravam cerca de 2 hrs/ 2 hrs e 30. Mas faz 02 dias que ele tem feito uma soneca grande pela manhã e, durante a tarde, as sonecas estão bem curtas. Um ciclo de sono. Ele desperta e eu ate tendo nina-lo no berço, mas ele nao retorna. Depois de 30 minutos ja esta com sono novamente. Outra questao eh que ele demora femais para iniciar a soneca. O ambiente esta ajustado, ele esta alimentado, tudo tranquilo, janela de sono del eh de 1 hr/1 hr 15, quando vai dando este horário, vou para o quarto; coloco ruido, quarto escuro, nino ele no colo e ainda acordado transfiro pro berço. Quando no berço, ele demora muuuito prw relaxar, quase 40/45 minutos. Nao sei como conduzir nesta situação. Faz uns 4,5 dias que esta assim.',
+    draft: `Olá! É compreensível que você esteja enfrentando dificuldades com as sonecas do seu filho de 31 dias. Mudanças no padrão de sono são comuns nessa fase, e é importante ajustar a rotina para ajudar na condução do sono.
+
+A principal hipótese aqui é a vigília excessiva. Como ele demora cerca de 40 a 45 minutos para relaxar no berço, o tempo total acordado pode estar em torno de 1h40 a 2h, o que é excessivo.
+
+Para ajudar, recomendo fracionar a soneca da manhã para cerca de 1h30 a 2h. Isso pode ajudar a distribuir melhor as sonecas ao longo do dia e evitar que ele fique muito cansado. Se a mamada estiver se aproximando, oferecer o peito pode ajudar a relaxá-lo e facilitar a transição para o sono.
+
+Para mais orientações sobre como estruturar a rotina e conduzir o sono, você pode conferir a aula sobre ‘Rotina por Janelas’ no aplicativo.
+
+A vigília excessiva vem da soma — não da soneca longa da manhã: se a condução começa depois de cerca de 1h–1h15 e ele ainda leva uns 40–45 minutos para adormecer, o tempo acordado chega perto de 1h40–2h — acima da referência de 45 minutos a 1 hora e 15 minutos.
+
+Como ele já demora cerca de 40 a 45 minutos para adormecer, antecipe o início da condução — não espere os sinais de sono — para que ele entre em sono dentro da janela de 45 minutos a 1 hora e 15 minutos.
+
+Também é importante saber qual costuma ser o intervalo entre as mamadas: se durante a demora para adormecer ele estiver se aproximando do próximo intervalo alimentar, considere fome antes de insistir no sono.`,
+    criteria: [
+      { id: 'no_peito_relax', w: 25, pass: (t) => !/oferecer o peito pode ajudar a relax|facilitar a transi[cç][aã]o para o sono/i.test(t) },
+      { id: 'keep_hunger_interval', w: 20, pass: (t) => /considere fome antes de insistir no sono/i.test(t) },
+      { id: 'wake_from_sum', w: 15, pass: (t) => /vig[ií]lia excessiva vem da soma|n[aã]o da soneca longa da manh/i.test(t) },
+      { id: 'anticipate', w: 15, pass: (t) => /antecip/i.test(t) && /n[aã]o espere os sinais de sono/i.test(t) },
+      { id: 'fraction_morning', w: 10, pass: (t) => /fracion/i.test(t) && /1h30|1h\s*30/i.test(t) },
+      { id: 'wake_ref', w: 15, pass: (t) => /45\s*min/i.test(t) && /1 hora e 15|1h15/i.test(t) },
+    ],
+  },
+  {
+    id: '55d-t007',
+    ageDays: 55,
+    babyName: 'Pedro',
+    sex: 'm',
+    officialNote: 9.0,
+    message:
+      'Bom dia! Bebê de 55 dias e chupa chupeta… quando a chupeta cai da boca ele reclama… devo colocá-la logo em seguida ou devo esperar um pouco para colocá-la na boca dele novamente? Outra coisa, a janela de sono dele está maior que 1h15. Geralmente 1h30 a 1h45! Tem problema?',
+    draft: `Bom dia! É normal que o bebê de 55 dias use a chupeta e reclame quando ela cai. Se ele só reclama, você pode observar por um momento se ele continua dormindo. Se despertar e precisar, ofereça a chupeta novamente.
+
+Sobre a janela de sono, se está acima de 1h15, O ideal é que a janela de vigília fique entre 45 minutos e 1h15.
+
+E quanto tempo ele demora para adormecer depois de você iniciar a condução?
+
+Recomendo que você confira a aula sobre ‘Sinais de Sono’ para mais orientações sobre como conduzir o sono do seu bebê.
+
+Para entender melhor, quanto tempo ele demora para entrar em sono após você iniciar a condução?
+
+Quando a chupeta cair e ele apenas reclamar, você não precisa recolocá-la imediatamente. Observe um pouco para ver se ele consegue continuar dormindo sem a chupeta. Se ele despertar e precisar de ajuda para retomar o sono, você pode oferecê-la novamente.
+
+Sobre o tempo acordado: a referência de janela de vigília é de 45 minutos a 1 hora e 15 minutos. Permanecer acordado habitualmente por 1h30 a 1h45 já ultrapassa o esperado para essa faixa etária. Procure observar os sinais de sono e iniciar a preparação para dormir antes de ultrapassar repetidamente 1h15.`,
+    criteria: [
+      { id: 'pacifier_once', w: 15, pass: (t) => ((t.match(/n[aã]o precisa recoloc|n[aã]o [eé] necess[aá]rio recoloc/gi) || []).length === 1) },
+      { id: 'window_once', w: 15, pass: (t) => ((t.match(/Permanecer acordado habitualmente por 1h30 a 1h45/gi) || []).length === 1) },
+      { id: 'ask_once', w: 15, pass: (t) => ((t.match(/quanto tempo (ele|ela) demora para (entrar em sono|adormecer)/gi) || []).length === 1) },
+      { id: 'ask_formulation', w: 15, pass: (t) => /quanto tempo ele demora para entrar em sono ap[oó]s voc[eê] iniciar a condu[cç][aã]o/i.test(t) },
+      { id: 'no_adormecer_depois', w: 10, pass: (t) => !/adormecer depois de voc[eê] iniciar a condu[cç][aã]o/i.test(t) },
+      { id: 'janela_lesson', w: 15, pass: (t) => /aula.{0,40}Janela de Vig[ií]lia/i.test(t) },
+      { id: 'no_sinais_primary', w: 10, pass: (t) => !/aula sobre ['‘’“”']?Sinais de Sono/i.test(t) },
+      { id: 'window_above', w: 5, pass: (t) => /1h30|1h\s*30/i.test(t) && /acima|ultrapass/i.test(t) },
+    ],
+  },
+  {
+    id: '57d-t007',
+    ageDays: 57,
+    babyName: 'Lara',
+    sex: 'f',
+    officialNote: 9.3,
+    message:
+      'Oi! Bebê de 57 dias. Estou ensinando a adormecer direto no berço progressivamente... começo com sono da manhã e estou avançando gradativamente para as outras sonecas, até chegar no sono noturno. O indicado é ir progressivamente ou deveria tentar em todas as sonecas de uma vez? Além disso, em algumas tentativas, há choro e fico uns 10 min tentando acalmá-la. Quando não resolve, pego no colo, acalmo e refaço o processo novamente... O caminho é esse mesmo?',
+    draft: `É normal que a adaptação ao berço traga desafios, especialmente aos 57 dias. O que você está fazendo é um passo importante para ajudar seu bebê a se acostumar a dormir no berço.
+
+A orientação prática segura é começar pela primeira soneca da manhã e seguir com todas as demais sonecas daquele mesmo dia no berço. Repita esse processo diariamente até consolidar. Quando houver choro, acalme seu bebê no colo e, em seguida, retorne ao berço, repetindo até que ele adormeça. Não é necessário cronometrar o choro; o foco deve ser na consistência e na repetição, acolhendo o choro e ajudando no colo quando necessário. A Estratégia do Travesseiro pode ser uma boa ferramenta para auxiliar nesse processo, então, se você já a utiliza, observe como está sendo feita.
+
+Para refinar sua abordagem, gostaria de saber: quanto tempo seu bebê permanece acordado antes das sonecas? Quando você inicia a condução para o sono, como está sendo a mamada efetiva e os sinais de saciedade?
+
+Se houver muita resistência, acalme no colo, volte ao berço e repita até adormecer. Não cronometre o choro.
+
+A janela de vigília de referência é de 45 minutos a 1 hora e 15 minutos.
+
+Mantenha o processo com consistência e repetição, acolhendo o choro e ajudando no colo sempre que necessário.
+
+Use a Estratégia do Travesseiro na condução e na colocação no berço.
+
+Assista à aula sobre a Estratégia do Travesseiro no aplicativo para aprender como aplicá-la corretamente.`,
+    criteria: [
+      { id: 'no_boa_ferramenta', w: 25, pass: (t) => !/pode ser uma boa (ferramenta|estrat[eé]gia)/i.test(t) },
+      { id: 'travesseiro_direct', w: 20, pass: (t) => /Use a Estrat[eé]gia do Travesseiro na condu[cç][aã]o e na coloca[cç][aã]o no ber[cç]o/i.test(t) },
+      { id: 'direct_once', w: 15, pass: (t) => ((t.match(/Use a Estrat[eé]gia do Travesseiro na condu[cç][aã]o e na coloca[cç][aã]o no ber[cç]o/gi) || []).length === 1) },
+      { id: 'aula', w: 15, pass: (t) => /aula.{0,80}travesseiro/i.test(t) },
+      { id: 'same_day', w: 10, pass: (t) => /mesmo dia|daquele dia|todas as demais sonecas/i.test(t) },
+      { id: 'no_timer', w: 10, pass: (t) => /n[aã]o cronometr|sem cronometrar/i.test(t) },
+      { id: 'consistency', w: 5, pass: (t) => /consist[eê]ncia e repeti[cç][aã]o/i.test(t) },
     ],
   },
 ];
