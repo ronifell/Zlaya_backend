@@ -255,7 +255,7 @@ Sem “buscando conforto” antes da mamada. Sem exigir Travesseiro com bebê ca
       { id: 'feeding_before_behavior', w: 10, pass: (t) => /mamada efetiva|saciedad|alimenta|retirando leite|fome/i.test(t) },
       { id: 'satiety_conduct', w: 15, pass: (t) => /retir.{0,25}peito|retire-a do peito/i.test(t) && /vertical/i.test(t) },
       { id: 'no_conforto_shortcut', w: 5, pass: (t) => !/buscando conforto|apenas por conforto/i.test(t) },
-      { id: 'no_travesseiro_calma', w: 5, pass: (t) => !/inicie quando a beb[eê] estiver calma/i.test(t) },
+      { id: 'no_travesseiro_calma', w: 5, pass: (t) => !/inicie.{0,50}quando (ela|a beb[eê]) estiver calma/i.test(t) },
       { id: 'no_acostumada', w: 5, pass: (t) => !/acostumad[oa]s? a dormir no colo/i.test(t) },
       { id: 'not_crib_first', w: 5, pass: (t) => !/^[\s\S]{0,280}adapta[cç][aã]o ao ber[cç]o/i.test(t) },
       { id: 'no_fixed_timeline', w: 10, pass: (t) => /n[aã]o existe prazo|sem prazo|n[aã]o h[aá] prazo|prazo fixo|depende da (repeti[cç][aã]o|consist[eê]ncia)/i.test(t) },

@@ -140,6 +140,48 @@ function ensureAngryWakeFeedRefine(text) {
   return appendOnce(out, ANGRY_WAKE_FEED_REFINE);
 }
 
+function motherReportedWakeWindow(message) {
+  return /permanece acordad|tempo acordad|janela (de sono|de vig[ií]lia)|acordad[oa] por|1h\s*30|1h30|1h\s*15|1h15|45\s*min/i.test(
+    String(message || ''),
+  );
+}
+
+/** TESTE 008 (30d): don't reinforce feeds before intake is confirmed; don't blame wake window without evidence; drop restated opening. */
+function scrubAngryWakeTeste008(text, message) {
+  let out = String(text || '');
+  out = out.replace(/[^.!?\n]*refor[cç]ar as mamadas[^.!?]*[.!?]/gi, '');
+  out = out.replace(/[^.!?\n]*Para melhorar essa situa[cç][aã]o, considere refor[cç]ar[^.!?]*[.!?]/gi, '');
+  out = out.replace(/[^.!?\n]*garantindo que ela esteja bem alimentada[^.!?]*[.!?]/gi, '');
+  out = out.replace(
+    /[^.!?\n]*[EÉ] compreens[ií]vel que.{0,120}acorde muito irritada[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*despertar bravo.{0,120}s[oó] se acalmar ao mamar[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*principal hip[oó]tese [eé] que isso pode estar relacionado [aà] alimenta[cç][aã]o e [aà] saciedade[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*[EÉ] importante investigar se a mamada foi efetiva[^.!?]*[.!?]/gi,
+    '',
+  );
+  if (!motherReportedWakeWindow(message)) {
+    out = out.replace(
+      /[^.!?\n]*(?:respeitar a |fundamental respeitar a )?janela de vig[ií]lia[^.!?]{0,220}(?:hiperestimula|acordada por muito tempo)[^.!?]*[.!?]/gi,
+      '',
+    );
+    out = out.replace(/[^.!?\n]*hiperestimula[cç][aã]o[^.!?]*[.!?]/gi, '');
+    out = out.replace(
+      /[^.!?\n]*Tamb[eé]m [eé] fundamental respeitar a janela de vig[ií]lia[^.!?]*[.!?]/gi,
+      '',
+    );
+  }
+  return out.replace(/\n{3,}/g, '\n\n').trim();
+}
+
 /** TESTE 006 (30d): one feeding/discomfort reading; never pre-label as "comum". */
 function dedupeAngryWakeExplanation(text) {
   let out = stripCommonSituationFraming(text);
@@ -202,6 +244,7 @@ function reorderNightHourlyDecision(text) {
     '',
   );
   out = out.replace(/[^.!?\n]*Se j[aá] (tinham )?passado(?:m)? cerca de 2h30 a 3h[^.!?]*[.!?]/gi, '');
+  out = out.replace(/[^.!?\n]*Se j[aá] se passaram.{0,40}2h\s*30.{0,40}3h[^.!?]*[.!?]/gi, '');
   out = out.replace(
     /[^.!?\n]*Se o despertar ocorrer antes de completar aproximadamente 3 horas[^.!?]*[.!?]/gi,
     '',
@@ -252,6 +295,15 @@ function strip51dNormalization(text) {
     /[^.!?\n]*s[oó] consegue adormecer no colo ou no peito[^.!?]{0,80}(fase|adapta[cç][aã]o|idade)[^.!?]*[.!?]/gi,
     '',
   );
+  out = out.replace(
+    /[EÉ] compreens[ií]vel que.{0,100}dificuldade para dormir durante o dia[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*muitos beb[eê]s preferem o colo ou o peito[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(/Isso [eé] comum e esperado[^.!?]*[.!?]/gi, '');
   out = out.replace(/[^.!?\n]*ru[ií]do branco[^.!?]*[.!?]/gi, '');
   return out;
 }
@@ -262,6 +314,86 @@ function ensure51dInvestigationOpen(text) {
     return out;
   }
   return `${DAY_SLEEP_OPEN_51}\n\n${out}`.trim();
+}
+
+function strip51dCalmStartRule(text) {
+  let out = String(text || '');
+  out = out.replace(
+    /, mas [eé] fundamental que voc[eê] a inicie quando a beb[eê] estiver calma/gi,
+    '',
+  );
+  out = out.replace(
+    /[eé] fundamental que voc[eê] a inicie quando a beb[eê] estiver calma[^.]*\./gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*inicie.{0,50}quando (ela|a beb[eê]) estiver calma[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*[eé] importante que voc[eê] inicie.{0,80}calma[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*transfer[eê]ncia.{0,80}quando ela estiver calma[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*ocorra quando ela estiver calma[^.!?]*[.!?]/gi,
+    '',
+  );
+  return out;
+}
+
+function prefer51dCompleteSatietyConduct(text) {
+  let out = String(text || '');
+  const hasComplete =
+    /diferencie:\s*ainda est[aá] com fome/i.test(out) &&
+    /retir[ae]-a do peito|retire-a do peito|retirar do peito/i.test(out);
+  if (hasComplete) {
+    out = out.replace(
+      /Se ela ainda estiver com fome, mantenha a alimenta[cç][aã]o\.\s*/gi,
+      '',
+    );
+    out = out.replace(
+      /Se estiver saciada e permanecer no peito, voc[eê] pode retirar do peito[^.!?]*[.!?]\s*/gi,
+      '',
+    );
+    out = out.replace(
+      /Se ela ainda estiver no peito, retir[ae]-a(?: do peito)?[^.!?]*[.!?]\s*/gi,
+      '',
+    );
+  }
+  out = keepFirstMatch(
+    out,
+    /[^.!?\n]*(?:retir[ae]-a(?: do peito)?|retire-a do peito|retirar do peito)[^.!?]{0,180}(?:posi[cç][aã]o vertical|conduza ao sono|conduzir ao sono)[^.!?]*[.!?]/gi,
+  );
+  return out;
+}
+
+function stripNightHourlyContradiction(text) {
+  let out = String(text || '');
+  out = out.replace(
+    /[^.!?\n]*Se j[aá] se passaram.{0,60}2h\s*30.{0,50}3h[^.!?]{0,160}sem oferecer[^.!?]{0,40}peito[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*Se j[aá] transcorreram.{0,80}2h\s*30.{0,50}3h[^.!?]{0,160}sem oferecer[^.!?]{0,40}peito[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*j[aá] se passaram.{0,40}2h\s*30.{0,40}3h.{0,120}(?:voltar ao sono|conduzir.{0,50}(?:ao |o )?sono).{0,80}sem oferecer[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*associa[cç][oõ]es negativas entre acordar e mamar[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /Isso ajuda a evitar associa[cç][oõ]es negativas[^.!?]*[.!?]/gi,
+    '',
+  );
+  return out;
 }
 
 function stripBottleBehavioralReading(text) {
@@ -396,7 +528,11 @@ function stripLeaked55dInvestigation(text) {
   );
   out = out.replace(/[^.!?\n]*Ele parece irritado ou calmo[^.!?]*[.!?]/gi, '');
   out = out.replace(
-    /[^.!?\n]*(?:est[aá] mamando efetivamente|apresentando sinais de saciedade|intervalos entre as mamadas)[^.!?]*[.!?]/gi,
+    /[^.!?\n]*(?:est[aá] mamando efetivamente|apresentando sinais de saciedade|apresenta sinais de saciedade|intervalos entre as mamadas)[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*sinais de saciedade ap[oó]s as mamadas[^.!?]*[.!?]/gi,
     '',
   );
   out = out.replace(/[^.!?\n]*E como est[aá] a alimenta[cç][aã]o[^.!?]*[.!?]/gi, '');
@@ -449,6 +585,14 @@ function is55EnterSleepAsk(p) {
   return /quanto tempo.{0,80}(entrar em sono|adormecer).{0,120}condu[cç][aã]o/i.test(p);
 }
 
+/** TESTE 008 (55d): do not leak feeding/satiety questions when the mother only asked pacifier + wake window. */
+function is55LeakedFeedAsk(p) {
+  const t = String(p || '');
+  if (t.length > 280) return false;
+  if (/chupeta/i.test(t) || /janela de vig[ií]lia|1h30 a 1h45/i.test(t)) return false;
+  return /sinais de saciedade|intervalos entre as mamadas|mamando efetivamente|como est[aá] a alimenta[cç][aã]o/i.test(t);
+}
+
 /** TESTE 007 (55d): one pacifier block, one window, one enter-sleep ask, Janela lesson. */
 function consolidate55dComposition(text) {
   let out = String(text || '');
@@ -478,7 +622,7 @@ function consolidate55dComposition(text) {
       continue;
     }
     if (/[eé] normal que.{0,120}(chupeta|55 dias)/i.test(p) && p.length < 320) continue;
-    if (is55PacifierPara(p) || is55WindowPara(p) || is55EnterSleepAsk(p)) continue;
+    if (is55PacifierPara(p) || is55WindowPara(p) || is55EnterSleepAsk(p) || is55LeakedFeedAsk(p)) continue;
     if (/aula/i.test(p)) continue;
     rest.push(p);
   }
@@ -714,6 +858,20 @@ export function enrichThirtySixtyOfficialAnswer({
     out = out.replace(new RegExp(`\\n\\nA janela de vigília de referência nesta faixa é de ${WAKE_WINDOW_REF}\\.`, 'gi'), '');
     out = dedupeAngryWakeExplanation(out);
     out = ensureAngryWakeFeedRefine(out);
+    out = scrubAngryWakeTeste008(out, msg);
+    const hasPosturalAfterScrub = /arroto/i.test(out) && /20 a 30 minutos/i.test(out);
+    if (!hasPosturalAfterScrub) {
+      out = appendOnce(
+        out,
+        'Depois da mamada, antes de deitar: houve arroto? Ela permaneceu em posição vertical por 20 a 30 minutos?',
+      );
+    }
+    if (!has(out, /refluxo/i)) {
+      out = appendOnce(
+        out,
+        'Esse padrão também pode apontar para algum desconforto depois da mamada, inclusive refluxo. Você pode conferir a aula \'O que é o refluxo?\' no aplicativo.',
+      );
+    }
     notes.push('angry_wake_once');
     notes.push('angry_wake_feed_refine');
   }
@@ -1050,6 +1208,18 @@ export function enrichThirtySixtyOfficialAnswer({
       /[^.!?\n]*ap[oó]s esse per[ií]odo, isso est[aá] correto[^.!?]*[.!?]/gi,
       'A condução deve respeitar a janela de 45 minutos a 1 hora e 15 minutos e os sinais de sono.',
     );
+    out = out.replace(
+      /[^.!?\n]*(?:Isso significa que,? )?ap[oó]s esse per[ií]odo acordado[^.!?]{0,80}iniciar a condu[cç][aã]o[^.!?]*[.!?]/gi,
+      '',
+    );
+    out = out.replace(
+      /[^.!?\n]*ap[oó]s esse per[ií]odo(?: acordado)?,? [eé] hora de iniciar a condu[cç][aã]o[^.!?]*[.!?]/gi,
+      '',
+    );
+    out = out.replace(
+      /Isso significa que, ap[oó]s esse per[ií]odo acordado[^.!?]*[.!?]/gi,
+      '',
+    );
     if (/chupeta/i.test(msg) && /principal hip[oó]tese.{0,80}chupeta/i.test(out)) {
       out = out.replace(/A principal hip[oó]tese[^.]*\./i, pacifierConditional);
     }
@@ -1114,6 +1284,26 @@ export function enrichThirtySixtyOfficialAnswer({
         'A condução deve respeitar a janela de 45 minutos a 1 hora e 15 minutos e os sinais de sono.',
       );
       notes.push('49_respect_window');
+    }
+    if (!has(out, /iniciada dentro da janela|dentro da janela de 45 minutos/i)) {
+      out = appendOnce(
+        out,
+        'A condução deve ser iniciada dentro da janela de 45 minutos a 1 hora e 15 minutos, observando os sinais de sono e o tempo que ele demora para entrar em sono.',
+      );
+      notes.push('49_within_window');
+    }
+    if (!has(out, /alimenta[cç][aã]o.{0,100}intervalos entre as mamadas|intervalos entre as mamadas/i)) {
+      out = appendOnce(
+        out,
+        'Como está a alimentação dele e os intervalos entre as mamadas? Ele parece saciado após as mamadas?',
+      );
+      notes.push('49_feed_satiety_ask');
+    } else if (!has(out, /saciad/i)) {
+      out = appendOnce(
+        out,
+        'Ele parece saciado após as mamadas?',
+      );
+      notes.push('49_satiety_ask');
     }
     if (
       /chegar a durar 1h|em exce[cç][aã]o.{0,30}1h/i.test(msg) &&
@@ -1238,12 +1428,15 @@ export function enrichThirtySixtyOfficialAnswer({
     out = out.replace(/acordou ap[oó]s 4 horas(?!\s+da manh)/gi, 'acordou após as 4h da manhã');
     out = out.replace(/Isso ajuda a evitar que (ele|ela) associe o despertar [aà] necessidade de mamar[^.]*\./gi, '');
     out = out.replace(/evitar que (ele|ela) associe o despertar [aà] necessidade de mamar[^.]*\./gi, '');
+    out = out.replace(/[^.!?\n]*associa[cç][oõ]es negativas entre acordar e mamar[^.!?]*[.!?]/gi, '');
+    out = out.replace(/Isso ajuda a evitar associa[cç][oõ]es negativas[^.!?]*[.!?]/gi, '');
     out = out.replace(/quanto tempo durou o primeiro sono da noite\??/gi, '');
     out = out.replace(/Quando (ele|ela) acorda antes de 3 horas, voc[eê] oferece o peito automaticamente\??/gi, '');
     out = out.replace(/H[aá] sinais claros de fome ou apenas agita[cç][aã]o breve\??/gi, '');
     out = out.replace(/Para entender melhor a situa[cç][aã]o, gostaria de saber:\s*/gi, '');
     out = out.replace(/gostaria de saber:\s*(?=A pergunta decisiva|O primeiro passo|Antes de pensar|$)/gi, '');
     out = reorderNightHourlyDecision(out);
+    out = stripNightHourlyContradiction(out);
     notes.push('night_last_feed_first');
     if (!has(out, /n[aã]o [eé] fome.{0,80}novinho|decis[aã]o de oferecer o peito n[aã]o se resume/i)) {
       out = appendOnce(
@@ -1342,14 +1535,7 @@ export function enrichThirtySixtyOfficialAnswer({
       '',
     );
     out = out.replace(/fome ou que est[aá] buscando conforto[^.]*\./gi, '');
-    out = out.replace(
-      /, mas [eé] fundamental que voc[eê] a inicie quando a beb[eê] estiver calma/gi,
-      '',
-    );
-    out = out.replace(
-      /[eé] fundamental que voc[eê] a inicie quando a beb[eê] estiver calma[^.]*\./gi,
-      '',
-    );
+    out = strip51dCalmStartRule(out);
     out = out.replace(/  +/g, ' ');
     out = out.replace(/\.\s*\./g, '.');
     out = out.replace(/\(n[aã]o use ['"“”']?o tempo que a beb[eê] precisar[^)]*\)/gi, '');
@@ -1395,10 +1581,7 @@ export function enrichThirtySixtyOfficialAnswer({
       }
       notes.push('51_satiety_conduct');
     }
-    out = keepFirstMatch(
-      out,
-      /[^.!?\n]*(?:retir[ae]-a(?: do peito)?|retire-a do peito)[^.!?]{0,160}(?:posi[cç][aã]o vertical|conduza ao sono|conduzir ao sono)[^.!?]*[.!?]/gi,
-    );
+    out = prefer51dCompleteSatietyConduct(out);
     out = keepFirstMatch(
       out,
       /[^.!?\n]*(?:execu[cç][aã]o.{0,40}travesseiro|travesseiro.{0,90}execu|executando.{0,50}travesseiro|realizando.{0,50}travesseiro|como est[aá] (sendo )?a execu[cç][aã]o|como voc[eê] est[aá] realizando)[^.!?]*[.!?]/gi,
@@ -1601,10 +1784,13 @@ export function enrichThirtySixtyOfficialAnswer({
       '',
     );
     out = out.replace(
+      /[^.!?\n]*pode ser uma boa (ferramenta|estrat[eé]gia)[^.!?]*[.!?]/gi,
+      '',
+    );
+    out = out.replace(
       /[^.!?]*se voc[eê] j[aá] a utiliza, observe como est[aá] sendo feita[^.!?]*[.!?]/gi,
       '',
     );
-    out = out.replace(/pode ser uma boa (estrat[eé]gia|ferramenta)/gi, 'deve ser usada');
     if (!has(out, /use a estrat[eé]gia do travesseiro|travesseiro.{0,40}condu[cç][aã]o e na coloca[cç][aã]o/i)) {
       out = appendOnce(out, travesseiroDirect57);
       notes.push('57_travesseiro_direct');
