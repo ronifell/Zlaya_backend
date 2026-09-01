@@ -106,7 +106,7 @@ function isAngryWakeRepeatParagraph(para) {
 function salvageAngryWakeExtras(para) {
   const sentences = String(para || '').match(/[^.!?]+[.!?]+/g) || [];
   return sentences
-    .filter((s) => /refluxo|arroto|posi[cç][aã]o vertical|20 a 30 minutos|suc[cç][aã]o ativa|degluti[cç][aã]o/i.test(s))
+    .filter((s) => /refluxo|arroto|posi[cç][aã]o vertical|20 a 30 minutos|30 a 40 minutos|suc[cç][aã]o ativa|degluti[cç][aã]o|colocad[oa] no ber[cç]o/i.test(s))
     .filter((s) => !isAngryWakeRepeatParagraph(s))
     .filter((s) => !/n[aã]o consideraria a dura[cç][aã]o|n[aã]o [eé] o (principal )?problema/i.test(s))
     .join(' ')
@@ -146,14 +146,31 @@ function motherReportedWakeWindow(message) {
   );
 }
 
-/** TESTE 008 (30d): don't reinforce feeds before intake is confirmed; don't blame wake window without evidence; drop restated opening. */
+function applyAngryWakePostural3040(text) {
+  let out = String(text || '');
+  out = out.replace(
+    /posi[cç][aã]o vertical por 20 a 30 minutos/gi,
+    'posição vertical por 30 a 40 minutos',
+  );
+  out = out.replace(
+    /em posi[cç][aã]o vertical por 20 a 30 minutos/gi,
+    'em posição vertical por 30 a 40 minutos',
+  );
+  out = out.replace(
+    /permanecer 20 a 30 minutos em posi[cç][aã]o vertical/gi,
+    'permanecer 30 a 40 minutos em posição vertical',
+  );
+  return out;
+}
+
+/** TESTE 008/009 (30d): feeds, no wake without evidence, no morning-nap reask, no restated opening, postural 30–40. */
 function scrubAngryWakeTeste008(text, message) {
   let out = String(text || '');
   out = out.replace(/[^.!?\n]*refor[cç]ar as mamadas[^.!?]*[.!?]/gi, '');
   out = out.replace(/[^.!?\n]*Para melhorar essa situa[cç][aã]o, considere refor[cç]ar[^.!?]*[.!?]/gi, '');
   out = out.replace(/[^.!?\n]*garantindo que ela esteja bem alimentada[^.!?]*[.!?]/gi, '');
   out = out.replace(
-    /[^.!?\n]*[EÉ] compreens[ií]vel que.{0,120}acorde muito irritada[^.!?]*[.!?]/gi,
+    /[^.!?\n]*[EÉ] compreens[ií]vel que.{0,160}(acorde muito irritada|preocupada com o choro)[^.!?]*[.!?]/gi,
     '',
   );
   out = out.replace(
@@ -161,25 +178,31 @@ function scrubAngryWakeTeste008(text, message) {
     '',
   );
   out = out.replace(
-    /[^.!?\n]*principal hip[oó]tese [eé] que isso pode estar relacionado [aà] alimenta[cç][aã]o e [aà] saciedade[^.!?]*[.!?]/gi,
+    /[^.!?\n]*principal hip[oó]tese .{0,40}(isso|o choro) pode estar relacionado [aà] alimenta[cç][aã]o e [aà]? ?saciedade[^.!?]*[.!?]/gi,
     '',
   );
   out = out.replace(
     /[^.!?\n]*[EÉ] importante investigar se a mamada foi efetiva[^.!?]*[.!?]/gi,
     '',
   );
+  out = out.replace(
+    /[^.!?\n]*dura[cç][aã]o da soneca da manh[aã][^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*mais sobre a dura[cç][aã]o da soneca da manh[aã][^.!?]*[.!?]/gi,
+    '',
+  );
   if (!motherReportedWakeWindow(message)) {
-    out = out.replace(
-      /[^.!?\n]*(?:respeitar a |fundamental respeitar a )?janela de vig[ií]lia[^.!?]{0,220}(?:hiperestimula|acordada por muito tempo)[^.!?]*[.!?]/gi,
-      '',
-    );
+    out = out.replace(/[^.!?\n]*janela de vig[ií]lia[^.!?]*[.!?]/gi, '');
+    out = out.replace(/[^.!?\n]*acordad[oa] por muito tempo[^.!?]*[.!?]/gi, '');
     out = out.replace(/[^.!?\n]*hiperestimula[cç][aã]o[^.!?]*[.!?]/gi, '');
     out = out.replace(
       /[^.!?\n]*Tamb[eé]m [eé] fundamental respeitar a janela de vig[ií]lia[^.!?]*[.!?]/gi,
       '',
     );
   }
-  return out.replace(/\n{3,}/g, '\n\n').trim();
+  return applyAngryWakePostural3040(out.replace(/\n{3,}/g, '\n\n').trim());
 }
 
 /** TESTE 006 (30d): one feeding/discomfort reading; never pre-label as "comum". */
@@ -303,7 +326,7 @@ function strip51dNormalization(text) {
     /[^.!?\n]*muitos beb[eê]s preferem o colo ou o peito[^.!?]*[.!?]/gi,
     '',
   );
-  out = out.replace(/Isso [eé] comum e esperado[^.!?]*[.!?]/gi, '');
+  out = out.replace(/Isso [eé] (bastante )?comum e esperado[^.!?]*[.!?]/gi, '');
   out = out.replace(/[^.!?\n]*ru[ií]do branco[^.!?]*[.!?]/gi, '');
   return out;
 }
@@ -347,6 +370,10 @@ function strip51dCalmStartRule(text) {
 
 function prefer51dCompleteSatietyConduct(text) {
   let out = String(text || '');
+  out = out.replace(
+    /Se ela ainda estiver no peito ap[oó]s a mamada[^.!?]*[.!?]/gi,
+    'Se ela já realizou mamada efetiva, está saciada, sem sinais de fome e permanece no peito, retire-a do peito, coloque em posição vertical por 20 a 30 minutos e, depois, conduza ao sono.',
+  );
   const hasComplete =
     /diferencie:\s*ainda est[aá] com fome/i.test(out) &&
     /retir[ae]-a do peito|retire-a do peito|retirar do peito/i.test(out);
@@ -446,9 +473,14 @@ function hasWakeArithmetic(text) {
   );
 }
 
-/** TESTE 006 (45d): one 21h30 orientation (bath + late night), keep “21h já está além”. */
+/** TESTE 006/009 (45d): one 21h30 orientation; fix “e O banho”; keep “21h já está além”. */
 function consolidate2130Mentions(text, { includeBath } = {}) {
   let out = String(text || '');
+  out = out.replace(/\be O banho\b/g, 'e o banho');
+  out = out.replace(
+    /,\s*e [oO] banho [àa]s 21h30 n[aã]o [eé] recomendado quando leva o in[ií]cio do sono noturno para ainda mais tarde\.?/gi,
+    '.',
+  );
   const lateRe = /[^.!?\n]*(?:21h30|21:30)[^.!?]*[.!?]/gi;
   const hits = out.match(lateRe) || [];
   if (hits.length === 0) return out;
@@ -463,6 +495,7 @@ function consolidate2130Mentions(text, { includeBath } = {}) {
     seen += 1;
     if (has21hLate) {
       const kept21h = m
+        .replace(/,?\s*e [oO] banho [àa]s 21h30 n[aã]o [eé] recomendado[^.!?]*/i, '')
         .replace(/,?\s*e 21h30 n[aã]o [eé] recomendado[^.!?]*/i, '')
         .replace(/\s{2,}/g, ' ')
         .replace(/\s+\./g, '.')
@@ -472,7 +505,11 @@ function consolidate2130Mentions(text, { includeBath } = {}) {
     }
     return seen === 1 ? one : '';
   });
-  return out;
+  out = keepFirstMatch(
+    out,
+    /[^.!?\n]*banho [àa]s 21h30 n[aã]o [eé] recomendado[^.!?]*[.!?]/gi,
+  );
+  return out.replace(/\be O banho\b/g, 'e o banho');
 }
 
 function dedupeCribCryCalm(text) {
@@ -664,7 +701,7 @@ function consolidateExcessWakeComposition(text) {
   out = keepFirstMatch(out, morningFractionRe);
   out = stripBreastAsSleepAid(out);
   out = out.replace(/Isso pode ajudar a melhorar a distribui[cç][aã]o das sonecas durante a tarde[^.!?]*[.!?]/gi, '');
-  out = out.replace(/Isso pode ajudar a entender melhor a situa[cç][aã]o[^.!?]*[.!?]/gi, '');
+  out = out.replace(/Isso (ajudar[aá]|pode ajudar|pode nos ajudar) a entender melhor a situa[cç][aã]o[^.!?]*[.!?]/gi, '');
   out = out.replace(
     /[^.!?\n]*(?:qual [eé]|quanto tempo|e quanto tempo)[^.!?]{0,140}(?:permanece|permanecer|costuma permanecer) acordad[oa][^.!?]{0,120}(?:antes de iniciar|antes da condu|[àa] soneca|para a soneca|antes das sonecas)[^.!?]*[.!?]*/gi,
     '',
@@ -676,7 +713,7 @@ function consolidateExcessWakeComposition(text) {
   );
 
   const intervalRe =
-    /[^.!?\n]*((?:intervalo (?:aproximado |t[ií]pico )?entre as mamadas)|(?:pr[oó]ximo intervalo (?:para mamar|de mamada|alimentar))|(?:considere fome antes de insistir)|(?:fome tamb[eé]m precisa ser considerada)|(?:observe se (?:ele|ela) est[aá] pr[oó]ximo do intervalo para mamar))[^.!?]*[.!?]?/gi;
+    /[^.!?\n]*((?:intervalo (?:aproximado |t[ií]pico )?entre as mamadas)|(?:pr[oó]ximo intervalo (?:para mamar|de mamada|alimentar))|(?:considere fome antes de insistir)|(?:fome tamb[eé]m precisa ser considerada)|(?:observe se (?:ele|ela) est[aá] pr[oó]ximo do intervalo para mamar)|(?:considere amament[aá]-l[oa])|(?:pr[oó]ximo do intervalo para mamar e demora a dormir))[^.!?]*[.!?]?/gi;
   const intervalHits = out.match(intervalRe) || [];
   intervalRe.lastIndex = 0;
   const oneExplained =
@@ -692,7 +729,75 @@ function consolidateExcessWakeComposition(text) {
   out = out.replace(/Agora, gostaria de saber:\s*/gi, '');
   out = out.replace(/\n{3,}/g, '\n\n');
   out = out.replace(/[ \t]{2,}/g, ' ');
-  return out.trim();
+  return composeExcessWakeOrder(out.trim());
+}
+
+/** TESTE 009 (31d): hypothesis → wake sum → anticipate → morning fraction → feed once → lesson. */
+function composeExcessWakeOrder(text) {
+  const parts = String(text || '')
+    .split(/\n{2,}/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+  if (parts.length < 2) return String(text || '').trim();
+
+  const buckets = {
+    lead: [],
+    hypothesis: [],
+    calc: [],
+    anticipate: [],
+    fraction: [],
+    feed: [],
+    lesson: [],
+    other: [],
+  };
+
+  for (const p of parts) {
+    const isLesson =
+      /(?:conferir a aula|revise a aula|recomendo.{0,40}aula|aula ['"“”']?Janela)/i.test(p) &&
+      !hasWakeArithmetic(p) &&
+      !/antecipe o in[ií]cio/i.test(p);
+    if (isLesson) {
+      buckets.lesson.push(p);
+    } else if (
+      /vig[ií]lia excessiva vem da soma|tempo acordado chega perto de 1h40|1h[–\-]?1h15 e ele ainda leva/i.test(p)
+    ) {
+      buckets.calc.push(p);
+    } else if (/antecipe o in[ií]cio da condu[cç][aã]o|antecip.{0,40}condu[cç][aã]o/i.test(p) && !/fracion/i.test(p)) {
+      buckets.anticipate.push(p);
+    } else if (/fracion/i.test(p) && !hasWakeArithmetic(p)) {
+      buckets.fraction.push(p);
+    } else if (
+      /intervalo entre as mamadas|considere fome|amament[aá]-l[oa]|pr[oó]ximo intervalo alimentar/i.test(p)
+    ) {
+      buckets.feed.push(p);
+    } else if (/principal hip[oó]tese.{0,60}vig[ií]lia excessiva|hip[oó]tese.{0,20}[eé] a vig[ií]lia excessiva/i.test(p)) {
+      buckets.hypothesis.push(p);
+    } else if (
+      buckets.hypothesis.length === 0 &&
+      buckets.calc.length === 0 &&
+      buckets.anticipate.length === 0
+    ) {
+      buckets.lead.push(p);
+    } else {
+      buckets.other.push(p);
+    }
+  }
+
+  const feed = buckets.feed.length ? [FEED_INTERVAL_CANONICAL] : [];
+  return [
+    ...buckets.lead,
+    ...buckets.hypothesis,
+    ...buckets.calc,
+    ...buckets.anticipate,
+    ...buckets.fraction,
+    ...feed,
+    ...buckets.other,
+    ...buckets.lesson,
+  ]
+    .filter(Boolean)
+    .join('\n\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
 }
 
 function scrubRnArtifacts(text) {
@@ -859,11 +964,18 @@ export function enrichThirtySixtyOfficialAnswer({
     out = dedupeAngryWakeExplanation(out);
     out = ensureAngryWakeFeedRefine(out);
     out = scrubAngryWakeTeste008(out, msg);
-    const hasPosturalAfterScrub = /arroto/i.test(out) && /20 a 30 minutos/i.test(out);
+    out = applyAngryWakePostural3040(out);
+    const hasPosturalAfterScrub = /arroto/i.test(out) && /30 a 40 minutos/i.test(out);
     if (!hasPosturalAfterScrub) {
       out = appendOnce(
         out,
-        'Depois da mamada, antes de deitar: houve arroto? Ela permaneceu em posição vertical por 20 a 30 minutos?',
+        'Depois da mamada, antes de deitar: houve arroto? Ela permaneceu em posição vertical por 30 a 40 minutos?',
+      );
+    }
+    if (!has(out, /colocad[oa] no ber[cç]o|ao ser colocad/i)) {
+      out = appendOnce(
+        out,
+        'Há sinais de desconforto depois da mamada ou ao ser colocada no berço?',
       );
     }
     if (!has(out, /refluxo/i)) {
@@ -1245,10 +1357,17 @@ export function enrichThirtySixtyOfficialAnswer({
       out,
       /[^.!?\n]*janela de vig[ií]lia[^.!?]{0,100}45 minutos.{0,25}1 hora e 15[^.!?]*[.!?]/gi,
     );
-    if (!has(out, /como o beb[eê] acorda|como ele acorda|como ela acorda|como (ele|ela|o beb[eê]) desperta|acorda da soneca:\s*tranquil/i)) {
+    out = out.replace(
+      /Observe como o beb[eê] acorda da soneca: tranquil[oa], chorando, buscando peito ou com desconforto\.?/gi,
+      'Como ele desperta das sonecas: tranquilo, chorando, buscando peito ou demonstrando desconforto?',
+    );
+    if (
+      !/como (ele|ela|o beb[eê]) desperta das sonecas:/i.test(out) &&
+      !/acorda da soneca:\s*tranquil[oa], chorando/i.test(out)
+    ) {
       out = appendOnce(
         out,
-        'Observe como o bebê acorda da soneca: tranquilo, chorando, buscando peito ou com desconforto.',
+        'Como ele desperta das sonecas: tranquilo, chorando, buscando peito ou demonstrando desconforto?',
       );
       notes.push('49_how_wakes');
     }
@@ -1485,11 +1604,15 @@ export function enrichThirtySixtyOfficialAnswer({
   if (daySleep51) {
     out = strip51dNormalization(out);
     out = out.replace(
+      /(?:Ap[oó]s esse (?:tempo|per[ií]odo)|Depois (?:disso|desse (?:tempo|per[ií]odo))|Ao (?:final|t[eé]rmino|fim) da janela)[^.!?]{0,120}(?:ofere[cç]a|oferecer) (?:uma )?mamada[^.!?]*[.!?]/gi,
+      '',
+    );
+    out = out.replace(
       /(?:Ap[oó]s esse tempo|Depois (?:disso|desse tempo)|Ao (?:final|t[eé]rmino|fim) da janela)[^.!?]{0,90}mamada efetiva[^.!?]*[.!?]/gi,
       '',
     );
     out = out.replace(
-      /quando (a janela|esse tempo) (terminar|acabar|se encerrar)[^.!?]{0,50}mamada[^.!?]*[.!?]/gi,
+      /quando (a janela|esse tempo|esse per[ií]odo) (terminar|acabar|se encerrar)[^.!?]{0,50}mamada[^.!?]*[.!?]/gi,
       '',
     );
     out = out.replace(
@@ -1949,6 +2072,10 @@ export function enrichThirtySixtyOfficialAnswer({
   if (gender.corrections.length) notes.push('gender');
 
   out = scrubRnArtifacts(out);
+  if (ids.has('nap_angry_wake_30_60')) {
+    out = applyAngryWakePostural3040(out);
+    out = scrubAngryWakeTeste008(out, msg);
+  }
   out = out.replace(/\n{3,}/g, '\n\n').trim();
   return { text: out, notes };
 }

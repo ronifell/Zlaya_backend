@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
 import { config } from '../config/index.js';
 import { resolveAge, isNamespaceActive } from './ageService.js';
-import { classifyIntent, applyRnIntentOverrides } from './intentClassifier.js';
+import { classifyIntent, applyRnIntentOverrides, applyThirtySixtyIntentOverrides } from './intentClassifier.js';
 import { extractSignals } from './signalExtractor.js';
 import { retrieve } from './retrieval.js';
 import {
@@ -122,6 +122,12 @@ export async function processTurn({ message, babyProfile, conversation, conversa
     ageDays: age?.days ?? null,
   });
   intent = intentOverride.intent;
+  const thirtySixtyIntent = applyThirtySixtyIntentOverrides({
+    intent,
+    message,
+    ageDays: age?.days ?? null,
+  });
+  intent = thirtySixtyIntent.intent;
 
   // 2b) Clinical red flags --------------------------------------------
   const clinical = detectClinicalRedFlags({ text: message, namespace });

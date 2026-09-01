@@ -10,6 +10,7 @@ import { extractSignals } from '../services/signalExtractor.js';
 import { processTurn } from '../services/zlayaPipeline.js';
 import { suggestedLessonsFromRetrieval } from '../services/fallback.js';
 import { enrichThirtySixtyOfficialAnswer } from '../services/thirtySixtyOfficialEnricher.js';
+import { applyThirtySixtyIntentOverrides } from '../services/intentClassifier.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const K = path.join(__dirname, '..', 'knowledge', '30_60');
@@ -112,6 +113,12 @@ assert(/associa[cç][oõ]es negativas entre acordar e mamar/i.test(prompt), 'pro
 assert(/inicie essa condu[cç][aã]o quando ela estiver calma/i.test(prompt), 'prompt: TESTE 008 51d no calma start');
 assert(/Ele apresenta sinais de saciedade ap[oó]s as mamadas/i.test(prompt), 'prompt: TESTE 008 55d no satiety ask');
 assert(/ap[oó]s esse per[ií]odo acordado/i.test(prompt), 'prompt: TESTE 008 49d no after-window start');
+assert(/vertical 30–40 min neste fluxo|vertical 30-40 min neste fluxo/i.test(prompt), 'prompt: TESTE 009 30d postural 30–40');
+assert(/dura[cç][aã]o da soneca da manh[aã]/i.test(prompt), 'prompt: TESTE 009 30d no morning-nap ask');
+assert(/Isso ajudar[aá] a entender melhor a situa[cç][aã]o/i.test(prompt), 'prompt: TESTE 009 31d no orphan ajudará');
+assert(/e O banho/i.test(prompt), 'prompt: TESTE 009 45d no e O banho');
+assert(/Como ele desperta das sonecas/i.test(prompt), 'prompt: TESTE 009 49d ask how wakes');
+assert(/Ap[oó]s esse per[ií]odo, ofere[cç]a uma mamada efetiva/i.test(prompt), 'prompt: TESTE 009 51d no window-to-feed');
 
 const sig48 = extractSignals({
   message: 'Bebê de 48 dias. Estou começando a rotina do sono dela umas 18:30, até 20 horas está dormindo. transferir pro berço em sono profundo ou com os olhos abertos para criar autonomia',
@@ -565,7 +572,7 @@ Por fim, você pode revisar a aula sobre refluxo, que pode ajudar a entender mel
   assert(countAngryWakeParas(enriched.text) === 1, 'TESTE 008 30d: nap/wake reading once', String(countAngryWakeParas(enriched.text)));
   assert(/n[aã]o comprova saciedade/i.test(enriched.text), 'TESTE 008 30d: time ≠ satiety');
   assert(/n[aã]o significa automaticamente/i.test(enriched.text), 'TESTE 008 30d: suck-relax not auto hunger');
-  assert(/arroto/i.test(enriched.text) && /20 a 30 minutos/i.test(enriched.text), 'TESTE 008 30d: keep postural');
+  assert(/arroto/i.test(enriched.text) && /30 a 40 minutos/i.test(enriched.text), 'TESTE 008 30d: postural 30–40');
   assert(/refluxo/i.test(enriched.text), 'TESTE 008 30d: keep reflux');
 }
 
@@ -707,6 +714,139 @@ A condução deve respeitar a janela de 45 minutos a 1 hora e 15 minutos e os si
   assert(/dentro da janela|respeitar a janela de 45 minutos a 1 hora e 15/i.test(enriched.text), 'TESTE 008 49d: conduction within/respecting window');
   assert(/alimenta[cç][aã]o.{0,80}intervalos entre as mamadas/i.test(enriched.text), 'TESTE 008 49d: keep feeding ask');
   assert(/saciad/i.test(enriched.text), 'TESTE 008 49d: keep satiety ask');
+}
+
+console.log('\n=== Layer A: TESTE 009 enricher replay ===\n');
+
+{
+  const message30 =
+    'Minha bebê de 30 dias faz sonecas de 1h às vezes mais.. quando acorda ela acorda muito brava e chora bastante e só acalma dando o peito mama bem pouco e relaxa.. como melhorar? Antes da soneca ela já mama em média 20 a 30 min';
+  const draft30 = `Como ela consegue dormir por cerca de 1 hora ou até mais, eu não consideraria a duração da soneca o principal problema neste momento. O que chama mais atenção é ela acordar muito irritada e relaxar depois de sugar um pouco. Por isso, primeiro observaria como está a mamada e se existe algum desconforto depois dela.
+
+O tempo de mamada, sozinho, não comprova saciedade — mesmo que ela tenha mamado 20 a 30 minutos antes da soneca. Observe sucção ativa, deglutição e sinais de saciedade. Sugar pouco e relaxar ao despertar não significa automaticamente que ela precise se alimentar: investigue também desconforto e se a sucção está sendo usada para relaxar.
+
+É compreensível que você esteja preocupada com o choro da sua bebê ao acordar. Com 30 dias, é comum que os bebês apresentem variações no sono e nos despertares. O que chama atenção no seu relato é que, apesar das sonecas de cerca de 1 hora ou mais, ela acorda muito irritada e só se acalma ao mamar.
+
+A principal hipótese aqui é que o choro pode estar relacionado à alimentação e saciedade, além de possíveis desconfortos após a mamada. Para melhorar essa situação, sugiro que você observe o que acontece entre o fim da mamada e a hora de deitar. Pergunte-se: houve arroto? Ela permaneceu em posição vertical por 20 a 30 minutos? A mamada pareceu efetiva, com sucção ativa e sinais de que ela está saciada?
+
+Além disso, é importante garantir que a janela de vigília antes das sonecas seja respeitada, que é de 45 minutos a 1 hora e 15 minutos. Se a sua bebê estiver acordada por muito tempo antes de dormir, isso pode contribuir para a irritação.
+
+Se você puder compartilhar mais sobre a duração da soneca da manhã e quanto tempo ela demora para adormecer após você iniciar a condução, isso pode ajudar a refinar ainda mais a orientação.
+
+Para aprofundar no tema, recomendo que você acesse a aula sobre refluxo e alimentação.`;
+  const sig = extractSignals({ message: message30, ageBand: '30_60', ageDays: 30 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft30,
+    message: message30,
+    signals: sig,
+    babyProfile: { babyName: 'Lara', ageDays: 30, sex: 'f' },
+  });
+  const intentFix = applyThirtySixtyIntentOverrides({
+    intent: { intent: 'sonecas_curtas', confidence: 0.8, source: 'test' },
+    message: message30,
+    ageDays: 30,
+  });
+  assert(intentFix.intent.intent === 'mamadas', 'TESTE 009 30d: intent sonecas_curtas → mamadas');
+  assert(/30 a 40 minutos/i.test(enriched.text), 'TESTE 009 30d: postural 30–40');
+  assert(!/posi[cç][aã]o vertical por 20 a 30 minutos/i.test(enriched.text), 'TESTE 009 30d: no postural 20–30');
+  assert(!/janela de vig[ií]lia/i.test(enriched.text), 'TESTE 009 30d: no wake window without evidence');
+  assert(!/dura[cç][aã]o da soneca da manh[aã]/i.test(enriched.text), 'TESTE 009 30d: no morning-nap ask');
+  assert(!/[eé] compreens[ií]vel que voc[eê] esteja preocupada/i.test(enriched.text), 'TESTE 009 30d: no restart');
+  assert(/n[aã]o consideraria a dura[cç][aã]o da soneca/i.test(enriched.text), 'TESTE 009 30d: keep 1h+ axis');
+}
+
+{
+  const message31 =
+    'Ola tudo bem? Meu filho tem 31 dias, sempre fez as sonecas no berço, que duravam cerca de 2 hrs/ 2 hrs e 30. Mas faz 02 dias que ele tem feito uma soneca grande pela manhã e, durante a tarde, as sonecas estão bem curtas. Um ciclo de sono. Ele desperta e eu ate tendo nina-lo no berço, mas ele nao retorna. Depois de 30 minutos ja esta com sono novamente. Outra questao eh que ele demora femais para iniciar a soneca. O ambiente esta ajustado, ele esta alimentado, tudo tranquilo, janela de sono del eh de 1 hr/1 hr 15, quando vai dando este horário, vou para o quarto; coloco ruido, quarto escuro, nino ele no colo e ainda acordado transfiro pro berço. Quando no berço, ele demora muuuito prw relaxar, quase 40/45 minutos. Nao sei como conduzir nesta situação. Faz uns 4,5 dias que esta assim.';
+  const draft31 = `Olá! É compreensível que você esteja enfrentando dificuldades com o sono do seu filho de 31 dias.
+
+A principal hipótese aqui é a vigília excessiva. Isso significa que ele pode estar ficando muito tempo acordado antes de adormecer, o que pode dificultar o relaxamento.
+
+Recomendo fracionar a soneca da manhã para cerca de 1h30 a 2h, observando se isso melhora as sonecas da tarde. Além disso, se você perceber que ele está próximo do intervalo para mamar e demora a dormir, considere amamentá-lo para ajudar a relaxar e manter o sono.
+
+Isso ajudará a entender melhor a situação.
+
+Para mais orientações sobre a janela de vigília e como estruturar a rotina, você pode conferir a aula "Janela de Vigília" no aplicativo.
+
+A vigília excessiva vem da soma — não da soneca longa da manhã: se a condução começa depois de cerca de 1h–1h15 e ele ainda leva uns 40–45 minutos para adormecer, o tempo acordado chega perto de 1h40–2h — acima da referência de 45 minutos a 1 hora e 15 minutos.
+
+Como ele já demora cerca de 40 a 45 minutos para adormecer, antecipe o início da condução — não espere os sinais de sono — para que ele entre em sono dentro da janela de 45 minutos a 1 hora e 15 minutos.
+
+Também é importante saber qual costuma ser o intervalo entre as mamadas: se durante a demora para adormecer ele estiver se aproximando do próximo intervalo alimentar, considere fome antes de insistir no sono.`;
+  const sig = extractSignals({ message: message31, ageBand: '30_60', ageDays: 31 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft31,
+    message: message31,
+    signals: sig,
+    babyProfile: { babyName: 'João', ageDays: 31, sex: 'm' },
+  });
+  assert(!/Isso ajudar[aá] a entender melhor a situa[cç][aã]o/i.test(enriched.text), 'TESTE 009 31d: no orphan ajudará');
+  assert(!/amament[aá]-l[oa] para ajudar a relaxar/i.test(enriched.text), 'TESTE 009 31d: no breast-to-relax');
+  const calcPos = enriched.text.search(/vig[ií]lia excessiva vem da soma|1h40/i);
+  const lessonPos = enriched.text.search(/aula.{0,40}Janela/i);
+  assert(calcPos >= 0 && (lessonPos < 0 || calcPos < lessonPos), 'TESTE 009 31d: calc before lesson');
+  assert(/considere fome antes de insistir no sono/i.test(enriched.text), 'TESTE 009 31d: keep one feed orientation');
+  assert(/antecip/i.test(enriched.text), 'TESTE 009 31d: keep anticipate');
+}
+
+{
+  const message45 =
+    'Bebê de 45 dias, o ritual do sono precisa começar entre 19 e 20 horas? Meu esposo gosta de dar banho nele e chega por volta das 22:00. Estou iniciando o sono noturno às 21h, porém ele está demorando para cair no sono. E o banho pode dar às 21:30?';
+  const draft45 = `É compreensível que você esteja se organizando para o sono noturno do seu bebê de 45 dias. O horário recomendado para o início do sono noturno é entre 19h e 20h. Iniciar às 21h já está além dessa faixa, e O banho às 21h30 não é recomendado quando leva o início do sono noturno para ainda mais tarde. A família pode organizar conforme sua dinâmica, mas o banho às 21h30 não é recomendado quando leva o início do sono noturno para ainda mais tarde — 21h30 ou 22h não é o horário recomendado. A questão não é apenas o banho em si, mas o horário tardio que pode afetar a rotina.
+Para ajudar seu bebê a adormecer mais facilmente, observe a última soneca e o tempo que ele permanece acordado antes de tentar iniciar a noite. A janela de vigília ideal é de 45 minutos a 1 hora e 15 minutos.`;
+  const sig = extractSignals({ message: message45, ageBand: '30_60', ageDays: 45 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft45,
+    message: message45,
+    signals: sig,
+    babyProfile: { babyName: 'Lara', ageDays: 45, sex: 'f' },
+  });
+  assert(!/\be O banho\b/.test(enriched.text), 'TESTE 009 45d: no e O banho');
+  assert(((enriched.text.match(/banho [àa]s 21h30 n[aã]o [eé] recomendado/gi) || []).length === 1), 'TESTE 009 45d: bath 21h30 once');
+  assert(/21h.{0,40}(al[eé]m|fora da faixa|j[aá] est[aá])/i.test(enriched.text), 'TESTE 009 45d: keep 21h already late');
+}
+
+{
+  const message49 =
+    'Meu bebê tem 1 mês e 19 dias, as sonecas duram uma média de 30 min, no máximo, em exceção, chega a durar 1h. No entanto, por vezes ele tem despertares durante as sonecas. Ele usa chupeta. Preciso ajustar algo?';
+  const draft49 = `É compreensível que você esteja buscando ajustes nas sonecas do seu bebê de 49 dias, especialmente com a duração média de 30 minutos. Isso pode ser comum nesta faixa etária, e é importante observar como ele desperta.
+
+A primeira orientação é respeitar a janela de vigília, que deve ser de 45 minutos a 1 hora e 15 minutos.
+
+A condução deve ser iniciada dentro da janela de 45 minutos a 1 hora e 15 minutos, observando os sinais de sono e o tempo que ele demora para entrar em sono.`;
+  const sig = extractSignals({ message: message49, ageBand: '30_60', ageDays: 49 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft49,
+    message: message49,
+    signals: sig,
+    babyProfile: { babyName: 'Pedro', ageDays: 49, sex: 'm' },
+  });
+  assert(/como (ele|ela|o beb[eê]) desperta das sonecas:/i.test(enriched.text), 'TESTE 009 49d: ask how he wakes');
+  assert(/dentro da janela de 45 minutos a 1 hora e 15/i.test(enriched.text), 'TESTE 009 49d: keep within-window');
+}
+
+{
+  const message51 =
+    'Minha neném 1 mês e 21 dias tem dificuldade de dormir durante o dia, só dorme se for no colo, e no peito, tento fazer a técnica do travesseiro, as vezes da certo e as vezes não, quanto tempo pra ela aprender?';
+  const draft51 = `Antes de pensarmos em quanto tempo ela levará para aprender, precisamos entender por que ela está conseguindo entrar em sono apenas no colo ou no peito.
+
+Isso é bastante comum e esperado.
+
+Para ajudar a sua bebê a dormir fora do colo, siga este passo a passo: primeiro, observe a janela de vigília dela, que deve ser entre 45 minutos a 1 hora e 15 minutos. Após esse período, ofereça uma mamada efetiva, garantindo que ela esteja saciada. Se ela ainda estiver no peito após a mamada, retire-a suavemente. Em seguida, mantenha-a em posição vertical por 20 a 30 minutos antes de conduzi-la ao sono, utilizando a técnica do travesseiro que você já está aplicando. Lembre-se de que não existe um prazo fixo para ela aprender a dormir de forma independente; a evolução depende da consistência e repetição.
+
+Você pode conferir a aula sobre a Estratégia do Travesseiro para mais orientações sobre como aplicá-la de forma eficaz.`;
+  const sig = extractSignals({ message: message51, ageBand: '30_60', ageDays: 51 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft51,
+    message: message51,
+    signals: sig,
+    babyProfile: { babyName: 'Lara', ageDays: 51, sex: 'f' },
+  });
+  assert(!/ap[oó]s esse per[ií]odo[^.!?]{0,80}ofere[cç]a uma mamada/i.test(enriched.text), 'TESTE 009 51d: no window-to-feed');
+  assert(!/ainda estiver no peito ap[oó]s a mamada[^.!?]{0,40}retir/i.test(enriched.text), 'TESTE 009 51d: no bare retire after feed');
+  assert(/saciad/i.test(enriched.text) && /retir[ae]-a do peito|retire-a do peito/i.test(enriched.text), 'TESTE 009 51d: complete satiety logic');
+  assert(!/Isso [eé] (bastante )?comum e esperado/i.test(enriched.text), 'TESTE 009 51d: no colo/peito normalize');
+  assert(/aula.{0,80}travesseiro/i.test(enriched.text), 'TESTE 009 51d: keep Travesseiro lesson');
 }
 
 {
@@ -879,8 +1019,8 @@ const cases = [
     babyName: 'Lara',
     message:
       'Minha bebê de 30 dias faz sonecas de 1h às vezes mais.. quando acorda ela acorda muito brava e chora bastante e só acalma dando o peito mama bem pouco e relaxa.. como melhorar? Antes da soneca ela já mama em média 20 a 30 min',
-    must: [/alimenta|saciedad|vertical|arroto|p[oó]s-?mamada|depois da mamada/i],
-    mustNot: [/sonecas? curtas/i, /sequ[eê]ncia noturna/i, /sinais de saciedade no RN/i, /mau h[aá]bito/i, /sem evid[eê]ncia no relato|como hip[oó]tese, sem diagn[oó]stico/i, /[eé] (normal|comum) que .{0,140}acord(em|e) chorando/i, /como est[aá] o sono noturno/i, /essa situa[cç][aã]o [eé] comum/i],
+    must: [/alimenta|saciedad|vertical|arroto|p[oó]s-?mamada|depois da mamada/i, /30 a 40 minutos/i],
+    mustNot: [/sonecas? curtas/i, /sequ[eê]ncia noturna/i, /sinais de saciedade no RN/i, /mau h[aá]bito/i, /sem evid[eê]ncia no relato|como hip[oó]tese, sem diagn[oó]stico/i, /[eé] (normal|comum) que .{0,140}acord(em|e) chorando/i, /como est[aá] o sono noturno/i, /essa situa[cç][aã]o [eé] comum/i, /dura[cç][aã]o da soneca da manh[aã]/i],
   },
   {
     id: '31d',
@@ -890,7 +1030,7 @@ const cases = [
     message:
       'Meu filho tem 31 dias, sempre fez as sonecas no berço, que duravam cerca de 2 hrs/ 2 hrs e 30. Mas faz 02 dias que ele tem feito uma soneca grande pela manha e, durante a tarde, as sonecas estao bem curtas. Um ciclo de sono. Ele desperta e eu ate tendo nina-lo no berço, mas ele nao retorna. Depois de 30 minutos ja esta com sono novamente. Outra questao eh que ele demora demais para iniciar a soneca. O ambiente esta ajustado, ele esta alimentado, tudo tranquilo, janela de sono del eh de 1 hr/1 hr 15, quando vai dando este horário, vou para o quarto; coloco ruido, quarto escuro, nino ele no colo e ainda acordado transfiro pro berço. Quando no berço, ele demora muuuito pra relaxar, quase 40/45 minutos.',
     must: [/45\s*min|vig[ií]lia|1h30|1h\s*30|fracion|1h15|1 hora e 15/i, /antecip/i],
-    mustNot: [/mamada noturna insuficiente|produ[cç][aã]o de leite durante a noite|mau h[aá]bito|caprichar nas mamadas.{0,40}relaxar|quanto tempo (ele|ela) (costuma )?permanecer acordad[oa] antes de iniciar|soneca longa pela manh[aã].{0,220}tempo total acordado que excede|observe os sinais de sono e inicie a condu|Isso pode ajudar a avaliar se (ele|ela) est[aá] se alimentando adequadamente/i],
+    mustNot: [/mamada noturna insuficiente|produ[cç][aã]o de leite durante a noite|mau h[aá]bito|caprichar nas mamadas.{0,40}relaxar|quanto tempo (ele|ela) (costuma )?permanecer acordad[oa] antes de iniciar|soneca longa pela manh[aã].{0,220}tempo total acordado que excede|observe os sinais de sono e inicie a condu|Isso pode ajudar a avaliar se (ele|ela) est[aá] se alimentando adequadamente|Isso ajudar[aá] a entender melhor a situa[cç][aã]o/i],
   },
   {
     id: '40d-bottle',
@@ -942,7 +1082,7 @@ const cases = [
     babyName: 'Pedro',
     message:
       'Meu bebê tem 1 mês e 19 dias, as sonecas duram uma média de 30 min, no máximo, em exceção, chega a durar 1h. No entanto, por vezes ele tem despertares durante as sonecas. Ele usa chupeta. Preciso ajustar algo?',
-    must: [/45\s*min|como.*(acorda|desperta)|vig[ií]lia|quando ela cai/i],
+    must: [/45\s*min|como (ele|ela|o beb[eê]) desperta das sonecas:|vig[ií]lia|quando ela cai/i],
     mustNot: [/m[ií]nimo de 4 a 5|30 a 40 minutos ap[oó]s todas|\b(e|eh|é)\s+(um\s+)?mau\s+h[aá]bito\b|principal hip[oó]tese.{0,80}chupeta|acordando irritad|ap[oó]s esse per[ií]odo.{0,30}est[aá] correto|chupeta tamb[eé]m pode influenciar os despertares/i],
   },
   {
@@ -953,7 +1093,7 @@ const cases = [
     message:
       'Minha neném 1 mês e 21 dias tem dificuldade de dormir durante o dia, só dorme se for no colo, e no peito, tento fazer a técnica do travesseiro, as vezes da certo e as vezes nao, quanto tempo pra ela aprender?',
     must: [/n[aã]o existe prazo|sem prazo fixo|n[aã]o h[aá] prazo|consist[eê]ncia|vig[ií]lia|45\s*min/i],
-    mustNot: [/\b(e|eh|é)\s+(um\s+)?mau\s+h[aá]bito\b|cerca de 10 minutos|em torno de 10 minutos|acostumad[oa]s? a dormir no colo|^[\s\S]{0,280}adapta[cç][aã]o ao ber[cç]o|mamada.{0,40}conforto.{0,80}interromper|apenas por conforto|ap[oó]s esse tempo.{0,40}mamada efetiva|^[\s\S]{0,220}[eé] (normal|comum) que.{0,90}(colo|peito)|fase [eé] de adapta[cç][aã]o/i],
+    mustNot: [/\b(e|eh|é)\s+(um\s+)?mau\s+h[aá]bito\b|cerca de 10 minutos|em torno de 10 minutos|acostumad[oa]s? a dormir no colo|^[\s\S]{0,280}adapta[cç][aã]o ao ber[cç]o|mamada.{0,40}conforto.{0,80}interromper|apenas por conforto|ap[oó]s esse (tempo|per[ií]odo).{0,80}mamada efetiva|^[\s\S]{0,220}[eé] (normal|comum) que.{0,90}(colo|peito)|fase [eé] de adapta[cç][aã]o/i],
     mustLessons: ['lesson-travesseiro'],
     mustNotLessons: ['lesson-ruido-branco'],
   },

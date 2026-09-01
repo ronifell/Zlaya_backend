@@ -239,6 +239,50 @@ export function applyRnIntentOverrides({ intent, message, ageDays }) {
   return { intent, override: null };
 }
 
+/**
+ * 30–60 only. TESTE 009 (30d): sonecas of ~1h+ with an angry wake that
+ * calms at the breast are alimentação/saciedade/desconforto — not sonecas_curtas.
+ * Does not change RN (0–28) or other 30–60 patterns (e.g. 49d 30-min naps).
+ */
+export function applyThirtySixtyIntentOverrides({ intent, message, ageDays }) {
+  const days = Number(ageDays);
+  if (!Number.isFinite(days) || days < 29 || days > 60) {
+    return { intent, override: null };
+  }
+  if (intent?.intent !== 'sonecas_curtas') return { intent, override: null };
+
+  const norm = normalize(message);
+  const adequateNap =
+    /sonecas?\s+de\s+1\s*h/.test(norm) ||
+    /1\s*h(?:ora)?\s+(?:as|às)\s+vezes\s+mais/.test(norm) ||
+    /1\s*hora ou (?:ate|até) mais/.test(norm);
+  const angryWake = /brav[oa]|irritad|chora bastante|acorda muito/.test(norm);
+  const calmsBreast =
+    /acalma.{0,40}(peito|mama)/.test(norm) ||
+    /so acalma/.test(norm) ||
+    /mama bem pouco e relaxa/.test(norm);
+  if (!(adequateNap && angryWake && calmsBreast)) {
+    return { intent, override: null };
+  }
+
+  return {
+    intent: {
+      ...intent,
+      intent: 'mamadas',
+      rationale:
+        (intent.rationale ? `${intent.rationale} | ` : '') +
+        'override_30_60: soneca de 1h+ com despertar irritado e alívio ao sugar — eixo alimentação/saciedade/desconforto, não soneca curta → mamadas',
+      source: `${intent.source || 'unknown'}+30_60_override`,
+      originalIntent: intent.intent,
+    },
+    override: {
+      from: 'sonecas_curtas',
+      to: 'mamadas',
+      reason: 'nap_angry_wake_not_short',
+    },
+  };
+}
+
 export function listIntents() {
   return intentsData.intents;
 }
