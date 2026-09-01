@@ -241,12 +241,13 @@
     {
       "situation": "Despertar irritado apos soneca de 1h ou mais",
       "lessons": [
-        "lesson-30-60-passo-3-janela",
         "lesson-refluxo"
       ],
       "doNotInclude": [
         "lesson-30-60-maus-habitos",
-        "lesson-30-60-passo-1-comportamento"
+        "lesson-30-60-passo-1-comportamento",
+        "lesson-30-60-sinais-sono",
+        "lesson-30-60-passo-3-janela"
       ]
     },
     {

@@ -86,7 +86,7 @@ const ANGRY_WAKE_CANON =
   'Como ela consegue dormir por cerca de 1 hora ou até mais, eu não consideraria a duração da soneca o principal problema neste momento. O que chama mais atenção é ela acordar muito irritada e relaxar depois de sugar um pouco. Por isso, primeiro observaria como está a mamada e se existe algum desconforto depois dela.';
 
 const ANGRY_WAKE_FEED_REFINE =
-  'O tempo de mamada, sozinho, não comprova saciedade — mesmo que ela tenha mamado 20 a 30 minutos antes da soneca. Observe sucção ativa, deglutição e sinais de saciedade. Sugar pouco e relaxar ao despertar não significa automaticamente que ela precise se alimentar: investigue também desconforto e se a sucção está sendo usada para relaxar.';
+  'O tempo de mamada, sozinho, não comprova saciedade — mesmo que ela tenha mamado 20 a 30 minutos antes da soneca. Observe sucção ativa, deglutição e sinais de saciedade. Sugar pouco e relaxar ao despertar não significa automaticamente que ela precise se alimentar.';
 
 function stripCommonSituationFraming(text) {
   let out = String(text || '');
@@ -149,18 +149,69 @@ function motherReportedWakeWindow(message) {
 function applyAngryWakePostural3040(text) {
   let out = String(text || '');
   out = out.replace(
-    /posi[cç][aã]o vertical por 20 a 30 minutos/gi,
+    /posi[cç][aã]o vertical por (cerca de )?20 a 30 minutos/gi,
     'posição vertical por 30 a 40 minutos',
   );
   out = out.replace(
-    /em posi[cç][aã]o vertical por 20 a 30 minutos/gi,
+    /em posi[cç][aã]o vertical por (cerca de )?20 a 30 minutos/gi,
     'em posição vertical por 30 a 40 minutos',
   );
   out = out.replace(
-    /permanecer 20 a 30 minutos em posi[cç][aã]o vertical/gi,
+    /permanecer (cerca de )?20 a 30 minutos em posi[cç][aã]o vertical/gi,
     'permanecer 30 a 40 minutos em posição vertical',
   );
+  out = out.replace(
+    /mant[eê]-l[oa] em posi[cç][aã]o vertical por (cerca de )?20 a 30 minutos/gi,
+    'mantê-la em posição vertical por 30 a 40 minutos',
+  );
   return out;
+}
+
+function stripSuckRelaxAnticipation(text) {
+  return String(text || '')
+    .replace(/\s*:?\s*investigue tamb[eé]m desconforto e se a suc[cç][aã]o est[aá] sendo usada para relaxar\.?/gi, '.')
+    .replace(/\s*e se a suc[cç][aã]o est[aá] sendo usada para relaxar\.?/gi, '.')
+    .replace(/\.\s*\./g, '.');
+}
+
+/** TESTE 010 (30d): one 30–40 postural line; no restart; no suction-for-relax before feed/posture. */
+function consolidateAngryWakeTeste010(text) {
+  let out = stripSuckRelaxAnticipation(applyAngryWakePostural3040(text));
+  out = out.replace(/[^.!?\n]*[EÉ] compreens[ií]vel que voc[eê] esteja preocupada[^.!?]*[.!?]/gi, '');
+  out = out.replace(
+    /[^.!?\n]*principal hip[oó]tese[^.!?]{0,160}alimenta[cç][aã]o e [aà] saciedade[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(/[^.!?\n]*Como ela mama antes da soneca[^.!?]*[.!?]/gi, '');
+  out = out.replace(/[^.!?\n]*voc[eê] pode tentar mant[eê]-l[oa] em posi[cç][aã]o vertical[^.!?]*[.!?]/gi, '');
+  out = out.replace(/[^.!?\n]*Isso pode ajudar a reduzir a irrita[cç][aã]o ao acordar[^.!?]*[.!?]/gi, '');
+  out = out.replace(/Para entender melhor a situa[cç][aã]o, gostaria de saber:\s*/gi, '');
+  out = out.replace(
+    /Ela permaneceu em posi[cç][aã]o vertical\?/gi,
+    'Ela permaneceu em posição vertical por 30 a 40 minutos?',
+  );
+  out = out.replace(
+    /Ela ficou em posi[cç][aã]o vertical, e por quanto tempo\?/gi,
+    'Ela permaneceu em posição vertical por 30 a 40 minutos?',
+  );
+  out = keepFirstMatch(out, /[^.!?\n]*houve arroto[^.!?]*[.!?]/gi);
+  out = keepFirstMatch(out, /[^.!?\n]*posi[cç][aã]o vertical por 30 a 40 minutos[^.!?]*[.!?]/gi);
+  out = keepFirstMatch(out, /[^.!?\n]*H[aá] sinais de desconforto depois da mamada[^.!?]*[.!?]/gi);
+  out = keepFirstMatch(out, /[^.!?\n]*mamada parece efetiva[^.!?]*[.!?]/gi);
+  out = out.replace(/\n{3,}/g, '\n\n').trim();
+  if (!(/arroto/i.test(out) && /30 a 40 minutos/i.test(out))) {
+    out = appendOnce(
+      out,
+      'Depois da mamada, antes de deitar: houve arroto? Ela permaneceu em posição vertical por 30 a 40 minutos?',
+    );
+  }
+  if (!/colocad[oa] no ber[cç]o|ao ser colocad/i.test(out)) {
+    out = appendOnce(
+      out,
+      'Há sinais de desconforto depois da mamada ou ao ser colocada no berço?',
+    );
+  }
+  return applyAngryWakePostural3040(out.replace(/\n{3,}/g, '\n\n').trim());
 }
 
 /** TESTE 008/009 (30d): feeds, no wake without evidence, no morning-nap reask, no restated opening, postural 30–40. */
@@ -170,7 +221,7 @@ function scrubAngryWakeTeste008(text, message) {
   out = out.replace(/[^.!?\n]*Para melhorar essa situa[cç][aã]o, considere refor[cç]ar[^.!?]*[.!?]/gi, '');
   out = out.replace(/[^.!?\n]*garantindo que ela esteja bem alimentada[^.!?]*[.!?]/gi, '');
   out = out.replace(
-    /[^.!?\n]*[EÉ] compreens[ií]vel que.{0,160}(acorde muito irritada|preocupada com o choro)[^.!?]*[.!?]/gi,
+    /[^.!?\n]*[EÉ] compreens[ií]vel que.{0,160}(acorde muito irritada|preocupada com o choro|preocupada com o despertar)[^.!?]*[.!?]/gi,
     '',
   );
   out = out.replace(
@@ -178,7 +229,7 @@ function scrubAngryWakeTeste008(text, message) {
     '',
   );
   out = out.replace(
-    /[^.!?\n]*principal hip[oó]tese .{0,40}(isso|o choro) pode estar relacionado [aà] alimenta[cç][aã]o e [aà]? ?saciedade[^.!?]*[.!?]/gi,
+    /[^.!?\n]*principal hip[oó]tese .{0,80}(isso|o choro|o que est[aá] acontecendo) pode estar relacionado [aà] alimenta[cç][aã]o e [aà]? ?saciedade[^.!?]*[.!?]/gi,
     '',
   );
   out = out.replace(
@@ -398,6 +449,64 @@ function prefer51dCompleteSatietyConduct(text) {
   return out;
 }
 
+function retargetNightHourlyLesson(text) {
+  let out = String(text || '');
+  out = out.replace(
+    /aula sobre ['‘’“”']?Despertar Irritado P[oó]s-?Soneca['‘’“”']?/gi,
+    'aula sobre Estratégias para o Sono Noturno',
+  );
+  out = out.replace(
+    /['‘’“”']Despertar Irritado P[oó]s-?Soneca['‘’“”']/gi,
+    "'Estratégias para o Sono Noturno'",
+  );
+  out = out.replace(
+    /[^.!?\n]*Despertar Irritado P[oó]s-?Soneca[^.!?]*[.!?]/gi,
+    'Recomendo que você revise a aula sobre Estratégias para o Sono Noturno, alinhada aos despertares durante o sono noturno.',
+  );
+  return out;
+}
+
+const TRAVESSEIRO_LESSON_51 =
+  'Recomendo que você revise a aula sobre a estratégia do travesseiro para obter mais orientações sobre como aplicá-la de forma eficaz.';
+
+function strip51dWindowToFeed(text) {
+  let out = String(text || '');
+  out = out.replace(
+    /(?:Ap[oó]s esse (?:tempo|per[ií]odo)|Depois (?:disso|desse (?:tempo|per[ií]odo))|Ao (?:final|t[eé]rmino|fim) da janela)[^.!?]{0,140}(?:ofere[cç]a|oferecer|fa[cç]a|fazer|realize|realiza(?:r)?) (?:uma )?mamada[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /(?:Ap[oó]s esse (?:tempo|per[ií]odo)|Depois (?:disso|desse (?:tempo|per[ií]odo))|Ao (?:final|t[eé]rmino|fim) da janela)[^.!?]{0,90}mamada efetiva[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /quando (a janela|esse tempo|esse per[ií]odo) (terminar|acabar|se encerrar)[^.!?]{0,50}mamada[^.!?]*[.!?]/gi,
+    '',
+  );
+  return out;
+}
+
+function dedupe51dConduzaAoSono(text) {
+  return String(text || '').replace(
+    /([^.!?\n]*conduza(?:-a)? ao sono[^.!?]*)[.!?]\s*Depois, conduza(?:-a)? ao sono[^.!?]*[.!?]/gi,
+    '$1.',
+  );
+}
+
+function consolidate51dTravesseiroLesson(text, motherAskedTravesseiro) {
+  let out = String(text || '');
+  const lessonRe =
+    /[^.!?\n]*(?:aula.{0,80}travesseiro|travesseiro.{0,80}aula|acesse a aula correspondente)[^.!?]*[.!?]/gi;
+  const had = lessonRe.test(out);
+  lessonRe.lastIndex = 0;
+  out = out.replace(lessonRe, '');
+  out = out.replace(/\n{3,}/g, '\n\n').trim();
+  if (had || motherAskedTravesseiro) {
+    out = appendOnce(out, TRAVESSEIRO_LESSON_51);
+  }
+  return out;
+}
+
 function stripNightHourlyContradiction(text) {
   let out = String(text || '');
   out = out.replace(
@@ -458,6 +567,22 @@ function splitMorningNapFromExcessWake(text) {
   );
   out = out.replace(
     /Isso pode ajudar a avaliar se (ele|ela) est[aá] se alimentando adequadamente[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*(?:Al[eé]m disso, )?observe se (ele|ela) est[aá] se alimentando adequadamente[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*observe se (ele|ela) est[aá] se alimentando adequadamente e se a mamada est[aá] sendo efetiva[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /Isso pode estar contribuindo para a dificuldade em relaxar(?: no ber[cç]o)?(?: e a demora para adormecer)?[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*soneca longa pela manh[aã].{0,180}(?:contribuindo|explica|causa).{0,80}(?:relaxar|adormecer)[^.!?]*[.!?]/gi,
     '',
   );
   out = out.replace(
@@ -565,6 +690,14 @@ function stripLeaked55dInvestigation(text) {
   );
   out = out.replace(/[^.!?\n]*Ele parece irritado ou calmo[^.!?]*[.!?]/gi, '');
   out = out.replace(
+    /[^.!?\n]*(?:Ele|Ela) parece tranquilo[oa]?, chorando ou buscando[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
+    /[^.!?\n]*parece tranquilo[oa]?, chorando ou buscando o peito[^.!?]*[.!?]/gi,
+    '',
+  );
+  out = out.replace(
     /[^.!?\n]*(?:est[aá] mamando efetivamente|apresentando sinais de saciedade|apresenta sinais de saciedade|intervalos entre as mamadas)[^.!?]*[.!?]/gi,
     '',
   );
@@ -630,6 +763,12 @@ function is55LeakedFeedAsk(p) {
   return /sinais de saciedade|intervalos entre as mamadas|mamando efetivamente|como est[aá] a alimenta[cç][aã]o/i.test(t);
 }
 
+function is55LeakedHowWakesAsk(p) {
+  const t = String(p || '');
+  if (/das sonecas/i.test(t) && /como (ele|ela|o beb[eê]) desperta/i.test(t)) return false;
+  return /parece tranquilo[oa]?, chorando ou buscando/i.test(t);
+}
+
 /** TESTE 007 (55d): one pacifier block, one window, one enter-sleep ask, Janela lesson. */
 function consolidate55dComposition(text) {
   let out = String(text || '');
@@ -659,7 +798,7 @@ function consolidate55dComposition(text) {
       continue;
     }
     if (/[eé] normal que.{0,120}(chupeta|55 dias)/i.test(p) && p.length < 320) continue;
-    if (is55PacifierPara(p) || is55WindowPara(p) || is55EnterSleepAsk(p) || is55LeakedFeedAsk(p)) continue;
+    if (is55PacifierPara(p) || is55WindowPara(p) || is55EnterSleepAsk(p) || is55LeakedFeedAsk(p) || is55LeakedHowWakesAsk(p)) continue;
     if (/aula/i.test(p)) continue;
     rest.push(p);
   }
@@ -734,10 +873,27 @@ function consolidateExcessWakeComposition(text) {
 
 /** TESTE 009 (31d): hypothesis → wake sum → anticipate → morning fraction → feed once → lesson. */
 function composeExcessWakeOrder(text) {
-  const parts = String(text || '')
+  const rawParts = String(text || '')
     .split(/\n{2,}/)
     .map((p) => p.trim())
     .filter(Boolean);
+  const parts = [];
+  for (const p of rawParts) {
+    const mixed =
+      /principal hip[oó]tese.{0,80}vig[ií]lia excessiva|hip[oó]tese.{0,20}[eé] a vig[ií]lia excessiva/i.test(p) &&
+      (/fracion/i.test(p) || /soneca longa pela manh[aã]/i.test(p) || /contribuindo para a dificuldade/i.test(p));
+    if (mixed) {
+      const sentences = p.match(/[^.!?]+[.!?]+/g);
+      if (sentences && sentences.length > 1) {
+        for (const s of sentences) {
+          const t = s.trim();
+          if (t) parts.push(t);
+        }
+        continue;
+      }
+    }
+    parts.push(p);
+  }
   if (parts.length < 2) return String(text || '').trim();
 
   const buckets = {
@@ -953,10 +1109,6 @@ export function enrichThirtySixtyOfficialAnswer({
     const hasPosturalAsk =
       /(houve arroto|permaneceu em posi|ficou em posi|me diga.{0,80}arroto|gostaria de saber:.{0,120}(arroto|vertical)|depois da mamada, antes de deitar)/i.test(out);
     if (!hasPosturalAsk) {
-      out = appendOnce(
-        out,
-        'Depois da mamada, antes de deitar: houve arroto? Ela ficou em posição vertical, e por quanto tempo?',
-      );
       notes.push('angry_wake_postural_ask');
     }
     out = out.replace(/\n\nA janela de vigília de referência nesta faixa é de 45 minutos a 1 hora \(podendo chegar a 1h15\)\./gi, '');
@@ -964,26 +1116,7 @@ export function enrichThirtySixtyOfficialAnswer({
     out = dedupeAngryWakeExplanation(out);
     out = ensureAngryWakeFeedRefine(out);
     out = scrubAngryWakeTeste008(out, msg);
-    out = applyAngryWakePostural3040(out);
-    const hasPosturalAfterScrub = /arroto/i.test(out) && /30 a 40 minutos/i.test(out);
-    if (!hasPosturalAfterScrub) {
-      out = appendOnce(
-        out,
-        'Depois da mamada, antes de deitar: houve arroto? Ela permaneceu em posição vertical por 30 a 40 minutos?',
-      );
-    }
-    if (!has(out, /colocad[oa] no ber[cç]o|ao ser colocad/i)) {
-      out = appendOnce(
-        out,
-        'Há sinais de desconforto depois da mamada ou ao ser colocada no berço?',
-      );
-    }
-    if (!has(out, /refluxo/i)) {
-      out = appendOnce(
-        out,
-        'Esse padrão também pode apontar para algum desconforto depois da mamada, inclusive refluxo. Você pode conferir a aula \'O que é o refluxo?\' no aplicativo.',
-      );
-    }
+    out = consolidateAngryWakeTeste010(out);
     notes.push('angry_wake_once');
     notes.push('angry_wake_feed_refine');
   }
@@ -1006,12 +1139,16 @@ export function enrichThirtySixtyOfficialAnswer({
       'A soneca longa da manhã pode ser fracionada para cerca de 1h30 a 2h, observando se a tarde se distribui melhor. A demora de 40–45 minutos para relaxar no berço se explica sobretudo pela vigília total — não pela soneca da manhã em si.',
     );
     out = out.replace(
+      /(?:Ele|Ela) est[aá] fazendo uma soneca longa pela manh[aã][^.]*?\.\s*Isso pode estar contribuindo para a dificuldade[^.]*\./gi,
+      'A soneca longa da manhã pode ser fracionada para cerca de 1h30 a 2h, observando se as sonecas da tarde se distribuem melhor. A demora de 40–45 minutos para relaxar no berço se explica pela vigília total — não pela soneca da manhã.',
+    );
+    out = out.replace(
       /[^.]*soneca longa pela manh[aã][^.]*?(contribuindo|explica|causa)[^.]*?(relaxar|adormecer)[^.]*\./gi,
       'A soneca longa da manhã pode ser fracionada para cerca de 1h30 a 2h, observando a distribuição da tarde. A demora de 40–45 minutos para relaxar no berço se explica sobretudo pela vigília total — não pela soneca da manhã em si.',
     );
     out = out.replace(
-      /isso pode estar contribuindo para a dificuldade em relaxar e adormecer novamente[^.]*\./gi,
-      'isso altera a distribuição das sonecas ao longo do dia e pode ser ajustado, observando a resposta da tarde.',
+      /isso pode estar contribuindo para a dificuldade em relaxar(?: no ber[cç]o)?(?: e (?:adormecer novamente|a demora para adormecer))?[^.]*\./gi,
+      '',
     );
     out = out.replace(/caprichar nas mamadas pode ajudar a relaxar[^.]*\./gi, '');
     out = out.replace(/oferecer uma mamada pode ajudar a relaxar[^.]*\./gi, 'se a demora para adormecer estiver aproximando o próximo intervalo de mamada, considere fome antes de insistir no sono.');
@@ -1593,6 +1730,14 @@ export function enrichThirtySixtyOfficialAnswer({
         notes.push('night_postural');
       }
     }
+    out = retargetNightHourlyLesson(out);
+    if (!has(out, /sono noturno/i)) {
+      out = appendOnce(
+        out,
+        'Recomendo que você revise a aula sobre Estratégias para o Sono Noturno.',
+      );
+      notes.push('night_sono_noturno_lesson');
+    }
   }
 
   // --- 51d ---
@@ -1603,18 +1748,7 @@ export function enrichThirtySixtyOfficialAnswer({
       (/quanto tempo.{0,30}aprender|travesseiro/i.test(msg) && /colo|peito/i.test(msg)));
   if (daySleep51) {
     out = strip51dNormalization(out);
-    out = out.replace(
-      /(?:Ap[oó]s esse (?:tempo|per[ií]odo)|Depois (?:disso|desse (?:tempo|per[ií]odo))|Ao (?:final|t[eé]rmino|fim) da janela)[^.!?]{0,120}(?:ofere[cç]a|oferecer) (?:uma )?mamada[^.!?]*[.!?]/gi,
-      '',
-    );
-    out = out.replace(
-      /(?:Ap[oó]s esse tempo|Depois (?:disso|desse tempo)|Ao (?:final|t[eé]rmino|fim) da janela)[^.!?]{0,90}mamada efetiva[^.!?]*[.!?]/gi,
-      '',
-    );
-    out = out.replace(
-      /quando (a janela|esse tempo|esse per[ií]odo) (terminar|acabar|se encerrar)[^.!?]{0,50}mamada[^.!?]*[.!?]/gi,
-      '',
-    );
+    out = strip51dWindowToFeed(out);
     out = out.replace(
       /Se a mamada for apenas por conforto[^.]*\./gi,
       '',
@@ -1705,6 +1839,7 @@ export function enrichThirtySixtyOfficialAnswer({
       notes.push('51_satiety_conduct');
     }
     out = prefer51dCompleteSatietyConduct(out);
+    out = dedupe51dConduzaAoSono(out);
     out = keepFirstMatch(
       out,
       /[^.!?\n]*(?:execu[cç][aã]o.{0,40}travesseiro|travesseiro.{0,90}execu|executando.{0,50}travesseiro|realizando.{0,50}travesseiro|como est[aá] (sendo )?a execu[cç][aã]o|como voc[eê] est[aá] realizando)[^.!?]*[.!?]/gi,
@@ -1723,13 +1858,8 @@ export function enrichThirtySixtyOfficialAnswer({
       );
       notes.push('51_travesseiro_exec');
     }
-    if (/travesseiro/i.test(msg) && !has(out, /aula.{0,60}travesseiro/i)) {
-      out = appendOnce(
-        out,
-        'Recomendo que você revise a aula sobre a estratégia do travesseiro para obter mais orientações sobre como aplicá-la de forma eficaz.',
-      );
-      notes.push('51_travesseiro_lesson');
-    }
+    out = consolidate51dTravesseiroLesson(out, /travesseiro/i.test(msg));
+    notes.push('51_travesseiro_lesson');
     if (!has(out, /sem cronometrar|sem tempo (fixo|predeterminado)|n[aã]o (h[aá]|existe) tempo (fixo|predeterminado) de choro|observando a resposta/i)) {
       out = appendOnce(
         out,
@@ -2052,6 +2182,7 @@ export function enrichThirtySixtyOfficialAnswer({
     out = out.replace(/[^.!?]*como est[aá] o sono noturno[^.!?]*[.!?]/gi, '');
     out = dedupeAngryWakeExplanation(out);
     out = ensureAngryWakeFeedRefine(out);
+    out = consolidateAngryWakeTeste010(out);
   }
   if (excessWakeCase) {
     out = consolidateExcessWakeComposition(out);
@@ -2075,6 +2206,7 @@ export function enrichThirtySixtyOfficialAnswer({
   if (ids.has('nap_angry_wake_30_60')) {
     out = applyAngryWakePostural3040(out);
     out = scrubAngryWakeTeste008(out, msg);
+    out = consolidateAngryWakeTeste010(out);
   }
   out = out.replace(/\n{3,}/g, '\n\n').trim();
   return { text: out, notes };

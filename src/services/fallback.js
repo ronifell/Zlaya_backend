@@ -140,7 +140,6 @@ const LESSON_SCENARIO_RULES = [
     signalIds: ['nap_angry_wake_30_60'],
     whitelist: [
       'lesson-refluxo',
-      'lesson-30-60-sinais-sono',
     ],
     blacklist: [
       'lesson-30-60-maus-habitos',
@@ -148,6 +147,7 @@ const LESSON_SCENARIO_RULES = [
       'lesson-30-60-passo-3-janela',
       'lesson-30-60-passo-4-rotina',
       'lesson-30-60-caso-cecilia',
+      'lesson-30-60-sinais-sono',
     ],
   },
   {
