@@ -167,7 +167,7 @@ Respeitar manter chupeta. Conduta: observar retomada (ela já relatou que às ve
     message:
       'Olá. Meu bb tem 40 dias , tem noites que ele dorme super bem acorda entre 2:30 a 3 hrs , só que tem dia que após as 04:00 da manhã ele acorda de 1 em 1 hrs tento fazer ele continuar a dormir no berço porém sem sucesso, aí pego ele fico ninando no colo sem sucesso, aí coloco ele no peito ele mama mesmo sabendo que não é fome, ele mama e dorme. Continuo assim por ele ainda ser novinho ?',
     dossierSummary: `Preserve “após as 4h da manhã” (não “após 4 horas de sono”).
-Fluxo: última mamada → rotina alimentar do dia + efetividade + saciedade → posturais/desconforto → se ~2h30–3h, mamada efetiva; se ainda não completou o intervalo, tentar conduzir sem oferecer o peito imediatamente.
+Fluxo: reconhecer o primeiro período prolongado (~3h/4h) → mamada efetiva + posturais → se despertar ~1h depois, reconduzir sem peito automático → próximo intervalo no peito 2h a 2h30 do INÍCIO da mamada (mamadeira 3h).
 NÃO usar 3h sozinho para evitar peito. NÃO dizer que investigar alimentação evita associação. NÃO começar por associação peito–sono. Sem frases truncadas.`,
     criteria: [
       { id: 'offer_if_due', w: 10, pass: (t) => /2h\s*30|2h30/i.test(t) && /mamada efetiva/i.test(t) },
