@@ -71,6 +71,18 @@ assert(
 const janelaChunk = chunks.chunks.find((c) => c.id === '30-60-chunk-janela-sono-sonecas');
 assert(janelaChunk && /45 minutos a 1 hora/i.test(janelaChunk.text), 'chunk janela text');
 assert(janelaChunk && /NAO imponha um minimo|NÃO imponha um mínimo/i.test(janelaChunk.text), 'chunk rejects min naps mandate');
+assert(janelaChunk && /NAO permita soneca diurna de ate 3 horas/i.test(janelaChunk.text), 'chunk janela rejects 3h nap');
+assert(janelaChunk && /10 a 15 min/i.test(janelaChunk.text), 'chunk janela micro-nap reconduce');
+
+const ceciliaChunk = chunks.chunks.find((c) => c.id === '30-60-chunk-caso-cecilia');
+assert(
+  ceciliaChunk && !ceciliaChunk.intent.includes('dificuldade_para_dormir') && !ceciliaChunk.intent.includes('adaptacao_ao_berco'),
+  'chunk cecilia not auto-retrieved on ordinary day-sleep difficulty',
+);
+const refluxChunk = chunks.chunks.find((c) => c.id === '30-60-chunk-refluxo-oculto-aplv-60d');
+assert(refluxChunk && /ronquinho/i.test(refluxChunk.text), 'chunk reflux includes ronquinho');
+const acalmarChunk = chunks.chunks.find((c) => c.id === '30-60-chunk-acalmar-uma-posicao');
+assert(acalmarChunk && /a cada 30 segundos/i.test(acalmarChunk.text), 'chunk acalmar 30s');
 
 const prompt = buildSystemPrompt({
   namespace: '30_60',
@@ -139,6 +151,15 @@ assert(/N[AÃ]O some 10 a 20 minutos extras/i.test(prompt), 'prompt: 05/09 no ex
 assert(/2 a 5 minutos/i.test(prompt), 'prompt: 05/09 pacifier wait 2–5 min');
 assert(/80 cm/i.test(prompt), 'prompt: 05/09 white noise 80 cm');
 assert(/24\s*°C|24 °C|24°C/i.test(prompt), 'prompt: 05/09 room ~24°C');
+assert(/IDENTIFICAR O PROBLEMA/i.test(prompt), 'prompt: 05/09 reasoning sequence');
+assert(/regras oficiais vigentes prevalecem/i.test(prompt), 'prompt: protocol authority over old aulas');
+assert(/efeito vulc/i.test(prompt), 'prompt: no efeito vulcânico');
+assert(/ronquinho/i.test(prompt), 'prompt: reflux ronquinho');
+assert(/a cada 30 segundos/i.test(prompt), 'prompt: acalmar 30s');
+assert(/ENCERR/i.test(prompt) && /[uú]ltima soneca/i.test(prompt), 'prompt: 6.12 last nap');
+assert(/90 a 150/i.test(prompt), 'prompt: no 90–150 ml');
+assert(/charutinho/i.test(prompt), 'prompt: do not import RN charutinho');
+assert(/N[AÃ]O 3 horas/i.test(prompt), 'prompt: nap cap not 3h');
 
 const sig48 = extractSignals({
   message: 'Bebê de 48 dias. Estou começando a rotina do sono dela umas 18:30, até 20 horas está dormindo. transferir pro berço em sono profundo ou com os olhos abertos para criar autonomia',
@@ -357,6 +378,31 @@ assert(
 assert(
   rules.fixedRules.some((r) => /UMA vez so|UMA unica orientacao/i.test(r.rule) && /21h30/i.test(r.rule)),
   'rule: TESTE 006 21h30 once',
+);
+
+assert(
+  forbidden.forbiddenTerms.some((t) => /efeito vulc/i.test(t)),
+  'forbidden term: efeito vulcânico',
+);
+assert(
+  forbidden.forbiddenInterpretations.some((x) => /90 a 150 ml/i.test(x)),
+  'forbidden: no 90–150 ml',
+);
+assert(
+  forbidden.forbiddenInterpretations.some((x) => /charutinho/i.test(x)),
+  'forbidden: no RN charutinho import',
+);
+assert(
+  rules.fixedRules.some((r) => /IDENTIFICAR O PROBLEMA/i.test(r.rule)),
+  'rule: 05/09 reasoning sequence',
+);
+assert(
+  rules.fixedRules.some((r) => /ronquinho/i.test(r.rule)),
+  'rule: reflux ronquinho',
+);
+assert(
+  rules.fixedRules.some((r) => /a cada 30 segundos/i.test(r.rule)),
+  'rule: acalmar 30s',
 );
 
 function countAngryWakeParas(text) {

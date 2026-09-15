@@ -83,7 +83,7 @@
       "safetyLevel": "verde",
       "contentType": "conduta_pratica_oficial",
       "allowedAction": "orientar uma posicao firme, ruido branco, banho morno; sem cronometrar choro",
-      "blockedAction": "mudar de posicao a cada poucos segundos; deixar chorar sozinho; cronometrar choro na Educacao de Sono / Travesseiro",
+      "blockedAction": "mudar de posicao a cada 30 segundos; deixar chorar sozinho; cronometrar choro na Educacao de Sono / Travesseiro",
       "relatedLessons": [
         "lesson-30-60-passo-2-estimulos",
         "lesson-ruido-branco"
@@ -92,7 +92,7 @@
         "o que a familia fez para acalmar",
         "quantos colos/mudancas de posicao"
       ],
-      "text": "Quando o bebe de 30-60 dias esta muito irritado: evite varios colos; NAO mude de posicao a cada poucos segundos; segure em UMA posicao firme, passando controle e seguranca. Na Educacao de Sono / Travesseiro, NAO cronometre o choro. Na crise de choro intenso e prolongado por excesso de estimulos: ambiente mais tranquilo, uma posicao, aguardar cerca de 5 a 10 minutos, banho morno, boa mamada/mamadeira nesse contexto, ruido branco; se quem conduz estiver impaciente, passar a outro cuidador. NAO concluir automaticamente que e colica (colicas reais ~1 a 3%). Isso NAO e deixar chorar sozinho."
+      "text": "Quando o bebe de 30-60 dias esta muito irritado: evite varios colos; NAO mude de posicao a cada 30 segundos; segure em UMA posicao firme, passando controle e seguranca. Na Educacao de Sono / Travesseiro, NAO cronometre o choro. Na crise de choro intenso e prolongado por excesso de estimulos: ambiente mais tranquilo, uma posicao, aguardar cerca de 5 a 10 minutos, banho morno, boa mamada/mamadeira nesse contexto, ruido branco; se quem conduz estiver impaciente, passar a outro cuidador. NAO concluir automaticamente que e colica (colicas reais ~1 a 3%). Isso NAO e deixar chorar sozinho."
     },
     {
       "id": "30-60-chunk-janela-sono-sonecas",
@@ -121,7 +121,7 @@
         "duracao tipica de cada soneca",
         "qualidade do sono noturno"
       ],
-      "text": "Entre 30 e 60 dias, a janela de vigilia de referencia e de 45 minutos a 1 hora e 15 minutos. Essa referencia vai do despertar ate o bebe EFETIVAMENTE adormecer de novo — o tempo de conducao faz parte da janela. Inicie a conducao ANTES do limite; NAO some 10 a 20 minutos extras. Variacao de cerca de 10 minutos para mais ou para menos NAO e automaticamente inadequacao. Nao tente determinar o tempo exato de cada soneca. Como referencia (NAO obrigacao): ~5 a 6 sonecas aos 30 dias e ~4 a 6 aos 60 dias, conforme a duracao; NAO imponha um minimo de 4 a 5 sonecas nem avalie o numero isolado. Equilibrio dia/noite: se dorme muito bem a noite, sonecas diurnas podem ser em menor quantidade ou mais curtas; se dorme muito de dia, pode faltar sono a noite. NUNCA deixe uma soneca passar de 2 horas a no maximo 2 horas e 30 minutos: ao atingir 2h30, acorde. Soneca de cerca de 1 hora (ou mais) NAO deve ser chamada de soneca curta. A duracao conta a partir do momento em que adormeceu, inclusive durante as medidas posturais."
+      "text": "Entre 30 e 60 dias, a janela de vigilia de referencia e de 45 minutos a 1 hora e 15 minutos. Essa referencia vai do despertar ate o bebe EFETIVAMENTE adormecer de novo — o tempo de conducao faz parte da janela. Inicie a conducao ANTES do limite; NAO some 10 a 20 minutos extras. Variacao de cerca de 10 minutos para mais ou para menos NAO e automaticamente inadequacao. Nao tente determinar o tempo exato de cada soneca. Como referencia (NAO obrigacao): ~5 a 6 sonecas aos 30 dias e ~4 a 6 aos 60 dias, conforme a duracao; NAO imponha um minimo de 4 a 5 sonecas nem avalie o numero isolado. Equilibrio dia/noite: se dorme muito bem a noite, sonecas diurnas podem ser em menor quantidade ou mais curtas; se dorme muito de dia, pode faltar sono a noite. NUNCA deixe uma soneca passar de 2 horas a no maximo 2 horas e 30 minutos: ao atingir 2h30, acorde. NAO permita soneca diurna de ate 3 horas. Soneca de cerca de 1 hora (ou mais) NAO deve ser chamada de soneca curta. Soneca muito breve (~10 a 15 min): se ainda cansado, tente reconduzir, sem insistencia prolongada. A duracao conta a partir do momento em que adormeceu, inclusive durante as medidas posturais. Se a ultima soneca avancar a ponto de comprometer o inicio da noite, a orientacao preferencial e encerra-la, preservando a ultima janela e o inicio organizado do sono noturno."
     },
     {
       "id": "30-60-chunk-rotina-janelas",
@@ -216,7 +216,7 @@
         "irritabilidade persistente",
         "padrão de fezes/sangue"
       ],
-      "text": "A Zlaya NÃO diagnostica refluxo patológico, APLV ou outra condição clínica. Diante de suspeita SEM sinal de alerta, direcione para as DUAS AULAS COM PEDIATRA do curso para reconhecer sintomas. Se a mãe identificar TRÊS OU MAIS sintomas, oriente suporte humano no aplicativo E pediatra. Apatia com pouca disposição para mamar, sucção fraca, dificuldade incomum para despertar ou queda de responsividade é SINAL DE ALERTA: avaliação pediátrica DIRETA, sem esperar três sintomas. Mamada rápida isolada, com sucção efetiva, deglutição, saciedade e conforto, NÃO é saciedade precoce nem sinal de refluxo/APLV. Preferência por sling/vertical, isolada, NÃO basta. Ao completar cerca de 60 dias, observar refluxo oculto (sem vômito) e APLV. Aulas do app NÃO substituem avaliação pediátrica quando houver indicação."
+      "text": "A Zlaya NÃO diagnostica refluxo patológico, APLV ou outra condição clínica. Diante de suspeita SEM sinal de alerta, direcione para as DUAS AULAS COM PEDIATRA do curso para reconhecer sintomas. Se a mãe identificar TRÊS OU MAIS sintomas, oriente suporte humano no aplicativo E pediatra. Apatia com pouca disposição para mamar, sucção fraca, dificuldade incomum para despertar ou queda de responsividade é SINAL DE ALERTA: avaliação pediátrica DIRETA, sem esperar três sintomas. Entre os sinais a investigar (sem diagnóstico) está o barulho recorrente semelhante a ronquinho na garganta ou no esôfago, sobretudo quando persiste mesmo distante da mamada. Mamada rápida isolada, com sucção efetiva, deglutição, saciedade e conforto, NÃO é saciedade precoce nem sinal de refluxo/APLV. Preferência por sling/vertical, isolada, NÃO basta. Ao completar cerca de 60 dias, observar refluxo oculto (sem vômito) e APLV. Aulas do app NÃO substituem avaliação pediátrica quando houver indicação."
     },
     {
       "id": "30-60-chunk-sinais-de-sono",
@@ -389,15 +389,14 @@
         "sinais de saciedade?",
         "tempo de vigilia?"
       ],
-      "text": "Se o bebe parece so dormir no peito: ANTES de qualquer leitura comportamental, verifique se ha mamada efetiva e sinais de saciedade. Com boa producao, cerca de 20 minutos costumam alimentar quando ha retirada efetiva. NAO use 'mamada por conforto' isoladamente para interromper o peito nem substituir a succao por contencao e ruido branco. Diferencie: ainda esta com fome; fez mamada efetiva e ficou saciada; ou ja saciada permanece sugando enquanto adormece. So depois dessa leitura avalie a forma de adormecer. Sem rotular como mau habito nesta faixa (0 a 3 meses)."
+      "text": "Se o bebe parece so dormir no peito: ANTES de qualquer leitura comportamental, verifique se ha mamada efetiva e sinais de saciedade. O tempo isolado NAO determina mamada efetiva: cerca de 20 minutos podem coincidir com uma mamada completa quando ha succao ativa, degluticao e retirada efetiva, mas mamadas mais curtas ou ~30 min tambem ocorrem. NAO trate 20 minutos como prova automatica de alimentacao. NAO use 'mamada por conforto' isoladamente para interromper o peito nem substituir a succao por contencao e ruido branco. Diferencie: ainda esta com fome; fez mamada efetiva e ficou saciada; ou ja saciada permanece sugando enquanto adormece. So depois dessa leitura avalie a forma de adormecer. Sem rotular como mau habito nesta faixa (0 a 3 meses)."
     },
     {
       "id": "30-60-chunk-caso-cecilia",
       "namespace": "30_60",
       "theme": "caso_extremo_conducao",
       "intent": [
-        "dificuldade_para_dormir",
-        "adaptacao_ao_berco"
+        "caso_extremo"
       ],
       "ageBand": "30_60",
       "ageRangeDays": [
@@ -406,8 +405,8 @@
       ],
       "safetyLevel": "amarelo",
       "contentType": "orientacao_pratica",
-      "allowedAction": "ilustrar que padroes extremos sao aprendidos e reversiveis com conducao consistente, sem rotulo mau habito",
-      "blockedAction": "sugerir problema neurologico; deixar chorar sozinho; usar mau habito como rotulo automatico",
+      "allowedAction": "ilustrar SOMENTE padrao extremo de balanco forte/rede; nao usar em dificuldade ordinaria de dia",
+      "blockedAction": "usar Caso Cecilia como exemplo padrao de dificuldade para dormir de dia no colo/peito; sugerir problema neurologico; deixar chorar sozinho; usar mau habito como rotulo automatico",
       "relatedLessons": [
         "lesson-30-60-passo-3-janela",
         "lesson-travesseiro"
@@ -420,7 +419,7 @@
         "ha quanto tempo?",
         "vigilia e alimentacao estao organizadas?"
       ],
-      "text": "O Caso Cecilia ilustra um extremo por volta de 2 meses: so dormia com balanco forte na rede. Nao havia doenca — era padrao de conducao aprendido + temperamento. A mudanca veio de nao repetir o padrao, com contencao, paciencia e consistencia, ate dormir no berco. Em casos extremos ou familia muito abalada, encaminhar suporte humano. Mesmo em extremos, na faixa 0-3 meses evite o rotulo mau habito; foque na conducao e na organizacao de vigilia/alimentacao/sono."
+      "text": "O Caso Cecilia e ilustracao de EXTREMO (por volta de 2 meses: so dormia com balanco forte na rede). NAO use este caso como exemplo padrao de dificuldade ordinaria para dormir de dia no colo ou no peito. Nao havia doenca — era padrao de conducao aprendido + temperamento. A mudanca veio de nao repetir o padrao, com contencao, paciencia e consistencia, ate dormir no berco. Em casos extremos ou familia muito abalada, encaminhar suporte humano. Mesmo em extremos, na faixa 0-3 meses evite o rotulo mau habito; foque na conducao e na organizacao de vigilia/alimentacao/sono."
     },
     {
       "id": "30-60-chunk-adaptar-fora-colo",
@@ -590,7 +589,7 @@
         "a que horas termina a ultima soneca",
         "ha quanto tempo o bebe esta acordado quando tenta iniciar a noite"
       ],
-      "text": "Entre 30 e 60 dias, o horario saudavel de REFERENCIA para o INICIO do sono noturno e 19h a 20h — NAO usar de maneira rigida. Considere quando o dia comecou, as sonecas, o fim da ultima soneca, a ultima janela e o comportamento. Quem inicia o dia muito cedo pode iniciar a noite mais cedo. NAO mantenha o bebe artificialmente acordado so para alcancar 19h. Se a mae ja inicia as 21h, diga que 21h TAMBEM ja esta alem da referencia geral. Iniciar habitualmente 21h30 ou 22h NAO e recomendacao geral. EXCECAO proxima aos 60 dias: se entra em sono espontaneamente perto das 22h, sem irritabilidade nem choro de cansaco, sem exigir colo o tempo todo e tranquilo, NAO force 19h-20h; mantenha iluminacao normal — NAO escureca antecipadamente. Ritual: quarto, banho, mamada APOS o banho, arroto e posturais, berco. Escuro total DEPOIS de colocado no berco. O banho as 21h30 NAO e recomendado quando atrasa a noite. Diga 21h30 UMA vez. NAO escreva 'e O banho'. Investigue ultima soneca e vigilia UMA vez. NAO mande revisar genericamente os modulos 3 e 4."
+      "text": "Entre 30 e 60 dias, o horario saudavel de REFERENCIA para o INICIO do sono noturno e 19h a 20h — NAO usar de maneira rigida. Considere quando o dia comecou, as sonecas, o fim da ultima soneca, a ultima janela e o comportamento. Quem inicia o dia muito cedo pode iniciar a noite mais cedo. NAO mantenha o bebe artificialmente acordado so para alcancar 19h. Se a mae ja inicia as 21h, diga que 21h TAMBEM ja esta alem da referencia geral. Iniciar habitualmente 21h30 ou 22h NAO e recomendacao geral. EXCECAO proxima aos 60 dias: se entra em sono espontaneamente perto das 22h, sem irritabilidade nem choro de cansaco, sem exigir colo o tempo todo e tranquilo, NAO force 19h-20h; mantenha iluminacao normal — NAO escureca antecipadamente. Ritual: quarto, banho, mamada APOS o banho, arroto e posturais, berco. Escuro total DEPOIS de colocado no berco. O banho as 21h30 NAO e recomendado quando atrasa a noite. Diga 21h30 UMA vez. NAO escreva 'e O banho'. Investigue ultima soneca e vigilia UMA vez. Se a ultima soneca avancar a ponto de comprometer o inicio da noite, a orientacao preferencial e ENCERRAR essa soneca, preservando a ultima janela e o inicio organizado. NAO mande revisar genericamente os modulos 3 e 4."
     },
     {
       "namespace": "30_60",
@@ -613,7 +612,7 @@
         "lesson-30-60-volta-trabalho"
       ],
       "askIfMissing": [],
-      "text": "Por volta dos 40 dias (segundo mes), a amamentacao pode durar cerca de 20 minutos, podendo ser mais curta ou chegar a aproximadamente 30 minutos. O tempo isoladamente nao determina o termino da mamada. O parametro e verificar se houve retirada efetiva de leite e se a bebe apresenta sinais de saciedade. NAO introduza leitura comportamental da succao quando a duvida da mae e apenas duracao e volume. NAO introduza o conceito de habito a corrigir nesta faixa. Para mamadeira de aprendizado no segundo mes, a referencia do Metodo e aproximadamente 120 ml (cerca de 90 ml no primeiro mes) — informe o volume UMA vez, ja com o contexto da idade. A mamadeira de aprendizado tem finalidade de ensino da succao — explique o objetivo, sem garantir ausencia de desmame ou confusao de bico. NAO gere frases truncadas. Se duracao e volume ja foram respondidos e nao ha sinal de problema, nao faca perguntas complementares. Indique apenas o conteudo de preparacao/volta ao trabalho e mamadeira."
+      "text": "Por volta dos 40 dias (segundo mes), a amamentacao pode durar cerca de 20 minutos, podendo ser mais curta ou chegar a aproximadamente 30 minutos. O tempo isoladamente nao determina o termino da mamada. O parametro e verificar se houve retirada efetiva de leite e se a bebe apresenta sinais de saciedade. NAO introduza leitura comportamental da succao quando a duvida da mae e apenas duracao e volume. NAO introduza o conceito de habito a corrigir nesta faixa. Para mamadeira de aprendizado no segundo mes, a referencia do Metodo e aproximadamente 120 ml (cerca de 90 ml no primeiro mes) — informe o volume UMA vez, ja com o contexto da idade. NAO oriente 90 a 150 ml; a referencia geral da faixa e 90 a 120 ml. A mamadeira de aprendizado tem finalidade de ensino da succao — explique o objetivo, sem garantir ausencia de desmame ou confusao de bico. NAO gere frases truncadas. Se duracao e volume ja foram respondidos e nao ha sinal de problema, nao faca perguntas complementares. Indique apenas o conteudo de preparacao/volta ao trabalho e mamadeira."
     },
     {
       "namespace": "30_60",

@@ -31,6 +31,12 @@ export async function retrieve({ query, namespace, intent, boostThemes = [] }) {
   const themeSet = new Set(boostThemes || []);
   const THEME_BOOST_PER_MATCH = 0.08;
   const THEME_BOOST_CAP = 0.16;
+  const nsKey = String(namespace || '').toUpperCase();
+  const queryNorm = String(query || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+  const extremeCeciliaCue = /cecilia|balanco forte|rede/.test(queryNorm);
 
   // Reranking: similarity base + intent-match boost + signal/theme boost.
   const reranked = candidates.map((c) => {
@@ -48,7 +54,12 @@ export async function retrieve({ query, namespace, intent, boostThemes = [] }) {
   });
 
   reranked.sort((a, b) => b.rerankScore - a.rerankScore);
-  const top = reranked.slice(0, config.retrieval.rerankK);
+  let usable = reranked;
+  if (nsKey === '30_60' && !extremeCeciliaCue) {
+    const withoutCecilia = reranked.filter((c) => c.chunk.id !== '30-60-chunk-caso-cecilia');
+    if (withoutCecilia.length > 0) usable = withoutCecilia;
+  }
+  const top = usable.slice(0, config.retrieval.rerankK);
 
   // Filter out anything clearly below the similarity floor.
   const aboveFloor = top.filter((t) => t.similarity >= config.retrieval.minSimilarity);

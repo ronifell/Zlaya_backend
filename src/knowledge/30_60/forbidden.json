@@ -28,6 +28,7 @@
     "cluster feeding",
     "cluster",
     "autorregulação",
+    "efeito vulcânico",
     "vício na chupeta",
     "vício no peito",
     "vício do peito",
@@ -172,7 +173,13 @@
     "fazer duas perguntas sobre o tempo para entrar em sono apos iniciar a conducao",
     "substituir a aula de Janela de Vigilia por Sinais de Sono quando a duvida principal e a janela habitual acima de 1h15",
     "normalizar automaticamente a dificuldade de um bebe de 30-60 dias que so consegue dormir no colo ou no peito como caracteristica da idade ou fase de adaptacao",
-    "indicar ruido branco sem relacao demonstrada com a dificuldade de dormir de dia no colo/peito"
+    "indicar ruido branco sem relacao demonstrada com a dificuldade de dormir de dia no colo/peito",
+    "usar a expressao efeito vulcanico (nesta faixa: excesso de estimulos e perda da janela)",
+    "orientar 90 a 150 ml como volume da mamadeira nesta faixa (referencia 90 a 120 ml)",
+    "permitir soneca diurna de ate 3 horas nesta faixa (teto 2h a no maximo 2h30)",
+    "descrever a janela de vigilia como apenas cerca de 60 minutos",
+    "importar charutinho do RN como conduta padrao desta faixa",
+    "usar Caso Cecilia como exemplo padrao de dificuldade ordinaria para dormir de dia"
   ],
   "languageRules": {
     "forbidden": [
