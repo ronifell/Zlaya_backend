@@ -69,7 +69,7 @@ Para mais informações sobre a adaptação ao berço, você pode conferir a aul
       { id: 'travesseiro_aula', w: 15, pass: (t) => /aula.{0,80}travesseiro/i.test(t) },
       { id: 'keep_travesseiro', w: 10, pass: (t) => /estrat[eé]gia do travesseiro/i.test(t) },
       { id: 'no_transicao_generica', w: 10, pass: (t) => !/ajudar na transi[cç][aã]o/i.test(t) },
-      { id: 'travesseiro_purpose', w: 10, pass: (t) => /tamb[eé]m pode ajudar na condu[cç][aã]o e na coloca[cç][aã]o do beb[eê] no ber[cç]o/i.test(t) && /seguran[cç]a/i.test(t) },
+      { id: 'travesseiro_purpose', w: 10, pass: (t) => /tamb[eé]m pode ajudar na condu[cç][aã]o e na coloca[cç][aã]o do beb[eê] no ber[cç]o/i.test(t) && !/dando mais seguran[cç]a/i.test(t) },
       { id: 'aula_once', w: 10, pass: (t) => ((t.match(/aula.{0,80}(travesseiro|estrat[eé]gia)|aula correspondente|confira a aula|assista [àa] aula|revise a aula/gi) || []).length <= 1) },
     ],
   },

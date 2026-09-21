@@ -96,6 +96,13 @@ const unitCases = [
     keepPhrases: ['5 dias'],
     expectNoCorrections: true,
   },
+  {
+    name: '53d profile, official jejum anchors "aos 30 dias" / "aos 60 dias" must stay',
+    ageDays: 53,
+    input: 'O jejum noturno é cerca de 3 horas aos 30 dias, aumentando até cerca de 5 horas aos 60 dias.',
+    keepPhrases: ['aos 30 dias', 'aos 60 dias'],
+    expectNoCorrections: true,
+  },
 ];
 
 let pass = 0;

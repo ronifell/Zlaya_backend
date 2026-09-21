@@ -158,6 +158,11 @@ export function checkAgeConsistency({ text, ageDays }) {
     if (lo > 60) continue;
     // Method age-band labels ("30 a 60 dias", "0–28 dias") are not the baby's age.
     if (isMethodAgeBand(lo, hi)) continue;
+    // Official 30–60 rules use "aos 30 dias" / "aos 60 dias" as jejum/nap anchors.
+    if (ageDays >= 29 && ageDays <= 60 && lo === hi && (lo === 30 || lo === 60)) {
+      const before = norm.slice(Math.max(0, m.index - 16), m.index);
+      if (!/bebe de\s*$|com\s*$/i.test(before)) continue;
+    }
     if (ageDays < lo || ageDays > hi) {
       violations.push({
         term: `idade citada "${m[0].trim()}" diverge do perfil (${ageDays} dias)`,
@@ -1258,6 +1263,11 @@ export function correctAgeMentions({ text, ageDays }) {
     const n = Number(numStr);
     if (!Number.isFinite(n) || n < 0 || n > 60) return match;
     if (n === ageDays) return match;
+    // 30–60 official rules use 30 and 60 as anchors (jejum, nap count).
+    // Do not rewrite "aos 30 dias" / "aos 60 dias" to the profile age.
+    if (ageDays >= 29 && (n === 30 || n === 60) && !/beb[eê] de\s*$|com\s*$/i.test(before)) {
+      return match;
+    }
     corrections.push({ before: match.trim(), after: `${ageDays} dias`, kind: 'numeric_days' });
     return `${ageDays} dias`;
   });
@@ -2064,7 +2074,7 @@ export function detectClinicalRedFlags({ text, namespace }) {
     'perda de peso ou baixa evolução ponderal': ['perda de peso', 'nao ganha peso', 'emagreceu', 'perdeu peso'],
     'vômitos em jato persistentes': ['vomito em jato', 'vômito em jato', 'vomita tudo', 'vomito persistente'],
     'sangue nas fezes': ['sangue nas fezes', 'fezes com sangue'],
-    'febre': ['febre', 'temperatura alta', '38', '37.8', '37,8'],
+    'febre': ['febre', 'temperatura alta', '38 graus', '38°', '38c', '38 c', '37.8', '37,8'],
     'letargia importante / dificuldade de despertar para alimentar': ['letarg', 'nao acorda', 'dificil de acordar', 'dificuldade de despertar', 'sonolencia excessiva'],
     'recusa alimentar persistente': ['recusa alimentar', 'recusa o peito', 'nao quer mamar'],
     'sinais de desidratação (fralda seca por mais de 6h, fontanela afundada)': ['fralda seca', 'fontanela afundada', 'desidrata'],

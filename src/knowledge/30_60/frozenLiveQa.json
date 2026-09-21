@@ -1,0 +1,127 @@
+{
+  "id": "frozen-live-qa-round8",
+  "description": "Repeatable 30–60 live exam. Same 24 questions until every case is ≥ 9.5. Do not synonym-swap.",
+  "source": "QA_result.md at end of round 8",
+  "cases": [
+    {
+      "id": 1,
+      "ageDays": 33,
+      "question": "Meu bebê tem 33 dias. As sonecas ficam em 26 a 32 minutos. Ele usa chupeta e às vezes acorda no meio. Se acordar calmo, eu reconduzo ou já começo outra janela?"
+    },
+    {
+      "id": 2,
+      "ageDays": 40,
+      "question": "Ele tem 40 dias. Fica uns 48 minutos acordado e, no sling, ainda leva 36 a 40 minutos para adormecer. Chora bastante até dormir. O sling é o que mais funciona. Isso está dentro da janela?"
+    },
+    {
+      "id": 3,
+      "ageDays": 37,
+      "question": "Meu bebê tem 37 dias. Preciso tirá-lo para não passar das 9h. É regra ele estar acordado nesse horário?"
+    },
+    {
+      "id": 4,
+      "ageDays": 40,
+      "question": "Ele tem 40 dias. Dorme cerca de 1h12 e acorda muito bravo, com bastante choro. Mama um pouco e relaxa. O que investigo primeiro?"
+    },
+    {
+      "id": 5,
+      "ageDays": 43,
+      "question": "Meu bebê tem 43 dias. Faz poucas sonecas. Uma soneca de 3h25 foi das 10h20 às 13h45. Como organizo o dia? Às 21h10 ainda está acordado."
+    },
+    {
+      "id": 6,
+      "ageDays": 40,
+      "question": "Ele tem 40 dias. Fica com sono uns 18 minutos antes da próxima mamada. Deixo dormir ou adianto a mamada?"
+    },
+    {
+      "id": 7,
+      "ageDays": 47,
+      "question": "Meu bebê tem 47 dias. O banho é às 20h20 e ele só dorme perto das 21h35. O ritual pode começar nesse horário?"
+    },
+    {
+      "id": 8,
+      "ageDays": 51,
+      "question": "Ele tem 51 dias. Depois das 2h40 passa a ter sono mais leve e acorda. Aceita o peito. Ofereço toda vez?"
+    },
+    {
+      "id": 9,
+      "ageDays": 40,
+      "question": "Meu bebê tem 40 dias. Mamou, ficou uns 18 minutos em pé no colo e ainda está acordado. Posso brincar ou já conduzo o sono?"
+    },
+    {
+      "id": 10,
+      "ageDays": 44,
+      "question": "Ele tem 44 dias. Só dorme no charutinho. A mamada durou 14 minutos. O charutinho é o problema?"
+    },
+    {
+      "id": 11,
+      "ageDays": 40,
+      "question": "Meu bebê tem 40 dias. Ficou 13 minutos no peito e depois tomou 105 ml de fórmula. Esse tempo e esse volume estão adequados?"
+    },
+    {
+      "id": 12,
+      "ageDays": 37,
+      "question": "Ele tem 37 dias. Fica 1h12 acordado e ainda leva uns 32 minutos para dormir. De manhã a soneca é longa. Fraciono essa soneca?"
+    },
+    {
+      "id": 13,
+      "ageDays": 49,
+      "question": "Meu bebê tem 49 dias. Só dorme no colo ou no peito. Já uso o travesseiro. Em quanto tempo ele aprende? Posso passar todas as sonecas para o berço?"
+    },
+    {
+      "id": 14,
+      "ageDays": 37,
+      "question": "Ele tem 37 dias. Quando a chupeta cai, recoloco na hora?"
+    },
+    {
+      "id": 15,
+      "ageDays": 37,
+      "question": "Meu bebê tem 37 dias. Fica 2h08 acordado de dia. Teve uma soneca de 3h05. À noite já dormiu 5h10 seguidas e usa fórmula. Está tudo certo?"
+    },
+    {
+      "id": 16,
+      "ageDays": 37,
+      "question": "Ele tem 37 dias. A soneca durou 17 minutos. Por volta das 17h20 chora muito. Tem refluxo. O que vem primeiro?"
+    },
+    {
+      "id": 17,
+      "ageDays": 40,
+      "question": "Meu bebê tem 40 dias. Dormiu 17 minutos, tentei reconduzir e não voltou. O que faço agora?"
+    },
+    {
+      "id": 18,
+      "ageDays": 44,
+      "question": "Ele tem 44 dias. Começo o ritual às 18h20 e ele só adormece às 19h30. Está certo?"
+    },
+    {
+      "id": 19,
+      "ageDays": 44,
+      "question": "Meu bebê tem 44 dias. De uma hora para outra só dorme no colo, com bastante choro. A janela fica em uns 48 minutos. Começo pelos estímulos?"
+    },
+    {
+      "id": 20,
+      "ageDays": 59,
+      "question": "Ele tem 59 dias. Quero passar as sonecas para o berço. Faço uma soneca por dia até adaptar?"
+    },
+    {
+      "id": 21,
+      "ageDays": 37,
+      "question": "Meu bebê tem 37 dias. Quero que durma no quartinho dele com monitor. Pode?"
+    },
+    {
+      "id": 22,
+      "ageDays": 51,
+      "question": "Ele tem 51 dias. Quando a chupeta cai, recoloco na hora? Ele fica 1h38 acordado."
+    },
+    {
+      "id": 23,
+      "ageDays": 52,
+      "question": "Meu bebê tem 52 dias. Coloco no berço acordado ou espero sono leve? E se adormecer mamando?"
+    },
+    {
+      "id": 24,
+      "ageDays": 44,
+      "question": "Ele tem 44 dias. Depois das 4h acorda de hora em hora. Ofereço o peito sempre?"
+    }
+  ]
+}

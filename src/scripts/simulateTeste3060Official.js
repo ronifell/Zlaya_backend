@@ -64,8 +64,8 @@ assert(
   'rule: night start 19–20h',
 );
 assert(
-  rules.fixedRules.some((r) => /120 ml/i.test(r.rule)),
-  'rule: bottle ~120 ml second month',
+  rules.fixedRules.some((r) => /90 a 120 ml/i.test(r.rule)),
+  'rule: bottle 90–120 ml contextual',
 );
 
 const janelaChunk = chunks.chunks.find((c) => c.id === '30-60-chunk-janela-sono-sonecas');
@@ -101,7 +101,8 @@ assert(/essa situa[cç][aã]o [eé] comum e pode ser ajustada/i.test(prompt), 'p
 assert(/ANTECIPE a condu[cç][aã]o/i.test(prompt), 'prompt: TESTE 006 anticipate conduction');
 assert(/NÃO invente que ele demora 40–45/i.test(prompt) || /NÃO invente que ele demora 40-45/i.test(prompt), 'prompt: TESTE 006 55d no invented 40-45');
 assert(/NÃO pergunte como ele acorda das sonecas/i.test(prompt), 'prompt: TESTE 006 55d no leaked nap-wake questions');
-assert(/UMA vez s[oó], sem repetir o mesmo bloco/i.test(prompt), 'prompt: TESTE 006 56d cry-calm once');
+assert(/sem repetir o mesmo bloco/i.test(prompt), 'prompt: TESTE 006 56d cry-calm once');
+assert(/N[AÃ]O diga [àa] m[aã]e que o acolhimento/i.test(prompt), 'prompt: 56d no operational once-limit');
 assert(/iniciar a condu[cç][aã]o AP[OÓ]S esse per[ií]odo est[aá] correto/i.test(prompt), 'prompt: TESTE 006 49d no post-window start');
 assert(/NÃO oriente interromper o peito/i.test(prompt), 'prompt: no comfort-feed interrupt');
 assert(/mamou e dormiu/i.test(prompt) || /18h30/i.test(prompt), 'prompt: 48d early ritual');
@@ -116,6 +117,7 @@ assert(/primeira parte da noite/i.test(prompt) && /[uú]ltima mamada efetiva/i.t
 assert(/N[AÃ]O normalize automaticamente que um beb[eê] de 30 a 60 dias/i.test(prompt), 'prompt: TESTE 007 51d no colo/peito normalize');
 assert(/N[AÃ]O indique ru[ií]do branco sem rela[cç][aã]o demonstrada/i.test(prompt), 'prompt: TESTE 007 51d no ruído branco');
 assert(/pode ser uma boa ferramenta/i.test(prompt), 'prompt: TESTE 007 57d no boa ferramenta');
+assert(/N[AÃ]O h[aá] prazo oficial definido nas regras/i.test(prompt), 'prompt: crib learn timeline has no official prazo');
 assert(/aula priorit[aá]ria [eé] Janela de Vig[ií]lia/i.test(prompt), 'prompt: TESTE 007 55d Janela lesson primary');
 assert(/facilitar a transi[cç][aã]o para o sono/i.test(prompt), 'prompt: TESTE 007 31d no peito as sleep aid');
 assert(/N[AÃ]O recomende .{0,8}refor[cç]ar as mamadas/i.test(prompt), 'prompt: TESTE 008 30d no reinforce feeds');
@@ -1020,7 +1022,7 @@ Para mais informações sobre a janela de vigília e como estruturar a rotina, r
   assert(!/alimentando adequadamente e se a mamada est[aá] sendo efetiva/i.test(enriched.text), 'TESTE 010 31d: no generic feed probe');
   assert(/vig[ií]lia excessiva vem da soma|n[aã]o da soneca longa da manh/i.test(enriched.text), 'TESTE 010 31d: keep sum-not-morning-nap');
   assert(/antecip/i.test(enriched.text), 'TESTE 010 31d: keep anticipate');
-  assert(/fracion/i.test(enriched.text), 'TESTE 010 31d: keep fraction');
+  assert(!/fracion.{0,40}1h\s*30/i.test(enriched.text), 'TESTE 010 31d: no 1h30–2h fraction');
   assert(/considere fome antes de insistir no sono/i.test(enriched.text), 'TESTE 010 31d: keep feed-interval canon');
   assert(((enriched.text.match(/[^.!?\n]*(?:intervalo entre as mamadas|considere fome)[^.!?]*[.!?]/gi) || []).length <= 1), 'TESTE 010 31d: feed orientation once');
 }
@@ -1138,7 +1140,7 @@ Também é importante saber qual costuma ser o intervalo entre as mamadas: se du
     !/soneca longa pela manh[aã].{0,220}tempo total acordado que excede/i.test(enriched.text),
     'TESTE 006 31d: long morning nap not cause of excess wake',
   );
-  assert(/fracion/i.test(enriched.text), 'TESTE 006 31d: still fraction morning nap');
+  assert(!/fracion.{0,40}1h\s*30/i.test(enriched.text), 'TESTE 006 31d: no 1h30–2h fraction');
   assert(/1h–1h15|1h-1h15|1h–1h15|condu[cç][aã]o come[cç]a/i.test(enriched.text), 'TESTE 006 31d: wake = 1h–1h15 + 40–45');
   assert(/antecip/i.test(enriched.text), 'TESTE 006 31d: anticipate conduction');
   assert(!/observe os sinais de sono e inicie a condu/i.test(enriched.text), 'TESTE 006 31d: no sleep-sign gated start');
@@ -1190,6 +1192,8 @@ Para entender melhor, quanto tempo ele demora para entrar em sono após você in
 
 Para entender melhor, como ele costuma acordar após as sonecas? Ele está mamando efetivamente e apresentando sinais de saciedade? E você percebe se os despertares coincidem com a queda da chupeta?
 
+Se não houver essa relação, não há motivo para considerar a chupeta como causa principal dos despertares.
+
 Você pode conferir mais sobre a janela de vigília na aula correspondente no aplicativo.`;
   const sig = extractSignals({ message: message55, ageBand: '30_60', ageDays: 55 });
   const enriched = enrichThirtySixtyOfficialAnswer({
@@ -1204,6 +1208,7 @@ Você pode conferir mais sobre a janela de vigília na aula correspondente no ap
   assert(!/acordar ap[oó]s as sonecas|mamando efetivamente|despertares coincidem com a queda/i.test(enriched.text), 'TESTE 006 55d: no leaked nap/feed investigation');
   assert(/1h30|1h\s*30/i.test(enriched.text) && /acima|ultrapass/i.test(enriched.text), 'TESTE 006 55d: 1h30-1h45 is above ref');
   assert(!/fracion.{0,40}soneca da manh[aã]/i.test(enriched.text), 'TESTE 006 55d: no morning fraction');
+  assert(!/Se n[aã]o houver essa rela[cç][aã]o/i.test(enriched.text), 'R16 55d: no orphan pacifier-relation leftover');
 }
 
 {
@@ -1232,6 +1237,7 @@ Assista à aula sobre a Estratégia do Travesseiro no aplicativo para aprender c
   assert(/sono leve ou profundo/i.test(enriched.text), 'TESTE 006 56d: keep not required stage');
   assert(/j[aá] dormindo|adormecer mamando/i.test(enriched.text), 'TESTE 006 56d: keep feed-asleep');
   assert(/tamb[eé]m pode ajudar na condu[cç][aã]o e na coloca[cç][aã]o/i.test(enriched.text), 'TESTE 006 56d: keep travesseiro purpose');
+  assert(!/dando mais seguran[cç]a/i.test(enriched.text), 'R16 56d: no unofficial mother-segurança justification');
 }
 
 {
@@ -1330,7 +1336,7 @@ Você pode também revisar a aula sobre a Janela de Vigília, que pode oferecer 
   assert(!/Isso nos ajudar[aá] a ajustar a rotina/i.test(enriched.text), 'TESTE 011 31d: no orphan “Isso nos ajudará”');
   assert(/1h40|1h 40/i.test(enriched.text), 'TESTE 011 31d: keep 1h40–2h sum');
   assert(/antecip/i.test(enriched.text), 'TESTE 011 31d: keep anticipate');
-  assert(/fracion/i.test(enriched.text), 'TESTE 011 31d: keep morning fraction');
+  assert(!/fracion.{0,40}1h\s*30/i.test(enriched.text), 'TESTE 011 31d: no 1h30–2h fraction');
 }
 
 {
@@ -1430,6 +1436,970 @@ Você pode conferir também a aula sobre Janela de Vigília no aplicativo.`;
   assert(/n[aã]o precisa recoloc/i.test(enriched.text), 'TESTE 011 55d: keep pacifier');
   assert(/quanto tempo ele demora para entrar em sono/i.test(enriched.text), 'TESTE 011 55d: keep enter-sleep ask');
   assert(/aula.{0,40}Janela de Vig[ií]lia/i.test(enriched.text), 'TESTE 011 55d: keep Janela lesson');
+}
+
+{
+  const message44 =
+    'Meu bebê tem 44 dias. Faz poucas sonecas. Uma soneca de 3h15 foi das 10h45 às 14h. Como organizo o dia? Às 21h45 ainda está acordado.';
+  const draft44 = `É compreensível que você esteja preocupada com a organização do dia.
+
+A soneca de 3h15 precisa ser encerrada aos 2h30.`;
+  const sig = extractSignals({ message: message44, ageBand: '30_60', ageDays: 44 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft44,
+    message: message44,
+    signals: sig,
+    babyProfile: { ageDays: 44 },
+  });
+  assert(!/1h30 a 1h45 acordado/i.test(enriched.text), 'R6 44d: 21h45 is not 1h45 wake');
+  assert(/2 horas e 30|2h\s*30/i.test(enriched.text), 'R6 44d: keep nap cap');
+}
+
+{
+  const message43 =
+    'Ele tem 43 dias. Depois das 4h acorda de hora em hora. Ofereço o peito sempre?';
+  const draft43 = `É compreensível que você esteja preocupada com os despertares.
+
+Aceitar o peito ao acordar não comprova fome.`;
+  const sig = extractSignals({ message: message43, ageBand: '30_60', ageDays: 43 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft43,
+    message: message43,
+    signals: sig,
+    babyProfile: { ageDays: 43 },
+  });
+  assert(!/j[aá] dormiu algumas horas seguidas/i.test(enriched.text), 'R6 43d: no invented long first stretch');
+  assert(!/Voc[eê] relata que ele dorme bem durante a primeira parte/i.test(enriched.text), 'R6 43d: no assumed first stretch');
+  assert(/SE ele mamou efetivamente por volta das 4h|sem o hor[aá]rio e a qualidade da [uú]ltima mamada/i.test(enriched.text), 'R6 43d: conditional 4h feed');
+  assert(/jejum/i.test(enriched.text), 'R6 43d: keep night fast');
+}
+
+{
+  const message34 =
+    'Ele tem 34 dias. Fica 1h10 acordado e ainda leva uns 38 minutos para dormir. De manhã a soneca é longa. Fraciono essa soneca?';
+  const draft34 = `É normal que um bebê de 34 dias fique acordado por cerca de 1h10 e leve um tempo para adormecer. A janela de vigília ideal para essa faixa etária é de 45 minutos a 1 hora e 15 minutos.`;
+  const sig = extractSignals({ message: message34, ageBand: '30_60', ageDays: 34 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft34,
+    message: message34,
+    signals: sig,
+    babyProfile: { ageDays: 34 },
+  });
+  assert(!/[eé] normal que.{0,80}1h10/i.test(enriched.text), 'R6 34d: 1h10+38 is not normal');
+  assert(/n[aã]o: isso n[aã]o est[aá] dentro da janela|acima da refer[eê]ncia/i.test(enriched.text), 'R6 34d: total wake above window');
+  assert(/n[aã]o fracion/i.test(enriched.text), 'R6 34d: answer fraction with 2h30 cap');
+}
+
+{
+  const message31 =
+    'Meu bebê tem 31 dias. As sonecas ficam em 24 a 30 minutos. Ele usa chupeta e às vezes acorda no meio. Se acordar calmo, eu reconduzo ou já começo outra janela?';
+  const draft31 = `É normal que, com 31 dias, o bebê tenha sonecas curtas. Como orientação prática, se ele acordar calmo, você pode iniciar a condução para a próxima soneca.`;
+  const sig = extractSignals({ message: message31, ageBand: '30_60', ageDays: 31 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft31,
+    message: message31,
+    signals: sig,
+    babyProfile: { ageDays: 31 },
+  });
+  assert(!/acordar calmo.{0,80}pr[oó]xima soneca/i.test(enriched.text), 'R7 31d: calm wake is not immediate next sleep');
+  assert(/ainda parece cansado|despertar (for )?definitivo/i.test(enriched.text), 'R7 31d: tired vs definitive');
+}
+
+{
+  const message38 =
+    'Ele tem 38 dias. Quando a chupeta cai, recoloco na hora?';
+  const draft38 = `É normal que, aos 38 dias, o bebê ainda dependa da chupeta para se acalmar. Quando a chupeta cai e ele apenas reclama, você não precisa recolocá-la imediatamente.`;
+  const sig = extractSignals({ message: message38, ageBand: '30_60', ageDays: 38 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft38,
+    message: message38,
+    signals: sig,
+    babyProfile: { ageDays: 38 },
+  });
+  assert(!/depend/i.test(enriched.text), 'R7 38d: no pacifier dependency');
+  assert(/2 a 5 minutos/i.test(enriched.text), 'R7 38d: keep 2–5 min');
+}
+
+{
+  const message36 =
+    'Ele tem 36 dias. Fica 1h08 acordado e ainda leva uns 36 minutos para dormir. De manhã a soneca é longa. Fraciono essa soneca?';
+  const draft36 = `A principal hipótese aqui é que a soneca da manhã, sendo longa, pode interferir na distribuição das sonecas.`;
+  const sig = extractSignals({ message: message36, ageBand: '30_60', ageDays: 36 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft36,
+    message: message36,
+    signals: sig,
+    babyProfile: { ageDays: 36 },
+  });
+  assert(/1h44|cerca de 1h44/i.test(enriched.text), 'R7 36d: 68+36 = 1h44');
+  assert(!/1h35[–\-]1h40/i.test(enriched.text), 'R7 36d: do not rewrite to 1h35–1h40');
+  assert(/n[aã]o fracion/i.test(enriched.text), 'R7 36d: no fraction without duration');
+}
+
+{
+  const message41 =
+    'Meu bebê tem 41 dias. Dormiu 15 minutos, tentei reconduzir e não voltou. O que faço agora?';
+  const draft41 = `Observe se ele consegue se reorganizar e voltar a dormir. Se ele já estiver acordado por cerca de 1h30 a 1h45, isso está acima da referência.`;
+  const sig = extractSignals({ message: message41, ageBand: '30_60', ageDays: 41 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft41,
+    message: message41,
+    signals: sig,
+    babyProfile: { ageDays: 41 },
+  });
+  assert(/siga o dia|despertar definitivo/i.test(enriched.text), 'R7 41d: follow the day after failed reconduction');
+  assert(!/1h30 a 1h45/i.test(enriched.text), 'R7 41d: no invented 1h30–1h45');
+}
+
+{
+  const message33 =
+    'Meu bebê tem 33 dias. As sonecas ficam em 26 a 32 minutos. Ele usa chupeta e às vezes acorda no meio. Se acordar calmo, eu reconduzo ou já começo outra janela?';
+  const draft33 = `A recondução cabe sobretudo quando ele ainda parece cansado. Se o despertar for definitivo e ele estiver restabelecido, começa uma nova janela — não inicie outra condução só porque acordou calmo.
+
+A orientação prática é que, se ele acordar calmo, você pode reconduzi-lo ao sono, respeitando a janela de vigília.
+
+Se ele ainda parecer cansado, tente uma recondução breve. Se o despertar for definitivo, começa uma nova janela a partir daí.
+
+Sonecas de cerca de 22 a 28 minutos, se forem recorrentes, merecem observar se a tendência cai abaixo de cerca de 20 minutos.`;
+  const sig = extractSignals({ message: message33, ageBand: '30_60', ageDays: 33 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft33,
+    message: message33,
+    signals: sig,
+    babyProfile: { ageDays: 33 },
+  });
+  assert(!/acordar calmo.{0,80}pode reconduzi/i.test(enriched.text), 'R8 33d: drop calm → reconduce');
+  assert(!/22 a 28 minutos/i.test(enriched.text), 'R8 33d: do not leak 22–28 when mother said 26–32');
+  assert(/26 a 32 minutos|ainda parece cansado|despertar (for )?definitivo/i.test(enriched.text), 'R8 33d: keep tired vs definitive with her numbers');
+  assert(!/tente uma recondu[cç][aã]o breve/i.test(enriched.text), 'R14 33d: reconduction once');
+  assert(/irritabilidade|comportamento ao acordar/i.test(enriched.text), 'R14 33d: irritability already directs to satiety/reflux');
+}
+
+{
+  const message37 =
+    'Ele tem 37 dias. Fica 1h12 acordado e ainda leva uns 32 minutos para dormir. De manhã a soneca é longa. Fraciono essa soneca?';
+  const draft37 = `Com 32 minutos para adormecer, você está dentro da faixa, mas é bom ficar atenta.
+
+A janela conta do despertar até ele efetivamente adormecer, incluindo o tempo de condução. Se ele já ficou 1h12 acordado e ainda leva 32 minutos para dormir, o total fica em cerca de 1h44 — acima da referência de 45 minutos a 1 hora e 15 minutos. Não: isso não está dentro da janela. Inicie a preparação mais cedo.
+
+Não fraciono uma soneca só porque ela parece longa. O teto automático é 2 horas e 30 minutos. Me diga quanto tempo essa soneca da manhã durou.`;
+  const sig = extractSignals({ message: message37, ageBand: '30_60', ageDays: 37 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft37,
+    message: message37,
+    signals: sig,
+    babyProfile: { ageDays: 37 },
+  });
+  assert(/1h44/i.test(enriched.text), 'R8 37d: keep 1h44');
+  assert(!/voc[eê] est[aá] dentro da faixa/i.test(enriched.text), 'R8 37d: drop “dentro da faixa”');
+  assert(/n[aã]o: isso n[aã]o est[aá] dentro da janela/i.test(enriched.text), 'R8 37d: over the window');
+}
+
+{
+  const message51n =
+    'Ele tem 51 dias. Depois das 2h40 passa a ter sono mais leve e acorda. Aceita o peito. Ofereço toda vez?';
+  const draft51n = `Isso é despertar no sono noturno, não vigília diurna. O relógio aqui é o jejum da idade — cerca de 3 horas aos 30 dias, aumentando até cerca de 5 horas aos 60 dias — e não o intervalo diurno de 2h a 2h30.
+
+É compreensível que, após cerca de 2h40, ele acorda mais facilmente. Isso pode ser um sinal de que ele está se aproximando do limite da janela de vigília, que nesta faixa é de 45 minutos a 1 hora e 15 minutos.
+
+Aceitar o peito ao acordar não comprova fome. Confira a última mamada efetiva, a saciedade e se o jejum da idade já foi atingido — cerca de 3 horas aos 30 dias, aumentando até cerca de 5 horas aos 60 dias.`;
+  const sig = extractSignals({ message: message51n, ageBand: '30_60', ageDays: 51 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft51n,
+    message: message51n,
+    signals: sig,
+    babyProfile: { ageDays: 51 },
+  });
+  assert(/jejum da idade|sono noturno, n[aã]o vig[ií]lia/i.test(enriched.text), 'R8 51d: night-fast clock');
+  assert(!/aproximando do limite da janela de vig[ií]lia/i.test(enriched.text), 'R8 51d: night is not wake window');
+}
+
+{
+  const message40f =
+    'Meu bebê tem 40 dias. Dormiu 17 minutos, tentei reconduzir e não voltou. O que faço agora?';
+  const draft40f = `Como a recondução já foi tentada e não funcionou, siga o dia: a nova janela começa no despertar definitivo.
+
+Neste caso, acalme-o no colo e tente colocá-lo novamente no berço.
+
+E o despertar coincide com a queda da chupeta?
+
+Como a recondução já foi tentada e não funcionou, siga o dia: a nova janela começa no despertar definitivo. Se sonecas abaixo de cerca de 20 minutos forem recorrentes, investigue saciedade e sinais de refluxo.`;
+  const sig = extractSignals({ message: message40f, ageBand: '30_60', ageDays: 40 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft40f,
+    message: message40f,
+    signals: sig,
+    babyProfile: { ageDays: 40 },
+  });
+  assert(/siga o dia|despertar definitivo/i.test(enriched.text), 'R8 40d: stop after failed reconduction');
+  assert(!/novamente no ber[cç]o/i.test(enriched.text), 'R8 40d: do not reopen crib reconduction');
+  assert(!/chupeta/i.test(enriched.text), 'R8 40d: do not invent pacifier');
+  assert(!/Como a recondu[cç][aã]o j[aá] foi tentada e n[aã]o funcionou,\s*Se /i.test(enriched.text), 'R12 40d: no orphan failed-reconduction prefix');
+  assert(
+    !(/Se o padr[aã]o for recorrente/i.test(enriched.text) && /Se sonecas abaixo de cerca de 20 minutos forem recorrentes/i.test(enriched.text)),
+    'R13 40d: do not repeat the recurrence investigation',
+  );
+}
+
+{
+  const message44r =
+    'Ele tem 44 dias. Começo o ritual às 18h20 e ele só adormece às 19h30. Está certo?';
+  const draft44r = `A janela de vigília começa no último despertar, não no início do ritual. Sem o horário em que ele acordou, não dá para concluir que o intervalo do ritual foi a janela.
+
+O horário recomendado para o início do sono noturno é entre 19h e 20h. No entanto, é importante observar que o ritual deve ser breve e não ultrapassar esse tempo acordado para evitar a hiperestimulação.
+
+Se você começa o ritual às 18h20 e ele só adormece às 19h30, o intervalo entre o início do ritual e o adormecimento está acima do ideal, considerando a janela de vigília de 45 minutos a 1 hora e 15 minutos.`;
+  const sig = extractSignals({ message: message44r, ageBand: '30_60', ageDays: 44 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft44r,
+    message: message44r,
+    signals: sig,
+    babyProfile: { ageDays: 44 },
+  });
+  assert(/[uú]ltimo despertar, n[aã]o no in[ií]cio do ritual/i.test(enriched.text), 'R8 44d: ritual is not window start');
+  assert(!/intervalo entre o in[ií]cio do ritual.{0,80}acima/i.test(enriched.text), 'R8 44d: do not score ritual as window');
+  assert(!/intervalo.{0,40}entre o in[ií]cio do ritual.{0,80}al[eé]m/i.test(enriched.text), 'R13 44d ritual: do not score ritual duration as beyond the window');
+  assert(!/hiperestimula/i.test(enriched.text), 'R11 44d: no ritual hyperstimulation causality');
+  assert(/tempo de condu[cç][aã]o|efetivamente adormecer dentro da janela/i.test(enriched.text), 'R11 44d: conduction is part of the window');
+  assert(/19h30 est[aá] dentro da refer[eê]ncia geral/i.test(enriched.text), 'R11 44d: 19h30 is within 19h–20h');
+  assert(!/1 hora e 15 minutos;/i.test(enriched.text), 'R13 44d ritual: do not leave a truncated semicolon clause');
+}
+
+{
+  const message44s =
+    'Meu bebê tem 44 dias. De uma hora para outra só dorme no colo, com bastante choro. A janela fica em uns 48 minutos. Começo pelos estímulos?';
+  const draft44s = `Antes de atribuir o quadro a excesso de estímulos, confirme mamada efetiva e saciedade, medidas posturais, desconforto ou refluxo e se a vigília realmente passou de 45 minutos a 1 hora e 15 minutos. Uma janela de cerca de 45 minutos, sozinha, não é vigília excessiva.
+
+Como ela consegue dormir por cerca de 1 hora ou até mais, eu não consideraria a duração da soneca o principal problema neste momento. O que chama mais atenção é ela acordar muito irritada e relaxar depois de sugar um pouco.
+
+A orientação prática segura é começar a adaptar o bebê ao berço durante as sonecas. Para isso, inicie pela primeira soneca da manhã e siga com todas as demais sonecas do mesmo dia no berço.`;
+  const sig = extractSignals({ message: message44s, ageBand: '30_60', ageDays: 44 });
+  assert(!sig.signals.some((s) => s.id === 'nap_angry_wake_30_60'), 'R8 44d: sudden cry is not angry-wake 1h');
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft44s,
+    message: message44s,
+    signals: sig,
+    babyProfile: { ageDays: 44 },
+  });
+  assert(/Antes de atribuir o quadro a excesso de est[ií]mulos/i.test(enriched.text), 'R8 44d: physio before stimuli');
+  assert(!/cerca de 1 hora ou at[eé] mais/i.test(enriched.text), 'R8 44d: no 1h nap carry-over');
+  assert(!/todas as demais sonecas do mesmo dia no ber[cç]o/i.test(enriched.text), 'R8 44d: no unsolicited crib training');
+}
+
+{
+  const message33 =
+    'Meu bebê tem 33 dias. As sonecas ficam em 26 a 32 minutos. Ele usa chupeta e às vezes acorda no meio. Se acordar calmo, eu reconduzo ou já começo outra janela?';
+  const draft33 = `A recondução cabe sobretudo quando ele ainda parece cansado. Se o despertar for definitivo e ele estiver restabelecido, começa uma nova janela — não inicie outra condução só porque acordou calmo.
+
+Sonecas de cerca de 26 a 32 minutos, se forem recorrentes, merecem observar se a tendência cai abaixo de cerca de 20 minutos: aí as prioridades passam a ser saciedade e sinais de refluxo.`;
+  const sig = extractSignals({ message: message33, ageBand: '30_60', ageDays: 33 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft33,
+    message: message33,
+    signals: sig,
+    babyProfile: { ageDays: 33 },
+  });
+  assert(!/tend[eê]ncia cai abaixo/i.test(enriched.text), 'R9 33d: do not wait for 26–32 to fall below 20');
+  assert(/irritabil|comportamento ao acordar/i.test(enriched.text), 'R9 33d: recurrent 26–32 observe wake behavior');
+}
+
+{
+  const message40s =
+    'Ele tem 40 dias. Fica uns 48 minutos acordado e, no sling, ainda leva 36 a 40 minutos para adormecer. Chora bastante até dormir. O sling é o que mais funciona. Isso está dentro da janela?';
+  const draft40s = `Não: o tempo total, do despertar até ele efetivamente adormecer, está acima da janela de 45 minutos a 1 hora e 15 minutos.
+
+A principal hipótese é que a dificuldade para dormir pode estar relacionada à vigília excessiva. Se sim, isso pode indicar fome, e a mamada deve ser priorizada.
+
+Antes de atribuir o quadro só à janela, confirme mamada efetiva e saciedade, se o choro piora ao deitar, se há desconforto depois das mamadas e se a preferência pelo sling vem junto de outros sinais de refluxo. Preferência por posição vertical, sozinha, não prova refluxo.
+
+O bebê de 40 dias está acima da janela de vigília. Isso indica que a condução para o sono deve ser antecipada para evitar que ele ultrapasse a janela de vigília e entre em hiperestimulação.`;
+  const sig = extractSignals({ message: message40s, ageBand: '30_60', ageDays: 40 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft40s,
+    message: message40s,
+    signals: sig,
+    babyProfile: { ageDays: 40 },
+  });
+  assert(!/principal hip[oó]tese/i.test(enriched.text), 'R9 40d sling: no main-hypothesis label');
+  assert(!/pode indicar fome/i.test(enriched.text), 'R9 40d sling: approaching feed is not hunger');
+  assert(/Antes de atribuir o quadro s[oó] [aà] janela/i.test(enriched.text), 'R9 40d sling: physio before window');
+  assert(!/hiperestimula/i.test(enriched.text), 'R13 40d sling: exceeding the window is not auto-hyperstimulation');
+  assert(/antecip|inicie a condu[cç][aã]o|condu[cç][aã]o mais cedo|condu[cç][aã]o para o sono deve/i.test(enriched.text), 'R13 40d sling: keep earlier conduction after the window is exceeded');
+}
+
+{
+  const message47 =
+    'Meu bebê tem 47 dias. O banho é às 20h20 e ele só dorme perto das 21h35. O ritual pode começar nesse horário?';
+  const draft47 = `O horário recomendado para o início do sono noturno é entre 19h e 20h. Iniciar o ritual às 20h20 e fazer o bebê dormir apenas perto das 21h35 já está além dessa faixa.
+
+O ritual deve ser breve, normalmente consistindo em banho, mamada e dormir.
+
+A última soneca e o tempo acordado são fatores que influenciam a dificuldade para adormecer.
+
+A última soneca e o tempo acordado são fatores que podem influenciar a dificuldade para adormecer.
+
+A duração do ritual deve ser breve, e se o bebê só adormece às 21h35, é importante verificar quanto tempo ele permanece acordado antes de iniciar o ritual.
+
+A última soneca e o tempo acordado antes de tentar iniciar a noite são informações importantes para ajustar a rotina.
+
+Qual é o horário em que a última soneca termina? Para mais orientações sobre a rotina e o sono noturno, você pode conferir a aula "Início do Sono Noturno" no aplicativo.
+
+Observe a que horas termina a última soneca e há quanto tempo está acordado.
+
+Para entender melhor a situação, gostaria de saber a que horas termina a última soneca e quanto tempo costuma ficar acordado antes de tentar iniciar a noite.
+
+A referência de 19h a 20h é para o início do sono noturno, não necessariamente para o começo do ritual. Preserve o horário que você informou e mantenha o ritual breve, com a mamada depois do banho.
+
+A demora para adormecer não deve ser explicada apenas pelo horário, é importante também verificar a última soneca e a janela de vigília, que deve ser de 45 minutos a 1 hora e 15 minutos. Para mais informações sobre a rotina e o sono noturno, recomendo a aula "Sono Noturno" no aplicativo.
+
+O ritual deve ser breve: banho, mamada, medidas posturais e condução ao berço.A janela de vigília é de 45 minutos a 1 hora e 15 minutos, e o ritual deve ser organizado para respeitar essa janela.
+
+Para entender melhor a situação, a última soneca do bebê e quanto tempo ele costuma ficar acordado antes de tentar iniciar a noite são informações importantes.
+
+A última soneca do dia também deve ser considerada para entender melhor a situação. Aconselho que você observe esses pontos e, se necessário, ajuste o horário do banho e do início do ritual para que o bebê possa dormir mais cedo.
+
+O ritual deve ser breve: banho, mamada, medidas posturais e condução ao berço. Se o bebê só adormece às 21h35, é importante verificar quanto tempo ele permanece acordado antes de tentar iniciar a noite. A janela de vigília é de 45 minutos a 1 hora e 15 minutos, e o ritual deve ser ajustado para que o bebê não fique acordado além desse tempo.`;
+  const sig = extractSignals({ message: message47, ageBand: '30_60', ageDays: 47 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft47,
+    message: message47,
+    signals: sig,
+    babyProfile: { ageDays: 47 },
+  });
+  assert(!/j[aá] est[aá] al[eé]m dessa faixa/i.test(enriched.text), 'R9 47d: ritual 20h20 is not beyond 19h–20h');
+  assert(/n[aã]o necessariamente para o come[cç]o do ritual/i.test(enriched.text), 'R9 47d: 19h–20h is night-sleep start');
+  assert(!/Preserve o hor[aá]rio que voc[eê] informou/i.test(enriched.text), 'R10 47d: do not keep the 20h20 ritual before day facts');
+  assert(/21h35.{0,80}al[eé]m|al[eé]m.{0,80}21h35/i.test(enriched.text), 'R10 47d: sleep at 21h35 is beyond 19h–20h');
+  assert(/60 dias/i.test(enriched.text), 'R10 47d: late exception is not automatic at 47 days');
+  assert(!/(influenciam|podem influenciar) a dificuldade para adormecer/i.test(enriched.text), 'R13 47d: last nap is not presumed cause of delay');
+  assert(/precisam ser avaliados para organizar/i.test(enriched.text), 'R13 47d: last nap is evaluated to organize the night');
+  assert(!/gostaria de saber a que horas termina a [uú]ltima soneca/i.test(enriched.text), 'R13 47d: do not duplicate the last-nap investigation question');
+  assert((enriched.text.match(/O ritual deve ser breve/gi) || []).length <= 1, 'R13 47d: ritual-brief once');
+  assert(!/verificar quanto tempo ele permanece acordado antes de iniciar o ritual/i.test(enriched.text), 'R16 47d: last-nap ask is not duplicated as verificar acordado');
+  assert(!/informa[cç][oõ]es importantes para ajustar a rotina/i.test(enriched.text), 'R16 47d: no extra last-nap/awake-time opener');
+  assert(/N[aã]o preserve o hor[aá]rio do ritual antes de saber/i.test(enriched.text), 'R16 47d: keep official context ask');
+  assert(!/aula ['"“”']?In[ií]cio do Sono Noturno/i.test(enriched.text), 'R16 47d: no unsolicited Início do Sono Noturno aula');
+  assert(!/Qual [eé] o hor[aá]rio em que a [uú]ltima soneca termina/i.test(enriched.text), 'R16 47d: last-nap clock is already in the official ask');
+  assert(!/Observe a que horas termina a [uú]ltima soneca e h[aá] quanto tempo est[aá] acordado/i.test(enriched.text), 'R16 47d: last-nap observe-ask is already in the official block');
+  assert(!/ber[cç]o\.A refer/i.test(enriched.text), 'R16 47d: no glued ritual-brief and night-start sentences');
+  assert(!/aula ['"“”']?Sono Noturno/i.test(enriched.text), 'R16 47d: no unsolicited Sono Noturno aula');
+  assert(!/A demora para adormecer n[aã]o deve ser explicada apenas pelo hor[aá]rio/i.test(enriched.text), 'R16 47d: last-nap is already in the official context ask');
+  assert(!/ritual deve ser organizado para respeitar essa janela/i.test(enriched.text), 'R16 47d: no extra ritual-window organizer');
+  assert(!/s[aã]o informa[cç][oõ]es importantes[.!]/i.test(enriched.text), 'R16 47d: last-nap facts are already in Não preserve');
+  assert(!/ajuste o hor[aá]rio do banho/i.test(enriched.text), 'R16 47d: do not invent a bath-time change');
+  assert(!/verificar quanto tempo ele permanece acordado antes de tentar iniciar a noite/i.test(enriched.text), 'R16 47d: awake-time is already in Não preserve');
+  assert(!/ritual deve ser ajustado para que o beb[eê] n[aã]o fique acordado/i.test(enriched.text), 'R16 47d: ritual is not recast as a wake-window cap');
+}
+
+{
+  const message51n =
+    'Ele tem 51 dias. Depois das 2h40 passa a ter sono mais leve e acorda. Aceita o peito. Ofereço toda vez?';
+  const draft51n = `Isso é despertar no sono noturno, não vigília diurna. O relógio aqui é o jejum da idade — cerca de 3 horas aos 30 dias, aumentando até cerca de 5 horas aos 60 dias — e não o intervalo diurno de 2h a 2h30.
+
+Aceitar o peito ao acordar não comprova fome.`;
+  const sig = extractSignals({ message: message51n, ageBand: '30_60', ageDays: 51 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft51n,
+    message: message51n,
+    signals: sig,
+    babyProfile: { ageDays: 51 },
+  });
+  assert(/tente primeiro reconduzir/i.test(enriched.text), 'R9 51d: reconduce before fast if previous feed was effective');
+  assert(/ofere[cç]a a mamada/i.test(enriched.text), 'R9 51d: offer after the age fast');
+  assert(/volte ao intervalo da forma de alimenta[cç][aã]o/i.test(enriched.text), 'R9 51d: after the fast-ending feed, return to the feeding interval');
+  assert((enriched.text.match(/cerca de 3 horas aos 30 dias/gi) || []).length <= 1, 'R13 51d night: jejum 3h@30d once');
+}
+
+{
+  const message40p =
+    'Meu bebê tem 40 dias. Mamou, ficou uns 18 minutos em pé no colo e ainda está acordado. Posso brincar ou já conduzo o sono?';
+  const draft40p = `A janela começa quando ele acorda, não quando termina a mamada ou o tempo em pé. Sem o horário do último despertar, os minutos em posição vertical sozinhos não dizem se já é hora de conduzir o sono.
+
+Se o bebê mamou, ficou em pé no colo por cerca de 18 minutos e ainda está acordado, você pode interagir levemente com ele, pois ele está calmo e dentro da janela de vigília.
+
+A janela de vigília para um bebê de 40 dias é de 45 minutos a 1 hora e 15 minutos, contando desde o despertar. Como ele já ficou em pé por 18 minutos, você ainda tem tempo para interagir, mas fique atenta aos sinais de sono.`;
+  const sig = extractSignals({ message: message40p, ageBand: '30_60', ageDays: 40 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft40p,
+    message: message40p,
+    signals: sig,
+    babyProfile: { ageDays: 40 },
+  });
+  assert(!/pode interagir levemente/i.test(enriched.text), 'R9 40d play: do not authorize play without last wake time');
+  assert(!/ainda tem tempo para interagir/i.test(enriched.text), 'R9 40d play: 18 min vertical is not leftover play time');
+  assert(/18 minutos.{0,80}abaixo/i.test(enriched.text), 'R9 40d play: 18 min is short of 20–30');
+}
+
+{
+  const message44c =
+    'Ele tem 44 dias. Só dorme no charutinho. A mamada durou 14 minutos. O charutinho é o problema?';
+  const draft44c = `Antes de tratar o charutinho como forma de condução, confirme mamada efetiva, saciedade e sinais de desconforto ou refluxo.
+
+A principal hipótese é que a dificuldade para dormir durante o dia está relacionada à mamada efetiva e à saciedade. O charutinho, por si só, não deve ser rotulado como um problema nesta faixa etária.`;
+  const sig = extractSignals({ message: message44c, ageBand: '30_60', ageDays: 44 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft44c,
+    message: message44c,
+    signals: sig,
+    babyProfile: { ageDays: 44 },
+  });
+  assert(/^Nesta faixa o M[eé]todo n[aã]o define/i.test(enriched.text.trim()), 'R9 44d charutinho: undefined first');
+  assert(!/principal hip[oó]tese/i.test(enriched.text), 'R9 44d charutinho: no main hypothesis');
+  assert(!/n[aã]o deve ser rotulado como um problema/i.test(enriched.text), 'R9 44d charutinho: do not conclude it is not a problem');
+}
+
+{
+  const message40b =
+    'Meu bebê tem 40 dias. Ficou 13 minutos no peito e depois tomou 105 ml de fórmula. Esse tempo e esse volume estão adequados?';
+  const draft40b = `O volume de 105 ml de fórmula está dentro da referência geral para um bebê de 40 dias, que é de 90 a 120 ml por mamada. O tempo de 13 minutos no peito, por si só, não é um critério isolado.
+
+ Isso ajudará na adaptação do bebê à mamadeira sem garantir a ausência de desmame ou confusão de bico.
+
+Se ele ainda demonstra fome ou irritação, pode ser necessário ajustar a alimentação.
+
+Se você estiver pensando em como introduzir a fórmula, lembre-se que é mais fácil até cerca de 2 meses e meio.`;
+  const sig = extractSignals({ message: message40b, ageBand: '30_60', ageDays: 40 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft40b,
+    message: message40b,
+    signals: sig,
+    babyProfile: { ageDays: 40 },
+  });
+  assert(!/confus[aã]o de bico/i.test(enriched.text), 'R9 40d bottle: no nipple confusion');
+  assert(/90 a 120 ml/i.test(enriched.text), 'R9 40d bottle: keep 90–120 ml');
+  assert(!/2 meses e meio|2[,.]5 meses/i.test(enriched.text), 'R13 40d bottle: no unsolicited 2.5-month formula intro');
+  assert(!/fome ou irrita[cç][aã]o.{0,80}ajustar a alimenta[cç][aã]o/i.test(enriched.text), 'R14 40d bottle: irritation does not authorize a feed change');
+  assert(!/O importante [eé] verificar se houve uma retirada efetiva/i.test(enriched.text), 'R15 40d bottle: satiety criterion once');
+  assert(!/Para garantir que.{0,80}alimentando adequadamente/i.test(enriched.text), 'R15 40d bottle: no extra feed-adequacy ask');
+}
+
+{
+  const message37c =
+    'Meu bebê tem 37 dias. Fica 2h08 acordado de dia. Teve uma soneca de 3h05. À noite já dormiu 5h10 seguidas e usa fórmula. Está tudo certo?';
+  const draft37c = `Ficar cerca de 2 horas acordado já ultrapassa a janela de 45 minutos a 1 hora e 15 minutos. A soneca diurna não deve passar de 2 horas e 30 minutos. Se o bebê é saudável e dorme espontaneamente à noite, não o acorde só porque o sono passou da progressão típica do jejum.
+
+A orientação é acordá-lo aos 2h30 para oferecer a mamada. Além disso, o fato de ele ter dormido 5h10 seguidas à noite é um bom sinal, especialmente se ele está saudável e ganhando peso.
+
+Acordar aos 2h30 preserva alimentação, as próximas janelas e a noite. Isso não obriga mamada imediata: a mamada só entra se o intervalo desde o início da mamada anterior já tiver sido atingido.`;
+  const sig = extractSignals({ message: message37c, ageBand: '30_60', ageDays: 37 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft37c,
+    message: message37c,
+    signals: sig,
+    babyProfile: { ageDays: 37 },
+  });
+  assert(!/para oferecer a mamada/i.test(enriched.text), 'R9 37d combo: wake at 2h30 is not auto-feed');
+  assert(!/ganhando peso/i.test(enriched.text), 'R9 37d combo: do not invent weight gain');
+  assert(/n[aã]o obriga mamada imediata/i.test(enriched.text), 'R9 37d combo: keep not-auto-feed');
+  assert(!/Se (ele|o beb[eê]) [eé] saud[aá]vel e dorme espontaneamente [àa] noite,\s*$/m.test(enriched.text), 'R12 37d combo: no orphan healthy-night clause');
+}
+
+{
+  const message37l =
+    'Ele tem 37 dias. A soneca durou 17 minutos. Por volta das 17h20 chora muito. Tem refluxo. O que vem primeiro?';
+  const draft37l = `A principal hipótese é que o choro pode estar relacionado ao refluxo e à dificuldade de relaxar após sonecas breves.
+
+Recomendo que você confira a aula sobre refluxo para entender melhor como lidar com essa situação.
+
+Se essa soneca de cerca de 17 minutos foi isolada e ele ainda parecer cansado, tente reconduzir sem insistência prolongada. Se o padrão for recorrente, mesmo sem irritabilidade evidente, investigue saciedade e sinais de refluxo.
+
+Se essa leitura de desconforto/refluxo se sustentar, assista às duas aulas com o pediatra no aplicativo.`;
+  const sig = extractSignals({ message: message37l, ageBand: '30_60', ageDays: 37 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft37l,
+    message: message37l,
+    signals: sig,
+    babyProfile: { ageDays: 37 },
+  });
+  assert(!/principal hip[oó]tese/i.test(enriched.text), 'R9 37d late afternoon: reflux is not the main hypothesis');
+  assert(/cansa[cç]o e poss[ií]vel baixa produ[cç][aã]o/i.test(enriched.text), 'R9 37d late afternoon: tiredness and milk first');
+  assert(/duas aulas com o pediatra/i.test(enriched.text), 'R9 37d late afternoon: two pediatrician lessons');
+  assert((enriched.text.match(/padr[aã]o(?: abaixo de cerca de 20 minutos)? for recorrente/gi) || []).length <= 1, 'R13 37d late afternoon: recurrence investigation once');
+}
+
+{
+  const message44h =
+    'Ele tem 44 dias. Depois das 4h acorda de hora em hora. Ofereço o peito sempre?';
+  const draft44h = `O primeiro passo é ver há quanto tempo foi a última mamada efetiva e se o jejum noturno da idade já foi atingido — cerca de 3 horas aos 30 dias, aumentando até cerca de 5 horas aos 60 dias. Se ainda não atingiu o jejum da idade e a mamada anterior foi efetiva, com saciedade, tente primeiro reconduzi-lo ao sono. Quando o jejum da idade já tiver sido alcançado, ofereça mamada.
+
+Se o bebê de 44 dias acorda de hora em hora, isso pode indicar que ele não está recebendo a quantidade adequada de leite durante o dia, especialmente se você está oferecendo o peito em intervalos curtos, como menos de 2 horas.
+
+É importante investigar a última mamada efetiva antes das 4h da manhã. Se o bebê acorda de hora em hora, isso pode indicar que ele não está completando o jejum noturno adequado para a idade, que deve ser de cerca de 3h a 5h aos 44 dias.
+
+Primeiro, verifique se ele está mamando efetivamente e se está saciado após as mamadas. Caso contrário, pode tentar conduzir o bebê de volta ao sono sem oferecer o peito imediatamente.`;
+  const sig = extractSignals({ message: message44h, ageBand: '30_60', ageDays: 44 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft44h,
+    message: message44h,
+    signals: sig,
+    babyProfile: { ageDays: 44 },
+  });
+  assert(!/quantidade adequada de leite durante o dia/i.test(enriched.text), 'R9 44d hourly: no invented daytime milk cause');
+  assert(!/Caso contr[aá]rio.{0,80}sem oferecer o peito/i.test(enriched.text), 'R9 44d hourly: do not reconduce if the previous feed was not effective');
+  assert(/volte ao intervalo da forma de alimenta[cç][aã]o/i.test(enriched.text), 'R9 44d hourly: after the fast-ending feed, return to the feeding interval');
+  assert(/hor[aá]rio, sozinho, n[aã]o explica|forma de adormecer/i.test(enriched.text), 'R10 44d hourly: multifactor 11.7 investigation');
+  assert(!/ainda n[aã]o completou o jejum/i.test(enriched.text), 'R10 44d hourly: recurrence does not prove unfinished fast');
+  assert(!/n[aã]o est[aá] completando o jejum/i.test(enriched.text), 'R11 44d hourly: do not recast hourly wakes as unfinished fast');
+}
+
+{
+  const message44h2 =
+    'Ele tem 44 dias. Depois das 4h acorda de hora em hora. Ofereço o peito sempre?';
+  const draft44h2 = `O horário, sozinho, não explica despertares de hora em hora depois das 4h. Investigue a última mamada efetiva e a saciedade, as medidas posturais, a forma de adormecer, desconfortos e o comportamento nesses despertares. A recorrência horária não prova, por si, que o jejum noturno ainda não foi completado — isso se verifica pelo horário da última mamada efetiva.
+
+O primeiro passo é ver há quanto tempo foi a última mamada efetiva e se o jejum noturno da idade já foi atingido — cerca de 3 horas aos 30 dias, aumentando até cerca de 5 horas aos 60 dias. Se ainda não atingiu o jejum da idade e a mamada anterior foi efetiva, com saciedade, tente primeiro reconduzi-lo ao sono. Quando o jejum da idade já tiver sido alcançado, ofereça mamada.
+
+É importante investigar a última mamada efetiva antes das 4h da manhã. Se ele acorda de hora em hora, isso pode indicar que o jejum noturno ainda não foi completado. Se a última mamada foi efetiva e já se passaram cerca de 3 horas, você deve oferecer o peito novamente.`;
+  const sig = extractSignals({ message: message44h2, ageBand: '30_60', ageDays: 44 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft44h2,
+    message: message44h2,
+    signals: sig,
+    babyProfile: { ageDays: 44 },
+  });
+  assert(/recorr[eê]ncia hor[aá]ria n[aã]o prova/i.test(enriched.text), 'R12 44d hourly: keep 11.7 negation');
+  assert(!/pode indicar que o jejum noturno ainda n[aã]o foi completado/i.test(enriched.text), 'R12 44d hourly: do not reassociate hourly with unfinished fast');
+  assert(!/j[aá] se passaram cerca de 3 horas.{0,80}ofere[cç]/i.test(enriched.text), 'R12 44d hourly: do not auto-apply 3h feed');
+  assert(/volte ao intervalo da forma de alimenta[cç][aã]o|jejum noturno da idade/i.test(enriched.text), 'R12 44d hourly: keep age-based fast tree');
+  assert((enriched.text.match(/cerca de 3 horas aos 30 dias/gi) || []).length <= 1, 'R13 44d hourly: jejum 3h@30d once');
+}
+
+{
+  const message43org =
+    'Meu bebê tem 43 dias. Faz poucas sonecas. Uma soneca de 3h25 foi das 10h20 às 13h45. Como organizo o dia? Às 21h10 ainda está acordado.';
+  const draft43org = `A família pode organizar conforme sua dinâmica, mas iniciar o sono noturno por volta de 21h30 ou 22h não é o recomendado.
+
+Acordar aos 2h30 preserva alimentação, as próximas janelas e a noite. Isso não obriga mamada imediata: a mamada só entra se o intervalo desde o início da mamada anterior já tiver sido atingido.
+
+Com relação ao início do sono noturno, a referência é entre 19h e 20h. Como ele ainda está acordado às 21h10, isso já está além da faixa recomendada. Para organizar o dia, observe a última soneca e a janela de vigília, que deve ser de 45 minutos a 1h15.
+
+A referência geral para o início do sono noturno é 19h a 20h, sem aplicar isso de maneira rígida. Antes de definir o horário, diga a que horas o dia começou, quando terminou a última soneca, qual foi a última janela e como estava o comportamento.
+
+A recomendação é que o início do sono noturno ocorra entre 19h e 20h. É importante observar a última soneca e a janela de vigília, que deve ser de 45 minutos a 1 hora e 15 minutos. Isso ajudará a ajustar a rotina dele. Além disso, recomendo que você consulte a aula sobre a janela de vigília para entender melhor como organizar os períodos de sono e alimentação.
+
+Para organizar o dia, observe que a janela de vigília é de 45 minutos a 1 hora e 15 minutos. Isso significa que, após acordar, você deve conduzi-lo para a próxima soneca dentro desse intervalo. Se ele estiver acordado depois das 21h, isso pode impactar o início da noite.
+
+Para organizar o dia, considere a janela de vigília de 45 minutos a 1 hora e 15 minutos. Após a soneca, observe os sinais de sono e conduza-o para a próxima soneca dentro dessa janela. A última soneca deve ser avaliada para garantir que não comprometa o início da noite. Isso ajudará a ajustar a rotina.
+
+É compreensível que você esteja preocupada com a organização do dia do seu bebê de 43 dias. O ideal é que o dia do bebê de 43 dias comece com a primeira soneca, seguida por janelas de vigília de 45 minutos a 1 hora e 15 minutos. Se você já inicia a noite às 21h, isso também está além da faixa recomendada. É importante acordá-lo para oferecer a mamada e organizar a próxima janela. Para organizar o dia, você pode considerar encerrar a soneca antes de atingir 2h30 e observar a distribuição das sonecas ao longo do dia. Entendo que seu bebê fez uma soneca longa de 3h25, o que excede o teto de 2h30. ao atingir 2h30, acorde o bebê e organize a próxima janela. Se ele estiver calmo, você pode iniciar o ritual de sono agora, garantindo que ele tenha a oportunidade de adormecer no berço.`;
+  const sig = extractSignals({ message: message43org, ageBand: '30_60', ageDays: 43 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft43org,
+    message: message43org,
+    signals: sig,
+    babyProfile: { ageDays: 43 },
+  });
+  assert(/19h.{0,12}20h/i.test(enriched.text), 'R10 43d: state 19h–20h');
+  assert(/r[ií]gid/i.test(enriched.text), 'R10 43d: 19h–20h is not rigid');
+  assert(/dia come[cç]ou|[uú]ltima soneca|[uú]ltima janela|comportamento/i.test(enriched.text), 'R10 43d: ask day organization facts');
+  assert(!/encerrar a soneca antes/i.test(enriched.text), 'R14 43d: do not close a morning nap before 2h30');
+  assert(!/[eé] importante acorde/i.test(enriched.text), 'R14 43d: no garbled wake-cap composition');
+  assert(/n[aã]o obriga mamada imediata/i.test(enriched.text), 'R14 43d: keep wake at 2h30 is not auto-feed');
+  assert(!/21h30 ou 22h n[aã]o [eé] o recomendado/i.test(enriched.text), 'R15 43d: no duplicate 21h30/22h family-dynamics');
+  assert(/sem aplicar isso de maneira r[ií]gida/i.test(enriched.text), 'R15 43d: keep 19h–20h without rigidity');
+  assert(!/iniciar o ritual de sono agora/i.test(enriched.text), 'R15 43d: no unsolicited night ritual now');
+  assert(!/oportunidade de adormecer no ber[cç]o/i.test(enriched.text), 'R15 43d: no unsolicited crib-asleep');
+  assert(!/comece com a primeira soneca/i.test(enriched.text), 'R15 43d: day does not start with first nap');
+  assert(!/j[aá] inicia a noite [àaá]s 21h/i.test(enriched.text), 'R15 43d: do not infer night already starts at 21h');
+  assert(/24 horas em conjunto/i.test(enriched.text), 'R15 43d: keep 24h organization even if “organização do dia” fluff is present');
+  assert((enriched.text.match(/19h.{0,12}20h/gi) || []).length === 1, 'R16 43d: 19h–20h once');
+  assert(!/aula sobre (a )?janela de vig[ií]lia/i.test(enriched.text), 'R16 43d: no unsolicited Janela lesson');
+  assert(/sem aplicar isso de maneira r[ií]gida/i.test(enriched.text), 'R16 43d: keep 19h–20h without rigidity');
+  assert(!/observe que a janela de vig[ií]lia [eé] de 45/i.test(enriched.text), 'R16 43d: no generic janela intro besides 24h org');
+  assert(!/Para organizar o dia, (observe|considere) a janela/i.test(enriched.text), 'R16 43d: no organize-the-day janela opener');
+  assert(/ainda est[aá] acordado [àaá]s 21h10.{0,48}al[eé]m dessa refer[eê]ncia/i.test(enriched.text), 'R16 43d: keep 21h10 as beyond 19h–20h');
+  assert(/[eé] compreens[ií]vel que voc[eê] esteja preocupada com a organiza[cç][aã]o do dia/i.test(enriched.text), 'R16 43d: keep day-org empathy opener');
+}
+
+{
+  const message49c =
+    'Meu bebê tem 49 dias. Só dorme no colo ou no peito. Já uso o travesseiro. Em quanto tempo ele aprende? Posso passar todas as sonecas para o berço?';
+  const draft49c = `Você pode sim passar todas as sonecas para o berço. Comece pela primeira soneca da manhã e siga com todas as demais sonecas do mesmo dia no berço. Repita diariamente até consolidar. Se houver resistência, acalme-o no colo e volte ao berço até que ele adormeça. Não cronometre o choro. É fundamental que você observe a janela de vigília de 45 minutos a 1 hora e 15 minutos, e que ele esteja calmo ao ser colocado no berço. Se ele chorar ou ficar irritado, você pode ajudá-lo a se acalmar e seguir a condução. Sobre o tempo para aprender, não existe um prazo fixo definido nas regras; a evolução depende de consistência e repetição.
+
+Antes de passar as sonecas para o berço, confirme mamada efetiva e saciedade, medidas posturais, desconforto ou refluxo e se a janela está entre 45 minutos e 1 hora e 15 minutos.
+
+É fundamental que você observe a janela de vigília de 45 minutos a 1 hora e 15 minutos, e que ele esteja saciado antes de tentar colocá-lo no berço.
+
+A janela de vigília de referência é de 45 minutos a 1 hora e 15 minutos.
+
+É compreensível que você esteja buscando formas de ajudar seu bebê a dormir no berço, especialmente com 49 dias. A principal orientação é que, ao iniciar a adaptação ao berço, você deve trabalhar todas as sonecas do dia, não apenas uma por vez.
+
+Entendo que seu bebê de 49 dias só dorme no colo ou no peito. É importante saber que essa dificuldade não deve ser normalizada como uma fase de adaptação. Você pode passar todas as sonecas para o berço, mas é fundamental que isso seja feito de forma gradual e compatível com a idade.
+
+A evolução depende da consistência e repetição na condução do sono.`;
+  const sig = extractSignals({ message: message49c, ageBand: '30_60', ageDays: 49 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft49c,
+    message: message49c,
+    signals: sig,
+    babyProfile: { ageDays: 49 },
+  });
+  assert(!/primeira soneca da manh[aã]/i.test(enriched.text), 'R10 49d crib: no first-morning-nap protocol');
+  assert(!/n[aã]o cronometr/i.test(enriched.text), 'R10 49d crib: no do-not-time-crying protocol');
+  assert(/todas as sonecas/i.test(enriched.text), 'R10 49d crib: all same-day naps');
+  assert(/aula.{0,80}travesseiro/i.test(enriched.text), 'R10 49d crib: how-to stays in the aula');
+  assert(/n[aã]o existe prazo|n[aã]o h[aá] prazo oficial/i.test(enriched.text), 'R11 49d crib: no official learn-by date');
+  assert(/Eliana Dias/i.test(enriched.text), 'R11 49d crib: methodological deadline goes to Eliana Dias');
+  assert(!/calmo ao ser colocad/i.test(enriched.text), 'R12 49d crib: calm is not a crib-placement requirement');
+  assert(/todas as sonecas/i.test(enriched.text), 'R12 49d crib: keep same-day naps after calm strip');
+  assert(!/volte ao ber[cç]o at[eé] que ele adorme[cç]a/i.test(enriched.text), 'R14 49d crib: no colo-berço until asleep');
+  assert(!/at[eé] consolidar/i.test(enriched.text), 'R14 49d crib: no até consolidar milestone');
+  assert(!/Sobre o tempo para aprender/i.test(enriched.text), 'R15 49d crib: prazo is not restated as Sobre o tempo');
+  assert((enriched.text.match(/n[aã]o existe prazo oficial/gi) || []).length === 1, 'R15 49d crib: official prazo once');
+  assert((enriched.text.match(/consist[eê]ncia e repeti[cç][aã]o/gi) || []).length === 1, 'R15 49d crib: consistência e repetição once');
+  assert(/Eliana Dias/i.test(enriched.text), 'R15 49d crib: keep Eliana Dias for methodological deadline');
+  assert(!/A janela de vig[ií]lia de refer[eê]ncia [eé] de 45 minutos a 1 hora e 15 minutos/i.test(enriched.text), 'R16 49d crib: janela ref once in the investigation, not restated');
+  assert(/45 minutos.{0,20}1 hora e 15/i.test(enriched.text), 'R16 49d crib: keep investigation janela');
+  assert(!/[eé] compreens[ií]vel que voc[eê] esteja buscando formas de ajudar/i.test(enriched.text), 'R16 49d crib: no empathy opener');
+  assert(!/n[aã]o deve ser normalizada como uma fase de adapta[cç][aã]o/i.test(enriched.text), 'R16 49d crib: no adaptation-phase normalize leftover');
+  assert(!/Entendo que seu beb[eê].{0,80}s[oó] dorme no colo/i.test(enriched.text), 'R16 49d crib: no Empathy restatement of colo/peito');
+  assert(!/Voc[eê] pode passar todas as sonecas para o ber[cç]o, mas [eé] fundamental/i.test(enriched.text), 'R16 49d crib: same-day is not restated as Voc\u00ea pode passar');
+  assert(!/[ÉE] fundamental que voc[eê] observe a janela de vig[ií]lia/i.test(enriched.text), 'R16 49d crib: janela is not restated as É fundamental');
+}
+
+{
+  const message59c =
+    'Ele tem 59 dias. Quero passar as sonecas para o berço. Faço uma soneca por dia até adaptar?';
+  const draft59c = `É importante repetir diariamente até que ele se adapte. A janela de vigília é de 45 minutos a 1 hora e 15 minutos, então fique atenta a isso ao iniciar a condução para o sono. Para a adaptação ao berço, você deve trabalhar TODAS as sonecas do dia, não apenas uma por vez. Repita diariamente até consolidar essa adaptação. Comece pela primeira soneca da manhã e siga com todas as demais sonecas do mesmo dia no berço. Não avance uma soneca por vez ao longo dos dias. Não cronometrar o choro. É importante não cronometrar o choro durante esse processo. Se houver resistência, você pode acalmá-lo no colo e, em seguida, voltar ao berço e repetir até que ele adormeça. Quanto tempo ele costuma permanecer acordado antes das sonecas? Use a Estratégia do Travesseiro na condução e na colocação no berço, pois isso pode ajudar bastante nesse processo. Essa técnica pode ajudar a dar mais segurança a você nesse processo.`;
+  const sig = extractSignals({ message: message59c, ageBand: '30_60', ageDays: 59 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft59c,
+    message: message59c,
+    signals: sig,
+    babyProfile: { ageDays: 59 },
+  });
+  assert(!/uma soneca por vez ao longo dos dias/i.test(enriched.text) || /n[aã]o [eé] avan[cç]ar uma soneca por vez/i.test(enriched.text), 'R10 59d crib: not one nap per day over days');
+  assert(!/primeira soneca da manh[aã]/i.test(enriched.text), 'R10 59d crib: no first-morning-nap protocol');
+  assert(/gradual|compat[ií]vel com a idade|todas as sonecas/i.test(enriched.text), 'R10 59d crib: 9.3 gradual same-day');
+  assert(/gradual e compat[ií]vel com a idade/i.test(enriched.text), 'R14 59d crib: keep gradual even when all-naps is already present');
+  assert(!/at[eé] consolidar/i.test(enriched.text), 'R14 59d crib: no até consolidar milestone');
+  assert(!/colo.{0,80}ber[cç]o.{0,40}repet/i.test(enriched.text), 'R11 59d crib: no colo-berço loop');
+  assert(!/dar mais seguran[cç]a a voc[eê]/i.test(enriched.text), 'R12 59d crib: no unofficial segurança justification');
+  assert(!/n[aã]o cronometr/i.test(enriched.text), 'R12 59d crib: no do-not-time-crying protocol');
+  assert(!/quanto tempo ele costuma (ficar|permanecer) acordado antes das sonecas/i.test(enriched.text), 'R15 59d crib: no leaked wake-window ask');
+  assert(!/Para a adapta[cç][aã]o ao ber[cç]o.{0,80}TODAS as sonecas/i.test(enriched.text), 'R16 59d crib: same-day naps once, not restated as TODAS opener');
+  assert(!/pois isso pode ajudar bastante|Essa t[eé]cnica pode ajudar bastante/i.test(enriched.text), 'R16 59d crib: no generic Travesseiro justification');
+  assert(/todas as sonecas daquele mesmo dia/i.test(enriched.text), 'R16 59d crib: keep same-day naps after opener strip');
+  assert(!/[ÉE] importante repetir diariamente at[eé] que ele se adapte/i.test(enriched.text), 'R16 59d crib: no daily-until-adapted leftover');
+  assert(!/fique atenta a isso ao iniciar a condu[cç][aã]o/i.test(enriched.text), 'R16 59d crib: no “fique atenta” janela leftover');
+}
+
+{
+  const message37f =
+    'Ele tem 37 dias. Fica 1h12 acordado e ainda leva uns 32 minutos para dormir. De manhã a soneca é longa. Fraciono essa soneca?';
+  const draft37f = `É compreensível que você esteja buscando organizar as sonecas do seu bebê de 37 dias. A janela de vigília para ele é de 45 minutos a 1 hora e 15 minutos.
+
+A janela de vigília de referência para ele é de 45 minutos a 1 hora e 15 minutos.
+Para entender melhor a situação, você poderia me informar quanto tempo dura a soneca da manhã e se ele se aproxima do próximo intervalo de mamada durante esses 32 minutos que leva para adormecer?
+
+Com 37 dias, o tempo acordado de 1h12 e a demora de 32 minutos para adormecer indicam que a soma total de vigília está acima da referência de 45 minutos a 1h15.
+
+A soneca da manhã longa pode interferir na distribuição das sonecas da tarde. Considerando que ele está acordado por 1h12 e leva cerca de 32 minutos para adormecer, isso resulta em um tempo total acordado de aproximadamente 1h44, que está acima da referência de 45 minutos a 1h15.
+
+Não fraciono uma soneca só porque ela parece longa. O teto automático é 2 horas e 30 minutos. Me diga quanto tempo essa soneca da manhã durou.`;
+  const sig = extractSignals({ message: message37f, ageBand: '30_60', ageDays: 37 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft37f,
+    message: message37f,
+    signals: sig,
+    babyProfile: { ageDays: 37 },
+  });
+  assert(!/soneca da manh[aã].{0,80}(interfer|sonecas da tarde|distribui[cç][aã]o)/i.test(enriched.text), 'R11 37d: no morning-nap to afternoon causality');
+  assert(/2 horas e 30|2h\s*30/i.test(enriched.text), 'R11 37d: keep 2h30 cap');
+  assert(/quanto tempo essa soneca da manh[aã] durou/i.test(enriched.text), 'R11 37d: ask real morning-nap duration');
+  assert(!/[eé] compreens[ií]vel que voc[eê] esteja buscando organizar as sonecas/i.test(enriched.text), 'R16 37d: no empathy opener');
+  assert(!/A janela de vig[ií]lia( de refer[eê]ncia)? para ele [eé] de 45 minutos a 1 hora e 15 minutos/i.test(enriched.text), 'R16 37d: window ref is in the 1h44 calculation, not a second opener');
+  assert(/1h44/i.test(enriched.text), 'R16 37d: keep 1h44 calculation');
+  assert(!/soma total de vig[ií]lia est[aá] acima/i.test(enriched.text), 'R16 37d: no duplicate wake-sum opener before 1h44');
+  assert(!/voc[eê] poderia me informar quanto tempo dura a soneca da manh[aã]/i.test(enriched.text), 'R16 37d: morning-nap duration is already asked after 2h30');
+  assert(!/se aproxima do pr[oó]ximo intervalo de mamada/i.test(enriched.text), 'R16 37d: 32 min onset is not a feed-interval cue');
+}
+
+{
+  const message40aw =
+    'Ele tem 40 dias. Dorme cerca de 1h12 e acorda muito bravo, com bastante choro. Mama um pouco e relaxa. O que investigo primeiro?';
+  const draft40aw = `Como ele consegue dormir por cerca de 1 hora ou até mais, eu não consideraria a duração da soneca o principal problema neste momento. O que chama mais atenção é ele acordar muito irritado e relaxar depois de sugar um pouco. Por isso, primeiro observaria como está a mamada e se existe algum desconforto depois dela.
+
+O tempo de mamada, sozinho, não comprova saciedade. Observe sucção ativa, deglutição e sinais de saciedade. Sugar pouco e relaxar ao despertar não significa automaticamente que ele precise se alimentar.
+
+A mamada pareceu efetiva, com sucção ativa e sinais de saciedade?
+
+Depois da mamada, ele arrotou e permaneceu em posição vertical por cerca de 20 a 30 minutos?
+
+Há sinais de desconforto depois da mamada ou ao ser colocado no berço?
+
+Primeiro, investigue a efetividade da mamada: ele está mamando de forma ativa e deglutindo bem? e ele permaneceu em posição vertical por cerca de 20 a 30 minutos? Essas informações são essenciais para entender se ele está confortável e se a alimentação está adequada.
+
+Além disso, após a mamada, é importante que ele permaneça em posição vertical por cerca de 20 a 30 minutos. Isso pode ajudar a evitar desconfortos, como refluxo, que podem contribuir para o choro ao despertar.
+
+Ele permaneceu em posição vertical?
+
+por esse tempo?
+
+Primeiro, é importante investigar a efetividade da mamada. Pergunte-se se ele está mamando de forma ativa, se há deglutição e se você percebe sinais de saciedade. Além disso, observe o que acontece entre o fim da mamada e o momento de deitar: ele arrotou? Permaneceu em posição vertical por cerca de 20 a 30 minutos? Essas informações são cruciais para entender melhor a situação.
+
+Além disso, verifique se ele apresenta sinais de saciedade após a mamada.
+
+O primeiro passo é investigar a alimentação e a saciedade. Verifique se a mamada foi efetiva, observando a sucção ativa e a deglutição, além de sinais de saciedade. Isso pode ajudar a evitar desconfortos que possam estar contribuindo para o choro ao acordar.
+
+Primeiro, é importante investigar a alimentação e a saciedade. Além disso, após a mamada, é fundamental que ele permaneça em posição vertical por cerca de 20 a 30 minutos para ajudar na digestão. Ele permaneceu em posição vertical por esse tempo?`;
+  const sig = extractSignals({ message: message40aw, ageBand: '30_60', ageDays: 40 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft40aw,
+    message: message40aw,
+    signals: sig,
+    babyProfile: { ageDays: 40 },
+  });
+  const askParas = String(enriched.text).split(/\n{2,}/).filter((p) =>
+    /mamada parec(?:e|eu) efetiva|arrotou e permaneceu|sinais de desconforto depois da mamada/i.test(p)
+    && p.length < 360,
+  );
+  assert(askParas.length <= 1, 'R15 40d angry: investigation asks in one sequence', String(askParas.length));
+  assert(!/Primeiro, investigue a efetividade da mamada/i.test(enriched.text), 'R15 40d angry: no second efetividade block');
+  assert(!/Primeiro,.{0,80}efetividade da mamada/i.test(enriched.text), 'R15 40d angry: no second investigar-efetividade paragraph');
+  assert(!/Al[eé]m disso, ap[oó]s a mamada, [eé] importante que ele permane[cç]a/i.test(enriched.text), 'R15 40d angry: no vertical restatement after the ask');
+  assert(!/^Ele permaneceu em posi[cç][aã]o vertical\??$/im.test(enriched.text), 'R15 40d angry: no orphan vertical ask');
+  assert(!/^por esse tempo\??$/im.test(enriched.text), 'R15 40d angry: no orphan por esse tempo');
+  assert(/arrotou e permaneceu em posi[cç][aã]o vertical/i.test(enriched.text), 'R15 40d angry: keep postural investigation ask');
+  assert(!/O primeiro passo [eé] investigar a alimenta[cç][aã]o e a saciedade/i.test(enriched.text), 'R16 40d angry: no restated feed investigation paragraph');
+  assert(!/Primeiro, [eé] importante investigar a alimenta[cç][aã]o e a saciedade/i.test(enriched.text), 'R16 40d angry: no “Primeiro, é importante investigar” leftover');
+  assert(!/ap[oó]s a mamada, [eé] fundamental que ele permane[cç]a/i.test(enriched.text), 'R16 40d angry: no fundamental-vertical leftover');
+  assert(!/Ele permaneceu em posi[cç][aã]o vertical por esse tempo/i.test(enriched.text), 'R16 40d angry: no restated vertical-time ask');
+  assert(!/pode ajudar a evitar desconfortos/i.test(enriched.text), 'R16 40d angry: no preventive desconfortos leftover');
+  assert(!/Al[eé]m disso, verifique se ele apresenta sinais de saciedade/i.test(enriched.text), 'R16 40d angry: satiety ask is not restated after the sequence');
+}
+
+{
+  const message40s =
+    'Ele tem 40 dias. Fica com sono uns 18 minutos antes da próxima mamada. Deixo dormir ou adianto a mamada?';
+  const draft40s = `Você pode optar por duas abordagens: antecipar a mamada para compatibilizar a alimentação com a janela de sono, ou deixá-lo dormir e oferecer a mamada ao acordar, especialmente se as sonecas costumam ser curtas.
+
+Para garantir que ele esteja saciado, verifique se houve uma mamada efetiva antes de deixá-lo dormir. Se ele já está saciado, pode ser mais benéfico deixá-lo descansar.
+
+Para decidir, é importante verificar se ele fez uma mamada efetiva antes e se está saciado. Se ele já mamou bem e está apenas com sono, pode ser melhor deixá-lo dormir.
+
+Além disso, se você notar sinais de desconforto ou refluxo, isso também pode influenciar a decisão.
+
+Você já observou se ele arrota após as mamadas e quanto tempo permanece em posição vertical? Essas informações podem ajudar a entender melhor a situação.
+
+Para decidir, verifique se ele está com fome ou se já fez uma mamada efetiva e está saciado. Se ele já está saciado e apenas dorme, pode ser melhor deixá-lo dormir.
+
+Como ele está próximo do horário da mamada, você pode observar como ele reage. Se ele acordar tranquilo, pode ser uma boa oportunidade para a mamada.
+
+Sono e alimentação são controles distintos: sinais de sono não obrigam mamada antes de cada sono.`;
+  const sig = extractSignals({ message: message40s, ageBand: '30_60', ageDays: 40 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft40s,
+    message: message40s,
+    signals: sig,
+    babyProfile: { ageDays: 40 },
+  });
+  assert(!/arrot[oa].{0,80}posi[cç][aã]o vertical/i.test(enriched.text), 'R15 40d sleep-before-feed: no unsolicited postural ask');
+  assert(/antecipar a mamada|deix[aá]-l[oa] dormir/i.test(enriched.text), 'R15 40d sleep-before-feed: keep the two official options');
+  assert(/apenas com sono/i.test(enriched.text), 'R16 40d sleep-before-feed: satiety with sleep signs, not already asleep');
+  assert(!/apenas dorme/i.test(enriched.text), 'R16 40d sleep-before-feed: no “apenas dorme” leftover');
+  assert(!/acordar tranquilo/i.test(enriched.text), 'R16 40d sleep-before-feed: no acordar-tranquilo leftover');
+  assert(!/Para garantir que ele esteja saciado/i.test(enriched.text), 'R16 40d sleep-before-feed: no extra satiety-before-sleep leftover');
+  assert(!/pode ser mais ben[eé]fico deix[aá]-l[oa] descansar/i.test(enriched.text), 'R16 40d sleep-before-feed: no “deixá-lo descansar” leftover');
+  assert(/oferecer a mamada ao acordar/i.test(enriched.text), 'R16 40d sleep-before-feed: offer the feed on waking');
+  assert(!/notar sinais de desconforto ou refluxo/i.test(enriched.text), 'R16 40d sleep-before-feed: no unsolicited reflux leftover');
+}
+
+{
+  const message40b2 =
+    'Meu bebê tem 40 dias. Ficou 13 minutos no peito e depois tomou 105 ml de fórmula. Esse tempo e esse volume estão adequados?';
+  const draft40b2 = `O volume de 105 ml de fórmula está dentro da referência geral para um bebê de 40 dias, que é de 90 a 120 ml por mamada. O tempo de 13 minutos no peito, por si só, não determina se a mamada foi efetiva. O importante é verificar se houve retirada efetiva de leite e se ele apresenta sinais de saciedade após a mamada. O tempo de 13 minutos no peito, por si só, não é um critério isolado para determinar a saciedade, pois o importante é verificar se houve retirada efetiva de leite e se ele apresenta sinais de saciedade. O importante é verificar se houve uma mamada efetiva, ou seja, se ele retirou leite suficiente e apresentou sinais de saciedade após a mamada.
+
+Para garantir que o bebê esteja se alimentando adequadamente, observe se ele parece satisfeito e relaxado após a mamada.
+
+Além disso, como está sendo a aceitação da mamadeira por parte dele?
+
+A mamadeira deve ser oferecida em um momento em que ele esteja calmo, preferencialmente na primeira mamada da noite ou no final da tarde.
+
+O tempo de 13 minutos no peito pode ser considerado normal, desde que tenha havido uma retirada efetiva de leite e que o bebê apresente sinais de saciedade após a mamada.
+
+Você já notou se ele apresenta sinais de saciedade após a mamada no peito?
+
+O tempo isoladamente não determina o término da mamada: o parâmetro é verificar se houve retirada efetiva de leite e se o bebê apresenta sinais de saciedade.`;
+  const sig = extractSignals({ message: message40b2, ageBand: '30_60', ageDays: 40 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft40b2,
+    message: message40b2,
+    signals: sig,
+    babyProfile: { ageDays: 40 },
+  });
+  assert(!/O importante [eé] verificar se houve (uma )?(mamada|retirada) efetiva/i.test(enriched.text), 'R15 40d bottle leftover: drop duplicate efetiva');
+  assert(!/pois o importante [eé] verificar se houve (uma )?(mamada|retirada) efetiva/i.test(enriched.text), 'R15 40d bottle leftover: drop pois-retirada clause');
+  assert(!/mamadeira deve ser oferecida.{0,80}calmo/i.test(enriched.text), 'R15 40d bottle leftover: no unsolicited bottle timing');
+  assert(!/Para garantir que.{0,80}alimentando adequadamente/i.test(enriched.text), 'R15 40d bottle leftover: drop extra adequacy ask');
+  assert(/tempo isoladamente n[aã]o determina o t[eé]rmino da mamada: o par[aâ]metro [eé] verificar se houve retirada efetiva/i.test(enriched.text), 'R15 40d bottle leftover: keep duration-not-criterion');
+  assert(!/o par[aâ]metro [eé]\s*$/im.test(enriched.text), 'R15 40d bottle leftover: do not truncate the satiety sentence');
+  assert((enriched.text.match(/retirada efetiva/gi) || []).length <= 1, 'R15 40d bottle leftover: retirada efetiva once');
+  assert(!/pode ser considerado normal/i.test(enriched.text), 'R15 40d bottle leftover: duration is not “normal if satiated”');
+  assert(!/Voc[eê] j[aá] notou se.{0,80}sinais de saciedade/i.test(enriched.text), 'R15 40d bottle leftover: no extra satiety ask');
+  assert(!/aceita[cç][aã]o da mamadeira/i.test(enriched.text), 'R16 40d bottle leftover: no unsolicited bottle-acceptance ask');
+  assert(!/\n{3,}/.test(enriched.text), 'R15 40d bottle leftover: no extra blank lines');
+}
+
+{
+  const message44r =
+    'Ele tem 44 dias. Começo o ritual às 18h20 e ele só adormece às 19h30. Está certo?';
+  const draft44r = `A janela de vigília começa no último despertar, não no início do ritual. Sem o horário em que ele acordou, não dá para concluir que o intervalo do ritual foi a janela.
+
+O horário recomendado para o início do sono noturno é entre 19h e 20h. Portanto, iniciar o ritual às 18h20 e ele adormecer às 19h30 está dentro da faixa recomendada. No entanto, é importante observar que o ritual deve ser breve e a janela de vigília é de 45 minutos a 1 hora e 15 minutos.
+
+Se ele está acordado por muito tempo antes do ritual, isso pode contribuir para a demora em adormecer.
+
+Se ele está acordado por muito tempo entre o início do ritual e o adormecimento, isso pode indicar que ele está ultrapassando a janela de vigília, que é de 45 minutos a 1 hora e 15 minutos.
+
+O ritual deve ser breve e não deve ultrapassar esse tempo acordado.
+
+O ritual deve ser breve e que a janela de vigília deve ser respeitada para evitar que ele fique muito tempo acordado.
+
+O ritual deve ser breve, e se ele está demorando para adormecer, é importante verificar quanto tempo ele permanece acordado antes de iniciar a condução para o sono.
+
+O ritual deve ser breve, normalmente consistindo em banho, mamada e dormir. Se ele está demorando para adormecer, é importante verificar quanto tempo ele permanece acordado antes de iniciar o ritual e a duração da última soneca. Isso nos ajudará a encontrar a melhor abordagem para o seu caso.
+
+O horário recomendado para o início do sono noturno é entre 19h e 20h. O ritual deve ser breve, e a janela de vigília é de 45 minutos a 1 hora e 15 minutos.`;
+  const sig = extractSignals({ message: message44r, ageBand: '30_60', ageDays: 44 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft44r,
+    message: message44r,
+    signals: sig,
+    babyProfile: { ageDays: 44 },
+  });
+  assert(!/iniciar o ritual.{0,80}18h20.{0,80}dentro da faixa/i.test(enriched.text), 'R15 44d ritual: 18h20 is not the 19h–20h band');
+  assert(/19h30 est[aá] dentro da refer[eê]ncia geral/i.test(enriched.text), 'R15 44d ritual: keep 19h30 as night-start reference');
+  assert(!/acordado por muito tempo antes do ritual/i.test(enriched.text), 'R15 44d ritual: do not invent long wake before ritual');
+  assert(!/acordado por muito tempo entre o in[ií]cio do ritual/i.test(enriched.text), 'R16 44d ritual: do not recast ritual interval as long wake');
+  assert(!/n[aã]o deve ultrapassar esse tempo acordado/i.test(enriched.text), 'R15 44d ritual: do not tie ritual brevity to wake time');
+  assert(!/evitar que ele fique muito tempo acordado/i.test(enriched.text), 'R15 44d ritual: do not recast window as long-wake risk');
+  assert(!/verificar quanto tempo ele permanece acordado antes de iniciar a condu[cç][aã]o/i.test(enriched.text), 'R16 44d ritual: last-awake ask is not needed when 19h30 is already answered');
+  assert(!/verificar quanto tempo ele permanece acordado antes de iniciar o ritual/i.test(enriched.text), 'R16 44d ritual: no ritual-awake verificar leftover');
+  assert(!/normalmente consistindo em banho, mamada e dormir/i.test(enriched.text), 'R16 44d ritual: no generic ritual-brief leftover');
+  assert((enriched.text.match(/19h.{0,12}20h/gi) || []).length === 1, 'R16 44d ritual: 19h–20h once as 19h30 reference');
+}
+
+{
+  const message52a =
+    'Meu bebê tem 52 dias. Coloco no berço acordado ou espero sono leve? E se adormecer mamando?';
+  const draft52a = `Se o bebê está tranquilo e sem chorar, você pode colocá-lo acordado no berço e dar a oportunidade de adormecer ali. Não é obrigatório esperar que ele esteja em sono leve ou profundo. Caso ele adormeça mamando, você pode colocá-lo no berço já dormindo, sem necessidade de acordá-lo. Se ele ficar irritado ou chorar, você pode ajudá-lo a se acalmar e seguir a condução — isso deve ser feito uma única vez, sem exigir que ele esteja calmo para ser colocado no berço. Se ele adormecer durante uma mamada efetiva, não o acorde só para colocá-lo acordado no berço.
+
+Como você está utilizando a Estratégia do Travesseiro? Essa técnica pode ajudar na condução e na colocação no berço, dando mais segurança a você nesse processo.
+
+Para melhor condução, como está sendo realizada a Estratégia do Travesseiro? Isso pode ajudar na sua adaptação ao berço.
+
+Como você está realizando a condução para o sono?
+
+Como você está realizando a Estratégia do Travesseiro?
+
+Está utilizando a Estratégia do Travesseiro?
+
+Além disso, se você já utiliza a Estratégia do Travesseiro, como está sendo realizada? Isso pode ajudar a organizar a condução do sono.
+
+. Isso pode ajudar a organizar melhor a rotina.
+
+Para entender melhor como você está realizando a condução e a Estratégia do Travesseiro, poderia me contar como está sendo essa execução?
+
+Para entender melhor como está sendo a condução do sono, quanto tempo ele costuma ficar acordado antes das sonecas? E na condução e na colocação no berço?
+
+E na condução e colocação no berço?
+
+Para melhor condução, gostaria de saber: quanto tempo ele costuma permanecer acordado antes das sonecas? Isso ajudará a organizar a rotina e a condução do sono.
+
+Para entender melhor como está sendo a execução da Estratégia do Travesseiro, como você está realizando essa técnica? Isso pode ajudar na condução e na colocação no berço, dando mais segurança a você nesse processo.
+
+Complete o arroto e mantenha a posição vertical por cerca de 20 a 30 minutos (até ~40 minutos se houver refluxo) antes de colocá-lo no berço.
+
+Se ele adormecer durante uma mamada efetiva, não o acorde só para colocá-lo acordado no berço: complete o arroto e a posição vertical necessária (cerca de 20 a 30 minutos; e, então, leve-o ao berço já dormindo.
+
+A Estratégia do Travesseiro também pode ajudar na condução e na colocação do bebê no berço, dando mais segurança para você nesse processo. Isso pode ajudar a ajustar a condução do sono.
+
+Como você já está utilizando a mamada, gostaria de saber: quanto tempo ele costuma ficar acordado antes de você iniciar a condução para o sono?`;
+  const sig = extractSignals({ message: message52a, ageBand: '30_60', ageDays: 52 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft52a,
+    message: message52a,
+    signals: sig,
+    babyProfile: { ageDays: 52 },
+  });
+  assert(!/Como voc[eê] est[aá] utilizando a Estrat[eé]gia do Travesseiro/i.test(enriched.text), 'R15 52d crib-awake: no extra how-are-you-using');
+  assert(!/como est[aá] sendo realizada a Estrat[eé]gia do Travesseiro/i.test(enriched.text), 'R15 52d crib-awake: no how-is-it-being-done');
+  assert(!/Isso pode ajudar na sua adapta[cç][aã]o ao ber[cç]o/i.test(enriched.text), 'R15 52d crib-awake: no extra adaptação ask');
+  assert(!/organizar melhor a rotina/i.test(enriched.text), 'R15 52d crib-awake: no orphan rotina leftover');
+  assert(!/como voc[eê] est[aá] realizando a condu[cç][aã]o e a Estrat[eé]gia do Travesseiro/i.test(enriched.text), 'R15 52d crib-awake: no how-are-you-executing');
+  assert(!/Essa t[eé]cnica pode ajudar.{0,80}seguran[cç]a/i.test(enriched.text), 'R15 52d crib-awake: no duplicate Essa técnica');
+  assert(!/E na condu[cç][aã]o e (na )?coloca[cç][aã]o no ber[cç]o\??/i.test(enriched.text), 'R15 52d crib-awake: no orphan condução ask');
+  assert(!/quanto tempo ele costuma (ficar|permanecer) acordado antes das sonecas/i.test(enriched.text), 'R15 52d crib-awake: no leaked wake ask');
+  assert(!/Isso ajudar[aá] a organizar a rotina/i.test(enriched.text), 'R15 52d crib-awake: no rotina leftover after wake ask');
+  assert(!/dando mais seguran[cç]a/i.test(enriched.text), 'R16 52d crib-awake: no unofficial mother-segurança justification');
+  assert(!/ajustar a condu[cç][aã]o do sono/i.test(enriched.text), 'R16 52d crib-awake: no generic “ajustar a condução” leftover');
+  assert(/tamb[eé]m pode ajudar na condu[cç][aã]o e na coloca[cç][aã]o/i.test(enriched.text), 'R15 52d crib-awake: keep canonical purpose');
+  assert(!/uma [uú]nica vez/i.test(enriched.text), 'R16 52d crib-awake: no operational once-limit on calming');
+  assert(/se acalmar|acalme/i.test(enriched.text), 'R16 52d crib-awake: keep cry-calm conduction');
+  assert(!/j[aá] utiliza a Estrat[eé]gia do Travesseiro, como est[aá] sendo realizada/i.test(enriched.text), 'R16 52d crib-awake: no how-are-you-already-using');
+  assert(!/organizar a condu[cç][aã]o do sono/i.test(enriched.text), 'R16 52d crib-awake: no filler organize-conduction');
+  assert(!/Como voc[eê] est[aá] realizando a condu[cç][aã]o para o sono/i.test(enriched.text), 'R16 52d crib-awake: no extra how-is-conduction');
+  assert(!/Como voc[eê] est[aá] realizando a Estrat[eé]gia do Travesseiro/i.test(enriched.text), 'R16 52d crib-awake: no extra how-is-travesseiro');
+  assert(!/Caso ele adorme[cç]a mamando, voc[eê] pode coloc[aá]-lo no ber[cç]o j[aá] dormindo/i.test(enriched.text), 'R16 52d crib-awake: feed-asleep once');
+  assert(/n[aã]o o acorde s[oó] para coloc[aá]-lo acordado/i.test(enriched.text), 'R16 52d crib-awake: keep official feed-asleep');
+  assert(!/como voc[eê] est[aá] realizando essa t[eé]cnica/i.test(enriched.text), 'R16 52d crib-awake: no how-are-you-doing-the-technique');
+  assert(!/Est[aá] utilizando a Estrat[eé]gia do Travesseiro/i.test(enriched.text), 'R16 52d crib-awake: no está-utilizando leftover');
+  assert(!/at[eé]\s*(cerca de |~)?40 minutos se houver refluxo/i.test(enriched.text), 'R16 52d crib-awake: no unsolicited 40-min reflux postural');
+  assert(!/20 a 30 minutos;\s*e, então/i.test(enriched.text), 'R16 52d crib-awake: 40-min strip must not leave a broken sentence');
+  assert(!/Como voc[eê] j[aá] est[aá] utilizando a mamada/i.test(enriched.text), 'R16 52d crib-awake: no leaked mamada/wake ask');
+  assert(!/antes de voc[eê] iniciar a condu[cç][aã]o para o sono/i.test(enriched.text), 'R16 52d crib-awake: no leaked conduction-wake ask');
+}
+
+{
+  const message44h3 =
+    'Ele tem 44 dias. Depois das 4h acorda de hora em hora. Ofereço o peito sempre?';
+  const draft44h3 = `É compreensível que você esteja preocupada com os despertares do seu bebê de 44 dias.O primeiro passo é ver há quanto tempo foi a última mamada efetiva e se o jejum noturno da idade já foi atingido — cerca de 3 horas aos 30 dias, aumentando até cerca de 5 horas aos 60 dias. Se ainda não atingiu o jejum da idade e a mamada anterior foi efetiva, com saciedade, tente primeiro reconduzi-lo ao sono. Quando o jejum da idade já tiver sido alcançado, ofereça mamada.
+
+O horário, sozinho, não explica despertares de hora em hora depois das 4h. Investigue a última mamada efetiva e a saciedade, as medidas posturais, a forma de adormecer, desconfortos e o comportamento nesses despertares. A recorrência horária não prova, por si, que o jejum noturno ainda não foi completado — isso se verifica pelo horário da última mamada efetiva.
+
+Além disso, considere as medidas posturais após as mamadas (como arroto e posição vertical por 20 a 30 minutos) e se há sinais de desconforto. Também verifique as medidas posturais após as mamadas (arroto e posição vertical por 20 a 30 minutos) e se há sinais de desconforto após as mamadas.
+
+Pergunte-se também sobre as medidas posturais após as mamadas (como arroto e posição vertical por 20 a 30 minutos) e se há sinais de desconforto após as mamadas.
+
+Você tem observado a efetividade das mamadas e sinais de saciedade? Além disso, quais medidas posturais você tem utilizado após as mamadas? Essas informações podem ajudar a entender melhor a situação.`;
+  const sig = extractSignals({ message: message44h3, ageBand: '30_60', ageDays: 44 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft44h3,
+    message: message44h3,
+    signals: sig,
+    babyProfile: { ageDays: 44 },
+  });
+  assert(!/Al[eé]m disso, considere as medidas posturais/i.test(enriched.text), 'R15 44d hourly: postural investigation once');
+  assert(!/Tamb[eé]m verifique as medidas posturais/i.test(enriched.text), 'R15 44d hourly: no second postural paragraph');
+  assert(!/Pergunte-se tamb[eé]m sobre as medidas posturais/i.test(enriched.text), 'R16 44d hourly: no third postural paragraph');
+  assert(/medidas posturais/i.test(enriched.text), 'R15 44d hourly: keep 11.7 postural investigation');
+  assert(!/[ÉE] compreens[ií]vel que voc[eê] esteja preocupada com os despertares/i.test(enriched.text), 'R16 44d hourly: no empathy leftover on hourly wakes');
+  assert(/jejum noturno da idade j[aá] foi atingido/i.test(enriched.text), 'R16 44d hourly: keep age-based fast tree after empathy strip');
+  assert(!/Voc[eê] tem observado a efetividade das mamadas/i.test(enriched.text), 'R16 44d hourly: no extra satiety/postural ask');
+}
+
+{
+  const message37p =
+    'Ele tem 37 dias. Quando a chupeta cai, recoloco na hora?';
+  const draft37p = `Se a chupeta cair e ele apenas reclamar, você não precisa recolocá-la imediatamente. Observe alguns instantes para ver se ele consegue se reorganizar e continuar dormindo.
+
+A janela de vigília para um bebê de 37 dias é de 45 minutos a 1 hora e 15 minutos. Se ele costuma ficar acordado por 1h30 a 1h45, esse tempo já está acima do indicado para a idade.
+
+Como você já relatou que ele às vezes retoma sem a chupeta, observe alguns instantes no despertar e recoloque a chupeta se necessário.
+
+Para aprofundar mais sobre a janela de vigília e sinais de sono, recomendo a aula "Janela de Vigília (PASSO 3)".`;
+  const sig = extractSignals({ message: message37p, ageBand: '30_60', ageDays: 37 });
+  const enriched = enrichThirtySixtyOfficialAnswer({
+    text: draft37p,
+    message: message37p,
+    signals: sig,
+    babyProfile: { ageDays: 37 },
+  });
+  assert(!/1h30 a 1h45/i.test(enriched.text), 'R15 37d pacifier: do not leak 55d window numbers');
+  assert(!/j[aá] relatou que.{0,80}retoma/i.test(enriched.text), 'R15 37d pacifier: do not invent resume-without-pacifier');
+  assert(!/Janela de Vig[ií]lia/i.test(enriched.text), 'R15 37d pacifier: no unsolicited Janela lesson');
+  assert(/2 a 5 minutos/i.test(enriched.text), 'R15 37d pacifier: keep official wait');
 }
 
 console.log(`\nLayer A: ${passed} passed, ${failed} failed`);

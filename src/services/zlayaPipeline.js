@@ -282,7 +282,9 @@ export async function processTurn({ message, babyProfile, conversation, conversa
     // Também exige diferenciação literal entre "refluxo fisiológico" e
     // "refluxo patológico". Se algum item ficar de fora, o enricher anexa
     // um parágrafo metodológico SOMENTE com os itens faltantes.
-    const refluxFix = ensureRefluxRoutingComplete({
+    const refluxFix = is3060Ns
+      ? { text: draft.text, appended: false, missing: [] }
+      : ensureRefluxRoutingComplete({
       text: draft.text,
       userMessage: message,
       signalIds: (signals?.signals || []).map((s) => s.id),
