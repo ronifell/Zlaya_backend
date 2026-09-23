@@ -270,6 +270,16 @@ const LESSON_SCENARIO_RULES = [
     ],
   },
   {
+    signalIds: ['sleeping_through_night_30_60'],
+    whitelist: ['lesson-30-60-sono-noturno'],
+    blacklist: [
+      'lesson-30-60-maus-habitos',
+      'lesson-travesseiro',
+      'lesson-30-60-passo-1-comportamento',
+      'lesson-30-60-caso-cecilia',
+    ],
+  },
+  {
     signalIds: ['night_hourly_wakes_30_60'],
     whitelist: ['lesson-30-60-sono-noturno'],
     blacklist: [

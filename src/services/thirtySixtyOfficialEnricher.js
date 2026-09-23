@@ -1512,6 +1512,20 @@ function reportedHealthyLongNight(msg) {
   return /5\s*h(?:oras)?|5h30|5 horas e meia/.test(msg) && /noite|noturn|dorme (seguid|a noite)/i.test(msg);
 }
 
+function looksLikeSleepingThroughNightAsk(msg) {
+  const t = String(msg || '');
+  const night = /madrugada|(^|[^\w])(à|a)\s+noite|de noite|noturn/i.test(t);
+  const notWaking = /n[aã]o est[aá] acordando para mamar|n[aã]o acorda para mamar|n[aã]o desperta para mamar|n[aã]o mama (na |de )?madrugada|n[aã]o acorda (na |de )?madrugada|dorme a noite (inteira|toda)/i.test(t);
+  const askWake = /preciso acordar|devo acordar|tenho que acordar|preciso acord[aá]-?l[oa]|devo acord[aá]-?l[oa]/i.test(t);
+  return night && (notWaking || (askWake && /n[aã]o (est[aá] )?acord/i.test(t)));
+}
+
+const SLEEPING_THROUGH_NIGHT_CANON =
+  'Não. Se o bebê é saudável e está dormindo na madrugada, você não precisa acordá-lo só para mamar — salvo se o pediatra pediu isso por peso ou ganho de peso.\n\n'
+  + 'Dormir um período mais longo à noite, de forma espontânea, não é problema nesta faixa.\n\n'
+  + 'O jejum noturno — reconduzir ao sono ou oferecer a mamada — vale quando ele ACORDA. Como ele não está acordando, essa árvore não se aplica agora.\n\n'
+  + 'Se o pediatra não pediu para acordar, deixe-o dormir. Ganho de peso e mamadas do dia são outro controle, não o jejum da madrugada.';
+
 function reportedSuddenChange(msg) {
   return /mudou de (uma hora para outra|repente)|de uma hora para outra|do nada|s[uú]bita|repentin/i.test(msg)
     || (/muito choro|chora muito/i.test(msg) && /s[oó] (no )?colo/i.test(msg) && /4[0-5]\s*(min|minutos).{0,20}5[0-9]|40\s*[–\-aà]\s*50/i.test(msg));
@@ -4069,6 +4083,15 @@ export function enrichThirtySixtyOfficialAnswer({
       text: `Aos ${ageDays} dias, a fonte oficial consolidada disponível é de 30 a 60 dias. Não aplico automaticamente as regras dessa faixa a esta idade — isso requer validação metodológica da Eliana Dias. Me conte como o bebê acorda, como está a mamada e o que mais você observa, para eu organizar o que já puder sem importar regra de outra faixa.`,
       notes,
     };
+  }
+
+  if (
+    (ids.has('sleeping_through_night_30_60') || looksLikeSleepingThroughNightAsk(msg))
+    && !ids.has('night_hourly_wakes_30_60')
+    && !ids.has('nap_angry_wake_30_60')
+  ) {
+    notes.push('sleeping_through_night_not_fast');
+    return { text: SLEEPING_THROUGH_NIGHT_CANON, notes };
   }
 
   // --- 30d angry wake after adequate nap ---

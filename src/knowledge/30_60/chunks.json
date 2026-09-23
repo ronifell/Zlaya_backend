@@ -183,6 +183,32 @@
       "text": "JEJUM NOTURNO aos 30-60 dias: cerca de 3 horas aos 30 dias, aumentando gradualmente e podendo chegar a cerca de 5 horas aos 60 dias. Periodo maior espontaneo em bebe saudavel NAO e problema. Bebe saudavel DORMINDO NAO deve ser acordado so para mamar (salvo orientacao medica). Se despertar ANTES do jejum da idade apos mamada efetiva e saciedade, tente primeiro reconduzir ao sono. Se despertar APOS o jejum da idade, ofereca mamada efetiva + arroto + medidas posturais. Depois da mamada que encerra o jejum, os intervalos voltam ao habito: peito 2h a 2h30 e mamadeira 3h, contados do INICIO da mamada anterior. Se continuar dormindo, nao acorde so porque o intervalo foi atingido. Aceitar o peito ao acordar NAO comprova fome. NAO use 2h30-3h como intervalo de peito. NAO comece por associacao peito-sono. NAO normalize despertares de hora em hora so porque passou das 4h."
     },
     {
+      "id": "30-60-chunk-nao-acordar-dormindo",
+      "namespace": "30_60",
+      "theme": "nao_acordar_dormindo_30_60",
+      "intent": [
+        "comportamento_esperado",
+        "mamadas"
+      ],
+      "ageBand": "30_60",
+      "ageRangeDays": [
+        29,
+        60
+      ],
+      "safetyLevel": "verde",
+      "contentType": "regra_fixa",
+      "allowedAction": "responder que nao precisa acordar bebe saudavel que dorme na madrugada, salvo orientacao medica",
+      "blockedAction": "aplicar jejum noturno, reconducao ou primeiro intervalo de 3-4h quando o bebe nao esta acordando",
+      "relatedLessons": [
+        "lesson-30-60-sono-noturno"
+      ],
+      "askIfMissing": [
+        "o pediatra pediu para acordar por peso ou ganho?",
+        "como está o ganho de peso"
+      ],
+      "text": "Se o bebe de 30 a 60 dias e saudavel e NAO esta acordando para mamar na madrugada, a mae NAO precisa acorda-lo so para mamar — salvo se o pediatra pediu isso por peso ou ganho. Periodo noturno mais longo, espontaneo, NAO e problema. O jejum noturno (reconducir ao sono ou oferecer mamada) vale SOMENTE quando o bebe ACORDA. Nao misturar as duas arvores. Nao falar em primeiro intervalo de 3 a 4 horas. Nao tratar como soneca diurna nem como 'se nao acordar antes de 3 horas, reconduza'. Ganho de peso e mamadas do dia sao outro controle."
+    },
+    {
       "id": "30-60-chunk-refluxo-oculto-aplv-60d",
       "namespace": "30_60",
       "theme": "refluxo_oculto_aplv_60d",

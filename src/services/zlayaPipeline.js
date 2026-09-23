@@ -6,7 +6,7 @@ import {
   hydrateBabyProfile,
   isNamespaceActive,
 } from './ageService.js';
-import { classifyIntent, applyRnIntentOverrides, applyThirtySixtyIntentOverrides } from './intentClassifier.js';
+import { classifyIntent, applyRnIntentOverrides, applyThirtySixtyIntentOverrides, isGreetingOnly } from './intentClassifier.js';
 import { extractSignals } from './signalExtractor.js';
 import { retrieve } from './retrieval.js';
 import {
@@ -136,6 +136,27 @@ export async function processTurn({ message, babyProfile, conversation, conversa
   }
 
   const namespace = age.band.id;
+
+  if (isGreetingOnly(message)) {
+    const mother = (babyProfile?.motherName || 'Mãe').trim();
+    const baby = (babyProfile?.babyName || 'o bebê').trim();
+    const ageBit = Number.isFinite(age.days) ? ` (${age.days} dias)` : '';
+    return finalize({
+      turnId,
+      conversationId,
+      question: message,
+      babyProfile,
+      age,
+      response: {
+        text:
+          `${mother}, olá. Já tenho a idade de ${baby}${ageBit} do primeiro acesso. ` +
+          'Me conta o que está acontecendo no sono — sonecas, noite, horários ou mamadas — que eu te oriento pelo método.',
+        kind: 'greeting',
+      },
+      route: { path: PATHS.ASK_MORE_CONTEXT, details: { reason: 'greeting' } },
+      startedAt,
+    });
+  }
 
   // 2) Intent classification ------------------------------------------
   let intent = await classifyIntent(message);

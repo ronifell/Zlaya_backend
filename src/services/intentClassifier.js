@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { config, useOpenAI } from '../config/index.js';
 import { getOpenAI } from './openaiClient.js';
+import { looksLikeSleepingThroughNightAsk } from './signalExtractor.js';
 
 const intentsData = JSON.parse(
   readFileSync(path.join(config.paths.knowledge, 'intents.json'), 'utf-8'),
@@ -71,6 +72,15 @@ function looksLikeDomain(normText) {
   return DOMAIN_HINTS.some((h) => normText.includes(normalize(h)));
 }
 
+export function isGreetingOnly(text) {
+  const t = normalize(text)
+    .replace(/[!?.,;:]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (!t || t.length > 40) return false;
+  return /^(ola|oi|oie|hey|hi|hello|bom dia|boa tarde|boa noite)( (zlaya|zlayaa|tudo bem))?( (tudo bem))?$/.test(t);
+}
+
 function keywordClassify(text) {
   const norm = normalize(text);
   const scores = new Map();
@@ -82,6 +92,9 @@ function keywordClassify(text) {
     }
   }
   if (scores.size === 0) {
+    if (isGreetingOnly(text)) {
+      return { intent: 'ambiguo', confidence: 0.9, candidates: [], source: 'keyword' };
+    }
     if (looksLikeDomain(norm)) {
       return { intent: 'ambiguo', confidence: 0.2, candidates: [], source: 'keyword' };
     }
@@ -248,6 +261,24 @@ export function applyThirtySixtyIntentOverrides({ intent, message, ageDays }) {
   const days = Number(ageDays);
   if (!Number.isFinite(days) || days < 29 || days > 60) {
     return { intent, override: null };
+  }
+  if (looksLikeSleepingThroughNightAsk(message)) {
+    return {
+      intent: {
+        ...intent,
+        intent: 'comportamento_esperado',
+        rationale:
+          (intent?.rationale ? `${intent.rationale} | ` : '') +
+          'override_30_60: bebê dormindo na madrugada — não acordar; não aplicar jejum/recondução',
+        source: `${intent?.source || 'unknown'}+30_60_override`,
+        originalIntent: intent?.intent,
+      },
+      override: {
+        from: intent?.intent,
+        to: 'comportamento_esperado',
+        reason: 'sleeping_through_night_not_fast',
+      },
+    };
   }
   if (intent?.intent !== 'sonecas_curtas') return { intent, override: null };
 

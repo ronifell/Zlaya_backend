@@ -968,6 +968,23 @@ const SIGNAL_DEFS_30_60 = [
       'Responda as DUAS dúvidas UMA vez cada. Chupeta: se só reclamar ao cair, NÃO recolocar imediatamente nem de forma preventiva — aguarde cerca de 2 a 5 minutos e observe se se reorganiza; se permanecer tranquilo ou voltar ao sono, não recolocar; se continuar reclamando ou precisar de ajuda, ofereça de novo. Janela: 45 minutos a 1 hora e 15 minutos; 1h30–1h45 habitual JÁ está acima — compare com a referência, SEM “principal hipótese de vigília excessiva” e sem rotular “vigília excessiva” se basta dizer que está acima. Observar sinais de sono e preparar ANTES de passar de 1h15. Pergunte SOMENTE “quanto tempo ele demora para entrar em sono após você iniciar a condução?” — NÃO “depois de deitar” e NÃO uma segunda pergunta sobre “adormecer depois de iniciar a condução”. NÃO invente que ele demora 40–45 minutos para adormecer se a mãe não informou esse tempo — pergunte primeiro. Aula prioritária: Janela de Vigília (PASSO 3) — NÃO substitua por Sinais de Sono. NÃO pergunte “Ele parece tranquilo, chorando ou buscando o peito?”. NÃO pergunte como ele acorda das sonecas, nem mamadas/saciedade (NÃO pergunte “Ele apresenta sinais de saciedade após as mamadas?”), nem se despertares coincidem com a queda da chupeta: a mãe não relatou despertares de soneca nem dificuldade alimentar. NÃO introduza automaticamente alimentação, peito ou saciedade sem elemento no relato. NÃO diga “caprichar nas mamadas” nem “Isso pode ajudar a entender melhor a situação.” NÃO amplie a investigação para outros pilares sem elemento no relato. NÃO pergunte a duração da soneca da manhã. NÃO fracionar a soneca da manhã nem inferir dificuldade na tarde se a mãe não informou; se faltar dado, pergunte antes de intervir. Organize em um único fluxo, sem repetir blocos. NÃO peça idade de novo. NÃO use fallback nem suporte humano: há conteúdo metodológico suficiente.',
   },
   {
+    id: 'sleeping_through_night_30_60',
+    label: 'Não acorda para mamar na madrugada — não acordar bebê saudável que dorme',
+    directive: true,
+    phrases: [
+      'nao esta acordando para mamar', 'não está acordando para mamar',
+      'nao acorda para mamar', 'não acorda para mamar',
+      'nao desperta para mamar', 'não desperta para mamar',
+      'nao mama na madrugada', 'não mama na madrugada',
+      'nao acorda de madrugada', 'não acorda de madrugada',
+      'nao acorda na madrugada', 'não acorda na madrugada',
+      'dorme a noite inteira', 'dorme a noite toda',
+    ],
+    boostThemes: ['nao_acordar_dormindo_30_60', 'sono_noturno_30_60'],
+    priority:
+      'A dúvida é se a MÃE precisa ACORDAR o bebê que está DORMINDO na madrugada. Responda DIRETO: não, bebê saudável dormindo NÃO deve ser acordado só para mamar (salvo orientação médica por peso/ganho). Período noturno mais longo, espontâneo, NÃO é problema nesta faixa. NÃO aplique jejum noturno, recondução nem “se não acordar antes de 3 horas”. Essa árvore vale quando ELE ACORDA. NÃO fale em primeiro intervalo de 3–4 horas. NÃO trate como soneca diurna. NÃO pergunte sinais de fome em quem está dormindo. Ganho de peso e mamadas do dia são outro controle, se o pediatra não pediu para acordar.',
+  },
+  {
     id: 'night_hourly_wakes_30_60',
     label: 'Despertares de hora em hora após as 4h (investigar alimentação)',
     directive: true,
@@ -1166,6 +1183,29 @@ export function extractSignals({ message, conversation, ageBand, ageDays } = {})
         def.boostThemes.forEach((t) => boostThemes.add(t));
         priorities.push(def.priority);
         if (def.directive) hasDirectiveSignal = true;
+      }
+    }
+
+    if (looksLikeSleepingThroughNightAsk(message)) {
+      if (!signals.some((s) => s.id === 'sleeping_through_night_30_60')) {
+        const def = SIGNAL_DEFS_30_60.find((d) => d.id === 'sleeping_through_night_30_60');
+        signals.push({
+          id: def.id,
+          label: def.label,
+          matched: ['composite-sleeping-through-night'],
+        });
+        def.boostThemes.forEach((t) => boostThemes.add(t));
+        priorities.push(def.priority);
+        hasDirectiveSignal = true;
+      }
+      const drop = new Set(['long_daytime_nap', 'rn_night_waking', 'intervalo_mamada_diurna']);
+      for (let i = signals.length - 1; i >= 0; i -= 1) {
+        if (drop.has(signals[i].id)) signals.splice(i, 1);
+      }
+      for (let i = priorities.length - 1; i >= 0; i -= 1) {
+        if (/soneca diurna no RN|quando o RN ACORDA à noite|acordar para oferecer a mamada/i.test(priorities[i])) {
+          priorities.splice(i, 1);
+        }
       }
     }
 
@@ -1484,6 +1524,14 @@ export function extractSignals({ message, conversation, ageBand, ageDays } = {})
     hasRichContext,
     hasDirectiveSignal,
   };
+}
+
+export function looksLikeSleepingThroughNightAsk(text) {
+  const t = String(text || '');
+  const night = /madrugada|(^|[^\w])(à|a)\s+noite|de noite|noturn/i.test(t);
+  const notWaking = /n[aã]o est[aá] acordando para mamar|n[aã]o acorda para mamar|n[aã]o desperta para mamar|n[aã]o mama (na |de )?madrugada|n[aã]o acorda (na |de )?madrugada|dorme a noite (inteira|toda)/i.test(t);
+  const askWake = /preciso acordar|devo acordar|tenho que acordar|preciso acord[aá]-?l[oa]|devo acord[aá]-?l[oa]/i.test(t);
+  return night && (notWaking || (askWake && /n[aã]o (est[aá] )?acord/i.test(t)));
 }
 
 /**

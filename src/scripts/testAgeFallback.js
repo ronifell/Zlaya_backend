@@ -49,6 +49,15 @@ const oldTurn = await processTurn({ message: 'olá', babyProfile: { ageDays: 587
 assert.equal(oldTurn.response.kind, 'missing_profile');
 assert.match(oldTurn.response.text, /não parece a idade de um bebê/);
 
+const greetTurn = await processTurn({
+  message: 'ola Zlaya',
+  babyProfile: { motherName: 'Eliana Dias', babyName: 'Rodolfo', ageDays: 44 },
+});
+assert.equal(greetTurn.response.kind, 'greeting');
+assert.match(greetTurn.response.text, /Rodolfo/);
+assert.match(greetTurn.response.text, /44 dias/);
+assert.doesNotMatch(greetTurn.response.text, /suporte humano/);
+
 const adultThenChat = resolveAgeWithFallback({ ageDays: 5876 }, ['tem 45 dias']);
 assert.equal(adultThenChat.days, 45);
 
