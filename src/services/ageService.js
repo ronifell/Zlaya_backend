@@ -184,7 +184,11 @@ export function collectUserTexts(message, conversation = []) {
 
 export function resolveAgeWithFallback(profile, texts = []) {
   const primary = resolveAge(profile);
-  if (Number.isFinite(primary.days) && primary.days >= 0) {
+  if (
+    Number.isFinite(primary.days) &&
+    primary.days >= 0 &&
+    primary.days <= MAX_SUPPORTED_DAYS
+  ) {
     return { ...primary, source: 'profile' };
   }
 
@@ -204,7 +208,7 @@ export function resolveAgeWithFallback(profile, texts = []) {
     }
   }
 
-  return { days: primary.days, band: null, source: null };
+  return { days: null, band: null, source: null };
 }
 
 export function hydrateBabyProfile(profile, age) {

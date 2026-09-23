@@ -45,7 +45,11 @@ const { processTurn } = await import('../services/zlayaPipeline.js');
 const missingTurn = await processTurn({ message: 'olá Zlayaa', babyProfile: {} });
 assert.equal(missingTurn.response.kind, 'missing_profile');
 
-const oldTurn = await processTurn({ message: 'olá', babyProfile: { ageDays: 2000 } });
-assert.equal(oldTurn.response.kind, 'age_out_of_range');
+const oldTurn = await processTurn({ message: 'olá', babyProfile: { ageDays: 5876 } });
+assert.equal(oldTurn.response.kind, 'missing_profile');
+assert.match(oldTurn.response.text, /não parece a idade de um bebê/);
+
+const adultThenChat = resolveAgeWithFallback({ ageDays: 5876 }, ['tem 45 dias']);
+assert.equal(adultThenChat.days, 45);
 
 console.log('age fallback tests passed');

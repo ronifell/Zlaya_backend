@@ -80,15 +80,20 @@ export async function processTurn({ message, babyProfile, conversation, conversa
   const age = resolveAgeWithFallback(babyProfile, collectUserTexts(message, conversation));
   babyProfile = hydrateBabyProfile(babyProfile, age);
   if (!Number.isFinite(age.days) || age.days < 0) {
+    const rawDays = Number(babyProfile?.ageDays);
+    const looksLikeAdultCadastro = Number.isFinite(rawDays) && rawDays > 1095;
     return finalize({
       turnId,
       conversationId,
       question: message,
-      babyProfile,
+      babyProfile: looksLikeAdultCadastro
+        ? { ...babyProfile, ageDays: undefined, birthDate: undefined }
+        : babyProfile,
       age,
       response: {
-        text:
-          'Para te orientar com segurança, preciso ter a idade do bebê registrada no seu perfil. Pode confirmar a data de nascimento ou a idade em dias?',
+        text: looksLikeAdultCadastro
+          ? 'A data que está no cadastro não parece a idade de um bebê. Pode confirmar a data de nascimento do bebê ou a idade em dias?'
+          : 'Para te orientar com segurança, preciso ter a idade do bebê registrada no seu perfil. Pode confirmar a data de nascimento ou a idade em dias?',
         kind: 'missing_profile',
       },
       route: { path: PATHS.ASK_MORE_CONTEXT, details: { reason: 'missing_age' } },
@@ -104,7 +109,7 @@ export async function processTurn({ message, babyProfile, conversation, conversa
       age,
       response: {
         text:
-          `Recebi a idade do bebê (${age.days} dias), mas essa idade está fora das faixas que a Zlaya atende hoje (0 a 36 meses). Vou te encaminhar para o suporte humano para que a equipe possa te orientar.`,
+          'A data que está no cadastro não parece a idade de um bebê. Pode confirmar a data de nascimento do bebê ou a idade em dias?',
         kind: 'age_out_of_range',
       },
       route: { path: PATHS.ROUTE_TO_HUMAN_SUPPORT, details: { reason: 'age_out_of_range', days: age.days } },
