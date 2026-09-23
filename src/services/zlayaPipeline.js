@@ -1,6 +1,11 @@
 import { v4 as uuid } from 'uuid';
 import { config } from '../config/index.js';
-import { resolveAge, isNamespaceActive } from './ageService.js';
+import {
+  resolveAgeWithFallback,
+  collectUserTexts,
+  hydrateBabyProfile,
+  isNamespaceActive,
+} from './ageService.js';
 import { classifyIntent, applyRnIntentOverrides, applyThirtySixtyIntentOverrides } from './intentClassifier.js';
 import { extractSignals } from './signalExtractor.js';
 import { retrieve } from './retrieval.js';
@@ -72,8 +77,9 @@ export async function processTurn({ message, babyProfile, conversation, conversa
   const turnId = uuid();
 
   // 1) Age band ---------------------------------------------------------
-  const age = resolveAge(babyProfile);
-  if (!age.band) {
+  const age = resolveAgeWithFallback(babyProfile, collectUserTexts(message, conversation));
+  babyProfile = hydrateBabyProfile(babyProfile, age);
+  if (!Number.isFinite(age.days) || age.days < 0) {
     return finalize({
       turnId,
       conversationId,
@@ -86,6 +92,22 @@ export async function processTurn({ message, babyProfile, conversation, conversa
         kind: 'missing_profile',
       },
       route: { path: PATHS.ASK_MORE_CONTEXT, details: { reason: 'missing_age' } },
+      startedAt,
+    });
+  }
+  if (!age.band) {
+    return finalize({
+      turnId,
+      conversationId,
+      question: message,
+      babyProfile,
+      age,
+      response: {
+        text:
+          `Recebi a idade do bebê (${age.days} dias), mas essa idade está fora das faixas que a Zlaya atende hoje (0 a 36 meses). Vou te encaminhar para o suporte humano para que a equipe possa te orientar.`,
+        kind: 'age_out_of_range',
+      },
+      route: { path: PATHS.ROUTE_TO_HUMAN_SUPPORT, details: { reason: 'age_out_of_range', days: age.days } },
       startedAt,
     });
   }

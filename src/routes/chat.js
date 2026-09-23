@@ -11,7 +11,17 @@ const chatSchema = z.object({
     .object({
       babyName: z.string().optional(),
       motherName: z.string().optional(),
-      ageDays: z.number().int().nonnegative().optional(),
+      ageDays: z.preprocess(
+        (value) => {
+          if (value === '' || value === null || value === undefined) return undefined;
+          if (typeof value === 'string') {
+            const n = Number(value.trim().replace(',', '.'));
+            return Number.isFinite(n) ? n : value;
+          }
+          return value;
+        },
+        z.number().int().nonnegative().optional(),
+      ),
       birthDate: z.string().optional(),
     })
     .optional(),
