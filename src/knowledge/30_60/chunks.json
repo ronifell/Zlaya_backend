@@ -187,8 +187,9 @@
       "namespace": "30_60",
       "theme": "nao_acordar_dormindo_30_60",
       "intent": [
-        "comportamento_esperado",
-        "mamadas"
+        "despertares_noturnos",
+        "mamadas",
+        "comportamento_esperado"
       ],
       "ageBand": "30_60",
       "ageRangeDays": [
@@ -197,16 +198,16 @@
       ],
       "safetyLevel": "verde",
       "contentType": "regra_fixa",
-      "allowedAction": "responder que nao precisa acordar bebe saudavel que dorme na madrugada, salvo orientacao medica",
-      "blockedAction": "aplicar jejum noturno, reconducao ou primeiro intervalo de 3-4h quando o bebe nao esta acordando",
+      "allowedAction": "jejum noturno de cerca de 3 a 5 horas contado de quando adormece; nao acordar automaticamente se peso e ganho estao bons",
+      "blockedAction": "tratar como intervalo diurno; usar 3 a 4 horas; acordar ao completar 5 horas; mandar reconduzir sem mamar se despertar antes de 3 horas",
       "relatedLessons": [
         "lesson-30-60-sono-noturno"
       ],
       "askIfMissing": [
-        "o pediatra pediu para acordar por peso ou ganho?",
-        "como está o ganho de peso"
+        "já recuperou o peso do nascimento e está ganhando peso adequadamente?",
+        "quantas horas permanece dormindo desde que adormece até a primeira mamada"
       ],
-      "text": "Se o bebe de 30 a 60 dias e saudavel e NAO esta acordando para mamar na madrugada, a mae NAO precisa acorda-lo so para mamar — salvo se o pediatra pediu isso por peso ou ganho. Periodo noturno mais longo, espontaneo, NAO e problema. O jejum noturno (reconducir ao sono ou oferecer mamada) vale SOMENTE quando o bebe ACORDA. Nao misturar as duas arvores. Nao falar em primeiro intervalo de 3 a 4 horas. Nao tratar como soneca diurna nem como 'se nao acordar antes de 3 horas, reconduza'. Ganho de peso e mamadas do dia sao outro controle."
+      "text": "Pergunta de jejum e mamada noturna, NAO de intervalo diurno. Nao e necessario acordar o bebe automaticamente para mamar. Se ja recuperou o peso do nascimento, tem bom ganho, mama bem durante o dia e nao recebeu orientacao especifica para ser acordado, respeitar o primeiro periodo de sono e oferecer a mamada quando despertar espontaneamente. Referencia de jejum noturno: aproximadamente 3 a 5 horas, contadas de quando o bebe ADORMECE. Isso NAO significa acorda-lo ao completar cinco horas se segue dormindo com bom ganho. Diferenciar sono continuo espontaneo de um despertar durante a noite. NAO recomendar automaticamente voltar a dormir sem mamar se ele despertar antes de tres horas. Aula: Estrategias para o Sono Noturno. Perguntar recuperacao do peso e quantas horas dorme ate a primeira mamada."
     },
     {
       "id": "30-60-chunk-refluxo-oculto-aplv-60d",

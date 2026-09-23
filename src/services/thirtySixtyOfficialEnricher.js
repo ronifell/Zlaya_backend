@@ -1520,11 +1520,20 @@ function looksLikeSleepingThroughNightAsk(msg) {
   return night && (notWaking || (askWake && /n[aã]o (est[aá] )?acord/i.test(t)));
 }
 
-const SLEEPING_THROUGH_NIGHT_CANON =
-  'Não. Se o bebê é saudável e está dormindo na madrugada, você não precisa acordá-lo só para mamar — salvo se o pediatra pediu isso por peso ou ganho de peso.\n\n'
-  + 'Dormir um período mais longo à noite, de forma espontânea, não é problema nesta faixa.\n\n'
-  + 'O jejum noturno — reconduzir ao sono ou oferecer a mamada — vale quando ele ACORDA. Como ele não está acordando, essa árvore não se aplica agora.\n\n'
-  + 'Se o pediatra não pediu para acordar, deixe-o dormir. Ganho de peso e mamadas do dia são outro controle, não o jejum da madrugada.';
+function sleepingThroughNightAnswer(ageDays) {
+  const ageBit = Number.isFinite(ageDays) ? `Aos ${ageDays} dias, se` : 'Se';
+  return [
+    'Não é necessário acordar o bebê automaticamente para mamar.',
+    '',
+    `${ageBit} ele já recuperou o peso do nascimento, apresenta bom ganho de peso, mama adequadamente durante o dia e não recebeu uma orientação específica para ser acordado, você pode respeitar o primeiro período de sono e oferecer a mamada quando ele despertar espontaneamente.`,
+    '',
+    'Nessa faixa etária, a referência de jejum noturno é de aproximadamente 3 a 5 horas, contadas a partir do momento em que o bebê adormece. Essa referência não significa que você precise acordá-lo assim que completar cinco horas, caso ele esteja dormindo espontaneamente e apresente bom ganho de peso.',
+    '',
+    'Para orientar você com mais precisão: ele já recuperou o peso do nascimento e está ganhando peso adequadamente? Quantas horas ele permanece dormindo desde que adormece até despertar para a primeira mamada?',
+    '',
+    'A aula para esse tema é Estratégias para o Sono Noturno.',
+  ].join('\n');
+}
 
 function reportedSuddenChange(msg) {
   return /mudou de (uma hora para outra|repente)|de uma hora para outra|do nada|s[uú]bita|repentin/i.test(msg)
@@ -4090,8 +4099,8 @@ export function enrichThirtySixtyOfficialAnswer({
     && !ids.has('night_hourly_wakes_30_60')
     && !ids.has('nap_angry_wake_30_60')
   ) {
-    notes.push('sleeping_through_night_not_fast');
-    return { text: SLEEPING_THROUGH_NIGHT_CANON, notes };
+    notes.push('sleeping_through_night_fast');
+    return { text: sleepingThroughNightAnswer(ageDays), notes };
   }
 
   // --- 30d angry wake after adequate nap ---

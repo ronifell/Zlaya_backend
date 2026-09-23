@@ -982,7 +982,7 @@ const SIGNAL_DEFS_30_60 = [
     ],
     boostThemes: ['nao_acordar_dormindo_30_60', 'sono_noturno_30_60'],
     priority:
-      'A dúvida é se a MÃE precisa ACORDAR o bebê que está DORMINDO na madrugada. Responda DIRETO: não, bebê saudável dormindo NÃO deve ser acordado só para mamar (salvo orientação médica por peso/ganho). Período noturno mais longo, espontâneo, NÃO é problema nesta faixa. NÃO aplique jejum noturno, recondução nem “se não acordar antes de 3 horas”. Essa árvore vale quando ELE ACORDA. NÃO fale em primeiro intervalo de 3–4 horas. NÃO trate como soneca diurna. NÃO pergunte sinais de fome em quem está dormindo. Ganho de peso e mamadas do dia são outro controle, se o pediatra não pediu para acordar.',
+      'JEJUM E MAMADA NOTURNA, não intervalo diurno. Não acordar automaticamente se recuperou o peso do nascimento, tem bom ganho, mama bem de dia e não há orientação específica para acordar: respeitar o primeiro período de sono e oferecer a mamada no despertar espontâneo. Referência de jejum noturno: aproximadamente 3 a 5 horas, contadas de quando ele ADORMECE. Isso NÃO manda acordar ao completar 5 horas se continua dormindo com bom ganho. Diferencie sono contínuo espontâneo de um despertar no meio da noite. NÃO recomende automaticamente voltar a dormir sem mamar se ele despertar antes de 3 horas. NÃO use “primeiro intervalo de 3 a 4 horas” nem recondução diurna. Pergunte peso de nascimento/ganho e quantas horas dorme até a primeira mamada. Aula: Estratégias para o Sono Noturno.',
   },
   {
     id: 'night_hourly_wakes_30_60',

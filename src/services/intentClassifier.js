@@ -266,17 +266,17 @@ export function applyThirtySixtyIntentOverrides({ intent, message, ageDays }) {
     return {
       intent: {
         ...intent,
-        intent: 'comportamento_esperado',
+        intent: 'despertares_noturnos',
         rationale:
           (intent?.rationale ? `${intent.rationale} | ` : '') +
-          'override_30_60: bebê dormindo na madrugada — não acordar; não aplicar jejum/recondução',
+          'override_30_60: jejum e mamada noturna — não intervalo diurno; não acordar automaticamente no sono contínuo',
         source: `${intent?.source || 'unknown'}+30_60_override`,
         originalIntent: intent?.intent,
       },
       override: {
         from: intent?.intent,
-        to: 'comportamento_esperado',
-        reason: 'sleeping_through_night_not_fast',
+        to: 'despertares_noturnos',
+        reason: 'sleeping_through_night_fast',
       },
     };
   }

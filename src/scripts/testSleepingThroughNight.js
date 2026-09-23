@@ -23,13 +23,11 @@ const intent = applyThirtySixtyIntentOverrides({
   message: question,
   ageDays: 53,
 });
-assert.equal(intent.intent.intent, 'comportamento_esperado');
+assert.equal(intent.intent.intent, 'despertares_noturnos');
 
 const mixedDraft = `À noite, o bebê pode aumentar o primeiro intervalo de sono para cerca de 3 a 4 horas seguidas. Se ele dorme bem e não apresenta sinais claros de fome, você pode deixá-lo dormir.
 
-É importante observar se ele está se alimentando bem durante o dia. Se ele não acorda antes de 3 horas, tente reconduzi-lo ao sono sem oferecer mamada. Despertares ainda são comuns, mas nem sempre são fome.
-
-Para garantir que ele está se alimentando adequadamente, você poderia me informar se ele tem mamadas efetivas durante o dia e se está apresentando sinais de saciedade?`;
+É importante observar se ele está se alimentando bem durante o dia. Se ele não acorda antes de 3 horas, tente reconduzi-lo ao sono sem oferecer mamada. Despertares ainda são comuns, mas nem sempre são fome.`;
 
 const enriched = enrichThirtySixtyOfficialAnswer({
   text: mixedDraft,
@@ -38,12 +36,15 @@ const enriched = enrichThirtySixtyOfficialAnswer({
   babyProfile: { ageDays: 53, babyName: 'Rodolfo' },
 });
 
-assert.match(enriched.text, /n[aã]o precisa acord/i);
-assert.match(enriched.text, /quando ele ACORDA/i);
-assert.doesNotMatch(enriched.text, /primeiro intervalo/i);
-assert.doesNotMatch(enriched.text, /n[aã]o acorda antes de 3 horas/i);
+assert.match(enriched.text, /N[aã]o [eé] necess[aá]rio acordar o beb[eê] automaticamente/i);
+assert.match(enriched.text, /Aos 53 dias/i);
+assert.match(enriched.text, /3 a 5 horas/i);
+assert.match(enriched.text, /adormece/i);
+assert.match(enriched.text, /peso do nascimento/i);
+assert.match(enriched.text, /Estrat[eé]gias para o Sono Noturno/i);
+assert.doesNotMatch(enriched.text, /3 a 4 horas/i);
 assert.doesNotMatch(enriched.text, /tente reconduzi/i);
-assert.doesNotMatch(enriched.text, /sinais claros de fome/i);
-assert.ok(enriched.notes.includes('sleeping_through_night_not_fast'));
+assert.doesNotMatch(enriched.text, /intervalo diurn/i);
+assert.ok(enriched.notes.includes('sleeping_through_night_fast'));
 
 console.log('sleeping-through-night tests passed');
