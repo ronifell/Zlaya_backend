@@ -244,6 +244,16 @@ const LESSON_SCENARIO_RULES = [
     ],
   },
   {
+    signalIds: ['nap_duration_63_30_60'],
+    whitelist: ['lesson-30-60-passo-3-janela'],
+    blacklist: [
+      'lesson-30-60-maus-habitos',
+      'lesson-travesseiro',
+      'lesson-30-60-passo-1-comportamento',
+      'lesson-30-60-caso-cecilia',
+    ],
+  },
+  {
     signalIds: ['short_naps_pacifier_mention_30_60'],
     whitelist: [
       'lesson-30-60-sinais-sono',

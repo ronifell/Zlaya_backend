@@ -968,6 +968,19 @@ const SIGNAL_DEFS_30_60 = [
       'Responda as DUAS dúvidas UMA vez cada. Chupeta: se só reclamar ao cair, NÃO recolocar imediatamente nem de forma preventiva — aguarde cerca de 2 a 5 minutos e observe se se reorganiza; se permanecer tranquilo ou voltar ao sono, não recolocar; se continuar reclamando ou precisar de ajuda, ofereça de novo. Janela: 45 minutos a 1 hora e 15 minutos; 1h30–1h45 habitual JÁ está acima — compare com a referência, SEM “principal hipótese de vigília excessiva” e sem rotular “vigília excessiva” se basta dizer que está acima. Observar sinais de sono e preparar ANTES de passar de 1h15. Pergunte SOMENTE “quanto tempo ele demora para entrar em sono após você iniciar a condução?” — NÃO “depois de deitar” e NÃO uma segunda pergunta sobre “adormecer depois de iniciar a condução”. NÃO invente que ele demora 40–45 minutos para adormecer se a mãe não informou esse tempo — pergunte primeiro. Aula prioritária: Janela de Vigília (PASSO 3) — NÃO substitua por Sinais de Sono. NÃO pergunte “Ele parece tranquilo, chorando ou buscando o peito?”. NÃO pergunte como ele acorda das sonecas, nem mamadas/saciedade (NÃO pergunte “Ele apresenta sinais de saciedade após as mamadas?”), nem se despertares coincidem com a queda da chupeta: a mãe não relatou despertares de soneca nem dificuldade alimentar. NÃO introduza automaticamente alimentação, peito ou saciedade sem elemento no relato. NÃO diga “caprichar nas mamadas” nem “Isso pode ajudar a entender melhor a situação.” NÃO amplie a investigação para outros pilares sem elemento no relato. NÃO pergunte a duração da soneca da manhã. NÃO fracionar a soneca da manhã nem inferir dificuldade na tarde se a mãe não informou; se faltar dado, pergunte antes de intervir. Organize em um único fluxo, sem repetir blocos. NÃO peça idade de novo. NÃO use fallback nem suporte humano: há conteúdo metodológico suficiente.',
   },
   {
+    id: 'nap_duration_63_30_60',
+    label: 'Duração da soneca 30 a 40 minutos — item 6.3',
+    directive: true,
+    phrases: [
+      'sonecas de 30 a 40', 'soneca de 30 a 40',
+      'sao de 30 a 40', 'são de 30 a 40',
+      'sonecas sao de 30', 'sonecas são de 30',
+    ],
+    boostThemes: ['janela_sono_sonecas'],
+    priority:
+      'ITEM 6.3: sonecas de 30 a 40 minutos NÃO são sonecas curtas e NÃO estão erradas. Cerca de 1 hora também não. NÃO diga que não são ideais. NÃO use o teto de 2 horas ou 2h30 para julgar essa duração: o teto só encerra soneca longa. Não avalie a duração isolada. Tranquilo, bem e descansado segue a vigília; chorando, irritado ou ainda cansado, uma recondução; se não funcionar, segue o dia, sem insistir para completar uma duração. Do despertar definitivo, nova janela. NÃO peça de novo a duração se a mãe já informou 30 a 40 minutos. NÃO diga que as sonecas estão curtas nem que a rotina precisa melhorar por isso. Pergunte só como ele desperta, se ela não contou. Aula: Regule a janela de sono e as sonecas.',
+  },
+  {
     id: 'sleeping_through_night_30_60',
     label: 'Não acorda para mamar na madrugada — não acordar bebê saudável que dorme',
     directive: true,
@@ -1177,12 +1190,27 @@ export function extractSignals({ message, conversation, ageBand, ageDays } = {})
 
   if (is3060Band) {
     for (const def of SIGNAL_DEFS_30_60) {
+      if (def.id === 'nap_duration_63_30_60') continue;
       const matched = def.phrases.filter((p) => norm.includes(normalize(p)));
       if (matched.length) {
         signals.push({ id: def.id, label: def.label, matched });
         def.boostThemes.forEach((t) => boostThemes.add(t));
         priorities.push(def.priority);
         if (def.directive) hasDirectiveSignal = true;
+      }
+    }
+
+    if (looksLikeNapDuration63Ask(message)) {
+      if (!signals.some((s) => s.id === 'nap_duration_63_30_60')) {
+        const def = SIGNAL_DEFS_30_60.find((d) => d.id === 'nap_duration_63_30_60');
+        signals.push({
+          id: def.id,
+          label: def.label,
+          matched: ['composite-nap-duration-63'],
+        });
+        def.boostThemes.forEach((t) => boostThemes.add(t));
+        priorities.push(def.priority);
+        hasDirectiveSignal = true;
       }
     }
 
@@ -1524,6 +1552,17 @@ export function extractSignals({ message, conversation, ageBand, ageDays } = {})
     hasRichContext,
     hasDirectiveSignal,
   };
+}
+
+export function looksLikeNapDuration63Ask(text) {
+  const t = String(text || '');
+  if (!/soneca/i.test(t)) return false;
+  const range = /30\s*(?:a|–|-|ate|até)\s*40\s*min/i.test(t);
+  const aboutThirty = /(?:cerca de|m[eé]dia de|duram|dura[cç][aã]o).{0,30}30\s*min/i.test(t);
+  if (!range && !aboutThirty) return false;
+  if (/posi[cç][aã]o vertical/i.test(t) && !range) return false;
+  if (/chupeta|refluxo|madrugada|irritad|brav[oa]|s[oó] acalma|no peito/i.test(t)) return false;
+  return true;
 }
 
 export function looksLikeSleepingThroughNightAsk(text) {
