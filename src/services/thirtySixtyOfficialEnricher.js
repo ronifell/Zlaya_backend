@@ -1508,6 +1508,15 @@ function reportedTwoHourWake(msg) {
   return /2\s*h(?:oras)?\s*(acord|de vig|de janela)|acordad[oa].{0,24}2\s*h|fica (cerca de |uns )?2\s*h(?:oras)?|at[eé] 2 horas acord/i.test(msg);
 }
 
+function reportedNap3040(msg) {
+  const t = String(msg || '');
+  if (/posi[cç][aã]o vertical|mamou 20 a 30|20 a 30 minutos ap[oó]s a mamada/i.test(t) && !/soneca/i.test(t)) return false;
+  return /soneca/.test(t) && /30\s*(?:a|–|-|ate|até)\s*40\s*min|cerca de 30\s*min|m[eé]dia de 30\s*min|sonecas?.{0,30}30\s*min/i.test(t);
+}
+
+const NAP_DURATION_63 =
+  'Sonecas de 30 a 40 minutos não devem ser classificadas como sonecas curtas. Cerca de 1 hora também não. A duração não se avalia sozinha: se ele despertar tranquilo, bem e descansado, segue a vigília; se acordar chorando, irritado ou ainda cansado, pode tentar reconduzir uma vez. Se não funcionar, segue o dia, sem insistir para completar uma duração. Do despertar definitivo, começa uma nova janela.';
+
 function reportedHealthyLongNight(msg) {
   return /5\s*h(?:oras)?|5h30|5 horas e meia/.test(msg) && /noite|noturn|dorme (seguid|a noite)/i.test(msg);
 }
@@ -5247,6 +5256,10 @@ export function enrichThirtySixtyOfficialAnswer({
   }
   if (reportedLateAfternoon(msg) || ids.has('late_afternoon_cry_30_60')) {
     out = keepFirstMatch(out, /Se (?:o|esse) padr[aã]o(?: abaixo de cerca de 20 minutos)? for recorrente[^.!?]*[.!?]/gi);
+  }
+  if (reportedNap3040(msg) && !has(out, /30 a 40 minutos n[aã]o devem ser classificadas como sonecas curtas/i)) {
+    out = appendOnce(out, NAP_DURATION_63);
+    notes.push('nap_duration_63');
   }
   out = applyRound14LeftoverGuards(out, msg, ids, notes);
   out = applyRound15LeftoverGuards(out, msg, ids, notes);

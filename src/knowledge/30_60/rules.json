@@ -44,7 +44,12 @@
     {
       "id": "30-60-janela-sono",
       "rule": "Entre 30 e 60 dias, a janela de vigilia de referencia e de 45 minutos a 1 hora e 15 minutos, progressiva na faixa. Essa referencia e o periodo entre acordar e EFETIVAMENTE entrar em sono de novo — NAO e o momento de comecar a conducao. Ao final da janela o bebe ja deve ter adormecido; o tempo de conducao FAZ PARTE da janela. Inicie a conducao ANTES do limite da idade. NAO some 10 a 20 minutos extras a janela. Variacao individual de cerca de 10 minutos para mais ou para menos NAO e automaticamente inadequacao. Se adormecer antes do fim da janela, respeite o sono — NAO mantenha acordado so para completar a janela. Nao tente determinar a duracao fixa da soneca. Como referencia (NAO como obrigacao): ~5 a 6 sonecas aos 30 dias e ~4 a 6 aos 60 dias, conforme a duracao; NAO imponha minimo de 4 a 5 sonecas nem avalie o numero isolado. Soneca NAO deve passar de ~2 horas a no maximo 2 horas e 30 minutos: ao atingir 2h30, acorde para preservar alimentacao, proximas janelas e a noite. NAO permita soneca diurna de ate 3 horas nesta faixa. Soneca muito breve (~10 a 15 min): se ainda demonstrar cansaco, tente reconduzir, sem insistencia prolongada para obrigar duracao. Se a ultima soneca avancar a ponto de comprometer o inicio da noite, a orientacao preferencial e encerra-la, preservando a ultima janela e o inicio organizado do sono noturno.",
-      "rationale": "Documento consolidado 05/09/2026 — secoes 6.1 a 6.4, 6.12 e 6.13."
+      "rationale": "Documento consolidado 05/09/2026 — secoes 6.1, 6.2, 6.4, 6.12 e 6.13."
+    },
+    {
+      "id": "30-60-duracao-sonecas",
+      "rule": "DURACAO DAS SONECAS (item 6.3, V2 de 23/09/2026): na faixa de 30 a 60 dias, sonecas de 30 a 40 minutos NAO devem ser classificadas como sonecas curtas. Uma soneca de aproximadamente 1 hora tambem NAO deve ser classificada como curta. A duracao NAO deve ser avaliada isoladamente. Ao despertar: se o bebe estiver tranquilo, bem e descansado, segue-se a vigilia; se acordar chorando, irritado ou ainda cansado, pode haver UMA tentativa de reconducao ao sono. Se a reconducao nao funcionar, segue-se o dia. NAO orientar insistencia prolongada para obrigar o bebe a completar uma duracao de soneca. A partir do despertar definitivo, inicia-se uma nova janela de vigilia.",
+      "rationale": "Documento V2 — 23/09/2026 — item 6.3. Unica alteracao metodologica desta versao."
     },
     {
       "id": "30-60-equilibrio-dia-noite",
@@ -196,7 +201,7 @@
     {
       "id": "30-60-contagem-duracao-soneca",
       "rule": "A duracao da soneca conta a partir do momento em que o bebe EFETIVAMENTE ADORMECE — nao so quando e colocado no berco. Sono durante as medidas posturais ja conta. A transferencia ao berco NAO reinicia a contagem. Ex.: 25 min dormindo na vertical + 15 min no berco = ~40 min. Se despertar pouco depois da transferencia, considere o sono anterior; se ainda cansado, tente reconduzir; se nao voltar, segue o dia e nova janela no despertar definitivo. Soneca de ~1h NAO e automaticamente curta: se acorda tranquilo, segue a vigilia; se chora/irritado/cansado, pode tentar reconduzir sem insistencia prolongada para obrigar duracao. Sonecas curtas RECORRENTES com irritabilidade: investigar prioritariamente baixa saciedade e refluxo. Soneca muito breve (~10 a 15 min): se ainda cansado, tente reconduzir; sem insistencia prolongada para obrigar duracao. Sonecas RECORRENTES abaixo de ~20 min: investigar mesmo sem irritabilidade (saciedade precoce, apatia, comportamento alimentar).",
-      "rationale": "Documento consolidado 05/09/2026 — secoes 6.3 a 6.8."
+      "rationale": "Documento consolidado 05/09/2026 — secoes 6.4 a 6.8. A classificacao de 30 a 40 minutos deixou de ser soneca curta no item 6.3 da V2 de 23/09/2026."
     },
     {
       "id": "30-60-inicio-precoce-dia",
@@ -216,7 +221,7 @@
     {
       "id": "30-60-teto-soneca-e-micronap",
       "rule": "Se a mae informar horarios de inicio e fim da soneca, calcule a duracao. Qualquer soneca diurna de ~3h ou 3h30 EXCEDE o teto de 2h30 e deve ser encerrada aos 2h30. NAO apresente 2h30 a 3h como duracao esperada. Soneca recorrente abaixo de ~20 minutos: investigar saciedade e refluxo mesmo sem irritabilidade evidente; se isolada e ainda cansado, tente reconduzir sem insistencia prolongada. NAO chame 10-15 min de 'normal' sem essa qualificacao.",
-      "rationale": "Documento consolidado 05/09/2026 — secoes 6.3 a 6.8; avaliacao 15/09/2026 casos 5, 15 e 17."
+      "rationale": "Documento consolidado 05/09/2026 — secoes 6.4 a 6.8; avaliacao 15/09/2026 casos 5, 15 e 17."
     },
     {
       "id": "30-60-mamada-conta-na-janela",
