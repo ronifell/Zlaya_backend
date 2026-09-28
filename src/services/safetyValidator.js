@@ -120,13 +120,16 @@ function isMethodAgeBand(lo, hi) {
  * draft repeated "até 5 dias atrás" and the guard treated "5 dias" as an
  * age hallucination.
  */
-function isElapsedTimeDayMention(fullText, index, matchLen) {
+function isElapsedTimeDayMention(fullText, index, matchLen, ageDays) {
   if (index > 0 && /[.,]/.test(fullText[index - 1])) return true;
   const before = String(fullText).slice(Math.max(0, index - 24), index);
   const after = String(fullText).slice(index + matchLen, index + matchLen + 28);
   if (/\b(atras|atrás)\b/i.test(after)) return true;
   if (/\b(ha|há|faz|fazem)\s+$/i.test(before)) return true;
   if (/\b(uns|cerca de|aproximadamente)\s+$/i.test(before)) return true;
+  if (Number(ageDays) > 60) {
+    if (/\b(em|por|durante|depois de|dentro de|ao longo de|leva|levam)\s+$/i.test(before)) return true;
+  }
   return false;
 }
 
@@ -147,7 +150,7 @@ export function checkAgeConsistency({ text, ageDays }) {
   const re = /(?:entre\s+)?(\d{1,3})(?:\s*(?:a|ate|até|e|–|-|—)\s*(\d{1,3}))?\s*dias?\b/gi;
   let m;
   while ((m = re.exec(norm)) !== null) {
-    if (isElapsedTimeDayMention(norm, m.index, m[0].length)) continue;
+    if (isElapsedTimeDayMention(norm, m.index, m[0].length, ageDays)) continue;
     const a = Number(m[1]);
     const b = m[2] ? Number(m[2]) : a;
     if (!Number.isFinite(a) || !Number.isFinite(b)) continue;
@@ -158,10 +161,18 @@ export function checkAgeConsistency({ text, ageDays }) {
     if (lo > 60) continue;
     // Method age-band labels ("30 a 60 dias", "0–28 dias") are not the baby's age.
     if (isMethodAgeBand(lo, hi)) continue;
+    // Short durations ("em 2 a 4 dias") are not the baby's age once the
+    // profile is already past 60 days. Standalone "10 dias" still fails.
+    if (ageDays > 60 && m[2] && hi <= 14) continue;
     // Official 30–60 rules use "aos 30 dias" / "aos 60 dias" as jejum/nap anchors.
     if (ageDays >= 29 && ageDays <= 60 && lo === hi && (lo === 30 || lo === 60)) {
       const before = norm.slice(Math.max(0, m.index - 16), m.index);
       if (!/bebe de\s*$|com\s*$/i.test(before)) continue;
+    }
+    // 60–90 anchors ("aos 60 dias", "cerca de 75 dias" is already > 60).
+    if (ageDays >= 61 && ageDays <= 120 && lo === hi && (lo === 30 || lo === 60)) {
+      const before = norm.slice(Math.max(0, m.index - 20), m.index);
+      if (!/bebe de\s*$|com\s*$|tem\s*$/i.test(before)) continue;
     }
     if (ageDays < lo || ageDays > hi) {
       violations.push({
@@ -1258,11 +1269,12 @@ export function correctAgeMentions({ text, ageDays }) {
     // or "Entre 30 e 60 dias".
     const before = fullText.slice(Math.max(0, offset - 16), offset);
     if (/(\b\d{1,3})\s*(?:a|até|ate|e|–|-|—)\s*$/i.test(before)) return match;
-    if (isElapsedTimeDayMention(fullText, offset, match.length)) return match;
+    if (isElapsedTimeDayMention(fullText, offset, match.length, ageDays)) return match;
 
     const n = Number(numStr);
     if (!Number.isFinite(n) || n < 0 || n > 60) return match;
     if (n === ageDays) return match;
+    if (ageDays > 60 && n <= 14) return match;
     // 30–60 official rules use 30 and 60 as anchors (jejum, nap count).
     // Do not rewrite "aos 30 dias" / "aos 60 dias" to the profile age.
     if (ageDays >= 29 && (n === 30 || n === 60) && !/beb[eê] de\s*$|com\s*$/i.test(before)) {
@@ -1289,6 +1301,7 @@ export function correctAgeMentions({ text, ageDays }) {
   // scope here.)
   const semanasRe = /\b(uma|duas|tr[êe]s|quatro)\s+semanas?\b/gi;
   out = out.replace(semanasRe, (match, word) => {
+    if (ageDays > 60) return match;
     const key = word.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     const days = semanasMap[key];
     if (!Number.isFinite(days)) return match;
@@ -1300,6 +1313,7 @@ export function correctAgeMentions({ text, ageDays }) {
   // 3) "<N> semana(s)" numeric variant inside the RN window.
   const semanasNumRe = /\b(\d{1,2})\s*semanas?\b/gi;
   out = out.replace(semanasNumRe, (match, numStr) => {
+    if (ageDays > 60) return match;
     const n = Number(numStr);
     if (!Number.isFinite(n) || n < 1 || n > 8) return match;
     const days = n * 7;

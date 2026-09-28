@@ -1,0 +1,48 @@
+{
+  "namespace": "90_120",
+  "description": "Termos que a Zlaya não usa na faixa 90–120. A detecção interrompe a resposta (Caminho 6).",
+  "forbiddenTerms": [
+    "exterogestação",
+    "salto de desenvolvimento",
+    "pressão de sono",
+    "treinamento de sono",
+    "sleep training",
+    "deixar chorar",
+    "extinção",
+    "cry it out",
+    "pico glicêmico",
+    "fome residual acumulada",
+    "mamadas agrupadas",
+    "cluster feeding",
+    "autorregulação",
+    "o bebê manipula",
+    "o bebê está fazendo manha",
+    "regressão natural do sono",
+    "todo despertar é fome",
+    "todo despertar é associação",
+    "você acostumou mal"
+  ],
+  "forbiddenInterpretations": [
+    "importar janela, jejum, volume ou teto de soneca de 30 a 60 ou de 60 a 90 quando a aula desta faixa não definiu esse número",
+    "diagnosticar refluxo ou outra condição",
+    "prescrever dose de medicamento",
+    "orientar deixar o bebê chorar sozinho",
+    "manter o travesseiro a noite toda como item fixo",
+    "insistir na soneca que não aconteceu até ele dormir",
+    "retirar e devolver a chupeta quando a retirada total já foi a conduta",
+    "aplicar a redução da posição em pé sem antes avaliar refluxo",
+    "criar uma forma permanente de adormecer por causa da vacina"
+  ],
+  "languageRules": {
+    "forbidden": [
+      "diminutivos para se dirigir à mãe",
+      "linguagem de culpa",
+      "promessa de resultado em prazo fechado como garantia"
+    ],
+    "required": [
+      "identificar o problema antes da conduta",
+      "indicar a aula quando a técnica depender do vídeo",
+      "idade exata do perfil quando a resposta citar idade"
+    ]
+  }
+}

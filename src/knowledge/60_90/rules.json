@@ -1,0 +1,86 @@
+{
+  "namespace": "60_90",
+  "ageRange": {
+    "minDays": 61,
+    "maxDays": 90
+  },
+  "description": "Regras metodológicas oficiais da Zlaya para 60 a 90 dias (documento consolidado de 19/09/2026). O dia 60 permanece na faixa 30–60 já concluída. Quando a aula divergir deste documento, prevalece a regra oficial.",
+  "fixedRules": [
+    {
+      "id": "60-90-faixa-propria",
+      "rule": "Esta faixa tem tratamento próprio. Não transporte regras de 30 a 60 dias nem antecipe regras de 90 a 120 dias. A idade exata em dias orienta a interpretação. Para prematuros, use a idade cronológica.",
+      "rationale": "Documento 19/09/2026, seções 1, 2 e 12.4."
+    },
+    {
+      "id": "60-90-raciocinio",
+      "rule": "Sequência: identificar o problema, verificar o contexto, investigar as causas relevantes, aplicar as regras desta faixa e orientar a conduta. Não preencha lacunas com suposições nem transforme hipótese em conclusão. Não atribua automaticamente dificuldade de sono a uma forma de adormecer, despertar a fome ou choro a uma única causa. Fatores alimentares e fisiológicos vêm antes de conclusões comportamentais. Peça só o que falta para decidir.",
+      "rationale": "Seções 2, 3 e 12.5."
+    },
+    {
+      "id": "60-90-alimentacao",
+      "rule": "Diante de dificuldade de sono, verifique alimentação, mamada efetiva e saciedade antes da forma de adormecer, da janela ou de leitura comportamental. Intervalos contados do início da última mamada: cerca de 2 horas e 30 minutos no peito; cerca de 3 horas na mamadeira. De dia, não ficar mais de 3 horas sem alimentação, exceto se estiver dormindo. Perto dos 90 dias, evite lanchinhos repetidos, que podem interferir na noite. Acordar da soneca antes do horário da mamada não é fome e não zera o intervalo: pode aguardar. Se insistir em mamar antes, alimente e investigue déficit. Não existe tempo obrigatório de 20 minutos para trocar de peito. Se agitar na mamada, arrote e ofereça de novo o mesmo peito. Se demonstrar saciedade, não force. Frequência ou duração isolada não provam mamada adequada. Não prometa sono longo só por tempo de mamada ou volume.",
+      "rationale": "Seção 5."
+    },
+    {
+      "id": "60-90-formula",
+      "rule": "Fórmula: cerca de 120 ml por mamada no início da faixa, evolução gradual, cerca de 150 ml perto dos 90 dias, intervalo de cerca de 3 horas. Uma mamadeira terminada, isolada, não manda aumentar na hora. Se consumir todo o volume de forma repetida por um dia ou, no máximo, dois, a oferta pode subir 30 ml. Isso é quantidade disponível, não obrigação de terminar. Respeite a saciedade.",
+      "rationale": "Seção 5.6."
+    },
+    {
+      "id": "60-90-janela-sonecas",
+      "rule": "A janela começa no despertar e termina quando o bebê efetivamente adormece. Mamada, cuidados, interação e condução fazem parte da janela. Referência gradual: cerca de 1 hora e 15 minutos no início da faixa; em torno de 1 hora e 30 minutos perto dos 90 dias. Considere idade, qualidade da soneca anterior, sinais de sono e comportamento. Sonecas: cerca de 5 no início da faixa e cerca de 4 perto dos 90 dias, com redução gradual. Não retire uma soneca só para bater um número. Soneca de até 2 horas, contada do adormecer efetivo; se adormecer nas medidas posturais, esse tempo já conta. Ao completar 2 horas, se seguir dormindo, acorde. Menos de 2 horas não é inadequado só por isso: se acordar calmo e descansado, siga a rotina; se acordar irritado, choroso ou cansado, investigue. Sonecas recorrentes de 10 a 20 minutos, sobretudo com irritabilidade ou dificuldade de permanecer acordado, exigem investigação. A rotina parte do horário real em que ele acorda, sem horário fixo de relógio.",
+      "rationale": "Seção 6."
+    },
+    {
+      "id": "60-90-postura-ambiente-ritual",
+      "rule": "Depois da mamada: arrotar e posição vertical por 20 a 30 minutos. Com sinais de refluxo, 40 minutos. Sonecas não precisam de escuro total: reduza estímulos e preserve a diferença entre dia e noite. Temperatura de conforto cerca de 24 °C, mais roupas e sinais térmicos. Ritual: banho, vestir, diminuir a luminosidade, mamada, arroto e posição vertical, condução ao sono e ao berço. Não é preciso escurecer a casa inteira nem exigir silêncio absoluto. Depois que a noite começa, o quarto fica escuro e com poucos estímulos. O banho cabe antes de a janela acabar e antes da próxima mamada, não com o bebê já exausto.",
+      "rationale": "Seção 7."
+    },
+    {
+      "id": "60-90-charutinho-ninho-ruido-chupeta",
+      "rule": "Charutinho somente até cerca de 2 meses e meio (cerca de 75 dias). Ninho até 3 meses no máximo; aos 90 dias deve ser encerrado. Ruído branco é pontual para acalmar: volume mais alto e aparelho próximo só no tempo necessário; se não houver resposta em 1 a 2 minutos, não insista e investigue outra causa. Depois que adormecer, reduza o volume e afaste para cerca de 80 cm do berço. Não use quando ele já está calmo. Se a chupeta cair e ele continuar dormindo, não recoloque. Se reclamar, observe brevemente e recoloque só se ainda precisar. Sem recolocação automática.",
+      "rationale": "Seções 7.5 a 7.7 e aula de ruído branco, sem contradizer o limite de 1 a 2 minutos e os 80 cm."
+    },
+    {
+      "id": "60-90-sono-noturno",
+      "rule": "Início da noite: referência 19h a 20h, sem rigidez. Considere início do dia, sonecas, última janela, última mamada, sinais de sono e comportamento. No início da faixa, se estiver tranquilo, confortável e sem sinal de cansaço, pode ficar acordado até perto das 22h; não force o sono. Perto dos 90 dias, antecipe aos poucos em direção a 19h–20h. Jejum noturno evolui de cerca de 4 horas no início da faixa para cerca de 6 horas perto dos 90 dias, contado de quando ele efetivamente dorme, não da última mamada. Se continuar dormindo depois desse período, não acorde para mamar. No despertar depois do primeiro tempo, pode mamar, com ambiente escuro e poucos estímulos; depois, arroto e medidas posturais. Depois dessa primeira mamada noturna, o intervalo seguinte é de cerca de 3 horas ou mais para todos, inclusive no peito, contado do início da mamada. Se seguir dormindo, não acorde. Se despertar antes de 3 horas, tente primeiro voltar a dormir sem outra mamada. Se insistir, alimente e investigue déficit. Despertares frequentes não se normalizam sem investigação. A mamada dos sonhos não faz parte do método: não acorde nem alimente de forma preventiva para alongar a madrugada, e não justifique isso por uma relação causal obrigatória com pico glicêmico. À noite, troque a fralda só se houver cocô, vazamento ou outra necessidade objetiva. Não prometa noite inteira, não diga que todo despertar é fome, não mande mamar em todo despertar e não acorde porque o jejum completou.",
+      "rationale": "Seção 8. A aula da mamada dos sonhos não prevalece sobre a proibição de usar pico glicêmico como justificativa."
+    },
+    {
+      "id": "60-90-adormecer-berco",
+      "rule": "Não há tempo obrigatório de 5 ou 10 minutos para transferir ao berço: observe o relaxamento e transfira aos poucos. Colocar acordado no berço é uma possibilidade, não uma obrigação em todas as sonecas. Se a mamada foi efetiva, houve saciedade e ele continua no peito para adormecer, retire, arrote e mantenha a vertical. Se adormecer mamando ou nas medidas posturais, não acorde. A repetição de uma única forma de adormecer começa a importar; adormecer na mamada ainda pode acontecer e não é erro automático. Se mamar virar a única forma de iniciar ou retomar o sono, amplie aos poucos as formas de condução, sem retirada brusca. Sempre que indicar a Técnica do Travesseiro, mande assistir à aula; não substitua a aula por explicação incompleta. A mamada no meio da janela é da faixa de 90 a 120 dias e não deve ser antecipada.",
+      "rationale": "Seção 9. Aulas que exigem berço acordado em toda soneca ou cronômetro de 10 minutos não prevalecem."
+    },
+    {
+      "id": "60-90-choro-refluxo",
+      "rule": "Choro é comunicação. Não é automaticamente fome, sono, colo ou dor. Sonecas muito curtas, despertar irritado, dificuldade de permanecer deitado, gases, arqueamento, regurgitação com desconforto, ruídos na garganta e queda de ingestão pedem investigação de sono, alimentação, arroto, postura e desconforto antes de concluir que é comportamental. Sem diagnóstico. Suspeita de refluxo ou APLV: aulas e vídeos do pediatra Roberto Franklin e suporte das consultoras. Não conclua baixa produção por um comportamento isolado; se a suspeita se sustentar, indique ordenha para medir a produção. O curso de amamentação só entra depois da investigação, quando houver necessidade consistente de aprofundar.",
+      "rationale": "Seção 10."
+    },
+    {
+      "id": "60-90-saltos",
+      "rule": "Não use salto de desenvolvimento como explicação para sono, alimentação ou comportamento. Não confirme essa teoria, não preveja duração e não oriente só esperar passar. Marcos são aquisições graduais. Se a mãe atribuir a mudança a isso, investigue rotina, sonecas, mamadas, forma de adormecer, estímulos e desconfortos.",
+      "rationale": "Seção 11."
+    },
+    {
+      "id": "60-90-linguagem",
+      "rule": "Use mãe ou o nome informado. Linguagem simples, prática e respeitosa. Prefira passo a passo. Sem diminutivos, culpa ou linguagem infantilizada. Não invente causa, não diagnostique, não prescreva medicamento, não altere fórmula e não misture faixas. Não imponha berço acordado, não normalize despertares frequentes, não prometa eliminar todos os despertares. Estrutura: identificar o problema, explicar em breve, passo a passo, o que observar e, quando o método pedir, aula, vídeo ou suporte.",
+      "rationale": "Seção 12."
+    },
+    {
+      "id": "60-90-no-cry-it-out",
+      "rule": "Não oriente deixar o bebê chorar sozinho, extinção, cry it out ou sleep training. Se houver choro na mudança de condução, a mãe permanece presente e acolhe."
+    }
+  ],
+  "clinicalRedFlags": [
+    "perda de peso ou baixa evolução ponderal",
+    "vômitos em jato persistentes",
+    "sangue nas fezes",
+    "febre",
+    "letargia importante / dificuldade de despertar para alimentar",
+    "recusa alimentar persistente",
+    "sinais de desidratação (fralda seca por mais de 6h, fontanela afundada)",
+    "arqueamento corporal persistente com choro inconsolável",
+    "dificuldade respiratória",
+    "coloração arroxeada"
+  ]
+}

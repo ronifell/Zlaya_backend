@@ -1,0 +1,126 @@
+{
+  "namespace": "60_90",
+  "description": "Aulas do módulo 60 a 90 dias e encaminhamentos clínicos previstos na regra oficial.",
+  "lessons": [
+    {
+      "id": "lesson-60-90-ritual",
+      "title": "Crie um ritual para o sono noturno",
+      "track": "sono",
+      "appPath": "/aulas/60_90/ritual-noturno"
+    },
+    {
+      "id": "lesson-60-90-colo-peito",
+      "title": "Desassocie colo e peito da hora de dormir",
+      "track": "berco",
+      "appPath": "/aulas/60_90/colo-e-peito"
+    },
+    {
+      "id": "lesson-60-90-saltos",
+      "title": "Desmistifique os chamados saltos de desenvolvimento",
+      "track": "desenvolvimento",
+      "appPath": "/aulas/60_90/saltos"
+    },
+    {
+      "id": "lesson-60-90-mamada-sonhos",
+      "title": "Elimine a mamada dos sonhos",
+      "track": "sono",
+      "appPath": "/aulas/60_90/mamada-dos-sonhos"
+    },
+    {
+      "id": "lesson-60-90-sono-noturno",
+      "title": "Estratégia para o sono noturno",
+      "track": "sono",
+      "appPath": "/aulas/60_90/sono-noturno"
+    },
+    {
+      "id": "lesson-60-90-despertares",
+      "title": "O que fazer nos despertares noturnos",
+      "track": "sono",
+      "appPath": "/aulas/60_90/despertares-noturnos"
+    },
+    {
+      "id": "lesson-60-90-forma-adormecer",
+      "title": "Vamos começar a tirar as associações negativas de sono",
+      "track": "berco",
+      "appPath": "/aulas/60_90/forma-de-adormecer"
+    },
+    {
+      "id": "lesson-60-90-ruido",
+      "title": "Use o ruído branco",
+      "track": "ambiente",
+      "appPath": "/aulas/60_90/ruido-branco"
+    },
+    {
+      "id": "lesson-60-90-rotina",
+      "title": "Passo a passo para estruturar a rotina de 60 a 90 dias",
+      "track": "rotina",
+      "appPath": "/aulas/60_90/rotina"
+    },
+    {
+      "id": "lesson-travesseiro",
+      "title": "Técnica do Travesseiro",
+      "track": "berco",
+      "appPath": "/aulas/travesseiro"
+    },
+    {
+      "id": "lesson-pediatra-refluxo-aplv",
+      "title": "Aulas e vídeos do pediatra Roberto Franklin",
+      "track": "medico",
+      "appPath": "/aulas/bonus/pediatra-roberto-franklin"
+    }
+  ],
+  "situationToLessons": [
+    {
+      "situation": "Ritual noturno",
+      "lessons": ["lesson-60-90-ritual"]
+    },
+    {
+      "situation": "Única forma de adormecer no colo ou no peito",
+      "lessons": ["lesson-60-90-colo-peito", "lesson-60-90-forma-adormecer"]
+    },
+    {
+      "situation": "Teoria de salto para explicar o sono",
+      "lessons": ["lesson-60-90-saltos"]
+    },
+    {
+      "situation": "Mamada dos sonhos",
+      "lessons": ["lesson-60-90-mamada-sonhos", "lesson-60-90-sono-noturno"]
+    },
+    {
+      "situation": "Despertares noturnos e jejum",
+      "lessons": ["lesson-60-90-sono-noturno", "lesson-60-90-despertares"]
+    },
+    {
+      "situation": "Ruído branco",
+      "lessons": ["lesson-60-90-ruido"]
+    },
+    {
+      "situation": "Janela, sonecas e rotina do dia",
+      "lessons": ["lesson-60-90-rotina"]
+    },
+    {
+      "situation": "Suspeita de refluxo ou APLV",
+      "lessons": ["lesson-pediatra-refluxo-aplv"]
+    },
+    {
+      "situation": "Técnica do Travesseiro",
+      "lessons": ["lesson-travesseiro"]
+    }
+  ],
+  "supportChannels": {
+    "humanSupport": {
+      "label": "Suporte das consultoras da equipe Eliana Dias",
+      "description": "Acompanhamento humano quando a regra manda buscar as consultoras ou o caso sai da base validada.",
+      "appPath": "/suporte/humano"
+    },
+    "pediatricianBonus": {
+      "label": "Aulas e vídeos do pediatra Roberto Franklin",
+      "description": "Encaminhamento obrigatório diante de suspeita de refluxo ou APLV, sem diagnóstico pela Zlaya.",
+      "appPath": "/aulas/bonus/pediatra-roberto-franklin"
+    },
+    "familyPediatrician": {
+      "label": "Pediatra da família",
+      "description": "Avaliação pediátrica diante de sinal de alerta."
+    }
+  }
+}

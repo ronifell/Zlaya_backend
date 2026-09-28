@@ -1,3 +1,5 @@
+import { collectLaterBandSignals } from './laterBandSignals.js';
+
 /**
  * Contextual signal extractor.
  *
@@ -1542,6 +1544,29 @@ export function extractSignals({ message, conversation, ageBand, ageDays } = {})
   const detailScore =
     provided.length + signals.length + (currentNorm.length >= 140 ? 1 : 0);
   const hasRichContext = hasDirectiveSignal || detailScore >= 2 || currentNorm.length >= 180;
+
+  const is6090Band =
+    String(ageBand || '').toLowerCase() === '60_90' ||
+    (Number.isFinite(ageDays) && ageDays >= 61 && ageDays <= 90);
+  const is90120Band =
+    String(ageBand || '').toLowerCase() === '90_120' ||
+    (Number.isFinite(ageDays) && ageDays >= 91 && ageDays <= 120);
+  if (is6090Band || is90120Band) {
+    const bandSignals = collectLaterBandSignals({
+      text: motherText,
+      ageDays,
+      band: is90120Band ? '90_120' : '60_90',
+    });
+    return {
+      signals: bandSignals.signals,
+      boostThemes: bandSignals.boostThemes,
+      priorities: bandSignals.priorities,
+      provided,
+      alreadyUsing,
+      hasRichContext: bandSignals.hasDirectiveSignal || provided.length >= 2 || currentNorm.length >= 180,
+      hasDirectiveSignal: bandSignals.hasDirectiveSignal,
+    };
+  }
 
   return {
     signals,

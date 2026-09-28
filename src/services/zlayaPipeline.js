@@ -59,6 +59,8 @@ import { generateAnswer } from './responseGenerator.js';
 import { renderRoute, suggestedLessonsFromRetrieval } from './fallback.js';
 import { recordTurn } from './auditLogger.js';
 import { enrichThirtySixtyOfficialAnswer, scrubThirtySixtySafetyWording } from './thirtySixtyOfficialEnricher.js';
+import { enrichSixtyNinetyOfficialAnswer } from './sixtyNinetyOfficialEnricher.js';
+import { enrichNinetyOneTwentyOfficialAnswer } from './ninetyOneTwentyOfficialEnricher.js';
 
 /**
  * Full Zlaya turn pipeline.
@@ -244,6 +246,11 @@ export async function processTurn({ message, babyProfile, conversation, conversa
       draft.text = ageFix.text;
       draft.ageCorrections = ageFix.corrections;
     }
+
+    const laterBandKey = String(namespace).toUpperCase();
+    const laterBandBaseText = (laterBandKey === '60_90' || laterBandKey === '90_120')
+      ? draft.text
+      : null;
 
     // 30_60: early scrub of wording that the post-generation guard treats as
     // unsafe even in methodological negations (TESTE 40d-2 score 3.0).
@@ -719,6 +726,31 @@ export async function processTurn({ message, babyProfile, conversation, conversa
       }
     }
 
+    // 60_90 and 90_120 keep their own protocol. RN post-processing above
+    // stays in place for RN and 30_60; these bands restore the pre-RN text
+    // and then apply only their official answer.
+    if (laterBandBaseText != null && draft?.text) {
+      draft.text = laterBandBaseText;
+      const officialProfile = { ...(babyProfile || {}), ageDays: babyProfile?.ageDays ?? age?.days };
+      const enriched = laterBandKey === '60_90'
+        ? enrichSixtyNinetyOfficialAnswer({
+          text: draft.text,
+          message,
+          signals,
+          babyProfile: officialProfile,
+        })
+        : enrichNinetyOneTwentyOfficialAnswer({
+          text: draft.text,
+          message,
+          signals,
+          babyProfile: officialProfile,
+        });
+      if (enriched.text !== draft.text) {
+        draft.text = enriched.text;
+        draft.laterBandOfficialEnrichment = enriched.notes;
+      }
+    }
+
     safety = checkForbiddenContent({
       text: draft.text,
       namespace,
@@ -759,6 +791,23 @@ export async function processTurn({ message, babyProfile, conversation, conversa
           babyProfile: { ...(babyProfile || {}), ageDays: babyProfile?.ageDays ?? age?.days },
         });
         recoveredText = scrubThirtySixtySafetyWording(cleaned.text);
+      }
+      if ((laterBandKey === '60_90' || laterBandKey === '90_120') && recoveredText) {
+        const officialProfile = { ...(babyProfile || {}), ageDays: babyProfile?.ageDays ?? age?.days };
+        const cleaned = laterBandKey === '60_90'
+          ? enrichSixtyNinetyOfficialAnswer({
+            text: recoveredText,
+            message,
+            signals,
+            babyProfile: officialProfile,
+          })
+          : enrichNinetyOneTwentyOfficialAnswer({
+            text: recoveredText,
+            message,
+            signals,
+            babyProfile: officialProfile,
+          });
+        recoveredText = cleaned.text;
       }
       const recoveredSafety = checkForbiddenContent({
         text: recoveredText,

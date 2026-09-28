@@ -1,0 +1,72 @@
+{
+  "namespace": "90_120",
+  "ageRange": {
+    "minDays": 91,
+    "maxDays": 120
+  },
+  "description": "Regras operacionais da Zlaya para 90 a 120 dias, extraídas das aulas do módulo. O protocolo de raciocínio é o mesmo das faixas anteriores. Não importe números de 30–60 nem de 60–90 que estas aulas não definam.",
+  "fixedRules": [
+    {
+      "id": "90-120-protocolo",
+      "rule": "Sequência: identificar o problema, verificar o contexto, investigar as causas relevantes, aplicar só o que esta faixa define e orientar a conduta. Não preencha lacunas, não transforme hipótese em conclusão e não misture regras de outra idade. Alimentação e desconforto vêm antes de leitura comportamental quando a aula manda avaliar isso primeiro. Sem diagnóstico, sem medicamento prescrito pela IA e sem deixar chorar sozinho.",
+      "rationale": "Protocolo oficial comum às faixas já concluídas, aplicado ao material de 90 a 120 dias."
+    },
+    {
+      "id": "90-120-travesseiro",
+      "rule": "O travesseiro pode ser estratégia pontual para o início do sono. Não é item fixo e não permanece a noite toda. Coloque atravessado no berço; o bebê entra do quadril para cima, nunca só a cabeça. Depois do sono profundo, se ele sair de cima, o travesseiro pode ser retirado. A função é o aconchego do colo dentro do berço, para ele finalizar o adormecer no berço. Sempre indique a aula; não substitua o vídeo por explicação incompleta.",
+      "rationale": "Aula Adapte a Estratégia do travesseiro."
+    },
+    {
+      "id": "90-120-soneca-nao-feita",
+      "rule": "Um dia ou outro sem soneca pode acontecer. Diminua estímulos, reduza luz e interação e siga a rotina; um banho pode reorganizar. Não insista de forma excessiva naquele momento. Tente de novo no próximo sinal de sono. Se a ausência virar padrão, revise janelas, estímulo, organização das mamadas e desconfortos.",
+      "rationale": "Aula Bebê não fez a soneca."
+    },
+    {
+      "id": "90-120-chupeta",
+      "rule": "É esperado a chupeta soltar depois de cerca de dez minutos, quando a mandíbula relaxa e o sono aprofunda. O problema é despertar toda vez que ela cai, antes de consolidar o sono, e não conseguir retomar. Nesse caso, a retirada é total e consistente; tirar e devolver reforça o padrão. Acordar de uma a três vezes na noite pedindo a chupeta pode acontecer: como ele ainda não recoloque sozinho, a mãe ajuda, avaliando benefício e prejuízo até cerca de cinco a sete meses, quando ele consegue pegá-la.",
+      "rationale": "Aula do bebê que perde a chupeta."
+    },
+    {
+      "id": "90-120-em-pe",
+      "rule": "Se só dorme em pé no colo, avalie refluxo primeiro. Sem refluxo, dez a quinze minutos em pé bastam; volte aos poucos à horizontal. Se o padrão já existe, faça a passagem ao longo de três a quatro dias, espere alguns minutos na horizontal no colo e só então vá ao berço, para não ativar o reflexo de defesa da descida brusca. No berço: devagar, primeiro os pés, depois o corpo. Com refluxo, não aplique essa redução como se não houvesse desconforto: indique as aulas do pediatra e o suporte, sem diagnóstico.",
+      "rationale": "Aula do bebê que só dorme em pé no colo."
+    },
+    {
+      "id": "90-120-carrinho",
+      "rule": "Um ou dois passeios por dia, de manhã e à tarde, respeitando sono e alimentação. No carrinho, virado para a frente, com o tronco levemente elevado, não totalmente deitado. O passeio ajuda a observar e relaxar sem colo o tempo todo.",
+      "rationale": "Aula Passeando de carrinho."
+    },
+    {
+      "id": "90-120-peito",
+      "rule": "Adormecer durante a mamada pode acontecer nesta idade. O ajuste é quando ele só dorme no peito. Organize o dia: mamada ao acordar de manhã e após as sonecas, e um reforço cerca de uma hora depois. A janela gira em torno de 1 hora e 30 minutos, então ele não precisa estar no peito para adormecer. Nine no colo sem oferecer o peito; pode andar e sentar quando der. Aplique em todas as vezes. Muitos aceitam em dois a três dias. Por volta de três meses a três meses e meio, vale começar. Há choro possível no colo, com a mãe presente.",
+      "rationale": "Aula Retirando o hábito de dormir no peito. Este reforço é a mamada no meio da janela, que a faixa de 60 a 90 dias não antecipa."
+    },
+    {
+      "id": "90-120-andando",
+      "rule": "Se só dorme com a mãe andando, reduza o movimento aos poucos: mais devagar, menos balanço, pausas curtas quando relaxar; se agitar, retome o movimento leve e reduza de novo. Não alterne retirada total e movimento intenso. A maioria responde em dois a quatro dias; padrão muito firme pode levar a primeira semana. A aula mostra a redução.",
+      "rationale": "Aula do bebê que só dorme se a mãe estiver andando."
+    },
+    {
+      "id": "90-120-vacina",
+      "rule": "Depois da vacina, sono e humor podem mudar por cerca de 24 a 48 horas. Mantenha a rotina no possível, acolha mais enquanto estiver sensível e retome a condução habitual depois. Não crie uma forma permanente de adormecer por um desconforto passageiro. Se puder, vacine entre 14h e 15h. Febre ou dor local: somente o antitérmico já indicado pelo pediatra, na dose e no intervalo que ele orientou. A IA não prescreve.",
+      "rationale": "Aula Vacinas."
+    },
+    {
+      "id": "90-120-viagem",
+      "rule": "Na viagem, sono em berço próprio, de preferência berço portátil. Leve o carrinho; sonecas podem ocorrer nele, respeitando as janelas e sem excesso de estímulo. Organize antes a alimentação já escolhida, com pote térmico e alimentos adequados à idade.",
+      "rationale": "Aula Viagem com o bebê."
+    }
+  ],
+  "clinicalRedFlags": [
+    "perda de peso ou baixa evolução ponderal",
+    "vômitos em jato persistentes",
+    "sangue nas fezes",
+    "febre",
+    "letargia importante / dificuldade de despertar para alimentar",
+    "recusa alimentar persistente",
+    "sinais de desidratação (fralda seca por mais de 6h, fontanela afundada)",
+    "arqueamento corporal persistente com choro inconsolável",
+    "dificuldade respiratória",
+    "coloração arroxeada"
+  ]
+}

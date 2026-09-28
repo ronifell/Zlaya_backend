@@ -68,38 +68,49 @@ export function decideRoute({
     });
   }
 
+  const nsKey = String(namespace || '').toUpperCase();
   const thirtySixtyGrounded =
-    String(namespace || '').toUpperCase() === '30_60' &&
+    nsKey === '30_60' &&
     Boolean(
       signals?.hasDirectiveSignal ||
       (signals?.signals || []).some((s) => String(s.id || '').includes('30_60')),
     );
+  const laterBandGrounded =
+    (nsKey === '60_90' || nsKey === '90_120') &&
+    Boolean(
+      signals?.hasDirectiveSignal ||
+      (signals?.signals || []).some((s) => /^(60_90|90_120)_/.test(String(s.id || ''))),
+    );
+  const methodGrounded = thirtySixtyGrounded || laterBandGrounded;
+  const methodReason = thirtySixtyGrounded
+    ? 'thirty_sixty_method_content'
+    : 'later_band_method_content';
 
   // Caminho 7: explicitly out of scope OR no retrieval at all
-  if (intent === 'fora_da_base' && !thirtySixtyGrounded) {
+  if (intent === 'fora_da_base' && !methodGrounded) {
     return route(PATHS.ROUTE_TO_HUMAN_SUPPORT, { reason: 'intent_out_of_base' });
   }
-  if ((!retrieval || retrieval.status === 'no_results') && !thirtySixtyGrounded) {
+  if ((!retrieval || retrieval.status === 'no_results') && !methodGrounded) {
     return route(PATHS.ROUTE_TO_HUMAN_SUPPORT, { reason: 'no_retrieval_results' });
   }
-  if (thirtySixtyGrounded && (!retrieval || retrieval.status === 'no_results' || intent === 'fora_da_base')) {
-    return route(PATHS.ANSWER_DIRECTLY, { reason: 'thirty_sixty_method_content' });
+  if (methodGrounded && (!retrieval || retrieval.status === 'no_results' || intent === 'fora_da_base')) {
+    return route(PATHS.ANSWER_DIRECTLY, { reason: methodReason });
   }
 
   // Caminho 4: ambiguous intent or low retrieval confidence
-  if ((intent === 'ambiguo' || (intentConfidence ?? 0) < 0.35) && !thirtySixtyGrounded) {
+  if ((intent === 'ambiguo' || (intentConfidence ?? 0) < 0.35) && !methodGrounded) {
     return route(PATHS.FALLBACK, { reason: 'low_intent_confidence', intentConfidence });
   }
-  if (thirtySixtyGrounded && (intent === 'ambiguo' || (intentConfidence ?? 0) < 0.35)) {
+  if (methodGrounded && (intent === 'ambiguo' || (intentConfidence ?? 0) < 0.35)) {
     return route(PATHS.ANSWER_DIRECTLY, {
-      reason: 'thirty_sixty_method_content',
+      reason: methodReason,
       intentConfidence,
     });
   }
   if (retrieval.confidence < (config.retrieval.answerMinConfidence * 0.6)) {
-    if (thirtySixtyGrounded) {
+    if (methodGrounded) {
       return route(PATHS.ANSWER_DIRECTLY, {
-        reason: 'thirty_sixty_method_content',
+        reason: methodReason,
         confidence: retrieval.confidence,
       });
     }
@@ -107,7 +118,7 @@ export function decideRoute({
   }
 
   // Caminho 2: missing baby context required for safe answering
-  if (babyContext && !babyContext.hasMinimumContext && !thirtySixtyGrounded) {
+  if (babyContext && !babyContext.hasMinimumContext && !methodGrounded) {
     return route(PATHS.ASK_MORE_CONTEXT, {
       reason: 'missing_baby_context',
       missing: babyContext.missingFields,
@@ -143,9 +154,13 @@ export function decideRoute({
     // mother already gave rich context, in which case prefer a practical,
     // grounded answer (lessons are still attached as suggestions).
     if (retrieval.confidence < config.retrieval.answerMinConfidence) {
-      if (thirtySixtyGrounded || (richContext && retrieval.confidence >= config.retrieval.answerMinConfidence * 0.75)) {
+      if (methodGrounded || (richContext && retrieval.confidence >= config.retrieval.answerMinConfidence * 0.75)) {
         return route(PATHS.ANSWER_DIRECTLY, {
-          reason: thirtySixtyGrounded ? 'thirty_sixty_method_content' : 'rich_context_practical_orientation',
+          reason: thirtySixtyGrounded
+            ? 'thirty_sixty_method_content'
+            : laterBandGrounded
+              ? 'later_band_method_content'
+              : 'rich_context_practical_orientation',
           confidence: retrieval.confidence,
         });
       }

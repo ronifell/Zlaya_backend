@@ -60,7 +60,12 @@ function composeLocalAnswer({ question, chunks, namespace, intent, signals }) {
   const supporting = ns === '30_60' ? [] : chunks.slice(1, 3).map((c) => c.chunk);
 
   const lines = [];
-  lines.push(`Mãe, sobre a sua dúvida no contexto do RN (${namespace}):`);
+  const opener = ns === '60_90'
+    ? 'Mãe, sobre a sua dúvida na faixa de 60 a 90 dias:'
+    : ns === '90_120'
+      ? 'Mãe, sobre a sua dúvida na faixa de 90 a 120 dias:'
+      : `Mãe, sobre a sua dúvida no contexto do RN (${namespace}):`;
+  lines.push(opener);
   lines.push('');
   lines.push(leading.text);
 

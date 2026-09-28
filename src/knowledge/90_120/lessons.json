@@ -1,0 +1,94 @@
+{
+  "namespace": "90_120",
+  "description": "Aulas do módulo 90 a 120 dias.",
+  "lessons": [
+    {
+      "id": "lesson-90-120-travesseiro",
+      "title": "Adapte a Estratégia do travesseiro",
+      "track": "berco",
+      "appPath": "/aulas/90_120/travesseiro"
+    },
+    {
+      "id": "lesson-90-120-soneca",
+      "title": "Bebê não fez a soneca",
+      "track": "sonecas",
+      "appPath": "/aulas/90_120/soneca-nao-feita"
+    },
+    {
+      "id": "lesson-90-120-chupeta",
+      "title": "Ensinando o bebê que perde a chupeta e acorda",
+      "track": "chupeta",
+      "appPath": "/aulas/90_120/chupeta"
+    },
+    {
+      "id": "lesson-90-120-em-pe",
+      "title": "Ensinando o bebê que só dorme em pé no colo",
+      "track": "colo",
+      "appPath": "/aulas/90_120/dorme-em-pe"
+    },
+    {
+      "id": "lesson-90-120-carrinho",
+      "title": "Passeando de carrinho",
+      "track": "passeio",
+      "appPath": "/aulas/90_120/carrinho"
+    },
+    {
+      "id": "lesson-90-120-peito",
+      "title": "Retirando o hábito de dormir no peito",
+      "track": "peito",
+      "appPath": "/aulas/90_120/dormir-no-peito"
+    },
+    {
+      "id": "lesson-90-120-andando",
+      "title": "Como retirar o hábito do bebê que só dorme se a mãe estiver andando",
+      "track": "colo",
+      "appPath": "/aulas/90_120/dorme-andando"
+    },
+    {
+      "id": "lesson-90-120-vacina",
+      "title": "Vacinas",
+      "track": "saude",
+      "appPath": "/aulas/90_120/vacinas"
+    },
+    {
+      "id": "lesson-90-120-viagem",
+      "title": "Viagem com o bebê",
+      "track": "rotina",
+      "appPath": "/aulas/90_120/viagem"
+    },
+    {
+      "id": "lesson-pediatra-refluxo-aplv",
+      "title": "Aulas e vídeos do pediatra Roberto Franklin",
+      "track": "medico",
+      "appPath": "/aulas/bonus/pediatra-roberto-franklin"
+    }
+  ],
+  "situationToLessons": [
+    { "situation": "Travesseiro no início do sono", "lessons": ["lesson-90-120-travesseiro"] },
+    { "situation": "Soneca que não aconteceu", "lessons": ["lesson-90-120-soneca"] },
+    { "situation": "Chupeta que cai e ele acorda", "lessons": ["lesson-90-120-chupeta"] },
+    { "situation": "Só dorme em pé no colo", "lessons": ["lesson-90-120-em-pe"] },
+    { "situation": "Passeio de carrinho", "lessons": ["lesson-90-120-carrinho"] },
+    { "situation": "Só dorme no peito", "lessons": ["lesson-90-120-peito"] },
+    { "situation": "Só dorme se a mãe anda", "lessons": ["lesson-90-120-andando"] },
+    { "situation": "Vacina e sono", "lessons": ["lesson-90-120-vacina"] },
+    { "situation": "Viagem", "lessons": ["lesson-90-120-viagem"] },
+    { "situation": "Suspeita de refluxo", "lessons": ["lesson-pediatra-refluxo-aplv", "lesson-90-120-em-pe"] }
+  ],
+  "supportChannels": {
+    "humanSupport": {
+      "label": "Suporte humano da equipe Eliana Dias",
+      "description": "Análise individual quando o caso sai da base desta faixa.",
+      "appPath": "/suporte/humano"
+    },
+    "pediatricianBonus": {
+      "label": "Aulas e vídeos do pediatra Roberto Franklin",
+      "description": "Suspeita de refluxo, sem diagnóstico pela Zlaya.",
+      "appPath": "/aulas/bonus/pediatra-roberto-franklin"
+    },
+    "familyPediatrician": {
+      "label": "Pediatra da família",
+      "description": "Dose de medicamento e sinais de alerta."
+    }
+  }
+}

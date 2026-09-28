@@ -45,8 +45,8 @@ export const config = {
     data: path.join(ROOT, 'data'),
   },
 
-  // Pilot scope: RN (0–28) and 30_60 (29–60) are active by default.
-  activeNamespaces: (process.env.ACTIVE_NAMESPACES || 'RN,30_60')
+  // Pilot scope: RN (0–28), 30_60 (29–60), 60_90 (61–90) and 90_120 (91–120).
+  activeNamespaces: (process.env.ACTIVE_NAMESPACES || 'RN,30_60,60_90,90_120')
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean),
