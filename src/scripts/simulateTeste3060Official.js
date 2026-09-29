@@ -820,8 +820,9 @@ A condução deve respeitar a janela de 45 minutos a 1 hora e 15 minutos e os si
   });
   assert(!/ap[oó]s esse per[ií]odo acordado.{0,80}iniciar a condu[cç][aã]o|[eé] hora de iniciar a condu[cç][aã]o para a soneca/i.test(enriched.text), 'TESTE 008 49d: no after-window start');
   assert(/dentro da janela|respeitar a janela de 45 minutos a 1 hora e 15/i.test(enriched.text), 'TESTE 008 49d: conduction within/respecting window');
-  assert(/alimenta[cç][aã]o.{0,80}intervalos entre as mamadas/i.test(enriched.text), 'TESTE 008 49d: keep feeding ask');
-  assert(/saciad/i.test(enriched.text), 'TESTE 008 49d: keep satiety ask');
+  assert(!/intervalos entre as mamadas/i.test(enriched.text), 'TESTE 008 49d: no feeding questionnaire');
+  assert(!/90 a 120 ml|21h30 ou 22h|sling|tempo total, do despertar/i.test(enriched.text), 'TESTE 008 49d: no mixed rules');
+  assert(/saciad/i.test(enriched.text), 'TESTE 008 49d: keep satiety only inside the short-nap rule');
 }
 
 console.log('\n=== Layer A: TESTE 009 enricher replay ===\n');

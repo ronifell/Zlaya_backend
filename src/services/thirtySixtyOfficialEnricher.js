@@ -1572,8 +1572,6 @@ function sleepingThroughNightAnswer(ageDays) {
     '',
     'Nessa faixa etária, a referência de jejum noturno é de aproximadamente 3 a 5 horas, contadas a partir do momento em que o bebê adormece. Essa referência não significa que você precise acordá-lo assim que completar cinco horas, caso ele esteja dormindo espontaneamente e apresente bom ganho de peso.',
     '',
-    'Para orientar você com mais precisão: ele já recuperou o peso do nascimento e está ganhando peso adequadamente? Quantas horas ele permanece dormindo desde que adormece até despertar para a primeira mamada?',
-    '',
     'A aula para esse tema é Estratégias para o Sono Noturno.',
   ].join('\n');
 }
@@ -1588,8 +1586,80 @@ function reportedLongNapUnspecified(msg) {
     && !/soneca.{0,40}\d+\s*h|umas 2|cerca de 2/i.test(msg);
 }
 
+function clockTokens(msg) {
+  const out = [];
+  const re = /(\d{1,2})\s*[:h]\s*(\d{2})/gi;
+  let m;
+  while ((m = re.exec(String(msg || '')))) {
+    out.push({ label: `${Number(m[1])}h${m[2]}`, minutes: Number(m[1]) * 60 + Number(m[2]) });
+  }
+  return out;
+}
+
+function reportedNightStretchSchedule(msg) {
+  const t = String(msg || '');
+  if (/soneca|janela|ritual|banho|chupeta/i.test(t)) return false;
+  if (!/dorme|adormece/i.test(t) || !/acorda|desperta/i.test(t)) return false;
+  const clocks = clockTokens(t);
+  if (clocks.length < 2) return false;
+  const evening = clocks.some((c) => c.minutes >= 18 * 60 && c.minutes <= 23 * 60 + 59);
+  const early = clocks.some((c) => c.minutes <= 8 * 60);
+  return evening && early;
+}
+
+function nightStretchScheduleAnswer(ageDays, msg) {
+  const clocks = clockTokens(msg);
+  const ageBit = Number.isFinite(ageDays) ? `Com ${ageDays} dias, ` : '';
+  const first = clocks[0]?.label || 'o início da noite';
+  const wake = clocks[1]?.label || 'o primeiro despertar';
+  const back = clocks[2]?.label;
+  const backLine = back
+    ? `Depois da mamada, ele volta a dormir até ${back}. Esse trecho também é sono, não um tempo acordado do dia.`
+    : 'O trecho em que ele volta a dormir depois da mamada também é sono, não um tempo acordado do dia.';
+  return [
+    `${ageBit}esses horários são o sono da noite. A janela de 45 minutos a 1 hora e 15 minutos não se aplica a eles.`,
+    '',
+    `De ${first} até ${wake} ele permaneceu dormindo e despertou sozinho. Esse primeiro período já passa da referência de cerca de 3 a 5 horas, contadas de quando ele adormece. Você não precisa acordá-lo para mamar. Oferecer a mamada nesse despertar espontâneo está de acordo com a regra.`,
+    '',
+    backLine,
+    '',
+    'A aula para esse tema é Estratégias para o Sono Noturno.',
+  ].join('\n');
+}
+
+function looksLikeThirtyMinNapPacifierAsk(msg) {
+  const t = String(msg || '');
+  if (!/soneca/i.test(t) || !/chupeta/i.test(t) || !/despert/i.test(t)) return false;
+  if (!/30\s*min/i.test(t)) return false;
+  if (/sling|canguru|f[oó]rmula|\d+\s*ml|preciso acordar|madrugada/i.test(t)) return false;
+  return true;
+}
+
+function thirtyMinNapPacifierAnswer(ageDays) {
+  const ageBit = Number.isFinite(ageDays) ? `Aos ${ageDays} dias, ` : '';
+  return [
+    `${ageBit}sonecas com média de cerca de 30 minutos, que às vezes chegam a cerca de 1 hora, não são sonecas curtas e não pedem ajuste só pela duração. Sonecas de 30 a 40 minutos não estão erradas. Sonecas de cerca de 1 hora não devem ser consideradas curtas. A duração não se avalia sozinha.`,
+    '',
+    'A recondução cabe quando ele ainda parece cansado. Se o despertar for definitivo e ele estiver restabelecido, começa uma nova janela. Não insista para completar uma duração. O que muda a conduta é como ele desperta das sonecas: tranquilo e restabelecido, segue a vigília; com choro, irritação ou ainda cansado, uma recondução.',
+    '',
+    'Abaixo de cerca de 20 minutos, se o padrão for recorrente, a investigação de ele estar saciado e de sinais de refluxo vale mesmo sem irritabilidade. A média de 30 minutos não entra nessa leitura.',
+    '',
+    'A condução deve respeitar a janela de 45 minutos a 1 hora e 15 minutos, e deve ocorrer dentro da janela de 45 minutos a 1 hora e 15 minutos, observando os sinais de sono. A duração de uma soneca de cerca de 30 minutos, sozinha, não indica que a condução precise começar mais cedo. Sem o tempo em que ele permanece acordado antes da soneca, não dá para dizer que a janela foi ultrapassada.',
+    '',
+    'Como ele usa chupeta, vale observar se os despertares acontecem justamente quando ela cai. Se não houver essa relação, não há motivo para considerá-la causa principal.',
+    '',
+    'A aula para esse tema é Regule a janela de sono e as sonecas.',
+  ].join('\n');
+}
+
 function reportedShortNaps2535(msg) {
-  return /24\s*(a|-|–)\s*30|26\s*(a|-|–)\s*32|25\s*(a|-|–)\s*35|22\s*(a|-|–)\s*28|sonecas?.{0,24}(22|24|25|26|28|30|32|35)\s*min/i.test(msg);
+  const t = String(msg || '');
+  // A 30-minute average is the "not a short nap" case, not the 22–28 band.
+  if (/m[eé]dia de 30\s*min|duram.{0,24}30\s*min/i.test(t)
+    && !/22\s*(a|-|–)\s*28|24\s*(a|-|–)\s*30|25\s*(a|-|–)\s*35|26\s*(a|-|–)\s*32/.test(t)) {
+    return false;
+  }
+  return /24\s*(a|-|–)\s*30|26\s*(a|-|–)\s*32|25\s*(a|-|–)\s*35|22\s*(a|-|–)\s*28|sonecas?.{0,24}(22|24|25|26|28|32|35)\s*min/i.test(t);
 }
 
 function shortNapRangeLabel(msg) {
@@ -4135,6 +4205,16 @@ export function enrichThirtySixtyOfficialAnswer({
       text: `Aos ${ageDays} dias, a fonte oficial consolidada disponível é de 30 a 60 dias. Não aplico automaticamente as regras dessa faixa a esta idade — isso requer validação metodológica da Eliana Dias. Me conte como o bebê acorda, como está a mamada e o que mais você observa, para eu organizar o que já puder sem importar regra de outra faixa.`,
       notes,
     };
+  }
+
+  if (reportedNightStretchSchedule(msg)) {
+    notes.push('night_stretch_schedule');
+    return { text: nightStretchScheduleAnswer(ageDays, msg), notes };
+  }
+
+  if (looksLikeThirtyMinNapPacifierAsk(msg)) {
+    notes.push('thirty_min_nap_pacifier_closed');
+    return { text: thirtyMinNapPacifierAnswer(ageDays), notes };
   }
 
   if (
