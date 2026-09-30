@@ -1228,12 +1228,17 @@ export function extractSignals({ message, conversation, ageBand, ageDays } = {})
         priorities.push(def.priority);
         hasDirectiveSignal = true;
       }
-      const drop = new Set(['long_daytime_nap', 'rn_night_waking', 'intervalo_mamada_diurna']);
+      const drop = new Set([
+        'long_daytime_nap',
+        'rn_night_waking',
+        'intervalo_mamada_diurna',
+        'night_start_19_20_30_60',
+      ]);
       for (let i = signals.length - 1; i >= 0; i -= 1) {
         if (drop.has(signals[i].id)) signals.splice(i, 1);
       }
       for (let i = priorities.length - 1; i >= 0; i -= 1) {
-        if (/soneca diurna no RN|quando o RN ACORDA à noite|acordar para oferecer a mamada/i.test(priorities[i])) {
+        if (/soneca diurna no RN|quando o RN ACORDA à noite|acordar para oferecer a mamada|21h30\/22h NÃO é recomendado|horário recomendado de início do sono noturno/i.test(priorities[i])) {
           priorities.splice(i, 1);
         }
       }
@@ -1592,10 +1597,13 @@ export function looksLikeNapDuration63Ask(text) {
 
 export function looksLikeSleepingThroughNightAsk(text) {
   const t = String(text || '');
-  const night = /madrugada|(^|[^\w])(à|a)\s+noite|de noite|noturn/i.test(t);
-  const notWaking = /n[aã]o est[aá] acordando para mamar|n[aã]o acorda para mamar|n[aã]o desperta para mamar|n[aã]o mama (na |de )?madrugada|n[aã]o acorda (na |de )?madrugada|dorme a noite (inteira|toda)/i.test(t);
+  const night = /madrugada|(^|[^\w])(à|a)\s+noite|de noite|noturn|da manh[aã]|horas da manh/i.test(t);
+  const notWaking = /n[aã]o est[aá] acordando para mamar|n[aã]o acorda para mamar|n[aã]o desperta para mamar|n[aã]o mama (na |de )?madrugada|n[aã]o acorda (na |de )?madrugada|dorme a noite (inteira|toda)|sem acordar (pra|para) mamar|dormindo demais/i.test(t);
   const askWake = /preciso acordar|devo acordar|tenho que acordar|preciso acord[aá]-?l[oa]|devo acord[aá]-?l[oa]/i.test(t);
-  return night && (notWaking || (askWake && /n[aã]o (est[aá] )?acord/i.test(t)));
+  const longNightWithoutFeed = /(?:19|20|21|22)\s*h/.test(t)
+    && /sem acordar (pra|para) mamar|dormindo demais/i.test(t)
+    && /manh[aã]|noite|madrugada/i.test(t);
+  return longNightWithoutFeed || (night && (notWaking || (askWake && /n[aã]o (est[aá] )?acord|sem acordar/i.test(t))));
 }
 
 /**

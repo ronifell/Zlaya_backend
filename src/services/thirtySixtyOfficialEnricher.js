@@ -3,7 +3,7 @@
  * Must NOT be applied to RN (0–28).
  */
 
-import { looksLikeNapDuration63Ask } from './signalExtractor.js';
+import { looksLikeNapDuration63Ask, looksLikeSleepingThroughNightAsk } from './signalExtractor.js';
 
 const FEMININE_NAMES = new Set([
   'lara', 'maria', 'ana', 'sofia', 'helena', 'julia', 'júlia', 'isabela', 'manuela', 'alice',
@@ -1553,14 +1553,6 @@ const NAP_DURATION_63 =
 
 function reportedHealthyLongNight(msg) {
   return /5\s*h(?:oras)?|5h30|5 horas e meia/.test(msg) && /noite|noturn|dorme (seguid|a noite)/i.test(msg);
-}
-
-function looksLikeSleepingThroughNightAsk(msg) {
-  const t = String(msg || '');
-  const night = /madrugada|(^|[^\w])(à|a)\s+noite|de noite|noturn/i.test(t);
-  const notWaking = /n[aã]o est[aá] acordando para mamar|n[aã]o acorda para mamar|n[aã]o desperta para mamar|n[aã]o mama (na |de )?madrugada|n[aã]o acorda (na |de )?madrugada|dorme a noite (inteira|toda)/i.test(t);
-  const askWake = /preciso acordar|devo acordar|tenho que acordar|preciso acord[aá]-?l[oa]|devo acord[aá]-?l[oa]/i.test(t);
-  return night && (notWaking || (askWake && /n[aã]o (est[aá] )?acord/i.test(t)));
 }
 
 function sleepingThroughNightAnswer(ageDays) {

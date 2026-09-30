@@ -49,6 +49,36 @@ assert.ok(enriched.notes.includes('sleeping_through_night_fast'));
 assert.doesNotMatch(enriched.text, /Para orientar você com mais precisão/i);
 assert.doesNotMatch(enriched.text, /Quantas horas ele permanece/i);
 
+const tooLong =
+  'Meu bebê está dormindo demais 19h ate 4 horas da manhã sem acordar pra mamar. Tem algum problema?';
+assert.equal(looksLikeSleepingThroughNightAsk(tooLong), true);
+const tooLongSignals = extractSignals({
+  message: tooLong,
+  ageBand: '30_60',
+  ageDays: 50,
+});
+assert.equal(
+  tooLongSignals.signals.some((s) => s.id === 'sleeping_through_night_30_60'),
+  true,
+);
+assert.equal(
+  tooLongSignals.signals.some((s) => s.id === 'night_start_19_20_30_60'),
+  false,
+);
+const tooLongAnswer = enrichThirtySixtyOfficialAnswer({
+  text: 'Não: o tempo total, do despertar até ele efetivamente adormecer, está acima da janela de 45 minutos a 1 hora e 15 minutos.\n\nPara um bebê de 50 dias, dormir das 19h até as 4h da manhã sem acordar para mamar não é um problema. Esse padrão de sono noturno é saudável e esperado nessa faixa etária.',
+  message: tooLong,
+  signals: tooLongSignals,
+  babyProfile: { ageDays: 50, babyName: 'Rodolfo' },
+});
+assert.ok(tooLongAnswer.notes.includes('sleeping_through_night_fast'));
+assert.match(tooLongAnswer.text, /^N[aã]o [eé] necess[aá]rio acordar o beb[eê] automaticamente para mamar/i);
+assert.match(tooLongAnswer.text, /Aos 50 dias, se ele j[aá] recuperou o peso do nascimento/i);
+assert.match(tooLongAnswer.text, /3 a 5 horas/i);
+assert.doesNotMatch(tooLongAnswer.text, /tempo total, do despertar/i);
+assert.doesNotMatch(tooLongAnswer.text, /padr[aã]o de sono noturno [eé] saud[aá]vel/i);
+assert.doesNotMatch(tooLongAnswer.text, /n[aã]o [eé] um problema/i);
+
 const followUp = 'Ele dorme as 19:30 e acorda as 4:30. Eu amamento e ele dorme novamente ate 6:30';
 const followSignals = extractSignals({
   message: followUp,
