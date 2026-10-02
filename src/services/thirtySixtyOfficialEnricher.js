@@ -1516,25 +1516,12 @@ function reportedNap3040(msg) {
   return /soneca/.test(t) && /30\s*(?:a|–|-|ate|até)\s*40\s*min|cerca de 30\s*min|m[eé]dia de 30\s*min|sonecas?.{0,30}30\s*min/i.test(t);
 }
 
-function napDuration63Answer(ageDays, msg) {
-  const ageBit = Number.isFinite(ageDays) ? `Aos ${ageDays} dias, ` : '';
-  const calm = /acorda bem|despert[aou] (bem|tranquil)|tranquilo|descansad/i.test(msg);
-  const upset = /chorando|irritad|ainda cansad/i.test(msg);
-  const next = calm
-    ? 'Como ele desperta tranquilo e bem, segue a vigília. Não é preciso alongar essa soneca.'
-    : upset
-      ? 'Como ele acorda chorando, irritado ou ainda cansado, pode ser feita uma tentativa de recondução ao sono. Se não funcionar, segue o dia, sem insistir para completar uma duração.'
-      : 'Quando ele acorda dessas sonecas, está tranquilo, bem e descansado, ou chora, fica irritado e ainda parece cansado?';
+function napDuration63Answer(ageDays) {
+  const ageBit = Number.isFinite(ageDays) ? `Para um bebê de ${ageDays} dias, ` : '';
   return [
-    `Não. ${ageBit}sonecas de 30 a 40 minutos não devem ser classificadas como sonecas curtas. Uma soneca de aproximadamente 1 hora também não.`,
+    `${ageBit}sonecas de 30 a 40 minutos não devem ser classificadas como curtas.`,
     '',
-    'A duração da soneca não deve ser avaliada isoladamente. O limite de cerca de 2 horas, e no máximo 2 horas e 30 minutos, é apenas o teto para encerrar uma soneca longa. Ele não significa que 30 a 40 minutos estejam errados.',
-    '',
-    'Se ele despertar tranquilo, bem e descansado, segue a vigília. Se acordar chorando, irritado ou demonstrando que ainda está cansado, pode ser feita uma tentativa de recondução ao sono. Se essa tentativa não funcionar, segue o dia. Não é para insistir até completar uma duração. A partir do despertar definitivo, começa uma nova janela de vigília.',
-    '',
-    next,
-    '',
-    'A aula para esse tema é Regule a janela de sono e as sonecas.',
+    'Observe como ele desperta. Se despertar tranquilo, bem e descansado, siga a vigília. Se despertar chorando, irritado ou ainda cansado, tente reconduzir uma vez. Se não funcionar, siga o dia sem insistir para completar uma duração. A nova janela começa no despertar definitivo.',
   ].join('\n');
 }
 
@@ -4209,13 +4196,9 @@ export function enrichThirtySixtyOfficialAnswer({
     return { text: thirtyMinNapPacifierAnswer(ageDays), notes };
   }
 
-  if (
-    looksLikeNapDuration63Ask(msg)
-    && !ids.has('nap_angry_wake_30_60')
-    && !ids.has('short_naps_pacifier_mention_30_60')
-  ) {
+  if (looksLikeNapDuration63Ask(msg)) {
     notes.push('nap_duration_63');
-    return { text: napDuration63Answer(ageDays, msg), notes };
+    return { text: napDuration63Answer(ageDays), notes };
   }
 
   if (

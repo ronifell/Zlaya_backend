@@ -980,7 +980,7 @@ const SIGNAL_DEFS_30_60 = [
     ],
     boostThemes: ['janela_sono_sonecas'],
     priority:
-      'ITEM 6.3: sonecas de 30 a 40 minutos NÃO são sonecas curtas e NÃO estão erradas. Cerca de 1 hora também não. NÃO diga que não são ideais. NÃO use o teto de 2 horas ou 2h30 para julgar essa duração: o teto só encerra soneca longa. Não avalie a duração isolada. Tranquilo, bem e descansado segue a vigília; chorando, irritado ou ainda cansado, uma recondução; se não funcionar, segue o dia, sem insistir para completar uma duração. Do despertar definitivo, nova janela. NÃO peça de novo a duração se a mãe já informou 30 a 40 minutos. NÃO diga que as sonecas estão curtas nem que a rotina precisa melhorar por isso. Pergunte só como ele desperta, se ela não contou. Aula: Regule a janela de sono e as sonecas.',
+      'ITEM 6.3: responda só isto. Sonecas de 30 a 40 minutos NÃO são sonecas curtas. Depois, uma conduta só: observe como desperta; tranquilo, bem e descansado segue a vigília; chorando, irritado ou ainda cansado, reconduza uma vez; se não funcionar, siga o dia sem insistir numa duração; a nova janela começa no despertar definitivo. NÃO repita esse bloco. NÃO puxe mamada, fórmula, refluxo, sling, horário da noite, janela já ultrapassada nem teto de 2h30. A mãe não pediu esses temas.',
   },
   {
     id: 'sleeping_through_night_30_60',
