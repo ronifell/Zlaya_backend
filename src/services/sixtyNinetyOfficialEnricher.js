@@ -55,6 +55,33 @@ function napCountLine(ageDays) {
   return 'O número de sonecas vai de cerca de 5 no início da faixa para cerca de 4 perto dos 90 dias, aos poucos. Não retire uma soneca só para atingir a conta.';
 }
 
+function mentionsAplv(folded) {
+  return /aplv|alergia a proteina do leite/.test(folded);
+}
+
+function mentionsFormula(folded) {
+  return /\bformula\b|mamadeira/.test(folded);
+}
+
+function mentionsAminoFormula(folded) {
+  return /aminoacido/.test(folded);
+}
+
+function reportedAplvDiagnosis(folded) {
+  if (!mentionsAplv(folded)) return false;
+  if (/suspeit/.test(folded) && !/diagnostic/.test(folded)) return false;
+  return /diagnostic|\btem aplv\b|\bcom aplv\b|aplv confirm/.test(folded);
+}
+
+function aminoAplvCase(folded) {
+  return mentionsAplv(folded) && mentionsAminoFormula(folded);
+}
+
+function aplvFormulaCase(message) {
+  const folded = fold(message);
+  return aminoAplvCase(folded) || (reportedAplvDiagnosis(folded) && mentionsFormula(folded));
+}
+
 function formulaLine(ageDays) {
   const phase = phase60(ageDays);
   const head = com(ageDays);
@@ -68,8 +95,17 @@ function formulaLine(ageDays) {
 }
 
 const BUILDERS = {
-  '60_90_refluxo': (ageDays) =>
-    `${com(ageDays)}, eu não fecho diagnóstico. Se a suspeita é refluxo ou APLV, assista às aulas e aos vídeos do pediatra Roberto Franklin e procure o suporte das consultoras.\n\nEnquanto observa, o arroto continua e a posição vertical de referência é 20 a 30 minutos. Use 40 minutos quando houver sinais de refluxo. Não conclua baixa produção por um comportamento isolado. Se essa suspeita se sustentar, a ordenha serve para medir a produção. O curso de amamentação só entra depois, se ainda faltar aprofundar.`,
+  '60_90_refluxo': (ageDays, message) => {
+    const folded = fold(message);
+    const encaminha = `${com(ageDays)}, eu não fecho diagnóstico. Se a suspeita é refluxo ou APLV, assista às aulas e aos vídeos do pediatra Roberto Franklin e procure o suporte das consultoras.`;
+    if (aminoAplvCase(folded)) {
+      return `${encaminha}\n\nComo ele tem APLV e usa fórmula à base de aminoácidos, alguns bebês nessa situação pedem mamadas em intervalos menores, inclusive à noite, e podem ter dificuldade para cumprir o jejum noturno desta faixa. Considere essa fórmula ao avaliar o intervalo e os despertares noturnos. Não insista no intervalo habitual.\n\nDe dia, observe com que intervalo ele demonstra fome. Em uso de fórmula à base de aminoácidos, é normal que alguns bebês solicitem mamadas em torno de 1 hora e 30 minutos a 2 horas.`;
+    }
+    if (reportedAplvDiagnosis(folded) && mentionsFormula(folded)) {
+      return `${encaminha}\n\nVocê informou diagnóstico de APLV e uso de fórmula. Qual fórmula ele está utilizando?\n\nSe for fórmula à base de aminoácidos, alguns bebês pedem mamadas em intervalos menores, inclusive à noite, e podem ter dificuldade para cumprir o jejum noturno desta faixa. Nesse caso, considere essa fórmula ao avaliar o intervalo e os despertares noturnos. Não insista no intervalo habitual. De dia, observe com que intervalo ele demonstra fome. Cerca de 1 hora e 30 minutos a 2 horas pode ser normal para alguns desses bebês.`;
+    }
+    return `${encaminha}\n\nEnquanto observa, o arroto continua e a posição vertical de referência é 20 a 30 minutos. Use 40 minutos quando houver sinais de refluxo. Não conclua baixa produção por um comportamento isolado. Se essa suspeita se sustentar, a ordenha serve para medir a produção. O curso de amamentação só entra depois, se ainda faltar aprofundar.`;
+  },
 
   '60_90_mamada_sonhos': (ageDays) =>
     `${com(ageDays)}, a mamada dos sonhos não faz parte do método. Não acorde o bebê e não ofereça peito ou mamadeira de forma preventiva, antes de vocês irem dormir, para tentar alongar a madrugada.\n\n${fastLine(ageDays)} Se ele já estiver nesse período e continuar dormindo, deixe dormir. A aula é Elimine a mamada dos sonhos.`,
@@ -147,6 +183,9 @@ function pick(ids, message) {
   if (list.includes('60_90_mamada_sonhos')) {
     list = list.filter((id) => id !== '60_90_noite');
   }
+  if (aplvFormulaCase(message)) {
+    list = list.filter((id) => id !== '60_90_intervalo' && id !== '60_90_formula' && id !== '60_90_noite');
+  }
   return list.slice(0, 2);
 }
 
@@ -185,7 +224,7 @@ export function enrichSixtyNinetyOfficialAnswer({ text, message, babyProfile } =
   const ids = matchSixtyNinety(message);
   const chosen = pick(ids, message);
   if (chosen.length) {
-    const body = chosen.map((id) => BUILDERS[id](ageDays)).join('\n\n');
+    const body = chosen.map((id) => BUILDERS[id](ageDays, message)).join('\n\n');
     return { text: body, notes: chosen };
   }
   const folded = fold(message);

@@ -19,7 +19,7 @@ const CATALOG_60 = [
     re: /refluxo|aplv|arque|regurgit|vomit|ronquinh|ruido na garganta|engasg/,
     themes: ['refluxo_aplv_60_90'],
     priorityText: () =>
-      'Não diagnostique. Suspeita de refluxo ou APLV: aulas e vídeos do pediatra Roberto Franklin e suporte das consultoras. Vertical de 20 a 30 minutos; 40 minutos só com sinais de refluxo.',
+      'Não diagnostique. Suspeita de refluxo ou APLV: aulas e vídeos do pediatra Roberto Franklin e suporte das consultoras. Vertical de 20 a 30 minutos; 40 minutos só com sinais de refluxo. Se a mãe informar diagnóstico de APLV e uso de fórmula, pergunte qual fórmula. Com fórmula à base de aminoácidos, não insista no intervalo habitual: de dia, alguns bebês pedem mamada em cerca de 1 hora e 30 minutos a 2 horas, inclusive à noite, e podem não cumprir o jejum noturno.',
   },
   {
     id: '60_90_mamada_sonhos',

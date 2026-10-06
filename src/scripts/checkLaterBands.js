@@ -62,6 +62,27 @@ const cases = [
     mustNot: ['mau hábito'],
   },
   {
+    band: '60_90',
+    age: 68,
+    q: 'Suspeita de refluxo. Ele arqueia depois da mamada. O que eu faço?',
+    must: ['não fecho diagnóstico', 'Roberto Franklin', '20 a 30 minutos'],
+    mustNot: ['Qual fórmula', 'aminoácidos'],
+  },
+  {
+    band: '60_90',
+    age: 70,
+    q: 'Meu bebê de 70 dias tem diagnóstico de APLV e usa fórmula. O intervalo de 3 horas está curto demais?',
+    must: ['não fecho diagnóstico', 'Roberto Franklin', 'Qual fórmula', 'aminoácidos', '1 hora e 30 minutos a 2 horas', 'jejum noturno'],
+    mustNot: ['a cada cerca de 3 horas', 'em torno de 3 horas', '20 a 30 minutos'],
+  },
+  {
+    band: '60_90',
+    age: 76,
+    q: 'Ele tem APLV e usa fórmula à base de aminoácidos. Acorda de 1 hora e 30 minutos em 1 hora e 30 minutos, de dia e de noite. Preciso manter o intervalo da faixa?',
+    must: ['aminoácidos', '1 hora e 30 minutos a 2 horas', 'não insista no intervalo habitual', 'jejum noturno'],
+    mustNot: ['Qual fórmula', 'a cada cerca de 3 horas', 'em torno de 3 horas', 'cerca de 3 horas'],
+  },
+  {
     band: '90_120',
     age: 100,
     q: 'Meu bebê de 100 dias só dorme no peito. Como começo a mudar isso?',
