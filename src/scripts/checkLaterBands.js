@@ -79,8 +79,8 @@ const cases = [
     band: '60_90',
     age: 76,
     q: 'Ele tem APLV e usa fórmula à base de aminoácidos. Acorda de 1 hora e 30 minutos em 1 hora e 30 minutos, de dia e de noite. Preciso manter o intervalo da faixa?',
-    must: ['aminoácidos', '1 hora e 30 minutos a 2 horas', 'não insista no intervalo habitual', 'jejum noturno'],
-    mustNot: ['Qual fórmula', 'não fecho diagnóstico', 'a cada cerca de 3 horas', 'em torno de 3 horas', 'cerca de 3 horas'],
+    must: ['aminoácidos', '1 hora e 30 minutos a 2 horas', 'não insista no intervalo habitual', 'jejum noturno', 'chegar às 3 horas', 'mínimo de 2 horas'],
+    mustNot: ['Qual fórmula', 'não fecho diagnóstico', 'inclusive à noite', 'a cada cerca de 3 horas', 'em torno de 3 horas'],
   },
   {
     band: '60_90',
@@ -107,8 +107,8 @@ const cases = [
     band: '60_90',
     age: 78,
     q: 'Olá, bebê com 2meses e 18 dias, foi diagnosticado com APLV faz dez dias e precisou trocar a fórmula (amamentação apenas com fórmula) tem dificuldade de fazer as sonecas ainda, mas antes já fazia sono noturno com seis horas de duração mamava e despertava três horas depois. Agora desperta de três em três horas. Já tentei aumentar a quantidade de formula a noite para eliminar possibilidade de ter fome, acredito que não seja fome. Oque fazer?',
-    must: ['Qual fórmula ele está usando atualmente', '4 e 6 horas', '3 horas', '20 a 30 minutos', '40 minutos', 'aminoácidos'],
-    mustNot: ['não fecho diagnóstico', 'suspeita', 'baixa produção', 'ordenha', 'curso de amamentação', 'fralda', 'não prometo', 'em todo despertar', 'piso nem o teto'],
+    must: ['Qual fórmula ele está usando atualmente', '4 e 6 horas', '3 horas', '20 a 30 minutos', '40 minutos', 'aminoácidos', 'mínimo de 2 horas'],
+    mustNot: ['não fecho diagnóstico', 'suspeita', 'baixa produção', 'ordenha', 'curso de amamentação', 'fralda', 'não prometo', 'em todo despertar', 'piso nem o teto', 'inclusive à noite'],
   },
   {
     band: '90_120',

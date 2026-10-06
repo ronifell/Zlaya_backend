@@ -19,7 +19,7 @@ const CATALOG_60 = [
     re: /refluxo|aplv|arque|regurgit|vomit|ronquinh|ruido na garganta|engasg/,
     themes: ['refluxo_aplv_60_90'],
     priorityText: () =>
-      'Não diga à mãe que você não fecha diagnóstico. Suspeita de refluxo ou APLV: aulas e vídeos do pediatra Roberto Franklin e suporte das consultoras, em linguagem acolhedora. Vertical de 20 a 30 minutos; 40 minutos só com sinais de refluxo. Se ela informar diagnóstico de APLV e uso de fórmula, a primeira frase é: Qual fórmula ele está usando atualmente? Com fórmula à base de aminoácidos, não insista no intervalo habitual. Se a alimentação é só fórmula, não fale em baixa produção, ordenha nem curso de amamentação.',
+      'Não diga à mãe que você não fecha diagnóstico. Suspeita de refluxo ou APLV: aulas e vídeos do pediatra Roberto Franklin e suporte das consultoras, em linguagem acolhedora. Vertical de 20 a 30 minutos; 40 minutos só com sinais de refluxo. Se ela informar diagnóstico de APLV e uso de fórmula, a primeira frase é: Qual fórmula ele está usando atualmente? Com fórmula à base de aminoácidos, de dia cerca de 1 hora e 30 minutos a 2 horas pode ser normal. À noite, depois do primeiro jejum, tente chegar às 3 horas; se não chegar, o mínimo é 2 horas. Não aplique 1 hora e 30 minutos à noite. Se a alimentação é só fórmula, não fale em baixa produção, ordenha nem curso de amamentação.',
   },
   {
     id: '60_90_mamada_sonhos',

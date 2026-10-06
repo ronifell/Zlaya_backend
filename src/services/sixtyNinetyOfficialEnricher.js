@@ -173,6 +173,10 @@ function settlingAnswer(ageDays, message) {
   ].join('\n');
 }
 
+function aminoDayNightLine(b) {
+  return `À noite, alguns bebês em fórmula à base de aminoácidos podem ter o jejum noturno mais curto e mais dificuldade para chegar ao jejum desta faixa. Depois do primeiro jejum, se ${b.a} não conseguir fazer 3 horas até a mamada seguinte, tente primeiro conduzir para chegar às 3 horas, observando até quando ${b.a} suporta esse intervalo. Se não chegar às 3 horas, alimente respeitando um intervalo mínimo de 2 horas. De dia, observe com que intervalo ${b.a} demonstra fome. Cerca de 1 hora e 30 minutos a 2 horas pode ser normal, e nesse período não insista no intervalo habitual.`;
+}
+
 function aplvNightAnswer(ageDays, message) {
   const b = babyWords(message);
   const head = Number.isFinite(Number(ageDays)) ? `Com ${ageDays} dias` : 'Nesta faixa';
@@ -187,7 +191,7 @@ function aplvNightAnswer(ageDays, message) {
     '',
     'Se esse padrão da noite continuar, vale olhar as mamadas do dia e observar se o intervalo entre elas diminuiu.',
     '',
-    'Se a fórmula for à base de aminoácidos, me conta. Nesse caso alguns bebês pedem mamadas em torno de 1 hora e 30 minutos a 2 horas, inclusive à noite, e o jejum noturno da faixa pode não se cumprir. Não precisa manter o intervalo habitual.',
+    `Se a fórmula for à base de aminoácidos, me conta. ${aminoDayNightLine(b)}`,
   ].join('\n');
 }
 
@@ -224,10 +228,10 @@ const BUILDERS = {
     const folded = fold(message);
     const b = babyWords(message);
     if (aminoAplvCase(folded)) {
-      return `${com(ageDays)}, como ${b.a} tem APLV e usa fórmula à base de aminoácidos, alguns bebês nessa situação pedem mamadas em intervalos menores, inclusive à noite, e podem ter dificuldade para cumprir o jejum noturno desta faixa. Vale considerar essa fórmula ao olhar o intervalo e os despertares noturnos. Não insista no intervalo habitual.\n\nDe dia, observe com que intervalo ${b.a} demonstra fome. Em uso de fórmula à base de aminoácidos, é normal que alguns bebês solicitem mamadas em torno de 1 hora e 30 minutos a 2 horas.`;
+      return `${com(ageDays)}, como ${b.a} tem APLV e usa fórmula à base de aminoácidos, o dia e a noite não seguem o mesmo intervalo.\n\n${aminoDayNightLine(b)}`;
     }
     if (reportedAplvDiagnosis(folded) && mentionsFormula(folded)) {
-      return `${com(ageDays)}, qual fórmula ${b.a} está usando atualmente?\n\nSe for fórmula à base de aminoácidos, alguns bebês pedem mamadas em intervalos menores, inclusive à noite, e podem ter dificuldade para cumprir o jejum noturno desta faixa. Nesse caso, considere essa fórmula ao avaliar o intervalo e os despertares noturnos. Não insista no intervalo habitual. De dia, observe com que intervalo ${b.a} demonstra fome. Cerca de 1 hora e 30 minutos a 2 horas pode ser normal para alguns desses bebês.`;
+      return `${com(ageDays)}, qual fórmula ${b.a} está usando atualmente?\n\nSe for fórmula à base de aminoácidos, o dia e a noite não seguem o mesmo intervalo.\n\n${aminoDayNightLine(b)}`;
     }
     const supply = /producao|pouco leite|pouca leite/.test(folded) && !exclusiveFormula(folded)
       ? '\n\nSe a leitura de pouca produção se sustentar, a ordenha serve para medir a produção.'
