@@ -19,7 +19,7 @@ const CATALOG_60 = [
     re: /refluxo|aplv|arque|regurgit|vomit|ronquinh|ruido na garganta|engasg/,
     themes: ['refluxo_aplv_60_90'],
     priorityText: () =>
-      'Não diagnostique. Suspeita de refluxo ou APLV: aulas e vídeos do pediatra Roberto Franklin e suporte das consultoras. Vertical de 20 a 30 minutos; 40 minutos só com sinais de refluxo. Se a mãe informar diagnóstico de APLV e uso de fórmula, pergunte qual fórmula. Com fórmula à base de aminoácidos, não insista no intervalo habitual: de dia, alguns bebês pedem mamada em cerca de 1 hora e 30 minutos a 2 horas, inclusive à noite, e podem não cumprir o jejum noturno.',
+      'Não diga à mãe que você não fecha diagnóstico. Suspeita de refluxo ou APLV: aulas e vídeos do pediatra Roberto Franklin e suporte das consultoras, em linguagem acolhedora. Vertical de 20 a 30 minutos; 40 minutos só com sinais de refluxo. Se ela informar diagnóstico de APLV e uso de fórmula, a primeira frase é: Qual fórmula ele está usando atualmente? Com fórmula à base de aminoácidos, não insista no intervalo habitual. Se a alimentação é só fórmula, não fale em baixa produção, ordenha nem curso de amamentação.',
   },
   {
     id: '60_90_mamada_sonhos',
@@ -52,8 +52,8 @@ const CATALOG_60 = [
     themes: ['recursos_idade_60_90'],
     priorityText: (ageDays) =>
       Number(ageDays) > 75
-        ? 'Charutinho só até cerca de 75 dias: nesta idade já deve ter sido encerrado. Ninho encerra no máximo aos 90 dias.'
-        : 'Charutinho somente até cerca de 75 dias. Ninho até 3 meses, no máximo, e encerrado aos 90 dias.',
+        ? 'Charutinho só até cerca de 75 dias: nesta idade já deve ter sido encerrado. Ninho encerra no máximo aos 90 dias. Se o ninho apareceu só como falha de transferência, não responda com esses limites.'
+        : 'Charutinho somente até cerca de 75 dias. Ninho até 3 meses, no máximo, e encerrado aos 90 dias. Se o ninho apareceu só como falha de transferência, não responda com esses limites.',
   },
   {
     id: '60_90_meio_janela',
@@ -77,7 +77,7 @@ const CATALOG_60 = [
     re: /madrugada|noturn|a noite|de noite|jejum|dormir a noite|noite inteira|primeira mamada/,
     themes: ['sono_noturno_60_90'],
     priorityText: () =>
-      'Jejum noturno conta de quando ele dorme: cerca de 4 horas no início da faixa e cerca de 6 horas perto dos 90 dias. Não acorde se seguir dormindo. Depois da primeira mamada noturna, cerca de 3 horas ou mais, também no peito. Antes disso, tente voltar a dormir sem outra mamada.',
+      'Responda ao que ela perguntou, sem advertência. Jejum noturno conta de quando ele dorme: cerca de 4 horas no início da faixa e cerca de 6 horas perto dos 90 dias. Não acorde se seguir dormindo. Depois da primeira mamada noturna, cerca de 3 horas ou mais. Se despertar antes, tente reconduzir sem outra mamada. Se faltam mamada efetiva, saciedade, forma de adormecer e desconforto, pergunte antes de orientar. Não diga que não promete noite inteira. Não fale de fralda se ela não perguntou.',
   },
   {
     id: '60_90_chupeta',
@@ -117,7 +117,7 @@ const CATALOG_60 = [
     re: /lanchinho|toda hora|intervalo da mamada|intervalo alimentar|mama quase|mamadas curtas|mamada efetiva/,
     themes: ['alimentacao_saciedade_60_90'],
     priorityText: () =>
-      'Peito cerca de 2 horas e 30 minutos; mamadeira cerca de 3 horas, do início da mamada anterior. De dia, no máximo 3 horas sem comer, salvo se estiver dormindo. Acordar da soneca não zera o intervalo.',
+      'Regra 5.3: se a dúvida é oferecer o peito ao acordar da soneca antes do intervalo, responda só isso. No peito, cerca de 2 horas e 30 minutos desde o início da última mamada. Acordar da soneca não abre nova mamada. Não despeje janela nem forma de adormecer.',
   },
   {
     id: '60_90_inicio_noite',

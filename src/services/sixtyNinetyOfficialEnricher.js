@@ -45,7 +45,7 @@ function fastLine(ageDays) {
   if (phase === 'end') {
     return 'Perto dos 90 dias, o jejum noturno fica em torno de 6 horas, contadas de quando ele efetivamente dorme, não do horário da última mamada.';
   }
-  return 'O jejum noturno evolui de cerca de 4 horas no início da faixa para cerca de 6 horas perto dos 90 dias. A contagem começa quando ele dorme. Nesta idade, não trate nem o piso nem o teto como regra já fechada.';
+  return 'O jejum noturno nesta idade pode ficar entre cerca de 4 e 6 horas, contadas de quando ele dorme.';
 }
 
 function napCountLine(ageDays) {
@@ -82,6 +82,131 @@ function aplvFormulaCase(message) {
   return aminoAplvCase(folded) || (reportedAplvDiagnosis(folded) && mentionsFormula(folded));
 }
 
+function exclusiveFormula(folded) {
+  return /apenas com formula|somente formula|so formula|exclusiv\w+ (com )?formula|amamentacao apenas com formula/.test(folded);
+}
+
+function babyWords(message) {
+  const t = fold(message);
+  const female = /irritada|faze-la|coloca-la|\bela\b|sozinha|minha filha|diagnosticada/.test(t);
+  const male = /\bele\b|irritado|sozinho|meu filho|diagnosticado/.test(t);
+  const ela = female && !male;
+  return {
+    ela,
+    a: ela ? 'ela' : 'ele',
+    satisfeito: ela ? 'satisfeita' : 'satisfeito',
+    alimentado: ela ? 'alimentada' : 'alimentado',
+    lo: ela ? 'la' : 'lo',
+  };
+}
+
+function looksLikeNapWakeFeedAsk(message) {
+  const t = fold(message);
+  const nap = /soneca/.test(t);
+  const feed = /peito|mamadeira|formula/.test(t);
+  const onWake = /sempre que (ele |ela )?(acord|despert)|quando (ele |ela )?acord|ao acordar da soneca/.test(t);
+  const beforeInterval = /nao tenha chegado|ainda nao|antes d[eo] intervalo|2 horas|duas horas/.test(t);
+  return nap && feed && (onWake || beforeInterval);
+}
+
+function looksLikeInconsistentSettling(message) {
+  const t = fold(message);
+  const breastInduce = /peito para induzir|dando o peito|dou o peito|dar o peito|oferec\w* o peito para/.test(t);
+  const alternate = /balanc/.test(t);
+  const pillow = /travesseiro/.test(t);
+  const arms = /colo/.test(t);
+  return breastInduce && alternate && pillow && arms;
+}
+
+function looksLikeAplvFormulaNight(message) {
+  const t = fold(message);
+  return reportedAplvDiagnosis(t)
+    && mentionsFormula(t)
+    && !mentionsAminoFormula(t)
+    && /noite|noturn|desperta|madrugada/.test(t);
+}
+
+function looksLikeFrequentWakesNeedQuestions(message) {
+  const t = fold(message);
+  if (aplvFormulaCase(message)) return false;
+  if (/em todo despert|oferec\w* (o peito|mamada|mamadeira) em todo/.test(t)) return false;
+  const night = /noite|noturn/.test(t);
+  const firstStretch = /4:50|4h50|5 hrs|5 horas|seis horas|6 horas|em torno de \d/.test(t);
+  const frequent = /a cada\s*(2|1|duas|uma)\s*hora|2 em 2|1 em 1|de hora em hora|toda hora/.test(t);
+  const asks = /como fazer|o que fazer|oque fazer|nesse caso/.test(t);
+  const investigated = /saciedad|satisfeit|mamada efetiva/.test(t);
+  return night && firstStretch && frequent && asks && !investigated;
+}
+
+function ninhoIsOnlyTransfer(folded) {
+  return /\bninho\b/.test(folded) && !/charut/.test(folded) && /travesseiro|berco|coloc/.test(folded);
+}
+
+function napWakeFeedAnswer(ageDays, message) {
+  const t = fold(message);
+  const bottle = /formula|mamadeira/.test(t) && !/peito/.test(t);
+  const ageBit = Number.isFinite(Number(ageDays)) ? `Aos ${ageDays} dias, ` : '';
+  const interval = bottle
+    ? 'se ele toma mamadeira, a referência é de aproximadamente 3 horas entre as mamadas, contando do início da última mamada.'
+    : 'se ele mama no peito, a referência é de aproximadamente 2 horas e 30 minutos entre as mamadas, contando do início da última mamada.';
+  const naps = /30|40|1 hora|uma hora/.test(t)
+    ? '\n\nSonecas de 30 a 40 minutos ou de 1 hora podem acontecer nessa fase.'
+    : '';
+  return `Não. ${ageBit}${interval}\n\nSe ele acordar da soneca antes desse horário, você pode aguardar completar o intervalo. Acordar da soneca não significa que seja hora de mamar.${naps}`;
+}
+
+function settlingAnswer(ageDays, message) {
+  const b = babyWords(message);
+  const ageBit = Number.isFinite(Number(ageDays)) ? `Aos ${ageDays} dias, ` : '';
+  return [
+    `${ageBit}o ponto principal é a forma como o sono está sendo conduzido.`,
+    '',
+    'Quando chegar a hora da soneca, você não precisa esperar sinais evidentes de sono para começar a condução.',
+    '',
+    `Se ${b.a} se irritar ou chorar, o peito não entra para fazê-${b.lo} dormir. Se ${b.a} já mamou e está ${b.alimentado}, conduza o sono pelo passo a passo das aulas práticas.`,
+    '',
+    'Mantenha a mesma condução em todas as tentativas. Evite alternar entre balançar e oferecer o peito para induzir o sono.',
+    '',
+    'Pela sequência que você contou, a Técnica do Travesseiro não está sendo aplicada como o método ensina. Reveja essa aula.',
+    '',
+    `O colo não precisa sair de uma vez. O objetivo é deixar de usar o peito para induzir o sono e, aos poucos, ampliar as formas de adormecer, seguindo a condução do método, até avançar na autonomia. O passo a passo de como executar fica nas aulas práticas.`,
+  ].join('\n');
+}
+
+function aplvNightAnswer(ageDays, message) {
+  const b = babyWords(message);
+  const head = Number.isFinite(Number(ageDays)) ? `Com ${ageDays} dias` : 'Nesta faixa';
+  return [
+    `${head}, qual fórmula ${b.a} está usando atualmente?`,
+    '',
+    `O jejum noturno nesta idade pode ficar entre cerca de 4 e 6 horas, contadas de quando ${b.a} adormece. Se continuar dormindo depois disso, não precisa acordá-${b.lo} para mamar.`,
+    '',
+    `Depois da primeira mamada da noite, as seguintes ficam com intervalo de cerca de 3 horas. Se continuar dormindo, não precisa acordá-${b.lo}. Se despertar antes, tente primeiro reconduzir ao sono sem oferecer outra mamada.`,
+    '',
+    'Depois da mamada, coloque para arrotar e mantenha na posição vertical por 20 a 30 minutos antes de voltar ao berço. Se houver sinais de refluxo, 40 minutos.',
+    '',
+    'Se esse padrão da noite continuar, vale olhar as mamadas do dia e observar se o intervalo entre elas diminuiu.',
+    '',
+    'Se a fórmula for à base de aminoácidos, me conta. Nesse caso alguns bebês pedem mamadas em torno de 1 hora e 30 minutos a 2 horas, inclusive à noite, e o jejum noturno da faixa pode não se cumprir. Não precisa manter o intervalo habitual.',
+  ].join('\n');
+}
+
+function frequentWakesQuestions(ageDays, message) {
+  const b = babyWords(message);
+  const head = Number.isFinite(Number(ageDays)) ? `Com ${ageDays} dias` : 'Nesta faixa';
+  return [
+    `${head}, o primeiro período da noite já está acontecendo. O ponto principal são os despertares frequentes depois dele.`,
+    '',
+    'Antes de te dizer o que fazer, preciso de três informações.',
+    '',
+    `Como estão as mamadas do dia: de quanto em quanto tempo ${b.a} mama, a mamada parece efetiva e ${b.a} fica ${b.satisfeito}?`,
+    '',
+    `Como ${b.a} volta a dormir nesses despertares: no peito, no colo, balançando ou no berço?`,
+    '',
+    'Você nota algum desconforto, como arquejo, regurgitação ou choro que parece de dor?',
+  ].join('\n');
+}
+
 function formulaLine(ageDays) {
   const phase = phase60(ageDays);
   const head = com(ageDays);
@@ -97,14 +222,17 @@ function formulaLine(ageDays) {
 const BUILDERS = {
   '60_90_refluxo': (ageDays, message) => {
     const folded = fold(message);
-    const encaminha = `${com(ageDays)}, eu não fecho diagnóstico. Se a suspeita é refluxo ou APLV, assista às aulas e aos vídeos do pediatra Roberto Franklin e procure o suporte das consultoras.`;
+    const b = babyWords(message);
     if (aminoAplvCase(folded)) {
-      return `${encaminha}\n\nComo ele tem APLV e usa fórmula à base de aminoácidos, alguns bebês nessa situação pedem mamadas em intervalos menores, inclusive à noite, e podem ter dificuldade para cumprir o jejum noturno desta faixa. Considere essa fórmula ao avaliar o intervalo e os despertares noturnos. Não insista no intervalo habitual.\n\nDe dia, observe com que intervalo ele demonstra fome. Em uso de fórmula à base de aminoácidos, é normal que alguns bebês solicitem mamadas em torno de 1 hora e 30 minutos a 2 horas.`;
+      return `${com(ageDays)}, como ${b.a} tem APLV e usa fórmula à base de aminoácidos, alguns bebês nessa situação pedem mamadas em intervalos menores, inclusive à noite, e podem ter dificuldade para cumprir o jejum noturno desta faixa. Vale considerar essa fórmula ao olhar o intervalo e os despertares noturnos. Não insista no intervalo habitual.\n\nDe dia, observe com que intervalo ${b.a} demonstra fome. Em uso de fórmula à base de aminoácidos, é normal que alguns bebês solicitem mamadas em torno de 1 hora e 30 minutos a 2 horas.`;
     }
     if (reportedAplvDiagnosis(folded) && mentionsFormula(folded)) {
-      return `${encaminha}\n\nVocê informou diagnóstico de APLV e uso de fórmula. Qual fórmula ele está utilizando?\n\nSe for fórmula à base de aminoácidos, alguns bebês pedem mamadas em intervalos menores, inclusive à noite, e podem ter dificuldade para cumprir o jejum noturno desta faixa. Nesse caso, considere essa fórmula ao avaliar o intervalo e os despertares noturnos. Não insista no intervalo habitual. De dia, observe com que intervalo ele demonstra fome. Cerca de 1 hora e 30 minutos a 2 horas pode ser normal para alguns desses bebês.`;
+      return `${com(ageDays)}, qual fórmula ${b.a} está usando atualmente?\n\nSe for fórmula à base de aminoácidos, alguns bebês pedem mamadas em intervalos menores, inclusive à noite, e podem ter dificuldade para cumprir o jejum noturno desta faixa. Nesse caso, considere essa fórmula ao avaliar o intervalo e os despertares noturnos. Não insista no intervalo habitual. De dia, observe com que intervalo ${b.a} demonstra fome. Cerca de 1 hora e 30 minutos a 2 horas pode ser normal para alguns desses bebês.`;
     }
-    return `${encaminha}\n\nEnquanto observa, o arroto continua e a posição vertical de referência é 20 a 30 minutos. Use 40 minutos quando houver sinais de refluxo. Não conclua baixa produção por um comportamento isolado. Se essa suspeita se sustentar, a ordenha serve para medir a produção. O curso de amamentação só entra depois, se ainda faltar aprofundar.`;
+    const supply = /producao|pouco leite|pouca leite/.test(folded) && !exclusiveFormula(folded)
+      ? '\n\nSe a leitura de pouca produção se sustentar, a ordenha serve para medir a produção.'
+      : '';
+    return `${com(ageDays)}, as aulas e os vídeos do pediatra Roberto Franklin e o suporte das consultoras ajudam a observar esse quadro.\n\nEnquanto você observa, o arroto continua. A posição vertical de referência é 20 a 30 minutos. Com sinais de refluxo, 40 minutos.${supply}`;
   },
 
   '60_90_mamada_sonhos': (ageDays) =>
@@ -143,14 +271,42 @@ const BUILDERS = {
     return `${com(ageDays)}, a referência de início da noite é 19h a 20h, sem rigidez. Considere o começo do dia, as sonecas, a última janela, a última mamada, os sinais de sono e o comportamento.\n\n${extra}`;
   },
 
-  '60_90_noite': (ageDays) =>
-    `${com(ageDays)}, despertar à noite não se resolve oferecendo mamada em todo despertar, e eu não prometo noite inteira.\n\n${fastLine(ageDays)} Se ele continuar dormindo depois desse período, não acorde para mamar.\n\nQuando despertar depois desse primeiro tempo, pode mamar, com o quarto escuro e com poucos estímulos. Depois, arroto e posição vertical antes de voltar ao sono. A vertical de referência é 20 a 30 minutos; com sinais de refluxo, 40 minutos.\n\nDepois dessa primeira mamada noturna, o intervalo seguinte é de cerca de 3 horas ou mais, também para quem mama no peito, contado do início da mamada. Se ele seguir dormindo, não acorde. Se despertar antes, tente primeiro reconduzir ao sono sem outra mamada. Se a mamada anterior foi efetiva, houve saciedade, as medidas posturais foram feitas e não há sinal de refluxo ou desconforto, a tendência é voltar a dormir. Se ele insistir em mamar, alimente e investigue déficit alimentar.\n\nDespertares frequentes não são para normalizar: revise as mamadas do dia, a forma de adormecer e os desconfortos. À noite, troque a fralda só se houver cocô, vazamento ou outra necessidade objetiva. Aulas: Estratégia para o sono noturno e O que fazer nos despertares noturnos.`,
+  '60_90_noite': (ageDays, message) => {
+    const t = fold(message);
+    const offersEvery = /em todo despert|toda vez que (acord|despert)|cada despert/.test(t);
+    const breast = !exclusiveFormula(t);
+    const head = offersEvery
+      ? `${com(ageDays)}, não precisa oferecer mamada em todo despertar.`
+      : `${com(ageDays)}, olho primeiro o período em que ele consegue dormir, e só depois os despertares.`;
+    const breastBit = breast ? ', também para quem mama no peito,' : '';
+    const diaper = /fralda/.test(t)
+      ? '\n\nÀ noite, troque a fralda só se houver cocô, vazamento ou outra necessidade objetiva.'
+      : '';
+    return [
+      head,
+      '',
+      fastLine(ageDays),
+      'Se ele continuar dormindo depois desse período, não acorde para mamar.',
+      '',
+      'Quando despertar depois desse primeiro tempo, pode mamar, com o quarto escuro e com poucos estímulos. Depois, arroto e posição vertical antes de voltar ao sono. A vertical de referência é 20 a 30 minutos; com sinais de refluxo, 40 minutos.',
+      '',
+      `Depois dessa primeira mamada noturna, o intervalo seguinte é de cerca de 3 horas ou mais${breastBit} contado do início da mamada. Se ele seguir dormindo, não acorde. Se despertar antes, tente primeiro reconduzir ao sono sem outra mamada.${diaper}`,
+    ].join('\n');
+  },
 
   '60_90_chupeta': (ageDays) =>
     `${com(ageDays)}, se a chupeta cair e ele continuar dormindo, não recoloque. Se reclamar, observe brevemente e recoloque só se ainda precisar. A recolocação não é automática.`,
 
-  '60_90_sonecas': (ageDays) =>
-    `${windowLine(ageDays)}\n\n${napCountLine(ageDays)} A soneca vai até 2 horas, contadas de quando ele adormece. Se adormecer durante as medidas posturais, esse tempo já entra na soneca. Ao completar 2 horas, se seguir dormindo, acorde.\n\nMenos de 2 horas não é inadequado só por isso. Se acordar calmo e descansado, siga a rotina. Se acordar irritado, choroso ou cansado, investigue. Sonecas recorrentes de 10 a 20 minutos, principalmente com irritabilidade ou dificuldade de permanecer acordado, pedem essa investigação: alimentação, estímulos e desconforto. A rotina parte da hora real em que ele acorda, sem horário fixo.\n\nAntes de atribuir a soneca à forma de adormecer, confirme mamada efetiva e saciedade. De dia, não deixe mais de 3 horas sem alimentação, exceto se estiver dormindo. Acordar da soneca antes da hora de mamar não zera o intervalo.`,
+  '60_90_sonecas': (ageDays, message) => {
+    const t = fold(message);
+    const how = /forma de adormecer|so dorme|no peito para dormir|no colo para dormir/.test(t)
+      ? '\n\nAntes de olhar a forma de adormecer, confirme se a mamada foi efetiva e se houve saciedade.'
+      : '';
+    const feed = /peito|mamad|formula|intervalo/.test(t)
+      ? '\n\nDe dia, não deixe mais de 3 horas sem alimentação, exceto se estiver dormindo. Acordar da soneca antes da hora de mamar não zera o intervalo.'
+      : '';
+    return `${windowLine(ageDays)}\n\n${napCountLine(ageDays)} A soneca vai até 2 horas, contadas de quando ele adormece. Se adormecer durante as medidas posturais, esse tempo já entra na soneca. Ao completar 2 horas, se seguir dormindo, acorde.\n\nMenos de 2 horas não é inadequado só por isso. Se acordar calmo e descansado, siga a rotina. Se acordar irritado, choroso ou cansado, investigue. Sonecas recorrentes de 10 a 20 minutos, principalmente com irritabilidade ou dificuldade de permanecer acordado, pedem essa investigação: alimentação, estímulos e desconforto. A rotina parte da hora real em que ele acorda, sem horário fixo.${how}${feed}`;
+  },
 
   '60_90_adormecer': (ageDays) =>
     `${com(ageDays)}, mamar e colo não são o problema. O que passa a importar é quando uma única forma de adormecer se repete o tempo todo.\n\nPrimeiro, a mamada: se foi efetiva e houve saciedade, e ele continua no peito só para adormecer, retire, faça o arroto e mantenha a posição vertical por 20 a 30 minutos. Com sinais de refluxo, 40 minutos. Se ele adormecer mamando ou durante essas medidas, não acorde. Se continuar acordado, conduza o sono com um recurso adequado à faixa.\n\nAdormecer na mamada ainda pode acontecer e não é erro automático. Se mamar virar a única forma de iniciar ou retomar o sono, amplie as conduções aos poucos, sem retirada brusca. Colocar acordado no berço pode ajudar, e não é obrigação em todas as sonecas. Se houver choro, você permanece e acolhe. O colo continua quando há necessidade.\n\nQuando a Técnica do Travesseiro entrar, assista à aula. Eu não substituo essa aula por um passo a passo incompleto. As aulas de colo e peito e de forma de adormecer mostram a transição.`,
@@ -186,6 +342,12 @@ function pick(ids, message) {
   if (aplvFormulaCase(message)) {
     list = list.filter((id) => id !== '60_90_intervalo' && id !== '60_90_formula' && id !== '60_90_noite');
   }
+  if (list.includes('60_90_ruido') && !/despert|jejum|madrugada|acorda/.test(folded)) {
+    list = list.filter((id) => id !== '60_90_noite');
+  }
+  if (ninhoIsOnlyTransfer(folded)) {
+    list = list.filter((id) => id !== '60_90_recursos' && id !== '60_90_inicio_noite');
+  }
   return list.slice(0, 2);
 }
 
@@ -219,19 +381,43 @@ function scrub(text) {
   return out.replace(/\n{3,}/g, '\n\n').trim();
 }
 
+function soften(text) {
+  let out = String(text || '');
+  out = out.replace(/eu não fecho diagnóstico\.\s*/gi, '');
+  out = out.replace(/,?\s*e eu não prometo noite inteira(?: de sono)?\.?\s*/gi, ' ');
+  out = out.replace(/eu não prometo noite inteira(?: de sono)?\.\s*/gi, '');
+  out = out.replace(/não trate nem o piso nem o teto como regra já fechada\.\s*/gi, '');
+  out = out.replace(/despertares frequentes não são para normalizar:\s*/gi, '');
+  out = out.replace(/não conclua baixa produção por um comportamento isolado\.\s*/gi, '');
+  out = out.replace(/despertar à noite não se resolve oferecendo mamada em todo despertar\.?\s*/gi, '');
+  return out.replace(/[ ]{2,}/g, ' ').replace(/\n{3,}/g, '\n\n').trim();
+}
+
 export function enrichSixtyNinetyOfficialAnswer({ text, message, babyProfile } = {}) {
   const ageDays = babyProfile?.ageDays;
+  if (looksLikeNapWakeFeedAsk(message)) {
+    return { text: soften(napWakeFeedAnswer(ageDays, message)), notes: ['60_90_regra_53'] };
+  }
+  if (looksLikeInconsistentSettling(message)) {
+    return { text: soften(settlingAnswer(ageDays, message)), notes: ['60_90_conducao'] };
+  }
+  if (looksLikeAplvFormulaNight(message)) {
+    return { text: soften(aplvNightAnswer(ageDays, message)), notes: ['60_90_aplv_noite'] };
+  }
+  if (looksLikeFrequentWakesNeedQuestions(message)) {
+    return { text: soften(frequentWakesQuestions(ageDays, message)), notes: ['60_90_despertares_perguntas'] };
+  }
   const ids = matchSixtyNinety(message);
   const chosen = pick(ids, message);
   if (chosen.length) {
     const body = chosen.map((id) => BUILDERS[id](ageDays, message)).join('\n\n');
-    return { text: body, notes: chosen };
+    return { text: soften(body), notes: chosen };
   }
   const folded = fold(message);
   if (/sono|soneca|mamad|noite|berco|choro|janela/.test(folded)) {
-    return { text: frame(ageDays), notes: ['60_90_frame'] };
+    return { text: soften(frame(ageDays)), notes: ['60_90_frame'] };
   }
-  const cleaned = scrub(text);
+  const cleaned = soften(scrub(text));
   if (cleaned.length < 80) {
     return {
       text: `${com(ageDays)}, me conta se a dúvida é a soneca, a noite, a mamada, o choro ou a forma de adormecer, que eu aplico a regra desta faixa.`,
