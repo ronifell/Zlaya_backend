@@ -950,6 +950,7 @@ async function finalize({
     retrieval: retrieval
       ? {
           status: retrieval.status,
+          reason: retrieval.reason || null,
           confidence: retrieval.confidence,
           topSimilarity: retrieval.topSimilarity,
           chunks: (retrieval.chunks || []).map((c) => ({

@@ -159,17 +159,39 @@ function settlingAnswer(ageDays, message) {
   const b = babyWords(message);
   const ageBit = Number.isFinite(Number(ageDays)) ? `Aos ${ageDays} dias, ` : '';
   return [
-    `${ageBit}o ponto principal é a forma como o sono está sendo conduzido.`,
+    `${ageBit}eu entendi o que está acontecendo. O ponto principal é a forma como o sono está sendo conduzido.`,
     '',
-    'Quando chegar a hora da soneca, você não precisa esperar sinais evidentes de sono para começar a condução.',
+    `Na hora da soneca, você não precisa esperar sinais evidentes de sono para começar a condução. Pode começar quando chegar a hora, mesmo sem um sinal muito claro.`,
     '',
-    `Se ${b.a} se irritar ou chorar, o peito não entra para fazê-${b.lo} dormir. Se ${b.a} já mamou e está ${b.alimentado}, conduza o sono pelo passo a passo das aulas práticas.`,
+    `Se ${b.a} se irritar ou chorar, o peito não entra para fazê-${b.lo} dormir. Se ${b.a} já mamou e está ${b.alimentado}, siga o passo a passo das aulas práticas.`,
     '',
-    'Mantenha a mesma condução em todas as tentativas. Evite alternar entre balançar e oferecer o peito para induzir o sono.',
+    `O que ajuda é repetir a mesma condução em todas as tentativas. Quando uma vez você balança e, na outra, oferece o peito para induzir o sono, ${b.a} não encontra um caminho só.`,
     '',
-    'Pela sequência que você contou, a Técnica do Travesseiro não está sendo aplicada como o método ensina. Reveja essa aula.',
+    'Pela sequência que você contou, a Técnica do Travesseiro não está sendo aplicada como o método ensina. Vale rever essa aula com calma: o passo a passo está lá.',
     '',
-    `O colo não precisa sair de uma vez. O objetivo é deixar de usar o peito para induzir o sono e, aos poucos, ampliar as formas de adormecer, seguindo a condução do método, até avançar na autonomia. O passo a passo de como executar fica nas aulas práticas.`,
+    `O colo não precisa sair de uma vez. O objetivo agora é deixar de usar o peito para induzir o sono e, aos poucos, ampliar as formas de adormecer, seguindo a condução do método.`,
+  ].join('\n');
+}
+
+function looksLikeFormulaIntervalCry(message) {
+  const t = fold(message);
+  if (aminoAplvCase(t)) return false;
+  if (!mentionsFormula(t)) return false;
+  const intervalAsk = /3 em 3|de 3 em 3|intervalo|pode ser menor/.test(t);
+  const earlyCry = /2 horas/.test(t) && /chor/.test(t);
+  return (intervalAsk || earlyCry) && /chor|refluxo/.test(t);
+}
+
+function formulaIntervalCryAnswer(ageDays) {
+  const ageBit = Number.isFinite(Number(ageDays)) ? `aos ${ageDays} dias` : 'nesta faixa';
+  return [
+    `Mãe, ${ageBit}, o intervalo de referência para um bebê que toma fórmula é de aproximadamente 3 horas.`,
+    '',
+    'Mas precisamos entender por que ele está chorando depois de apenas 2 horas. Nem sempre o choro significa fome, especialmente quando há refluxo.',
+    '',
+    'Me conta: quantos ml de fórmula ele costuma tomar em cada mamada? Ele termina a mamadeira ou deixa um pouquinho?',
+    '',
+    'Com isso a gente entende melhor o que está acontecendo e como organizar as mamadas.',
   ].join('\n');
 }
 
@@ -399,6 +421,9 @@ function soften(text) {
 
 export function enrichSixtyNinetyOfficialAnswer({ text, message, babyProfile } = {}) {
   const ageDays = babyProfile?.ageDays;
+  if (looksLikeFormulaIntervalCry(message)) {
+    return { text: soften(formulaIntervalCryAnswer(ageDays)), notes: ['60_90_formula_intervalo'] };
+  }
   if (looksLikeNapWakeFeedAsk(message)) {
     return { text: soften(napWakeFeedAnswer(ageDays, message)), notes: ['60_90_regra_53'] };
   }

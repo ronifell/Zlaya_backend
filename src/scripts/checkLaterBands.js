@@ -84,6 +84,13 @@ const cases = [
   },
   {
     band: '60_90',
+    age: 71,
+    q: 'Bebê de 71 dias. Com refluxo, toma fórmula. Ele tem que mamar de 3 em 3 horas, ou pode ser menor? Porque muitas vezes com 2 horas ele já chora.',
+    must: ['71 dias', 'aproximadamente 3 horas', '2 horas', 'refluxo', 'quantos ml', 'termina a mamadeira', 'Nem sempre o choro significa fome'],
+    mustNot: ['120 ml', '150 ml', '30 ml', 'arroto continua', 'não prometa', 'não manda aumentar'],
+  },
+  {
+    band: '60_90',
     age: 69,
     q: 'Bebê de 2 meses e 9 dias. Às vezes dorme 1 hora de soneca, às vezes 30/40 min. Ofereço o peito sempre que ele acordar, mesmo que não tenha chegado ainda 2 horas que mamou a última vez?',
     must: ['69 dias', '2 horas e 30 minutos', 'não significa que seja hora de mamar', '30 a 40 minutos'],
